@@ -1,0 +1,21 @@
+name: the
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  the:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # https://github.com/actions/setup-node#supported-version-syntax
+          node-version: "lts/*"
+      - run: npm i -g pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run ci
