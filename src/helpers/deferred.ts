@@ -3,7 +3,7 @@ export type Deferred<T> = PromiseLike<T> & {
   reject: (reason?: unknown) => void
 }
 
-export function deferred<T = void>(): Deferred<T> {
+export function createDeferred<T = void>(): Deferred<T> {
   let resolve: (value: T | PromiseLike<T>) => void
   let reject: (reason?: unknown) => void
 
