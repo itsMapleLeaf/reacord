@@ -28,10 +28,8 @@
     "react-reconciler": "^0.26.2"
   },
   "peerDependencies": {
-    "@types/scheduler": "^0.16.2",
     "discord.js": "^13.3",
-    "react": "^17.0.2",
-    "scheduler": "^0.20.2"
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.0.4",
