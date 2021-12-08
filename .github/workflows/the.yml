@@ -18,6 +18,7 @@ jobs:
       matrix:
         node-version: [16, 17]
         pnpm-script: [build, lint, test, typecheck]
+      fail-fast: false
     name: ${{ matrix.pnpm-script }} (node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     steps:
