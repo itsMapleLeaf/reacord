@@ -23,14 +23,26 @@
   "author": "itsMapleLeaf",
   "license": "MIT",
   "dependencies": {
-    "match-sorter": "^6.3.1"
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-reconciler": "^0.26.4",
+    "react-reconciler": "^0.26.2"
+  },
+  "peerDependencies": {
+    "@types/scheduler": "^0.16.2",
+    "discord.js": "^13.3",
+    "react": "^17.0.2",
+    "scheduler": "^0.20.2"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.0.4",
+    "@types/scheduler": "^0.16.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "ava": "^4.0.0-rc.1",
     "c8": "^7.10.0",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
     "esbuild-node-loader": "^0.6.3",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
@@ -39,8 +51,11 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "nanoid": "^3.1.30",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "scheduler": "^0.20.2",
     "tsup": "^5.10.3",
     "typescript": "^4.5.2"
   },
