@@ -16,8 +16,7 @@
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "npm run lint -- --fix",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
-    "ci": "npm-run-all --parallel --print-label --race build lint test typecheck"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "itsMapleLeaf",
