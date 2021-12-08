@@ -56,7 +56,7 @@
       "--no-warnings"
     ],
     "files": [
-      "tests/**/*.test.ts"
+      "src/**/*.test.ts"
     ]
   }
 }
