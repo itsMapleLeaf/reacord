@@ -16,7 +16,7 @@ jobs:
   ci:
     strategy:
       matrix:
-        node-version: [14, 16, 17]
+        node-version: [16, 17]
         pnpm-script: [build, lint, test, typecheck]
     name: ${{ matrix.pnpm-script }} (node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
