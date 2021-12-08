@@ -1,0 +1,59 @@
+{
+  "name": "reacord",
+  "type": "module",
+  "description": "send reactive discord messages using react components ⚛",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "import": "./dist/main.js",
+    "require": "./dist/main.cjs"
+  },
+  "scripts": {
+    "build": "tsup-node src/main.ts --target node16 --format cjs,esm --dts",
+    "test": "ava",
+    "lint": "eslint --ext js,ts,tsx .",
+    "lint-fix": "npm run lint -- --fix",
+    "format": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "itsMapleLeaf",
+  "license": "MIT",
+  "dependencies": {
+    "match-sorter": "^6.3.1"
+  },
+  "devDependencies": {
+    "@itsmapleleaf/configs": "^1.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "ava": "^4.0.0-rc.1",
+    "esbuild-node-loader": "^0.6.3",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.5.1",
+    "tsup": "^5.10.3",
+    "typescript": "^4.5.2"
+  },
+  "prettier": "@itsmapleleaf/configs/prettier",
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@itsmapleleaf/configs/eslint"
+    ]
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=esbuild-node-loader",
+      "--experimental-specifier-resolution=node",
+      "--no-warnings"
+    ]
+  }
+}
