@@ -54,6 +54,9 @@
       "--loader=esbuild-node-loader",
       "--experimental-specifier-resolution=node",
       "--no-warnings"
+    ],
+    "files": [
+      "tests/**/*.test.ts"
     ]
   }
 }
