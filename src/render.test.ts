@@ -1,7 +1,6 @@
 import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
-import { setTimeout } from "node:timers/promises"
 import { raise } from "./helpers/raise.js"
 import { waitForWithTimeout } from "./helpers/wait-for-with-timeout.js"
 import { render } from "./render.js"
@@ -61,11 +60,8 @@ test.serial("rendering text", async (t) => {
 
   await waitForWithTimeout(
     async () => {
-      await setTimeout(1000)
       const messages = await channel.messages.fetch()
-      return messages
-        .filter((m) => !m.deleted)
-        .every((m) => m.content !== content)
+      return messages.size === 0
     },
     10_000,
     "Message was not deleted",
@@ -96,9 +92,7 @@ test.serial("rapid updates", async (t) => {
   await waitForWithTimeout(
     async () => {
       const messages = await channel.messages.fetch()
-      return messages
-        .filter((m) => !m.deleted)
-        .every((m) => m.content !== content)
+      return messages.size === 0
     },
     10_000,
     "Message was not deleted",
