@@ -2,15 +2,14 @@
 import ReactReconciler from "react-reconciler"
 import type { ReacordContainer } from "./container.js"
 import { raise } from "./helpers/raise.js"
-import { ReacordInstance } from "./instance.js"
 
 export const reconciler = ReactReconciler<
   unknown,
   Record<string, unknown>,
   ReacordContainer,
-  ReacordInstance,
-  ReacordInstance,
-  ReacordInstance,
+  string,
+  string,
+  string,
   unknown,
   unknown,
   unknown,
@@ -20,13 +19,13 @@ export const reconciler = ReactReconciler<
   unknown
 >({
   now: Date.now,
-  supportsMutation: true,
   isPrimaryRenderer: true,
-  noTimeout: -1,
+  supportsMutation: false,
+  supportsPersistence: true,
   supportsHydration: false,
-  supportsPersistence: false,
   scheduleTimeout: setTimeout,
   cancelTimeout: clearTimeout,
+  noTimeout: -1,
 
   getRootHostContext: () => ({}),
   getChildHostContext: () => ({}),
@@ -48,25 +47,41 @@ export const reconciler = ReactReconciler<
     hostContext,
     internalInstanceHandle,
   ) => {
-    return new ReacordInstance(text)
+    return text
   },
 
   prepareForCommit: () => null,
   resetAfterCommit: () => null,
-
-  clearContainer: (container) => {
-    container.clear()
-  },
-  appendChildToContainer: (container, child) => {
-    container.add(child)
-  },
-  removeChildFromContainer: (container, child) => {
-    container.remove(child)
-  },
 
   appendInitialChild: (parent, child) => raise("Not implemented"),
   finalizeInitialChildren: () => raise("Not implemented"),
   getPublicInstance: () => raise("Not implemented"),
   prepareUpdate: () => raise("Not implemented"),
   preparePortalMount: () => raise("Not implemented"),
+
+  createContainerChildSet: (container: ReacordContainer): string[] => {
+    console.log("createContainerChildSet", [container])
+    return []
+  },
+
+  appendChildToContainerChildSet: (children: string[], child: string) => {
+    console.log("appendChildToContainerChildSet", [children, child])
+    children.push(child)
+  },
+
+  finalizeContainerChildren: (
+    container: ReacordContainer,
+    children: string[],
+  ) => {
+    console.log("finalizeContainerChildren", [container, children])
+    return false
+  },
+
+  replaceContainerChildren: (
+    container: ReacordContainer,
+    children: string[],
+  ) => {
+    console.log("replaceContainerChildren", [container, children])
+    container.render(children)
+  },
 })
