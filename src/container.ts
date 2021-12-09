@@ -1,4 +1,5 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
+import { createDeferred } from "./helpers/deferred.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
@@ -8,38 +9,42 @@ export class ReacordContainer {
   channel: TextBasedChannels
   message?: Message
   actions: Action[] = []
-  runningActions = false
+  runningPromise?: PromiseLike<void>
 
   constructor(channel: TextBasedChannels) {
     this.channel = channel
   }
 
-  render(instances: string[]) {
+  async render(instances: string[]) {
     const messageOptions: MessageOptions = {
       content: instances.join("") || undefined, // empty strings are not allowed
     }
 
     const hasContent = messageOptions.content !== undefined
-    if (hasContent) {
-      this.addAction({ type: "updateMessage", options: messageOptions })
-    } else {
-      this.addAction({ type: "deleteMessage" })
-    }
+
+    await this.addAction(
+      hasContent
+        ? { type: "updateMessage", options: messageOptions }
+        : { type: "deleteMessage" },
+    )
   }
 
-  private addAction(action: Action) {
+  private async addAction(action: Action) {
     const lastAction = this.actions[this.actions.length - 1]
     if (lastAction?.type === action.type) {
       this.actions[this.actions.length - 1] = action
     } else {
       this.actions.push(action)
     }
-    void this.runActions()
+    await this.runActions()
   }
 
-  private runActions() {
-    if (this.runningActions) return
-    this.runningActions = true
+  private async runActions() {
+    if (this.runningPromise) {
+      return this.runningPromise
+    }
+
+    const promise = (this.runningPromise = createDeferred())
 
     queueMicrotask(async () => {
       let action: Action | undefined
@@ -47,11 +52,9 @@ export class ReacordContainer {
         try {
           switch (action.type) {
             case "updateMessage":
-              if (this.message) {
-                await this.message.edit(action.options)
-              } else {
-                this.message = await this.channel.send(action.options)
-              }
+              this.message = await (this.message
+                ? this.message.edit(action.options)
+                : this.channel.send(action.options))
               break
             case "deleteMessage":
               if (this.message) {
@@ -66,7 +69,10 @@ export class ReacordContainer {
         }
       }
 
-      this.runningActions = false
+      promise.resolve()
     })
+
+    await promise
+    this.runningPromise = undefined
   }
 }
