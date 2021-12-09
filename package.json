@@ -11,7 +11,7 @@
     "require": "./dist/main.cjs"
   },
   "scripts": {
-    "build": "tsup-node src/main.ts --target node16 --format cjs,esm --dts",
+    "build": "tsup-node src/main.ts --clean --target node16 --format cjs,esm --dts",
     "test": "c8 ava",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "npm run lint -- --fix",
