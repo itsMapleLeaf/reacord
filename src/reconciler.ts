@@ -60,12 +60,12 @@ export const reconciler = ReactReconciler<
   preparePortalMount: () => raise("Not implemented"),
 
   createContainerChildSet: (container: ReacordContainer): string[] => {
-    console.log("createContainerChildSet", [container])
+    // console.log("createContainerChildSet", [container])
     return []
   },
 
   appendChildToContainerChildSet: (children: string[], child: string) => {
-    console.log("appendChildToContainerChildSet", [children, child])
+    // console.log("appendChildToContainerChildSet", [children, child])
     children.push(child)
   },
 
@@ -73,7 +73,7 @@ export const reconciler = ReactReconciler<
     container: ReacordContainer,
     children: string[],
   ) => {
-    console.log("finalizeContainerChildren", [container, children])
+    // console.log("finalizeContainerChildren", [container, children])
     return false
   },
 
@@ -81,7 +81,7 @@ export const reconciler = ReactReconciler<
     container: ReacordContainer,
     children: string[],
   ) => {
-    console.log("replaceContainerChildren", [container, children])
+    // console.log("replaceContainerChildren", [container, children])
     container.render(children)
   },
 })
