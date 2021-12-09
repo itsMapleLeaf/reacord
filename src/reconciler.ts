@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/no-null */
 import ReactReconciler from "react-reconciler"
 import type { ReacordContainer } from "./container.js"
+import { raise } from "./helpers/raise.js"
 import { ReacordInstance } from "./instance.js"
 
 export const reconciler = ReactReconciler<
@@ -9,7 +10,7 @@ export const reconciler = ReactReconciler<
   ReacordContainer,
   ReacordInstance,
   ReacordInstance,
-  unknown,
+  ReacordInstance,
   unknown,
   unknown,
   unknown,
@@ -24,6 +25,8 @@ export const reconciler = ReactReconciler<
   noTimeout: -1,
   supportsHydration: false,
   supportsPersistence: false,
+  scheduleTimeout: setTimeout,
+  cancelTimeout: clearTimeout,
 
   getRootHostContext: () => ({}),
   getChildHostContext: () => ({}),
@@ -60,4 +63,10 @@ export const reconciler = ReactReconciler<
   removeChildFromContainer: (container, child) => {
     container.remove(child)
   },
+
+  appendInitialChild: (parent, child) => raise("Not implemented"),
+  finalizeInitialChildren: () => raise("Not implemented"),
+  getPublicInstance: () => raise("Not implemented"),
+  prepareUpdate: () => raise("Not implemented"),
+  preparePortalMount: () => raise("Not implemented"),
 })
