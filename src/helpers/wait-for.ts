@@ -3,6 +3,6 @@ import type { MaybePromise } from "./types.js"
 
 export async function waitFor(condition: () => MaybePromise<boolean>) {
   while (!(await condition())) {
-    await setTimeout()
+    await setTimeout(100)
   }
 }
