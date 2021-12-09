@@ -1,5 +1,4 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
-import { createDeferred } from "./helpers/deferred.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
@@ -44,35 +43,36 @@ export class ReacordContainer {
       return this.runningPromise
     }
 
-    const promise = (this.runningPromise = createDeferred())
-
-    queueMicrotask(async () => {
-      let action: Action | undefined
-      while ((action = this.actions.shift())) {
-        try {
-          switch (action.type) {
-            case "updateMessage":
-              this.message = await (this.message
-                ? this.message.edit(action.options)
-                : this.channel.send(action.options))
-              break
-            case "deleteMessage":
-              if (this.message) {
-                await this.message.delete()
-                this.message = undefined
-              }
-              break
-          }
-        } catch (error) {
-          console.error(`Failed to run action:`, action)
-          console.error(error)
-        }
+    const runAction = async (action: Action) => {
+      if (action.type === "updateMessage") {
+        this.message = await (this.message
+          ? this.message.edit(action.options)
+          : this.channel.send(action.options))
       }
 
-      promise.resolve()
+      if (action.type === "deleteMessage") {
+        await this.message?.delete()
+        this.message = undefined
+      }
+    }
+
+    this.runningPromise = new Promise((resolve) => {
+      // using a microtask to allow multiple actions to be added synchronously
+      queueMicrotask(async () => {
+        let action: Action | undefined
+        while ((action = this.actions.shift())) {
+          try {
+            await runAction(action)
+          } catch (error) {
+            console.error(`Failed to run action:`, action)
+            console.error(error)
+          }
+        }
+        resolve()
+      })
     })
 
-    await promise
+    await this.runningPromise
     this.runningPromise = undefined
   }
 }
