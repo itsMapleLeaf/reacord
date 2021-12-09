@@ -63,7 +63,18 @@
     "extends": [
       "./node_modules/@itsmapleleaf/configs/eslint",
       "plugin:unicorn/recommended"
-    ]
+    ],
+    "rules": {
+      "unicorn/prevent-abbreviations": [
+        "error",
+        {
+          "replacements": {
+            "props": false,
+            "args": false
+          }
+        }
+      ]
+    }
   },
   "ava": {
     "extensions": {
