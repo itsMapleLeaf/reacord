@@ -1,6 +1,7 @@
 import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
+import { setTimeout } from "node:timers/promises"
 import { raise } from "./helpers/raise.js"
 import { waitForWithTimeout } from "./helpers/wait-for-with-timeout.js"
 import { render } from "./render.js"
@@ -31,31 +32,77 @@ test.after(() => {
   client.destroy()
 })
 
-test("rendering text", async (t) => {
+test.serial("rendering text", async (t) => {
   const content = nanoid()
   const root = render(content, channel)
 
-  await waitForWithTimeout(async () => {
-    const messages = await channel.messages.fetch()
-    return messages.some((m) => m.content === content)
-  }, 4000)
+  await waitForWithTimeout(
+    async () => {
+      const messages = await channel.messages.fetch()
+      return messages.some((m) => m.content === content)
+    },
+    10_000,
+    "Message not found",
+  )
 
   const newContent = nanoid()
   root.rerender(newContent)
 
-  await waitForWithTimeout(async () => {
-    const messages = await channel.messages.fetch({ limit: 1 })
-    return messages.some((m) => m.content === content)
-  }, 4000)
+  await waitForWithTimeout(
+    async () => {
+      const messages = await channel.messages.fetch()
+      return messages.some((m) => m.content === newContent)
+    },
+    10_000,
+    "Message not found",
+  )
 
   root.destroy()
 
-  await waitForWithTimeout(async () => {
-    const messages = await channel.messages.fetch({ limit: 1 })
-    return messages
-      .filter((m) => !m.deleted)
-      .every((m) => m.content !== content)
-  }, 4000)
+  await waitForWithTimeout(
+    async () => {
+      await setTimeout(1000)
+      const messages = await channel.messages.fetch()
+      return messages
+        .filter((m) => !m.deleted)
+        .every((m) => m.content !== content)
+    },
+    10_000,
+    "Message was not deleted",
+  )
+
+  t.pass()
+})
+
+test.serial("rapid updates", async (t) => {
+  const content = nanoid()
+  const newContent = nanoid()
+
+  const root = render(content, channel)
+  root.rerender(newContent)
+
+  await waitForWithTimeout(
+    async () => {
+      const messages = await channel.messages.fetch()
+      return messages.some((m) => m.content === newContent)
+    },
+    10_000,
+    "Message not found",
+  )
+
+  root.rerender(content)
+  root.destroy()
+
+  await waitForWithTimeout(
+    async () => {
+      const messages = await channel.messages.fetch()
+      return messages
+        .filter((m) => !m.deleted)
+        .every((m) => m.content !== content)
+    },
+    10_000,
+    "Message was not deleted",
+  )
 
   t.pass()
 })
