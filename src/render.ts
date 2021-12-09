@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import type { TextBasedChannels } from "discord.js"
 import { ReacordContainer } from "./container"
 import { reconciler } from "./reconciler"

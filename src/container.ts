@@ -20,9 +20,9 @@ export class ReacordContainer {
   }
 
   clear() {
-    this.instances.forEach((instance) => {
+    for (const instance of this.instances) {
       instance.destroy()
-    })
+    }
     this.instances.clear()
   }
 }

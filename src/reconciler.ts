@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import ReactReconciler from "react-reconciler"
 import type { ReacordContainer } from "./container.js"
 import { ReacordInstance } from "./instance.js"
@@ -30,7 +31,7 @@ export const reconciler = ReactReconciler<
 
   createInstance: (
     type,
-    props,
+    properties,
     rootContainerInstance,
     hostContext,
     internalInstanceHandle,

@@ -1,10 +1,10 @@
 import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
-import { testBotToken, testChannelId } from "../test/env.js"
 import { raise } from "./helpers/raise.js"
 import { waitForWithTimeout } from "./helpers/wait-for-with-timeout.js"
 import { render } from "./render.js"
+import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
   intents: ["GUILDS"],
@@ -21,7 +21,7 @@ test.before(async () => {
     raise("Channel not found")
 
   if (!(result instanceof TextChannel)) {
-    throw new Error("Channel must be a text channel")
+    throw new TypeError("Channel must be a text channel")
   }
 
   channel = result

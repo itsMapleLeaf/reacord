@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 export type Deferred<T> = PromiseLike<T> & {
   resolve: (value: T | PromiseLike<T>) => void
   reject: (reason?: unknown) => void
