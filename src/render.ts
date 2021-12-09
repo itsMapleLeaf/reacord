@@ -10,6 +10,9 @@ export function render(content: string, target: ReacordRenderTarget) {
   const containerId = reconciler.createContainer(container, 0, false, null)
   reconciler.updateContainer(content, containerId)
   return {
+    rerender: (newContent: string) => {
+      reconciler.updateContainer(newContent, containerId)
+    },
     destroy: () => {
       reconciler.updateContainer(null, containerId)
     },

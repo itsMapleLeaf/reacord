@@ -35,15 +35,24 @@ test("rendering text", async (t) => {
   const content = nanoid()
   const root = render(content, channel)
 
-  await waitForWithTimeout(
-    () => channel.messages.cache.some((m) => m.content === content),
-    4000,
-  )
+  await waitForWithTimeout(async () => {
+    const messages = await channel.messages.fetch()
+    return messages.some((m) => m.content === content)
+  }, 4000)
+
+  const newContent = nanoid()
+  root.rerender(newContent)
+
+  await waitForWithTimeout(async () => {
+    const messages = await channel.messages.fetch({ limit: 1 })
+    return messages.some((m) => m.content === content)
+  }, 4000)
 
   root.destroy()
 
-  await waitForWithTimeout(() => {
-    return channel.messages.cache
+  await waitForWithTimeout(async () => {
+    const messages = await channel.messages.fetch({ limit: 1 })
+    return messages
       .filter((m) => !m.deleted)
       .every((m) => m.content !== content)
   }, 4000)
