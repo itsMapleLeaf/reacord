@@ -8,7 +8,7 @@ export class ReacordContainer {
   channel: TextBasedChannels
   message?: Message
   actions: Action[] = []
-  runningPromise?: PromiseLike<void>
+  runningPromise?: Promise<void>
 
   constructor(channel: TextBasedChannels) {
     this.channel = channel
@@ -74,5 +74,9 @@ export class ReacordContainer {
 
     await this.runningPromise
     this.runningPromise = undefined
+  }
+
+  awaitActions() {
+    return this.runningPromise ?? Promise.resolve()
   }
 }

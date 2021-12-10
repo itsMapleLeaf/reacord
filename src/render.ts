@@ -1,20 +1,22 @@
 /* eslint-disable unicorn/no-null */
 import type { TextBasedChannels } from "discord.js"
+import type { ReactNode } from "react"
 import { ReacordContainer } from "./container"
 import { reconciler } from "./reconciler"
 
 export type ReacordRenderTarget = TextBasedChannels
 
-export function render(content: string, target: ReacordRenderTarget) {
+export function createRoot(target: ReacordRenderTarget) {
   const container = new ReacordContainer(target)
   const containerId = reconciler.createContainer(container, 0, false, null)
-  reconciler.updateContainer(content, containerId)
   return {
-    rerender: (newContent: string) => {
-      reconciler.updateContainer(newContent, containerId)
+    render: (content: ReactNode) => {
+      reconciler.updateContainer(content, containerId)
+      return container.awaitActions()
     },
     destroy: () => {
       reconciler.updateContainer(null, containerId)
+      return container.awaitActions()
     },
   }
 }

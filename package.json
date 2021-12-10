@@ -86,7 +86,7 @@
       "--no-warnings"
     ],
     "files": [
-      "src/**/*.test.ts"
+      "{src,integration}/**/*.test.ts"
     ]
   }
 }

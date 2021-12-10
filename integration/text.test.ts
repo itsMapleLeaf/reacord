@@ -1,8 +1,8 @@
 import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
-import { ReacordContainer } from "./container.js"
-import { raise } from "./helpers/raise.js"
+import { raise } from "../src/helpers/raise.js"
+import { createRoot } from "../src/render.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
@@ -31,10 +31,10 @@ test.after(() => {
 })
 
 test("rendering text", async (t) => {
-  const container = new ReacordContainer(channel)
+  const root = createRoot(channel)
 
   const content = nanoid()
-  await container.render([content])
+  await root.render(content)
 
   {
     const messages = await channel.messages.fetch()
@@ -42,14 +42,14 @@ test("rendering text", async (t) => {
   }
 
   const newContent = nanoid()
-  await container.render([newContent])
+  await root.render(newContent)
 
   {
     const messages = await channel.messages.fetch()
     t.true(messages.some((m) => m.content === newContent))
   }
 
-  await container.render([])
+  await root.render(false)
 
   {
     const messages = await channel.messages.fetch()
@@ -58,21 +58,21 @@ test("rendering text", async (t) => {
 })
 
 test("rapid updates", async (t) => {
-  const container = new ReacordContainer(channel)
+  const root = createRoot(channel)
 
   const content = nanoid()
   const newContent = nanoid()
 
-  void container.render([content])
-  await container.render([newContent])
+  void root.render(content)
+  await root.render(newContent)
 
   {
     const messages = await channel.messages.fetch()
     t.true(messages.some((m) => m.content === newContent))
   }
 
-  void container.render([content])
-  await container.render([])
+  void root.render(content)
+  await root.render(false)
 
   {
     const messages = await channel.messages.fetch()
