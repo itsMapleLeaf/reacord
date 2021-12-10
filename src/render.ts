@@ -18,5 +18,6 @@ export function createRoot(target: ReacordRenderTarget) {
       reconciler.updateContainer(null, containerId)
       return container.awaitActions()
     },
+    awaitActions: () => container.awaitActions(),
   }
 }

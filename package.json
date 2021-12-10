@@ -78,7 +78,8 @@
   },
   "ava": {
     "extensions": {
-      "ts": "module"
+      "ts": "module",
+      "tsx": "module"
     },
     "nodeArguments": [
       "--loader=esbuild-node-loader",
@@ -86,7 +87,8 @@
       "--no-warnings"
     ],
     "files": [
-      "{src,integration}/**/*.test.ts"
-    ]
+      "{src,integration}/**/*.test.{ts,tsx}"
+    ],
+    "serial": true
   }
 }
