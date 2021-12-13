@@ -14,7 +14,7 @@
     "build": "tsup-node src/main.ts --clean --target node16 --format cjs,esm --dts",
     "test": "c8 ava",
     "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "npm run lint -- --fix",
+    "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit"
   },
@@ -32,7 +32,7 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
-    "@itsmapleleaf/configs": "^1.0.4",
+    "@itsmapleleaf/configs": "^1.1.0",
     "@types/scheduler": "^0.16.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
@@ -61,20 +61,8 @@
   "prettier": "@itsmapleleaf/configs/prettier",
   "eslintConfig": {
     "extends": [
-      "./node_modules/@itsmapleleaf/configs/eslint",
-      "plugin:unicorn/recommended"
-    ],
-    "rules": {
-      "unicorn/prevent-abbreviations": [
-        "error",
-        {
-          "replacements": {
-            "props": false,
-            "args": false
-          }
-        }
-      ]
-    }
+      "./node_modules/@itsmapleleaf/configs/eslint"
+    ]
   },
   "ava": {
     "extensions": {
@@ -86,9 +74,7 @@
       "--experimental-specifier-resolution=node",
       "--no-warnings"
     ],
-    "files": [
-      "{src,integration}/**/*.test.{ts,tsx}"
-    ],
+    "files": "{src,test,integration}/**/*.test.{ts,tsx}",
     "serial": true
   }
 }
