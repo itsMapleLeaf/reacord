@@ -4,7 +4,7 @@ import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
 import React, { useState } from "react"
 import { raise } from "../src/helpers/raise.js"
-import { createRoot } from "../src/render.js"
+import { createRoot } from "../src/root.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
