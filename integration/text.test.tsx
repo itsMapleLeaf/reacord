@@ -85,7 +85,7 @@ test("state", async (t) => {
   await assertSomeMessageHasContent(t, initialMessage)
 
   setMessage!(newMessage)
-  await root.awaitActions()
+  await root.completion()
 
   await assertSomeMessageHasContent(t, newMessage)
 

@@ -12,12 +12,12 @@ export function createRoot(target: ReacordRenderTarget) {
   return {
     render: (content: ReactNode) => {
       reconciler.updateContainer(content, containerId)
-      return container.awaitActions()
+      return container.completion()
     },
     destroy: () => {
       reconciler.updateContainer(null, containerId)
-      return container.awaitActions()
+      return container.completion()
     },
-    awaitActions: () => container.awaitActions(),
+    completion: () => container.completion(),
   }
 }
