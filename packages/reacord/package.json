@@ -12,7 +12,7 @@
     "require": "./dist/main.cjs"
   },
   "scripts": {
-    "build": "tsup-node src/main.ts --clean --target node16 --format cjs,esm --dts"
+    "build": "tsup src/main.ts --clean --target node16 --format cjs,esm --dts"
   },
   "keywords": [],
   "author": "itsMapleLeaf",
@@ -21,6 +21,7 @@
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-reconciler": "^0.26.4",
+    "immer": "^9.0.7",
     "react-reconciler": "^0.26.2"
   },
   "peerDependencies": {
