@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-null */
+import { raise } from "reacord-helpers/raise.js"
 import ReactReconciler from "react-reconciler"
 import type { ReacordContainer } from "./container.js"
 import type { ReacordElement, ReacordElementJsxTag } from "./element.js"
-import { raise } from "./helpers/raise.js"
 
 export const reconciler = ReactReconciler<
   ReacordElementJsxTag,

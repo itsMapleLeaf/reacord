@@ -1,20 +1,23 @@
 {
+  "name": "reacord-integration-tests",
   "private": true,
   "scripts": {
-    "build": "pnpm build --recursive --stream",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "test": "c8 ava",
-    "typecheck": "tsc --project ./tsconfig.base.json --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.0",
     "@types/node": "*",
+    "@types/react": "*",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "ava": "^4.0.0-rc.1",
     "c8": "^7.10.0",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
     "esbuild": "^0.14.2",
     "esbuild-node-loader": "^0.6.3",
     "eslint": "^8.4.1",
@@ -25,7 +28,11 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
+    "nanoid": "^3.1.30",
     "prettier": "^2.5.1",
+    "reacord": "workspace:*",
+    "reacord-helpers": "workspace:*",
+    "react": "^17.0.2",
     "typescript": "^4.5.4"
   },
   "eslintConfig": {
@@ -35,18 +42,16 @@
     "ignorePatterns": [
       "**/node_modules/**",
       "**/coverage/**",
-      "**/dist/**",
       "**/.vscode/**"
     ],
     "parserOptions": {
-      "project": "./tsconfig.base.json"
+      "project": "./tsconfig.json"
     }
   },
   "prettier": "@itsmapleleaf/configs/prettier",
   "ava": {
     "files": [
-      "**/*.test.{ts,tsx}",
-      "!**/{node_modules,dist,coverage}/**"
+      "**/*.test.{ts,tsx}"
     ],
     "nodeArguments": [
       "--loader=esbuild-node-loader",

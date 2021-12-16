@@ -1,0 +1,39 @@
+{
+  "name": "reacord",
+  "type": "module",
+  "description": "send reactive discord messages using react components ⚛",
+  "version": "0.0.0",
+  "types": "./dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "import": "./dist/main.js",
+    "require": "./dist/main.cjs"
+  },
+  "scripts": {
+    "build": "tsup-node src/main.ts --clean --target node16 --format cjs,esm --dts"
+  },
+  "keywords": [],
+  "author": "itsMapleLeaf",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-reconciler": "^0.26.4",
+    "react-reconciler": "^0.26.2"
+  },
+  "peerDependencies": {
+    "discord.js": "^13.3",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "esbuild": "^0.14.2",
+    "nanoid": "^3.1.30",
+    "reacord-helpers": "workspace:*",
+    "react": "^17.0.2",
+    "tsup": "^5.10.3"
+  }
+}

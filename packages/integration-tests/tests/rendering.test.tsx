@@ -2,10 +2,9 @@ import type { ExecutionContext } from "ava"
 import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
+import { createRoot, Embed } from "reacord"
+import { raise } from "reacord-helpers/raise.js"
 import React, { useState } from "react"
-import { Embed } from "../src/components/embed.js"
-import { raise } from "../src/helpers/raise.js"
-import { createRoot } from "../src/root.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({

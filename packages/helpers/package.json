@@ -1,0 +1,7 @@
+{
+  "name": "reacord-helpers",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^16.11.14"
+  }
+}

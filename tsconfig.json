@@ -1,7 +1,0 @@
-{
-  "extends": "@itsmapleleaf/configs/tsconfig.base",
-  "compilerOptions": {
-    "skipLibCheck": false
-  },
-  "exclude": ["node_modules", ".vscode", "dist", "coverage"]
-}
