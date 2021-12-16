@@ -1,15 +1,16 @@
 /* eslint-disable unicorn/no-null */
 import ReactReconciler from "react-reconciler"
 import type { ReacordContainer } from "./container.js"
+import type { ReacordElement, ReacordElementJsxTag } from "./element.js"
 import { raise } from "./helpers/raise.js"
 
 export const reconciler = ReactReconciler<
-  unknown,
-  Record<string, unknown>,
+  ReacordElementJsxTag,
+  ReacordElement,
   ReacordContainer,
+  ReacordElement,
   string,
-  string,
-  string,
+  unknown,
   unknown,
   unknown,
   unknown,
@@ -33,12 +34,12 @@ export const reconciler = ReactReconciler<
 
   createInstance: (
     type,
-    properties,
+    props,
     rootContainerInstance,
     hostContext,
     internalInstanceHandle,
   ) => {
-    throw new Error("Not implemented")
+    return props
   },
 
   createTextInstance: (
@@ -54,24 +55,30 @@ export const reconciler = ReactReconciler<
   resetAfterCommit: () => null,
 
   appendInitialChild: (parent, child) => raise("Not implemented"),
-  finalizeInitialChildren: () => raise("Not implemented"),
+  finalizeInitialChildren: (...args) => {
+    console.log("finalizeInitialChildren", args)
+    return false
+  },
   getPublicInstance: () => raise("Not implemented"),
   prepareUpdate: () => raise("Not implemented"),
   preparePortalMount: () => raise("Not implemented"),
 
-  createContainerChildSet: (container: ReacordContainer): string[] => {
+  createContainerChildSet: (): ReacordElement[] => {
     // console.log("createContainerChildSet", [container])
     return []
   },
 
-  appendChildToContainerChildSet: (children: string[], child: string) => {
+  appendChildToContainerChildSet: (
+    children: ReacordElement[],
+    child: ReacordElement,
+  ) => {
     // console.log("appendChildToContainerChildSet", [children, child])
     children.push(child)
   },
 
   finalizeContainerChildren: (
     container: ReacordContainer,
-    children: string[],
+    children: ReacordElement[],
   ) => {
     // console.log("finalizeContainerChildren", [container, children])
     return false
@@ -79,9 +86,9 @@ export const reconciler = ReactReconciler<
 
   replaceContainerChildren: (
     container: ReacordContainer,
-    children: string[],
+    children: ReacordElement[],
   ) => {
-    // console.log("replaceContainerChildren", [container, children])
+    console.log("replaceContainerChildren", [container, children])
     container.render(children)
   },
 })

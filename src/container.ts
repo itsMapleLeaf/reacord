@@ -1,4 +1,5 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
+import type { ReacordElement } from "./element.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
@@ -14,7 +15,7 @@ export class ReacordContainer {
     this.channel = channel
   }
 
-  render(instances: string[]) {
+  render(instances: ReacordElement[]) {
     const messageOptions: MessageOptions = {
       content: instances.join("") || undefined, // empty strings are not allowed
     }

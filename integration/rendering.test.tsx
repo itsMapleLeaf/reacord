@@ -3,6 +3,7 @@ import test from "ava"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
 import React, { useState } from "react"
+import { Embed } from "../src/components/embed.js"
 import { raise } from "../src/helpers/raise.js"
 import { createRoot } from "../src/root.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
@@ -32,7 +33,20 @@ test.after(() => {
   client.destroy()
 })
 
-test("rendering text", async (t) => {
+test.only("test", async (t) => {
+  const root = createRoot(channel)
+  await root.render(
+    <>
+      <Embed color="BLUE">
+        <Embed color="DARKER_GREY" />
+      </Embed>
+      <Embed color="DARKER_GREY" />
+    </>,
+  )
+  t.pass()
+})
+
+test("kitchen sink", async (t) => {
   const root = createRoot(channel)
 
   const content = nanoid()
@@ -50,7 +64,7 @@ test("rendering text", async (t) => {
   await assertNoMessageHasContent(t, newContent)
 })
 
-test("rapid updates", async (t) => {
+test("kitchen sink, rapid updates", async (t) => {
   const root = createRoot(channel)
 
   const content = nanoid()
