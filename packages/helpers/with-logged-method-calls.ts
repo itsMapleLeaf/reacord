@@ -10,7 +10,7 @@ export function withLoggedMethodCalls<T extends object>(value: T) {
       return (...values: any[]) => {
         console.log(
           `${String(property)}(${values
-            .map((value: any) => inspect(value, { depth: 1 }))
+            .map((value) => inspect(value, { depth: 1 }))
             .join(", ")})`,
         )
         return value.apply(target, values)

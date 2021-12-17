@@ -6,46 +6,35 @@ type Action =
   | { type: "updateMessage"; options: MessageOptions }
   | { type: "deleteMessage" }
 
-type ReacordContainerChild = TextElementInstance | TextInstance
+type ContainerChild = TextInstance | TextElementInstance
 
 export class ReacordContainer {
   private channel: TextBasedChannels
   private message?: Message
   private actions: Action[] = []
   private runningPromise?: Promise<void>
-  private instances = new Set<ReacordContainerChild>()
 
   constructor(channel: TextBasedChannels) {
     this.channel = channel
   }
 
-  add(instance: ReacordContainerChild) {
-    this.instances.add(instance)
-    this.render()
-  }
-
-  remove(instance: ReacordContainerChild) {
-    this.instances.delete(instance)
-    this.render()
-  }
-
-  clear() {
-    this.instances.clear()
-    this.render()
-  }
-
-  render() {
+  render(children: ContainerChild[]) {
     const messageOptions: MessageOptions = {}
-    for (const instance of this.instances) {
-      instance.render(messageOptions)
+    for (const child of children) {
+      child.renderToMessage(messageOptions)
     }
 
     // can't render an empty message
-    if (!messageOptions.content) {
-      this.addAction({ type: "deleteMessage" })
-    } else {
-      this.addAction({ type: "updateMessage", options: messageOptions })
+    if (!messageOptions?.content) {
+      messageOptions.content = "_ _"
     }
+
+    this.addAction({ type: "updateMessage", options: messageOptions })
+  }
+
+  destroy() {
+    this.actions = []
+    this.addAction({ type: "deleteMessage" })
   }
 
   completion() {

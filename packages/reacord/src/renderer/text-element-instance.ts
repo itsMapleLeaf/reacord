@@ -1,26 +1,22 @@
 import type { MessageOptions } from "discord.js"
 import type { TextInstance } from "./text-instance.js"
 
-type TextElementInstanceChild = TextElementInstance | TextInstance
+type TextElementChild = TextElementInstance | TextInstance
 
 export class TextElementInstance {
-  children = new Set<TextElementInstanceChild>()
+  children = new Set<TextElementChild>()
 
-  add(child: TextElementInstanceChild) {
+  add(child: TextElementChild) {
     this.children.add(child)
   }
 
-  remove(child: TextElementInstanceChild) {
-    this.children.delete(child)
-  }
-
-  clear() {
-    this.children.clear()
-  }
-
-  render(options: MessageOptions) {
+  renderToMessage(options: MessageOptions) {
     for (const child of this.children) {
-      child.render(options)
+      options.content = `${options.content ?? ""}${child.text}`
     }
+  }
+
+  get text(): string {
+    return [...this.children].map((child) => child.text).join("")
   }
 }

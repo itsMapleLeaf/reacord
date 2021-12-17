@@ -6,7 +6,8 @@
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "test": "c8 ava",
+    "test": "ava",
+    "test-coverage": "c8 ava",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -40,7 +41,7 @@
       "**/.vscode/**"
     ],
     "parserOptions": {
-      "project": "./tsconfig.base.json"
+      "project": "./tsconfig.json"
     }
   },
   "prettier": "@itsmapleleaf/configs/prettier",

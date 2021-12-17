@@ -38,7 +38,7 @@ test.beforeEach(async () => {
   await Promise.all(messages.map((message) => message.delete()))
 })
 
-test("rendering", async (t) => {
+test.serial("basic text & content updates", async (t) => {
   const root = createRoot(channel)
 
   await root.render("hi world")
@@ -55,10 +55,30 @@ test("rendering", async (t) => {
   await assertMessages(t, [{ content: "hi world" }])
 
   await root.render(<Text></Text>)
-  await assertMessages(t, [])
+  await assertMessages(t, [{ content: "_ _" }])
+
+  await root.render(<Text>hi world</Text>)
+  await assertMessages(t, [{ content: "hi world" }])
 
   await root.render([])
+  await assertMessages(t, [{ content: "_ _" }])
+
+  await root.destroy()
   await assertMessages(t, [])
+})
+
+test.serial("nested text", async (t) => {
+  const root = createRoot(channel)
+
+  await root.render(
+    <Text>
+      <Text>hi world</Text>{" "}
+      <Text>
+        hi moon <Text>hi sun</Text>
+      </Text>
+    </Text>,
+  )
+  await assertMessages(t, [{ content: "hi world hi moon hi sun" }])
 })
 
 type MessageData = ReturnType<typeof extractMessageData>

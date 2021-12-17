@@ -1,13 +1,9 @@
 import type { MessageOptions } from "discord.js"
 
 export class TextInstance {
-  text: string
+  constructor(readonly text: string) {}
 
-  constructor(text: string) {
-    this.text = text
-  }
-
-  render(options: MessageOptions) {
+  renderToMessage(options: MessageOptions) {
     options.content = `${options.content ?? ""}${this.text}`
   }
 }
