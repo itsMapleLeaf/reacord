@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         node-version: [16, 17]
-        pnpm-script: [build, lint, test, typecheck]
+        script-name: [lint, test, typecheck]
       fail-fast: false
-    name: ${{ matrix.pnpm-script }} (node ${{ matrix.node-version }})
+    name: ${{ matrix.script-name }} (node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,4 +29,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run ${{ matrix.pnpm-script }}
+      - run: pnpm run build
+      - run: pnpm run ${{ matrix.script-name }}
