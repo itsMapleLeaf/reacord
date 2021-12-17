@@ -2,13 +2,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm build --recursive --stream",
+    "build": "pnpm -C packages/reacord build",
+    "build-watch": "pnpm -C packages/reacord build -- --watch",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "test": "ava",
-    "test-coverage": "c8 ava",
-    "typecheck": "tsc --noEmit"
+    "test": "pnpm build && pnpm test-only",
+    "test-only": "ava",
+    "test-coverage": "pnpm build && c8 pnpm test-only",
+    "typecheck": "pnpm build && tsc --noEmit"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.0",
@@ -27,6 +29,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "typescript": "^4.5.4"
   },
