@@ -1,32 +1,51 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
-import type { ReacordElement } from "./element.js"
+import type { TextElementInstance } from "./text-element-instance.js"
+import type { TextInstance } from "./text-instance.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
   | { type: "deleteMessage" }
+
+type ReacordContainerChild = TextElementInstance | TextInstance
 
 export class ReacordContainer {
   private channel: TextBasedChannels
   private message?: Message
   private actions: Action[] = []
   private runningPromise?: Promise<void>
+  private instances = new Set<ReacordContainerChild>()
 
   constructor(channel: TextBasedChannels) {
     this.channel = channel
   }
 
-  render(instances: ReacordElement[]) {
-    const messageOptions: MessageOptions = {
-      content: instances.join("") || undefined, // empty strings are not allowed
+  add(instance: ReacordContainerChild) {
+    this.instances.add(instance)
+    this.render()
+  }
+
+  remove(instance: ReacordContainerChild) {
+    this.instances.delete(instance)
+    this.render()
+  }
+
+  clear() {
+    this.instances.clear()
+    this.render()
+  }
+
+  render() {
+    const messageOptions: MessageOptions = {}
+    for (const instance of this.instances) {
+      instance.render(messageOptions)
     }
 
-    const hasContent = messageOptions.content !== undefined
-
-    this.addAction(
-      hasContent
-        ? { type: "updateMessage", options: messageOptions }
-        : { type: "deleteMessage" },
-    )
+    // can't render an empty message
+    if (!messageOptions.content) {
+      this.addAction({ type: "deleteMessage" })
+    } else {
+      this.addAction({ type: "updateMessage", options: messageOptions })
+    }
   }
 
   completion() {

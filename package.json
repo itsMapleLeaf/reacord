@@ -51,7 +51,8 @@
     "nodeArguments": [
       "--loader=esbuild-node-loader",
       "--experimental-specifier-resolution=node",
-      "--no-warnings"
+      "--no-warnings",
+      "--enable-source-maps"
     ],
     "extensions": {
       "ts": "module",
