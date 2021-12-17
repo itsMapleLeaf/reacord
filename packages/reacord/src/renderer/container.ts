@@ -1,4 +1,5 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
+import type { EmbedInstance } from "./embed-instance.js"
 import type { TextElementInstance } from "./text-element-instance.js"
 import type { TextInstance } from "./text-instance.js"
 
@@ -6,7 +7,7 @@ type Action =
   | { type: "updateMessage"; options: MessageOptions }
   | { type: "deleteMessage" }
 
-type ContainerChild = TextInstance | TextElementInstance
+type ContainerChild = TextInstance | TextElementInstance | EmbedInstance
 
 export class ReacordContainer {
   private channel: TextBasedChannels
@@ -19,17 +20,17 @@ export class ReacordContainer {
   }
 
   render(children: ContainerChild[]) {
-    const messageOptions: MessageOptions = {}
+    const options: MessageOptions = {}
     for (const child of children) {
-      child.renderToMessage(messageOptions)
+      child.renderToMessage(options)
     }
 
     // can't render an empty message
-    if (!messageOptions?.content) {
-      messageOptions.content = "_ _"
+    if (!options?.content && !options.embeds?.length) {
+      options.content = "_ _"
     }
 
-    this.addAction({ type: "updateMessage", options: messageOptions })
+    this.addAction({ type: "updateMessage", options })
   }
 
   destroy() {

@@ -3,11 +3,12 @@ import { raise } from "reacord-helpers/raise.js"
 import ReactReconciler from "react-reconciler"
 import type { ReacordElementMap } from "./elements.js"
 import type { ReacordContainer } from "./renderer/container.js"
+import { EmbedInstance } from "./renderer/embed-instance.js"
 import { TextElementInstance } from "./renderer/text-element-instance.js"
 import { TextInstance } from "./renderer/text-instance.js"
 
 // instances that represent an element
-type ElementInstance = TextElementInstance
+type ElementInstance = TextElementInstance | EmbedInstance
 
 // any instance
 type Instance = ElementInstance | TextInstance
@@ -18,12 +19,12 @@ type ElementTag =
 
 type Props = Record<string, unknown>
 
-const createInstance = (
-  type: ElementTag,
-  props: Props,
-): TextElementInstance => {
+const createInstance = (type: ElementTag, props: Props): ElementInstance => {
   if (type === "reacord-text") {
     return new TextElementInstance()
+  }
+  if (type === "reacord-embed") {
+    return new EmbedInstance((props as any).color)
   }
   raise(`Unknown element type "${type}"`)
 }
@@ -79,7 +80,25 @@ export const reconciler = ReactReconciler<
   },
 
   appendInitialChild: (parent, child) => {
-    parent.add(child)
+    if (
+      parent instanceof TextElementInstance &&
+      (child instanceof TextInstance || child instanceof TextElementInstance)
+    ) {
+      parent.add(child)
+      return
+    }
+
+    if (
+      parent instanceof EmbedInstance &&
+      (child instanceof TextInstance || child instanceof TextElementInstance)
+    ) {
+      parent.add(child)
+      return
+    }
+
+    raise(
+      `Cannot append child of type ${child.constructor.name} to ${parent.constructor.name}`,
+    )
   },
 
   cloneInstance: (
