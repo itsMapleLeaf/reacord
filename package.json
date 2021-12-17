@@ -1,12 +1,13 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "pnpm build --recursive --stream",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "test": "c8 ava",
-    "typecheck": "tsc --project ./tsconfig.base.json --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.0",
