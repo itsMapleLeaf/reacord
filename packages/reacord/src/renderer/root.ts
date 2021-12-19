@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-null */
 import type { TextBasedChannels } from "discord.js"
 import type { ReactNode } from "react"
+import { ReacordContainer } from "./container"
 import { reconciler } from "./reconciler"
-import { ReacordContainer } from "./renderer/container"
 
 export type ReacordRenderTarget = TextBasedChannels
 

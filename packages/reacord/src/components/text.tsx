@@ -1,10 +1,11 @@
 import type { ReactNode } from "react"
 import React from "react"
+import { TextElementInstance } from "../renderer/text-element-instance.js"
 
 export type TextProps = {
   children?: ReactNode
 }
 
 export function Text(props: TextProps) {
-  return <reacord-text {...props} />
+  return <reacord-element createInstance={() => new TextElementInstance()} />
 }

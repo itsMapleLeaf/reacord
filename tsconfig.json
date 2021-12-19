@@ -1,4 +1,7 @@
 {
   "extends": "@itsmapleleaf/configs/tsconfig.base",
+  "compilerOptions": {
+    "noImplicitOverride": true
+  },
   "exclude": ["**/node_modules/**", "**/coverage/**", "**/dist/**"]
 }

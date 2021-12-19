@@ -1,22 +1,19 @@
 import type { MessageOptions } from "discord.js"
-import type { TextInstance } from "./text-instance.js"
+import { ContainerInstance } from "./container-instance.js"
 
-type TextElementChild = TextElementInstance | TextInstance
+/** Represents a <Text /> element */
+export class TextElementInstance extends ContainerInstance {
+  readonly name = "Text"
 
-export class TextElementInstance {
-  children = new Set<TextElementChild>()
-
-  add(child: TextElementChild) {
-    this.children.add(child)
+  constructor() {
+    super({ warnOnNonTextChildren: true })
   }
 
-  renderToMessage(options: MessageOptions) {
-    for (const child of this.children) {
-      options.content = `${options.content ?? ""}${child.text}`
-    }
+  override getText() {
+    return this.getChildrenText()
   }
 
-  get text(): string {
-    return [...this.children].map((child) => child.text).join("")
+  override renderToMessage(options: MessageOptions) {
+    options.content = (options.content ?? "") + this.getText()
   }
 }

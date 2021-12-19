@@ -1,13 +1,9 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
-import type { EmbedInstance } from "./embed-instance.js"
-import type { TextElementInstance } from "./text-element-instance.js"
-import type { TextInstance } from "./text-instance.js"
+import type { BaseInstance } from "./base-instance.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
   | { type: "deleteMessage" }
-
-type ContainerChild = TextInstance | TextElementInstance | EmbedInstance
 
 export class ReacordContainer {
   private channel: TextBasedChannels
@@ -19,9 +15,13 @@ export class ReacordContainer {
     this.channel = channel
   }
 
-  render(children: ContainerChild[]) {
+  render(children: BaseInstance[]) {
     const options: MessageOptions = {}
     for (const child of children) {
+      if (!child.renderToMessage) {
+        console.warn(`${child.name} is not a valid message child`)
+        continue
+      }
       child.renderToMessage(options)
     }
 

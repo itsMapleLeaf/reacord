@@ -40,7 +40,7 @@ test.beforeEach(async () => {
   await Promise.all(messages.map((message) => message.delete()))
 })
 
-test.serial("kitchen sink + destroy", async (t) => {
+test.serial.only("kitchen sink + destroy", async (t) => {
   const root = createRoot(channel)
 
   await root.render(
@@ -108,18 +108,6 @@ test.serial("empty embed fallback", async (t) => {
 
   await root.render(<Embed />)
   await assertMessages(t, [{ embeds: [{ color: null, description: "_ _" }] }])
-})
-
-test.serial("invalid children error", (t) => {
-  const root = createRoot(channel)
-
-  t.throws(() =>
-    root.render(
-      <Text>
-        <Embed />
-      </Text>,
-    ),
-  )
 })
 
 type MessageData = ReturnType<typeof extractMessageData>

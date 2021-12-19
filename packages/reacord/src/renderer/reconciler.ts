@@ -1,46 +1,46 @@
 /* eslint-disable unicorn/no-null */
+import { inspect } from "node:util"
 import { raise } from "reacord-helpers/raise.js"
 import ReactReconciler from "react-reconciler"
-import type { ReacordElementMap } from "./elements.js"
-import type { ReacordContainer } from "./renderer/container.js"
-import { EmbedInstance } from "./renderer/embed-instance.js"
-import { TextElementInstance } from "./renderer/text-element-instance.js"
-import { TextInstance } from "./renderer/text-instance.js"
+import { BaseInstance } from "./base-instance.js"
+import { ContainerInstance } from "./container-instance.js"
+import type { ReacordContainer } from "./container.js"
+import { TextInstance } from "./text-instance.js"
 
-// instances that represent an element
-type ElementInstance = TextElementInstance | EmbedInstance
-
-// any instance
-type Instance = ElementInstance | TextInstance
-
-type ElementTag =
-  | keyof ReacordElementMap
-  | (string & { __autocompleteHack__?: never })
+type ElementTag = string
 
 type Props = Record<string, unknown>
 
-const createInstance = (type: ElementTag, props: Props): ElementInstance => {
-  if (type === "reacord-text") {
-    return new TextElementInstance()
+const createInstance = (type: string, props: Props): BaseInstance => {
+  if (type !== "reacord-element") {
+    raise(`createInstance: unknown type: ${type}`)
   }
-  if (type === "reacord-embed") {
-    return new EmbedInstance((props as any).color)
+
+  if (typeof props.createInstance !== "function") {
+    const actual = inspect(props.createInstance)
+    raise(`invalid createInstance function, received: ${actual}`)
   }
-  raise(`Unknown element type "${type}"`)
+
+  const instance = props.createInstance()
+  if (!(instance instanceof BaseInstance)) {
+    raise(`invalid instance: ${inspect(instance)}`)
+  }
+
+  return instance
 }
 
 export const reconciler = ReactReconciler<
-  ElementTag, // Type,
+  string, // Type (jsx tag),
   Props, // Props,
   ReacordContainer, // Container,
-  ElementInstance, // Instance,
+  BaseInstance, // Instance,
   TextInstance, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
   never, // PublicInstance,
   null, // HostContext,
   never, // UpdatePayload,
-  Instance[], // ChildSet,
+  BaseInstance[], // ChildSet,
   unknown, // TimeoutHandle,
   unknown // NoTimeout
 >({
@@ -63,46 +63,37 @@ export const reconciler = ReactReconciler<
 
   createContainerChildSet: () => [],
 
-  appendChildToContainerChildSet: (childSet: Instance[], child: Instance) => {
+  appendChildToContainerChildSet: (
+    childSet: BaseInstance[],
+    child: BaseInstance,
+  ) => {
     childSet.push(child)
   },
 
   finalizeContainerChildren: (
     container: ReacordContainer,
-    children: Instance[],
+    children: BaseInstance[],
   ) => false,
 
   replaceContainerChildren: (
     container: ReacordContainer,
-    children: Instance[],
+    children: BaseInstance[],
   ) => {
     container.render(children)
   },
 
   appendInitialChild: (parent, child) => {
-    if (
-      parent instanceof TextElementInstance &&
-      (child instanceof TextInstance || child instanceof TextElementInstance)
-    ) {
+    if (parent instanceof ContainerInstance) {
       parent.add(child)
-      return
+    } else {
+      raise(
+        `Cannot append child of type ${child.constructor.name} to ${parent.constructor.name}`,
+      )
     }
-
-    if (
-      parent instanceof EmbedInstance &&
-      (child instanceof TextInstance || child instanceof TextElementInstance)
-    ) {
-      parent.add(child)
-      return
-    }
-
-    raise(
-      `Cannot append child of type ${child.constructor.name} to ${parent.constructor.name}`,
-    )
   },
 
   cloneInstance: (
-    instance: Instance,
+    instance: BaseInstance,
     _: unknown,
     type: ElementTag,
     oldProps: Props,

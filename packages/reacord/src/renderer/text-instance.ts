@@ -1,9 +1,19 @@
 import type { MessageOptions } from "discord.js"
+import { BaseInstance } from "./base-instance.js"
 
-export class TextInstance {
-  constructor(readonly text: string) {}
+/** Represents raw strings in JSX */
+export class TextInstance extends BaseInstance {
+  readonly name = "Text"
 
-  renderToMessage(options: MessageOptions) {
-    options.content = `${options.content ?? ""}${this.text}`
+  constructor(private readonly text: string) {
+    super()
+  }
+
+  override getText() {
+    return this.text
+  }
+
+  override renderToMessage(options: MessageOptions) {
+    options.content = (options.content ?? "") + this.getText()
   }
 }

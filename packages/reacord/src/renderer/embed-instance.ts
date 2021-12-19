@@ -3,21 +3,17 @@ import type {
   MessageEmbedOptions,
   MessageOptions,
 } from "discord.js"
-import type { TextElementInstance } from "./text-element-instance.js"
-import type { TextInstance } from "./text-instance.js"
+import { ContainerInstance } from "./container-instance.js"
 
-type EmbedChild = TextInstance | TextElementInstance
+/** Represents an <Embed /> element */
+export class EmbedInstance extends ContainerInstance {
+  readonly name = "Embed"
 
-export class EmbedInstance {
-  children: EmbedChild[] = []
-
-  constructor(readonly color: ColorResolvable) {}
-
-  add(child: EmbedChild) {
-    this.children.push(child)
+  constructor(readonly color?: ColorResolvable) {
+    super({ warnOnNonTextChildren: false })
   }
 
-  renderToMessage(message: MessageOptions) {
+  override renderToMessage(message: MessageOptions) {
     message.embeds ??= []
     message.embeds.push(this.embedOptions)
   }
@@ -25,7 +21,7 @@ export class EmbedInstance {
   get embedOptions(): MessageEmbedOptions {
     return {
       color: this.color,
-      description: this.children.map((child) => child.text).join("") || "_ _",
+      description: this.getChildrenText() || "_ _",
     }
   }
 }
