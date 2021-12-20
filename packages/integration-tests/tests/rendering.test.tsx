@@ -1,7 +1,4 @@
-/* eslint-disable unicorn/numeric-separators-style */
 /* eslint-disable unicorn/no-null */
-import type { ExecutionContext } from "ava"
-import test from "ava"
 import type { Message } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import type { ReacordRoot } from "reacord"
@@ -9,6 +6,7 @@ import { createRoot, Embed, EmbedAuthor, Text } from "reacord"
 import { pick } from "reacord-helpers/pick.js"
 import { raise } from "reacord-helpers/raise.js"
 import React from "react"
+import { afterAll, beforeAll, expect, test } from "vitest"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
@@ -18,7 +16,7 @@ const client = new Client({
 let channel: TextChannel
 let root: ReacordRoot
 
-test.serial.before(async () => {
+beforeAll(async () => {
   await client.login(testBotToken)
 
   const result =
@@ -31,31 +29,27 @@ test.serial.before(async () => {
   }
 
   channel = result
-  root = createRoot(channel)
 
   for (const [, message] of await channel.messages.fetch()) {
     await message.delete()
   }
+
+  root = createRoot(channel)
 })
 
-test.after(() => {
+afterAll(() => {
   client.destroy()
 })
 
-// test.serial.beforeEach(async () => {
-//   const messages = await channel.messages.fetch()
-//   await Promise.all(messages.map((message) => message.delete()))
-// })
-
-test.serial("rapid updates", async (t) => {
+test("rapid updates", async () => {
   // rapid updates
   void root.render("hi world")
   void root.render("hi the")
   await root.render("hi moon")
-  await assertMessages(t, [{ content: "hi moon" }])
+  await assertMessages([{ content: "hi moon" }])
 })
 
-test.serial("nested text", async (t) => {
+test("nested text", async () => {
   await root.render(
     <Text>
       <Text>hi world</Text>{" "}
@@ -64,35 +58,35 @@ test.serial("nested text", async (t) => {
       </Text>
     </Text>,
   )
-  await assertMessages(t, [{ content: "hi world hi moon hi sun" }])
+  await assertMessages([{ content: "hi world hi moon hi sun" }])
 })
 
-test.serial("empty embed fallback", async (t) => {
+test("empty embed fallback", async () => {
   await root.render(<Embed />)
-  await assertMessages(t, [{ embeds: [{ description: "_ _" }] }])
+  await assertMessages([{ embeds: [{ description: "_ _" }] }])
 })
 
-test.serial("embed with only author", async (t) => {
+test("embed with only author", async () => {
   await root.render(
     <Embed>
       <EmbedAuthor>only author</EmbedAuthor>
     </Embed>,
   )
-  await assertMessages(t, [
+  await assertMessages([
     { embeds: [{ description: "_ _", author: { name: "only author" } }] },
   ])
 })
 
-test.serial("empty embed author", async (t) => {
+test("empty embed author", async () => {
   await root.render(
     <Embed>
       <EmbedAuthor />
     </Embed>,
   )
-  await assertMessages(t, [{ embeds: [{ description: "_ _" }] }])
+  await assertMessages([{ embeds: [{ description: "_ _" }] }])
 })
 
-test.serial("kitchen sink", async (t) => {
+test("kitchen sink", async () => {
   await root.render(
     <>
       message <Text>content</Text>
@@ -111,12 +105,12 @@ test.serial("kitchen sink", async (t) => {
       </Embed>
     </>,
   )
-  await assertMessages(t, [
+  await assertMessages([
     {
       content: "message contentno space",
       embeds: [
         {
-          color: 0xfeeeef,
+          color: 0xfe_ee_ef,
           description: "description more description",
           author: {
             name: "hi craw",
@@ -131,9 +125,9 @@ test.serial("kitchen sink", async (t) => {
   ])
 })
 
-test.serial("destroy", async (t) => {
+test("destroy", async () => {
   await root.destroy()
-  await assertMessages(t, [])
+  await assertMessages([])
 })
 
 type MessageData = ReturnType<typeof extractMessageData>
@@ -149,14 +143,10 @@ function extractMessageData(message: Message) {
   }
 }
 
-async function assertMessages(
-  t: ExecutionContext<unknown>,
-  expected: Array<DeepPartial<MessageData>>,
-) {
+async function assertMessages(expected: Array<DeepPartial<MessageData>>) {
   const messages = await channel.messages.fetch()
 
-  t.deepEqual(
-    messages.map((message) => extractMessageData(message)),
+  expect(messages.map((message) => extractMessageData(message))).toEqual(
     expected.map((message) => ({
       content: "",
       ...message,

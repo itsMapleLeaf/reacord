@@ -1,14 +1,16 @@
-import test from "ava"
+import { expect, test } from "vitest"
 import { createDeferred } from "./deferred.js"
 
-test("resolve", async (t) => {
+test("resolve", async () => {
   const deferred = createDeferred<string>()
   setTimeout(() => deferred.resolve("hi"))
-  t.is(await deferred, "hi")
+  expect(await deferred).toBe("hi")
 })
 
-test("reject", async (t) => {
+test("reject", async () => {
   const deferred = createDeferred()
-  setTimeout(() => deferred.reject(new Error("oops")))
-  await t.throwsAsync(() => deferred, { instanceOf: Error, message: "oops" })
+  const error = new Error("oops")
+  setTimeout(() => deferred.reject(error))
+  const caught = await Promise.resolve(deferred).catch((error) => error)
+  expect(caught).toBe(error)
 })

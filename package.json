@@ -8,20 +8,16 @@
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "test": "pnpm build && pnpm test-only",
-    "test-only": "ava",
-    "test-coverage": "pnpm build && c8 pnpm test-only",
+    "test-only": "vitest",
+    "coverage": "pnpm build && vitest --coverage",
     "typecheck": "pnpm build && tsc --noEmit"
   },
   "devDependencies": {
-    "@itsmapleleaf/configs": "^1.1.0",
-    "@types/node": "*",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
-    "ava": "^4.0.0-rc.1",
+    "@itsmapleleaf/configs": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
     "c8": "^7.10.0",
-    "esbuild": "^0.14.2",
-    "esbuild-node-loader": "^0.6.3",
-    "eslint": "^8.4.1",
+    "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
@@ -29,9 +25,10 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "vite": "^2.7.4",
+    "vitest": "^0.0.102"
   },
   "eslintConfig": {
     "extends": [
@@ -47,21 +44,5 @@
       "project": "./tsconfig.json"
     }
   },
-  "prettier": "@itsmapleleaf/configs/prettier",
-  "ava": {
-    "files": [
-      "**/*.test.{ts,tsx}",
-      "!**/{node_modules,dist,coverage}/**"
-    ],
-    "nodeArguments": [
-      "--loader=esbuild-node-loader",
-      "--experimental-specifier-resolution=node",
-      "--no-warnings",
-      "--enable-source-maps"
-    ],
-    "extensions": {
-      "ts": "module",
-      "tsx": "module"
-    }
-  }
+  "prettier": "@itsmapleleaf/configs/prettier"
 }

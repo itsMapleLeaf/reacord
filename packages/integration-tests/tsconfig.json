@@ -1,0 +1,4 @@
+{
+  "extends": "../../tsconfig",
+  "include": ["**/*", "node_modules/reacord/dist"]
+}
