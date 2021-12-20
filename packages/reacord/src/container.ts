@@ -76,7 +76,13 @@ export class ReacordContainer {
   private async runAction(action: Action) {
     if (action.type === "updateMessage") {
       this.message = await (this.message
-        ? this.message.edit(action.options)
+        ? this.message.edit({
+            ...action.options,
+
+            // need to ensure that, if there's no text, it's erased
+            // eslint-disable-next-line unicorn/no-null
+            content: action.options.content ?? null,
+          })
         : this.channel.send(action.options))
     }
 
