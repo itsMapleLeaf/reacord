@@ -4,7 +4,10 @@ export function pick<T, K extends keyof T>(
 ): Pick<T, K> {
   const result: any = {}
   for (const key of keys) {
-    result[key] = object[key]
+    const value = object[key]
+    if (value !== undefined) {
+      result[key] = value
+    }
   }
   return result
 }
