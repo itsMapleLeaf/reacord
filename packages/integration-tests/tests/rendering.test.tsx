@@ -40,7 +40,7 @@ test.beforeEach(async () => {
   await Promise.all(messages.map((message) => message.delete()))
 })
 
-test.serial.only("kitchen sink + destroy", async (t) => {
+test.serial("kitchen sink + destroy", async (t) => {
   const root = createRoot(channel)
 
   await root.render(

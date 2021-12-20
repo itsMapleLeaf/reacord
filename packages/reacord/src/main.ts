@@ -1,3 +1,3 @@
-export * from "./components/embed.js"
-export * from "./components/text.js"
-export * from "./renderer/root.js"
+export * from "./embed.js"
+export * from "./root.js"
+export * from "./text.js"

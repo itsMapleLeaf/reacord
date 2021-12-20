@@ -3,10 +3,24 @@ import type {
   MessageEmbedOptions,
   MessageOptions,
 } from "discord.js"
+import type { ReactNode } from "react"
+import React from "react"
 import { ContainerInstance } from "./container-instance.js"
 
-/** Represents an <Embed /> element */
-export class EmbedInstance extends ContainerInstance {
+export type EmbedProps = {
+  color?: ColorResolvable
+  children?: ReactNode
+}
+
+export function Embed(props: EmbedProps) {
+  return (
+    <reacord-element createInstance={() => new EmbedInstance(props.color)}>
+      {props.children}
+    </reacord-element>
+  )
+}
+
+class EmbedInstance extends ContainerInstance {
   readonly name = "Embed"
 
   constructor(readonly color?: ColorResolvable) {

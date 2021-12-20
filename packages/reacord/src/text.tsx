@@ -1,8 +1,21 @@
 import type { MessageOptions } from "discord.js"
+import type { ReactNode } from "react"
+import React from "react"
 import { ContainerInstance } from "./container-instance.js"
 
-/** Represents a <Text /> element */
-export class TextElementInstance extends ContainerInstance {
+export type TextProps = {
+  children?: ReactNode
+}
+
+export function Text(props: TextProps) {
+  return (
+    <reacord-element createInstance={() => new TextElementInstance()}>
+      {props.children}
+    </reacord-element>
+  )
+}
+
+class TextElementInstance extends ContainerInstance {
   readonly name = "Text"
 
   constructor() {
