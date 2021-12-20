@@ -1,4 +1,4 @@
-import type { MessageOptions } from "discord.js"
+import type { MessageEmbedOptions, MessageOptions } from "discord.js"
 
 export abstract class BaseInstance {
   /** The name of the JSX element represented by this instance */
@@ -10,4 +10,8 @@ export abstract class BaseInstance {
   /** If this element can be a child of a message,
    * the function to modify the message options */
   renderToMessage?(options: MessageOptions): void
+
+  /** If this element can be a child of an embed,
+   * the function to modify the embed options */
+  renderToEmbed?(options: MessageEmbedOptions): void
 }

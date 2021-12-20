@@ -1,4 +1,4 @@
-import type { MessageOptions } from "discord.js"
+import type { MessageEmbedOptions, MessageOptions } from "discord.js"
 import { BaseInstance } from "./base-instance.js"
 
 /** Represents raw strings in JSX */
@@ -15,5 +15,9 @@ export class TextInstance extends BaseInstance {
 
   override renderToMessage(options: MessageOptions) {
     options.content = (options.content ?? "") + this.getText()
+  }
+
+  override renderToEmbed(options: MessageEmbedOptions) {
+    options.description = (options.description ?? "") + this.getText()
   }
 }

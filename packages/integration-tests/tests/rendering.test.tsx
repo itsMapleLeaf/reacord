@@ -4,7 +4,8 @@ import type { ExecutionContext } from "ava"
 import test from "ava"
 import type { Message } from "discord.js"
 import { Client, TextChannel } from "discord.js"
-import { createRoot, Embed, Text } from "reacord"
+import type { ReacordRoot } from "reacord"
+import { createRoot, Embed, EmbedAuthor, Text } from "reacord"
 import { pick } from "reacord-helpers/pick.js"
 import { raise } from "reacord-helpers/raise.js"
 import React from "react"
@@ -15,8 +16,9 @@ const client = new Client({
 })
 
 let channel: TextChannel
+let root: ReacordRoot
 
-test.before(async () => {
+test.serial.before(async () => {
   await client.login(testBotToken)
 
   const result =
@@ -29,26 +31,80 @@ test.before(async () => {
   }
 
   channel = result
+  root = createRoot(channel)
+
+  for (const [, message] of await channel.messages.fetch()) {
+    await message.delete()
+  }
 })
 
 test.after(() => {
   client.destroy()
 })
 
-test.beforeEach(async () => {
-  const messages = await channel.messages.fetch()
-  await Promise.all(messages.map((message) => message.delete()))
+// test.serial.beforeEach(async () => {
+//   const messages = await channel.messages.fetch()
+//   await Promise.all(messages.map((message) => message.delete()))
+// })
+
+test.serial("rapid updates", async (t) => {
+  // rapid updates
+  void root.render("hi world")
+  void root.render("hi the")
+  await root.render("hi moon")
+  await assertMessages(t, [{ content: "hi moon" }])
 })
 
-test.serial("kitchen sink + destroy", async (t) => {
-  const root = createRoot(channel)
+test.serial("nested text", async (t) => {
+  await root.render(
+    <Text>
+      <Text>hi world</Text>{" "}
+      <Text>
+        hi moon <Text>hi sun</Text>
+      </Text>
+    </Text>,
+  )
+  await assertMessages(t, [{ content: "hi world hi moon hi sun" }])
+})
 
+test.serial("empty embed fallback", async (t) => {
+  await root.render(<Embed />)
+  await assertMessages(t, [{ embeds: [{ description: "_ _" }] }])
+})
+
+test.serial("embed with only author", async (t) => {
+  await root.render(
+    <Embed>
+      <EmbedAuthor>only author</EmbedAuthor>
+    </Embed>,
+  )
+  await assertMessages(t, [
+    { embeds: [{ description: "_ _", author: { name: "only author" } }] },
+  ])
+})
+
+test.serial("empty embed author", async (t) => {
+  await root.render(
+    <Embed>
+      <EmbedAuthor />
+    </Embed>,
+  )
+  await assertMessages(t, [{ embeds: [{ description: "_ _" }] }])
+})
+
+test.serial("kitchen sink", async (t) => {
   await root.render(
     <>
       message <Text>content</Text>
       no space
       <Embed color="#feeeef">
         description <Text>more description</Text>
+        <EmbedAuthor
+          url="https://example.com"
+          iconUrl="https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
+        >
+          hi craw
+        </EmbedAuthor>
       </Embed>
       <Embed>
         another <Text>hi</Text>
@@ -62,75 +118,64 @@ test.serial("kitchen sink + destroy", async (t) => {
         {
           color: 0xfeeeef,
           description: "description more description",
+          author: {
+            name: "hi craw",
+            url: "https://example.com",
+            iconURL:
+              "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+          },
         },
-        { color: null, description: "another hi" },
+        { author: {}, color: null, description: "another hi" },
       ],
     },
   ])
+})
 
+test.serial("destroy", async (t) => {
   await root.destroy()
   await assertMessages(t, [])
-})
-
-test.serial("updates", async (t) => {
-  const root = createRoot(channel)
-
-  // rapid updates
-  void root.render("hi world")
-  await root.render("hi moon")
-  await assertMessages(t, [{ content: "hi moon" }])
-
-  // regular update after initial render
-  await root.render(<Text>hi sun</Text>)
-  await assertMessages(t, [{ content: "hi sun" }])
-
-  // update that requires cloning a node
-  await root.render(<Text>the</Text>)
-  await assertMessages(t, [{ content: "the" }])
-})
-
-test.serial("nested text", async (t) => {
-  const root = createRoot(channel)
-
-  await root.render(
-    <Text>
-      <Text>hi world</Text>{" "}
-      <Text>
-        hi moon <Text>hi sun</Text>
-      </Text>
-    </Text>,
-  )
-  await assertMessages(t, [{ content: "hi world hi moon hi sun" }])
-})
-
-test.serial("empty embed fallback", async (t) => {
-  const root = createRoot(channel)
-
-  await root.render(<Embed />)
-  await assertMessages(t, [{ embeds: [{ color: null, description: "_ _" }] }])
 })
 
 type MessageData = ReturnType<typeof extractMessageData>
 function extractMessageData(message: Message) {
   return {
     content: message.content,
-    embeds: message.embeds.map((embed) => pick(embed, "color", "description")),
+    embeds: message.embeds.map((embed) => ({
+      ...pick(embed, "color", "description"),
+      author: embed.author
+        ? pick(embed.author, "name", "url", "iconURL")
+        : { name: "" },
+    })),
   }
 }
 
 async function assertMessages(
   t: ExecutionContext<unknown>,
-  expected: Array<Partial<MessageData>>,
+  expected: Array<DeepPartial<MessageData>>,
 ) {
   const messages = await channel.messages.fetch()
 
-  const messageDataFallback: MessageData = {
-    content: "",
-    embeds: [],
-  }
-
   t.deepEqual(
     messages.map((message) => extractMessageData(message)),
-    expected.map((data) => ({ ...messageDataFallback, ...data })),
+    expected.map((message) => ({
+      content: "",
+      ...message,
+      embeds:
+        message.embeds?.map((embed) => ({
+          color: null,
+          description: "",
+          ...embed,
+          author: {
+            name: "",
+            ...embed?.author,
+          },
+        })) ?? [],
+    })),
   )
 }
+
+type DeepPartial<Subject> = Subject extends object
+  ? {
+      [Key in keyof Subject]?: DeepPartial<Subject[Key]>
+    }
+  : Subject

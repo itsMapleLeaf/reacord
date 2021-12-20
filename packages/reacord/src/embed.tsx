@@ -33,9 +33,26 @@ class EmbedInstance extends ContainerInstance {
   }
 
   get embedOptions(): MessageEmbedOptions {
-    return {
+    /* eslint-disable unicorn/no-null */
+    const options: MessageEmbedOptions = {
       color: this.color,
-      description: this.getChildrenText() || "_ _",
+      description: null as unknown as undefined,
     }
+    /* eslint-enable unicorn/no-null */
+
+    for (const child of this.children) {
+      if (!child.renderToEmbed) {
+        console.warn(`${child.name} is not a valid child of ${this.name}`)
+        continue
+      }
+      child.renderToEmbed(options)
+    }
+
+    // can't render an empty embed
+    if (!options.description) {
+      options.description = "_ _"
+    }
+
+    return options
   }
 }
