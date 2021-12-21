@@ -1,5 +1,5 @@
 import "dotenv/config.js"
-import { raise } from "reacord-helpers/raise.js"
+import { raise } from "./helpers/raise.js"
 
 function getEnvironmentValue(name: string) {
   return process.env[name] ?? raise(`Missing environment variable: ${name}`)

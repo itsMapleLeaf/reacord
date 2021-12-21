@@ -1,10 +1,10 @@
 /* eslint-disable unicorn/no-null */
 import { inspect } from "node:util"
-import { raise } from "reacord-helpers/raise.js"
 import ReactReconciler from "react-reconciler"
 import { BaseInstance } from "./base-instance.js"
 import { ContainerInstance } from "./container-instance.js"
 import type { ReacordContainer } from "./container.js"
+import { raise } from "./helpers/raise.js"
 import { TextInstance } from "./text-instance.js"
 
 type ElementTag = string

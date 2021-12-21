@@ -8,7 +8,7 @@ export function withLoggedMethodCalls<T extends object>(value: T) {
         return value
       }
       return (...values: any[]) => {
-        console.log(
+        console.info(
           `${String(property)}(${values
             .map((value) => inspect(value, { depth: 1 }))
             .join(", ")})`,

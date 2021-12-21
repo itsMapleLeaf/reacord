@@ -2,12 +2,12 @@
 import type { Message } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import { deepEqual } from "node:assert"
-import type { ReacordRoot } from "reacord"
-import { createRoot, Embed, Text } from "reacord"
-import { pick } from "reacord-helpers/pick.js"
-import { raise } from "reacord-helpers/raise.js"
 import React from "react"
 import { afterAll, beforeAll, test } from "vitest"
+import { pick } from "./helpers/pick.js"
+import { raise } from "./helpers/raise.js"
+import type { ReacordRoot } from "./main"
+import { createRoot, Embed, Text } from "./main"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({

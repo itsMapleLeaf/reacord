@@ -1,16 +1,36 @@
 {
-  "private": true,
+  "name": "reacord",
   "type": "module",
+  "description": "send reactive discord messages using react components ⚛",
+  "version": "0.0.0",
+  "types": "./dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "import": "./dist/main.js",
+    "require": "./dist/main.cjs"
+  },
   "scripts": {
-    "build": "pnpm -C packages/reacord build",
+    "build": "tsup-node src/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm -C packages/reacord build -- --watch",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "test": "pnpm build && pnpm test-only",
-    "test-only": "vitest",
-    "coverage": "pnpm build && vitest --coverage",
-    "typecheck": "pnpm build && tsc --noEmit"
+    "test": "vitest",
+    "coverage": "vitest --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-reconciler": "^0.26.4",
+    "immer": "^9.0.7",
+    "react-reconciler": "^0.26.2"
+  },
+  "peerDependencies": {
+    "discord.js": "^13.3",
+    "react": ">=17"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
@@ -30,7 +50,13 @@
     "should": "^13.2.3",
     "typescript": "^4.5.4",
     "vite": "^2.7.4",
-    "vitest": "^0.0.102"
+    "vitest": "^0.0.102",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "esbuild": "^0.14.6",
+    "nanoid": "^3.1.30",
+    "react": "^17.0.2",
+    "tsup": "^5.11.6"
   },
   "eslintConfig": {
     "extends": [
