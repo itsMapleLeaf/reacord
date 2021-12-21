@@ -12,10 +12,11 @@
   - [x] image - url
   - [x] fields - name, value, inline
 - message components
-  - [ ] buttons
+  - [x] buttons
   - [ ] links
   - [ ] select
   - [ ] action row
+  - [ ] button onClick
 
 # cool ideas / polish
 

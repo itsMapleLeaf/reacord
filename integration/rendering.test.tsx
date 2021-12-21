@@ -5,7 +5,7 @@ import React from "react"
 import { omit } from "../src/helpers/omit.js"
 import { raise } from "../src/helpers/raise.js"
 import type { ReacordRoot } from "../src/main.js"
-import { createRoot, Embed, EmbedField, Text } from "../src/main.js"
+import { Button, createRoot, Embed, EmbedField, Text } from "../src/main.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
@@ -112,6 +112,15 @@ test("kitchen sink", async () => {
           field content but inline
         </EmbedField>
       </Embed>
+      <Button style="primary">primary button</Button>
+      <Button style="danger">danger button</Button>
+      <Button style="success">success button</Button>
+      <Button style="secondary">secondary button</Button>
+      <Button>secondary by default</Button>
+      <Button>
+        complex <Text>button</Text> text
+      </Button>
+      <Button disabled>disabled button</Button>
     </>,
   )
   await assertMessages([
@@ -150,6 +159,60 @@ test("kitchen sink", async () => {
           ],
         },
       ],
+      components: [
+        {
+          type: "ACTION_ROW",
+          components: [
+            {
+              type: "BUTTON",
+              label: "primary button",
+              style: "PRIMARY",
+              disabled: false,
+            },
+            {
+              type: "BUTTON",
+              label: "danger button",
+              style: "DANGER",
+              disabled: false,
+            },
+            {
+              type: "BUTTON",
+              label: "success button",
+              style: "SUCCESS",
+              disabled: false,
+            },
+            {
+              type: "BUTTON",
+              label: "secondary button",
+              style: "SECONDARY",
+              disabled: false,
+            },
+            {
+              type: "BUTTON",
+              label: "secondary by default",
+              style: "SECONDARY",
+              disabled: false,
+            },
+          ],
+        },
+        {
+          type: "ACTION_ROW",
+          components: [
+            {
+              type: "BUTTON",
+              label: "complex button text",
+              style: "SECONDARY",
+              disabled: false,
+            },
+            {
+              type: "BUTTON",
+              label: "disabled button",
+              style: "SECONDARY",
+              disabled: true,
+            },
+          ],
+        },
+      ],
     },
   ])
 })
@@ -171,7 +234,7 @@ function extractMessageData(message: Message): MessageOptions {
   return {
     content: nonEmptyOrUndefined(message.content),
     embeds: nonEmptyOrUndefined(
-      pruneUndefinedKeys(
+      pruneUndefinedValues(
         message.embeds.map((embed) => ({
           title: embed.title ?? undefined,
           description: embed.description ?? undefined,
@@ -191,10 +254,40 @@ function extractMessageData(message: Message): MessageOptions {
         })),
       ),
     ),
+    components: nonEmptyOrUndefined(
+      message.components.map((row) => ({
+        type: "ACTION_ROW",
+        components: row.components.map((component) => {
+          if (component.type === "BUTTON") {
+            return pruneUndefinedValues({
+              type: "BUTTON",
+              style: component.style ?? "SECONDARY",
+              label: component.label ?? undefined,
+              emoji: component.emoji?.name,
+              url: component.url ?? undefined,
+              disabled: component.disabled ?? undefined,
+            })
+          }
+
+          if (component.type === "SELECT_MENU") {
+            return pruneUndefinedValues({
+              type: "SELECT_MENU",
+              disabled: component.disabled ?? undefined,
+              options: component.options.map((option) => ({
+                label: option.label ?? undefined,
+                value: option.value ?? undefined,
+              })),
+            })
+          }
+
+          raise(`unknown component type ${(component as any).type}`)
+        }),
+      })),
+    ),
   }
 }
 
-function pruneUndefinedKeys<T>(input: T) {
+function pruneUndefinedValues<T>(input: T) {
   return JSON.parse(JSON.stringify(input))
 }
 

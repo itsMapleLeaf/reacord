@@ -27,6 +27,7 @@
     "@types/react": "*",
     "@types/react-reconciler": "^0.26.4",
     "immer": "^9.0.7",
+    "nanoid": "^3.1.30",
     "react-reconciler": "^0.26.2"
   },
   "peerDependencies": {
@@ -38,8 +39,6 @@
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
-    "c8": "^7.10.0",
-    "chai": "^4.3.4",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "esbuild": "^0.14.6",
@@ -53,10 +52,8 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
     "jest": "^27.4.5",
-    "nanoid": "^3.1.30",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
-    "should": "^13.2.3",
     "tsup": "^5.11.6",
     "typescript": "^4.5.4"
   },
