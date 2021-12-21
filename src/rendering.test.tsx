@@ -2,11 +2,10 @@
 import type { Message, MessageOptions } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import React from "react"
-import { EmbedField } from "./embed-field.js"
 import { omit } from "./helpers/omit.js"
 import { raise } from "./helpers/raise.js"
-import type { ReacordRoot } from "./main"
-import { createRoot, Embed, Text } from "./main"
+import type { ReacordRoot } from "./main.js"
+import { createRoot, Embed, EmbedField, Text } from "./main.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
