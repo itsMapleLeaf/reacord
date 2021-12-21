@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-null */
-import type { Message } from "discord.js"
+import type { Message, MessageOptions } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import React from "react"
-import { pick } from "./helpers/pick.js"
+import { omit } from "./helpers/omit.js"
 import { raise } from "./helpers/raise.js"
 import type { ReacordRoot } from "./main"
 import { createRoot, Embed, Text } from "./main"
@@ -78,6 +78,8 @@ test("empty embed author", async () => {
 })
 
 test("kitchen sink", async () => {
+  const timestamp = Date.now()
+
   await root.render(
     <>
       message <Text>content</Text>
@@ -86,7 +88,7 @@ test("kitchen sink", async () => {
         color="#feeeef"
         title="the embed"
         url="https://example.com"
-        timestamp={new Date().toISOString()}
+        timestamp={timestamp}
         thumbnailUrl="https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
         author={{
           name: "hi craw",
@@ -120,8 +122,16 @@ test("kitchen sink", async () => {
             iconURL:
               "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
           },
+          footer: {
+            text: "the footer",
+            iconURL:
+              "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+          },
+          timestamp,
+          title: "the embed",
+          url: "https://example.com",
         },
-        { author: {}, color: null, description: "another hi" },
+        { description: "another hi" },
       ],
     },
   ])
@@ -132,42 +142,48 @@ test("destroy", async () => {
   await assertMessages([])
 })
 
-type MessageData = ReturnType<typeof extractMessageData>
-function extractMessageData(message: Message) {
-  return {
-    content: message.content,
-    embeds: message.embeds.map((embed) => ({
-      ...pick(embed, "color", "description"),
-      author: embed.author
-        ? pick(embed.author, "name", "url", "iconURL")
-        : { name: "" },
-    })),
-  }
-}
-
-async function assertMessages(expected: Array<DeepPartial<MessageData>>) {
+async function assertMessages(expected: MessageOptions[]) {
   const messages = await channel.messages.fetch()
 
   expect(messages.map((message) => extractMessageData(message))).toEqual(
-    expected.map((message) => ({
-      content: "",
-      ...message,
-      embeds:
-        message.embeds?.map((embed) => ({
-          color: null,
-          description: "",
-          ...embed,
-          author: {
-            name: "",
-            ...embed?.author,
-          },
-        })) ?? [],
-    })),
+    expected,
   )
 }
 
-type DeepPartial<Subject> = Subject extends object
-  ? {
-      [Key in keyof Subject]?: DeepPartial<Subject[Key]>
-    }
-  : Subject
+function extractMessageData(message: Message): MessageOptions {
+  return {
+    content: nonEmptyOrUndefined(message.content),
+    embeds: nonEmptyOrUndefined(
+      pruneUndefinedKeys(
+        message.embeds.map((embed) => ({
+          title: embed.title ?? undefined,
+          description: embed.description ?? undefined,
+          url: embed.url ?? undefined,
+          timestamp: embed.timestamp ?? undefined,
+          color: embed.color ?? undefined,
+          fields: nonEmptyOrUndefined(embed.fields),
+          author: embed.author ? omit(embed.author, "proxyIconURL") : undefined,
+          thumbnail: embed.thumbnail ?? undefined,
+          image: embed.image ?? undefined,
+          video: embed.video ?? undefined,
+          footer: embed.footer ? omit(embed.footer, "proxyIconURL") : undefined,
+        })),
+      ),
+    ),
+  }
+}
+
+function pruneUndefinedKeys<T>(input: T) {
+  return JSON.parse(JSON.stringify(input))
+}
+
+function nonEmptyOrUndefined<T extends unknown>(input: T): T | undefined {
+  if (
+    input == undefined ||
+    input === "" ||
+    (Array.isArray(input) && input.length === 0)
+  ) {
+    return undefined
+  }
+  return input
+}
