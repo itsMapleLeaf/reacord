@@ -13,6 +13,7 @@ const config = {
     "(^\\./.+)\\.js$": "$1",
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"],
+  verbose: true,
 }
 
 export default config
