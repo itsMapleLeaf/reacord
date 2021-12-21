@@ -8,13 +8,26 @@ import React from "react"
 import { ContainerInstance } from "./container-instance.js"
 
 export type EmbedProps = {
+  title?: string
   color?: ColorResolvable
+  url?: string
+  timestamp?: Date | number | string
+  thumbnailUrl?: string
+  author?: {
+    name?: string
+    url?: string
+    iconUrl?: string
+  }
+  footer?: {
+    text?: string
+    iconUrl?: string
+  }
   children?: ReactNode
 }
 
 export function Embed(props: EmbedProps) {
   return (
-    <reacord-element createInstance={() => new EmbedInstance(props.color)}>
+    <reacord-element createInstance={() => new EmbedInstance(props)}>
       {props.children}
     </reacord-element>
   )
@@ -23,22 +36,31 @@ export function Embed(props: EmbedProps) {
 class EmbedInstance extends ContainerInstance {
   readonly name = "Embed"
 
-  constructor(readonly color?: ColorResolvable) {
+  constructor(readonly props: EmbedProps) {
     super({ warnOnNonTextChildren: false })
   }
 
   override renderToMessage(message: MessageOptions) {
     message.embeds ??= []
-    message.embeds.push(this.embedOptions)
+    message.embeds.push(this.getEmbedOptions())
   }
 
-  get embedOptions(): MessageEmbedOptions {
-    /* eslint-disable unicorn/no-null */
+  getEmbedOptions(): MessageEmbedOptions {
     const options: MessageEmbedOptions = {
-      color: this.color,
-      description: null as unknown as undefined,
+      ...this.props,
+      author: {
+        ...this.props.author,
+        iconURL: this.props.author?.iconUrl,
+      },
+      footer: {
+        text: "",
+        ...this.props.footer,
+        iconURL: this.props.footer?.iconUrl,
+      },
+      timestamp: this.props.timestamp
+        ? new Date(this.props.timestamp) // this _may_ need date-fns to parse this
+        : undefined,
     }
-    /* eslint-enable unicorn/no-null */
 
     for (const child of this.children) {
       if (!child.renderToEmbed) {

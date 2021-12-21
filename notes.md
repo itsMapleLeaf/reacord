@@ -6,10 +6,10 @@
   - [x] color
   - [x] author
   - [x] description
-  - [ ] title - text children, url
-  - [ ] footer - icon url, timestamp, text children
+  - [x] title - text children, url
+  - [x] footer - icon url, timestamp, text children
+  - [x] thumbnail - url
   - [ ] image - url
-  - [ ] thumbnail - url
   - [ ] fields - name, value, inline
 - message components
   - [ ] buttons

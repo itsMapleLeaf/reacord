@@ -1,12 +1,13 @@
 /* eslint-disable unicorn/no-null */
 import type { Message } from "discord.js"
 import { Client, TextChannel } from "discord.js"
+import { deepEqual } from "node:assert"
 import type { ReacordRoot } from "reacord"
-import { createRoot, Embed, EmbedAuthor, Text } from "reacord"
+import { createRoot, Embed, Text } from "reacord"
 import { pick } from "reacord-helpers/pick.js"
 import { raise } from "reacord-helpers/raise.js"
 import React from "react"
-import { afterAll, beforeAll, expect, test } from "vitest"
+import { afterAll, beforeAll, test } from "vitest"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
@@ -61,28 +62,20 @@ test("nested text", async () => {
   await assertMessages([{ content: "hi world hi moon hi sun" }])
 })
 
-test("empty embed fallback", async () => {
+test.only("empty embed fallback", async () => {
   await root.render(<Embed />)
   await assertMessages([{ embeds: [{ description: "_ _" }] }])
 })
 
-test("embed with only author", async () => {
-  await root.render(
-    <Embed>
-      <EmbedAuthor>only author</EmbedAuthor>
-    </Embed>,
-  )
+test.only("embed with only author", async () => {
+  await root.render(<Embed author={{ name: "only author" }} />)
   await assertMessages([
     { embeds: [{ description: "_ _", author: { name: "only author" } }] },
   ])
 })
 
 test("empty embed author", async () => {
-  await root.render(
-    <Embed>
-      <EmbedAuthor />
-    </Embed>,
-  )
+  await root.render(<Embed author={{}} />)
   await assertMessages([{ embeds: [{ description: "_ _" }] }])
 })
 
@@ -91,14 +84,25 @@ test("kitchen sink", async () => {
     <>
       message <Text>content</Text>
       no space
-      <Embed color="#feeeef">
+      <Embed
+        color="#feeeef"
+        title="the embed"
+        url="https://example.com"
+        timestamp={new Date().toISOString()}
+        thumbnailUrl="https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
+        author={{
+          name: "hi craw",
+          url: "https://example.com",
+          iconUrl:
+            "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+        }}
+        footer={{
+          text: "the footer",
+          iconUrl:
+            "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+        }}
+      >
         description <Text>more description</Text>
-        <EmbedAuthor
-          url="https://example.com"
-          iconUrl="https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
-        >
-          hi craw
-        </EmbedAuthor>
       </Embed>
       <Embed>
         another <Text>hi</Text>
@@ -146,7 +150,8 @@ function extractMessageData(message: Message) {
 async function assertMessages(expected: Array<DeepPartial<MessageData>>) {
   const messages = await channel.messages.fetch()
 
-  expect(messages.map((message) => extractMessageData(message))).toEqual(
+  deepEqual(
+    messages.map((message) => extractMessageData(message)),
     expected.map((message) => ({
       content: "",
       ...message,

@@ -13,11 +13,22 @@ function KitchenSink() {
         format="long|short|relative|etc"
       />
       {/* embeds */}
-      <Embed color="firebrick">
-        <EmbedAuthor url="subscribe to my patreon" iconUrl="data:whatever">
-          author name
-        </EmbedAuthor>
-        <EmbedTitle url="https://example.com">title</EmbedTitle>
+      <Embed
+        color="firebrick"
+        title="the embed"
+        url="https://example.com"
+        timestamp={new Date().toISOString()}
+        thumbnailUrl="https://example.com/thumbnail.png"
+        author={{
+          name: "the author",
+          url: "https://example.com",
+          iconUrl: "https://example.com/icon.png",
+        }}
+        footer={{
+          text: "the footer",
+          iconUrl: "https://example.com/icon.png",
+        }}
+      >
         description{"\n"}
         aaaaaaaaa
         <EmbedField name="field name">field content</EmbedField>
@@ -28,10 +39,6 @@ function KitchenSink() {
         <EmbedImage url="https://example.com/image.png" />
         <EmbedImage url="https://example.com/image.png" />
         <EmbedImage url="https://example.com/image.png" />
-        <EmbedThumbnail url="https://example.com/image.png" />
-        <EmbedFooter iconUrl="data:whatever" timestamp={Date.now()}>
-          footer content
-        </EmbedFooter>
       </Embed>
       {/* files */}
       <File url="data:sdklfjs" />
