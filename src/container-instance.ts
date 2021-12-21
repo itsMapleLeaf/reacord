@@ -20,10 +20,6 @@ export abstract class ContainerInstance extends BaseInstance {
     this.children.push(child)
   }
 
-  clear() {
-    this.children.splice(0)
-  }
-
   protected getChildrenText(): string {
     let text = ""
     for (const child of this.children) {
