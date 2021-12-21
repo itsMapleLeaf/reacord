@@ -10,7 +10,7 @@ const config = {
     ],
   },
   moduleNameMapper: {
-    "(^\\./.+)\\.js$": "$1",
+    "(^(\\./|\\.\\./).+)\\.js$": "$1",
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"],
   verbose: true,
