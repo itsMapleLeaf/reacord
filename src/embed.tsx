@@ -12,6 +12,7 @@ export type EmbedProps = {
   color?: ColorResolvable
   url?: string
   timestamp?: Date | number | string
+  imageUrl?: string
   thumbnailUrl?: string
   author?: {
     name?: string
@@ -48,6 +49,10 @@ class EmbedInstance extends ContainerInstance {
   getEmbedOptions(): MessageEmbedOptions {
     const options: MessageEmbedOptions = {
       ...this.props,
+      image: this.props.imageUrl ? { url: this.props.imageUrl } : undefined,
+      thumbnail: this.props.thumbnailUrl
+        ? { url: this.props.thumbnailUrl }
+        : undefined,
       author: {
         ...this.props.author,
         iconURL: this.props.author?.iconUrl,

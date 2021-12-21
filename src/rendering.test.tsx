@@ -2,6 +2,7 @@
 import type { Message, MessageOptions } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import React from "react"
+import { EmbedField } from "./embed-field.js"
 import { omit } from "./helpers/omit.js"
 import { raise } from "./helpers/raise.js"
 import type { ReacordRoot } from "./main"
@@ -79,6 +80,8 @@ test("empty embed author", async () => {
 
 test("kitchen sink", async () => {
   const timestamp = Date.now()
+  const image =
+    "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
 
   await root.render(
     <>
@@ -89,23 +92,26 @@ test("kitchen sink", async () => {
         title="the embed"
         url="https://example.com"
         timestamp={timestamp}
-        thumbnailUrl="https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024"
+        imageUrl={image}
+        thumbnailUrl={image}
         author={{
           name: "hi craw",
           url: "https://example.com",
-          iconUrl:
-            "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+          iconUrl: image,
         }}
         footer={{
           text: "the footer",
-          iconUrl:
-            "https://cdn.discordapp.com/avatars/109677308410875904/3e53fcb70760a08fa63f73376ede5d1f.png?size=1024",
+          iconUrl: image,
         }}
       >
         description <Text>more description</Text>
       </Embed>
       <Embed>
         another <Text>hi</Text>
+        <EmbedField name="field name">field content</EmbedField>
+        <EmbedField name="field name" inline>
+          field content but inline
+        </EmbedField>
       </Embed>
     </>,
   )
@@ -116,6 +122,8 @@ test("kitchen sink", async () => {
         {
           color: 0xfe_ee_ef,
           description: "description more description",
+          image: { url: image },
+          thumbnail: { url: image },
           author: {
             name: "hi craw",
             url: "https://example.com",
@@ -131,7 +139,17 @@ test("kitchen sink", async () => {
           title: "the embed",
           url: "https://example.com",
         },
-        { description: "another hi" },
+        {
+          description: "another hi",
+          fields: [
+            { name: "field name", value: "field content", inline: false },
+            {
+              name: "field name",
+              value: "field content but inline",
+              inline: true,
+            },
+          ],
+        },
       ],
     },
   ])
@@ -163,8 +181,12 @@ function extractMessageData(message: Message): MessageOptions {
           color: embed.color ?? undefined,
           fields: nonEmptyOrUndefined(embed.fields),
           author: embed.author ? omit(embed.author, "proxyIconURL") : undefined,
-          thumbnail: embed.thumbnail ?? undefined,
-          image: embed.image ?? undefined,
+          thumbnail: embed.thumbnail
+            ? omit(embed.thumbnail, "proxyURL", "width", "height")
+            : undefined,
+          image: embed.image
+            ? omit(embed.image, "proxyURL", "width", "height")
+            : undefined,
           video: embed.video ?? undefined,
           footer: embed.footer ? omit(embed.footer, "proxyIconURL") : undefined,
         })),

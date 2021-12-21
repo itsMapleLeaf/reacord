@@ -19,6 +19,7 @@ function KitchenSink() {
         url="https://example.com"
         timestamp={new Date().toISOString()}
         thumbnailUrl="https://example.com/thumbnail.png"
+        imageUrl="https://example.com/image.png"
         author={{
           name: "the author",
           url: "https://example.com",
@@ -35,10 +36,6 @@ function KitchenSink() {
         <EmbedField name="field name" inline>
           field content but inline
         </EmbedField>
-        <EmbedImage url="https://example.com/image.png" />
-        <EmbedImage url="https://example.com/image.png" />
-        <EmbedImage url="https://example.com/image.png" />
-        <EmbedImage url="https://example.com/image.png" />
       </Embed>
       {/* files */}
       <File url="data:sdklfjs" />

@@ -9,8 +9,8 @@
   - [x] title - text children, url
   - [x] footer - icon url, timestamp, text children
   - [x] thumbnail - url
-  - [ ] image - url
-  - [ ] fields - name, value, inline
+  - [x] image - url
+  - [x] fields - name, value, inline
 - message components
   - [ ] buttons
   - [ ] links
@@ -20,6 +20,7 @@
 # cool ideas / polish
 
 - [ ] files
+- [ ] stickers
 - [ ] user mention component
 - [ ] channel mention component
 - [ ] timestamp component
