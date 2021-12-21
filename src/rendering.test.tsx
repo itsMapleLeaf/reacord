@@ -60,12 +60,12 @@ test("nested text", async () => {
   await assertMessages([{ content: "hi world hi moon hi sun" }])
 })
 
-test.only("empty embed fallback", async () => {
+test("empty embed fallback", async () => {
   await root.render(<Embed />)
   await assertMessages([{ embeds: [{ description: "_ _" }] }])
 })
 
-test.only("embed with only author", async () => {
+test("embed with only author", async () => {
   await root.render(<Embed author={{ name: "only author" }} />)
   await assertMessages([
     { embeds: [{ description: "_ _", author: { name: "only author" } }] },

@@ -39,7 +39,7 @@ export const reconciler = ReactReconciler<
   never, // HydratableInstance,
   never, // PublicInstance,
   null, // HostContext,
-  never, // UpdatePayload,
+  [], // UpdatePayload,
   BaseInstance[], // ChildSet,
   unknown, // TimeoutHandle,
   unknown // NoTimeout
@@ -100,10 +100,15 @@ export const reconciler = ReactReconciler<
     newProps: Props,
   ) => createInstance(type, newProps),
 
+  // returning a non-null value tells react to re-render the whole thing
+  // on any prop change
+  //
+  // we can probably optimize this to actually compare old/new props though
+  prepareUpdate: () => [],
+
   finalizeInitialChildren: () => false,
   prepareForCommit: (container) => null,
   resetAfterCommit: () => null,
-  prepareUpdate: () => null,
   getPublicInstance: () => raise("Not implemented"),
   preparePortalMount: () => raise("Not implemented"),
 })
