@@ -1,5 +1,4 @@
-import { expect, test } from "vitest"
-import { createDeferred } from "./deferred.js"
+import { createDeferred } from "./deferred"
 
 test("resolve", async () => {
   const deferred = createDeferred<string>()

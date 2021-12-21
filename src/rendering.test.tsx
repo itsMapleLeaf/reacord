@@ -1,9 +1,7 @@
 /* eslint-disable unicorn/no-null */
 import type { Message } from "discord.js"
 import { Client, TextChannel } from "discord.js"
-import { deepEqual } from "node:assert"
 import React from "react"
-import { afterAll, beforeAll, test } from "vitest"
 import { pick } from "./helpers/pick.js"
 import { raise } from "./helpers/raise.js"
 import type { ReacordRoot } from "./main"
@@ -150,8 +148,7 @@ function extractMessageData(message: Message) {
 async function assertMessages(expected: Array<DeepPartial<MessageData>>) {
   const messages = await channel.messages.fetch()
 
-  deepEqual(
-    messages.map((message) => extractMessageData(message)),
+  expect(messages.map((message) => extractMessageData(message))).toEqual(
     expected.map((message) => ({
       content: "",
       ...message,
