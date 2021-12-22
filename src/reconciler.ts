@@ -1,46 +1,41 @@
 /* eslint-disable unicorn/no-null */
 import { inspect } from "node:util"
 import ReactReconciler from "react-reconciler"
-import { BaseInstance } from "./base-instance.js"
-import { ContainerInstance } from "./container-instance.js"
-import type { ReacordContainer } from "./container.js"
 import { raise } from "./helpers/raise.js"
-import { TextInstance } from "./text-instance.js"
+import type { MessageNode, Node, TextNode } from "./node-tree.js"
+import type { MessageRenderer } from "./renderer.js"
 
 type ElementTag = string
 
 type Props = Record<string, unknown>
 
-const createInstance = (type: string, props: Props): BaseInstance => {
+const createInstance = (type: string, props: Props): Node => {
   if (type !== "reacord-element") {
     raise(`createInstance: unknown type: ${type}`)
   }
 
-  if (typeof props.createInstance !== "function") {
-    const actual = inspect(props.createInstance)
-    raise(`invalid createInstance function, received: ${actual}`)
+  if (typeof props.createNode !== "function") {
+    const actual = inspect(props.createNode)
+    raise(`invalid createNode function, received: ${actual}`)
   }
 
-  const instance = props.createInstance()
-  if (!(instance instanceof BaseInstance)) {
-    raise(`invalid instance: ${inspect(instance)}`)
-  }
-
-  return instance
+  return props.createNode()
 }
+
+type ChildSet = MessageNode
 
 export const reconciler = ReactReconciler<
   string, // Type (jsx tag),
   Props, // Props,
-  ReacordContainer, // Container,
-  BaseInstance, // Instance,
-  TextInstance, // TextInstance,
+  MessageRenderer, // Container,
+  Node, // Instance,
+  TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
   never, // PublicInstance,
   null, // HostContext,
   [], // UpdatePayload,
-  BaseInstance[], // ChildSet,
+  ChildSet, // ChildSet,
   unknown, // TimeoutHandle,
   unknown // NoTimeout
 >({
@@ -59,41 +54,37 @@ export const reconciler = ReactReconciler<
 
   createInstance,
 
-  createTextInstance: (text) => new TextInstance(text),
+  createTextInstance: (text) => ({ type: "text", text }),
 
-  createContainerChildSet: () => [],
+  createContainerChildSet: (): ChildSet => ({
+    type: "message",
+    children: [],
+  }),
 
-  appendChildToContainerChildSet: (
-    childSet: BaseInstance[],
-    child: BaseInstance,
-  ) => {
-    childSet.push(child)
+  appendChildToContainerChildSet: (childSet: ChildSet, child: Node) => {
+    childSet.children.push(child)
   },
 
-  finalizeContainerChildren: (
-    container: ReacordContainer,
-    children: BaseInstance[],
-  ) => false,
+  finalizeContainerChildren: (container: MessageRenderer, children: ChildSet) =>
+    false,
 
   replaceContainerChildren: (
-    container: ReacordContainer,
-    children: BaseInstance[],
+    container: MessageRenderer,
+    children: ChildSet,
   ) => {
     container.render(children)
   },
 
   appendInitialChild: (parent, child) => {
-    if (parent instanceof ContainerInstance) {
-      parent.add(child)
+    if ("children" in parent) {
+      parent.children.push(child)
     } else {
-      raise(
-        `Cannot append child of type ${child.constructor.name} to ${parent.constructor.name}`,
-      )
+      raise(`${parent.type} cannot have children`)
     }
   },
 
   cloneInstance: (
-    instance: BaseInstance,
+    instance: Node,
     _: unknown,
     type: ElementTag,
     oldProps: Props,

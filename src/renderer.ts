@@ -1,11 +1,12 @@
 import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
-import type { BaseInstance } from "./base-instance.js"
+import type { MessageNode } from "./node-tree.js"
+import { getMessageOptions } from "./node-tree.js"
 
 type Action =
   | { type: "updateMessage"; options: MessageOptions }
   | { type: "deleteMessage" }
 
-export class ReacordContainer {
+export class MessageRenderer {
   private channel: TextBasedChannels
   private message?: Message
   private actions: Action[] = []
@@ -15,22 +16,11 @@ export class ReacordContainer {
     this.channel = channel
   }
 
-  render(children: BaseInstance[]) {
-    const options: MessageOptions = {}
-    for (const child of children) {
-      if (!child.renderToMessage) {
-        console.warn(`${child.name} is not a valid message child`)
-        continue
-      }
-      child.renderToMessage(options)
-    }
-
-    // can't render an empty message
-    if (!options?.content && !options.embeds?.length) {
-      options.content = "_ _"
-    }
-
-    this.addAction({ type: "updateMessage", options })
+  render(node: MessageNode) {
+    this.addAction({
+      type: "updateMessage",
+      options: getMessageOptions(node),
+    })
   }
 
   destroy() {

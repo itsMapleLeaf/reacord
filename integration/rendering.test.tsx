@@ -74,14 +74,7 @@ test("empty embed fallback", async () => {
 
 test("embed with only author", async () => {
   await root.render(<Embed author={{ name: "only author" }} />)
-  await assertMessages([
-    { embeds: [{ description: "_ _", author: { name: "only author" } }] },
-  ])
-})
-
-test("empty embed author", async () => {
-  await root.render(<Embed author={{}} />)
-  await assertMessages([{ embeds: [{ description: "_ _" }] }])
+  await assertMessages([{ embeds: [{ author: { name: "only author" } }] }])
 })
 
 test("kitchen sink", async () => {
@@ -252,7 +245,7 @@ async function assertMessages(expected: MessageOptions[]) {
 }
 
 function extractMessageData(message: Message): MessageOptions {
-  return {
+  return pruneUndefinedValues({
     content: nonEmptyOrUndefined(message.content),
     embeds: nonEmptyOrUndefined(
       pruneUndefinedValues(
@@ -305,7 +298,7 @@ function extractMessageData(message: Message): MessageOptions {
         }),
       })),
     ),
-  }
+  })
 }
 
 function pruneUndefinedValues<T>(input: T) {

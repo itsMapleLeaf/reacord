@@ -1,11 +1,14 @@
-declare namespace JSX {
-  import type { ReactNode } from "react"
+import type { ReactNode } from "react"
+import type { Node } from "./node-tree"
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface IntrinsicElements {
-    "reacord-element": {
-      createInstance: () => unknown
-      children?: ReactNode
+declare global {
+  namespace JSX {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+    interface IntrinsicElements {
+      "reacord-element": {
+        createNode: () => Node
+        children?: ReactNode
+      }
     }
   }
 }

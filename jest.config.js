@@ -16,4 +16,5 @@ const config = {
   verbose: true,
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export default config

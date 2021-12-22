@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 export function pick<T, K extends keyof T>(
   object: T,
   ...keys: K[]

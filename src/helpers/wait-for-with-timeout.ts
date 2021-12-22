@@ -2,6 +2,7 @@ import { rejectAfter } from "./reject-after.js"
 import type { MaybePromise } from "./types.js"
 import { waitFor } from "./wait-for.js"
 
+// eslint-disable-next-line import/no-unused-modules
 export function waitForWithTimeout(
   condition: () => MaybePromise<boolean>,
   timeout = 1000,
