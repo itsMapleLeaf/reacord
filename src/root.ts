@@ -21,5 +21,6 @@ export function createRoot(target: ReacordRenderTarget) {
       container.destroy()
       return container.completion()
     },
+    complete: () => container.completion(),
   }
 }
