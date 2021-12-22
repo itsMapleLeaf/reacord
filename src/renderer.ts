@@ -1,31 +1,65 @@
-import type { Message, MessageOptions, TextBasedChannels } from "discord.js"
+import type {
+  InteractionCollector,
+  Message,
+  MessageComponentInteraction,
+  MessageComponentType,
+  TextBasedChannels,
+} from "discord.js"
 import type { MessageNode } from "./node-tree.js"
-import { getMessageOptions } from "./node-tree.js"
+import { collectInteractionHandlers, getMessageOptions } from "./node-tree.js"
 
 type Action =
-  | { type: "updateMessage"; options: MessageOptions }
+  | { type: "updateMessage"; tree: MessageNode }
   | { type: "deleteMessage" }
 
 export class MessageRenderer {
   private channel: TextBasedChannels
+  private interactionCollector: InteractionCollector<MessageComponentInteraction>
   private message?: Message
+  private tree?: MessageNode
   private actions: Action[] = []
   private runningPromise?: Promise<void>
 
   constructor(channel: TextBasedChannels) {
     this.channel = channel
+    this.interactionCollector =
+      this.createInteractionCollector() as InteractionCollector<MessageComponentInteraction>
+  }
+
+  private getInteractionHandler(customId: string) {
+    if (!this.tree) return undefined
+    const handlers = collectInteractionHandlers(this.tree)
+    return handlers.find((handler) => handler.customId === customId)
+  }
+
+  private createInteractionCollector() {
+    const collector =
+      this.channel.createMessageComponentCollector<MessageComponentType>({
+        filter: (interaction) =>
+          !!this.getInteractionHandler(interaction.customId),
+      })
+
+    collector.on("collect", (interaction) => {
+      const handler = this.getInteractionHandler(interaction.customId)
+      if (handler?.type === "button" && interaction.isButton()) {
+        handler.onClick(interaction)
+      }
+    })
+
+    return collector
   }
 
   render(node: MessageNode) {
     this.addAction({
       type: "updateMessage",
-      options: getMessageOptions(node),
+      tree: node,
     })
   }
 
   destroy() {
     this.actions = []
     this.addAction({ type: "deleteMessage" })
+    this.interactionCollector.stop()
   }
 
   completion() {
@@ -65,15 +99,20 @@ export class MessageRenderer {
 
   private async runAction(action: Action) {
     if (action.type === "updateMessage") {
-      this.message = await (this.message
-        ? this.message.edit({
-            ...action.options,
+      const options = getMessageOptions(action.tree)
+      // eslint-disable-next-line unicorn/prefer-ternary
+      if (this.message) {
+        this.message = await this.message.edit({
+          ...options,
 
-            // need to ensure that, if there's no text, it's erased
-            // eslint-disable-next-line unicorn/no-null
-            content: action.options.content ?? null,
-          })
-        : this.channel.send(action.options))
+          // need to ensure that, if there's no text, it's erased
+          // eslint-disable-next-line unicorn/no-null
+          content: options.content ?? null,
+        })
+      } else {
+        this.message = await this.channel.send(options)
+      }
+      this.tree = action.tree
     }
 
     if (action.type === "deleteMessage") {

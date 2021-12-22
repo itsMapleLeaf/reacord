@@ -1,9 +1,11 @@
 /* eslint-disable unicorn/no-null */
-import type { Message, MessageOptions } from "discord.js"
+import type { ButtonInteraction, Message, MessageOptions } from "discord.js"
 import { Client, TextChannel } from "discord.js"
+import { nanoid } from "nanoid"
 import React from "react"
 import { omit } from "../src/helpers/omit.js"
 import { raise } from "../src/helpers/raise.js"
+import { waitForWithTimeout } from "../src/helpers/wait-for-with-timeout.js"
 import type { ReacordRoot } from "../src/main.js"
 import {
   ActionRow,
@@ -112,17 +114,27 @@ test("kitchen sink", async () => {
           field content but inline
         </EmbedField>
       </Embed>
-      <Button style="primary">primary button</Button>
-      <Button style="danger">danger button</Button>
-      <Button style="success">success button</Button>
-      <Button style="secondary">secondary button</Button>
-      <Button>secondary by default</Button>
-      <Button>
+      <Button onClick={() => {}} style="primary">
+        primary button
+      </Button>
+      <Button onClick={() => {}} style="danger">
+        danger button
+      </Button>
+      <Button onClick={() => {}} style="success">
+        success button
+      </Button>
+      <Button onClick={() => {}} style="secondary">
+        secondary button
+      </Button>
+      <Button onClick={() => {}}>secondary by default</Button>
+      <Button onClick={() => {}}>
         complex <Text>button</Text> text
       </Button>
-      <Button disabled>disabled button</Button>
+      <Button onClick={() => {}} disabled>
+        disabled button
+      </Button>
       <ActionRow>
-        <Button>new action row</Button>
+        <Button onClick={() => {}}>new action row</Button>
       </ActionRow>
     </>,
   )
@@ -229,6 +241,31 @@ test("kitchen sink", async () => {
       ],
     },
   ])
+})
+
+test("button onClick", async () => {
+  let clicked = false
+
+  await root.render(<Button onClick={() => (clicked = true)} />)
+
+  const messages = await channel.messages.fetch()
+
+  const customId =
+    messages.first()?.components[0]?.components[0]?.customId ??
+    raise("Message not created")
+
+  client.emit("interactionCreate", {
+    id: nanoid(),
+    type: "MESSAGE_COMPONENT",
+    componentType: "BUTTON",
+    channelId: channel.id,
+    guildId: channel.guildId,
+    isButton: () => true,
+    customId,
+    user: { id: "123" },
+  } as ButtonInteraction)
+
+  await waitForWithTimeout(() => clicked, 1000)
 })
 
 test("destroy", async () => {

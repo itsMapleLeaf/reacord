@@ -1,12 +1,12 @@
 import type {
   BaseMessageComponentOptions,
+  ButtonInteraction,
   ColorResolvable,
   EmojiResolvable,
   MessageActionRowOptions,
   MessageEmbedOptions,
   MessageOptions,
 } from "discord.js"
-import { nanoid } from "nanoid"
 import type { ButtonStyle } from "./components/button.js"
 import { last } from "./helpers/last.js"
 import { toUpper } from "./helpers/to-upper.js"
@@ -63,6 +63,8 @@ type ButtonNode = {
   style?: ButtonStyle
   emoji?: EmojiResolvable
   disabled?: boolean
+  customId: string
+  onClick: (interaction: ButtonInteraction) => void
   children: Node[]
 }
 
@@ -181,12 +183,30 @@ function addActionRowItems(components: ActionRowOptions[], nodes: Node[]) {
     if (node.type === "button") {
       actionRow.components.push({
         type: "BUTTON",
-        label: node.children.map(getNodeText).join(""),
+        label: node.children.map(getNodeText).join("") || "_ _",
         style: node.style ? toUpper(node.style) : "SECONDARY",
         emoji: node.emoji,
         disabled: node.disabled,
-        customId: nanoid(),
+        customId: node.customId,
       })
     }
   }
+}
+
+type InteractionHandler = {
+  type: "button"
+  customId: string
+  onClick: (interaction: ButtonInteraction) => void
+}
+
+export function collectInteractionHandlers(node: Node): InteractionHandler[] {
+  if (node.type === "button") {
+    return [{ type: "button", customId: node.customId, onClick: node.onClick }]
+  }
+
+  if ("children" in node) {
+    return node.children.flatMap(collectInteractionHandlers)
+  }
+
+  return []
 }
