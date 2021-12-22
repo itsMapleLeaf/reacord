@@ -2,7 +2,7 @@
 import type { ButtonInteraction, Message, MessageOptions } from "discord.js"
 import { Client, TextChannel } from "discord.js"
 import { nanoid } from "nanoid"
-import React from "react"
+import React, { useState } from "react"
 import { omit } from "../src/helpers/omit.js"
 import { raise } from "../src/helpers/raise.js"
 import { waitForWithTimeout } from "../src/helpers/wait-for-with-timeout.js"
@@ -245,28 +245,45 @@ test("kitchen sink", async () => {
 
 test("button onClick", async () => {
   let clicked = false
-
   await root.render(<Button onClick={() => (clicked = true)} />)
-
-  const messages = await channel.messages.fetch()
-
-  const customId =
-    messages.first()?.components[0]?.components[0]?.customId ??
-    raise("Message not created")
-
-  client.emit("interactionCreate", {
-    id: nanoid(),
-    type: "MESSAGE_COMPONENT",
-    componentType: "BUTTON",
-    channelId: channel.id,
-    guildId: channel.guildId,
-    isButton: () => true,
-    customId,
-    user: { id: "123" },
-  } as ButtonInteraction)
-
+  await clickButton()
   await waitForWithTimeout(() => clicked, 1000)
 })
+
+test.only("button click with state", async () => {
+  function Counter() {
+    const [count, setCount] = useState(0)
+    return <Button onClick={() => setCount(count + 1)}>{count}</Button>
+  }
+
+  async function assertCount(count: number) {
+    await assertMessages([
+      {
+        content: "_ _",
+        components: [
+          {
+            type: "ACTION_ROW",
+            components: [
+              {
+                type: "BUTTON",
+                style: "SECONDARY",
+                label: String(count),
+                disabled: false,
+              },
+            ],
+          },
+        ],
+      },
+    ])
+  }
+
+  await root.render(<Counter />)
+  await assertCount(0)
+  await clickButton()
+  await assertCount(1)
+  await clickButton()
+  await assertCount(2)
+}, 10_000)
 
 test("destroy", async () => {
   await root.destroy()
@@ -279,6 +296,42 @@ async function assertMessages(expected: MessageOptions[]) {
   expect(messages.map((message) => extractMessageData(message))).toEqual(
     expected,
   )
+
+  return messages
+}
+
+async function clickButton(index = 0) {
+  const messages = await channel.messages.fetch()
+
+  const components = [...messages.values()]
+    .flatMap((message) => message.components.flatMap((row) => row.components))
+    .flatMap((component) => (component.type === "BUTTON" ? [component] : []))
+
+  const customId =
+    components[index]?.customId ?? raise(`Button not found at index ${index}`)
+
+  global.setTimeout(() => {
+    channel.client.emit("interactionCreate", createButtonInteraction(customId))
+  })
+  await channel.awaitMessageComponent({
+    filter: (interaction) => interaction.customId === customId,
+    time: 1000,
+  })
+  await root.complete()
+}
+
+function createButtonInteraction(customId: string) {
+  return {
+    id: nanoid(),
+    type: "MESSAGE_COMPONENT",
+    componentType: "BUTTON",
+    channelId: channel.id,
+    guildId: channel.guildId,
+    isButton: () => true,
+    customId,
+    user: { id: "123" },
+    deferUpdate: () => Promise.resolve(),
+  } as ButtonInteraction
 }
 
 function extractMessageData(message: Message): MessageOptions {

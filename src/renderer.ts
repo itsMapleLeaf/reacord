@@ -11,6 +11,10 @@ import { collectInteractionHandlers, getMessageOptions } from "./node-tree.js"
 type Action =
   | { type: "updateMessage"; tree: MessageNode }
   | { type: "deleteMessage" }
+  | {
+      type: "interaction.deferUpdate"
+      interaction: MessageComponentInteraction
+    }
 
 export class MessageRenderer {
   private channel: TextBasedChannels
@@ -42,6 +46,7 @@ export class MessageRenderer {
     collector.on("collect", (interaction) => {
       const handler = this.getInteractionHandler(interaction.customId)
       if (handler?.type === "button" && interaction.isButton()) {
+        this.actions.unshift({ type: "interaction.deferUpdate", interaction })
         handler.onClick(interaction)
       }
     })
@@ -118,6 +123,10 @@ export class MessageRenderer {
     if (action.type === "deleteMessage") {
       await this.message?.delete()
       this.message = undefined
+    }
+
+    if (action.type === "interaction.deferUpdate") {
+      await action.interaction.deferUpdate()
     }
   }
 }
