@@ -18,7 +18,7 @@
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
-    "test-watch": "pnpm test -- --watch",
+    "test-watch": "node --experimental-vm-modules --no-warnings --inspect-brk node_modules/jest/bin/jest.js --watch --runInBand",
     "coverage": "pnpm test -- --coverage",
     "typecheck": "tsc --noEmit"
   },
