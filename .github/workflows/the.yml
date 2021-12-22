@@ -16,7 +16,7 @@ jobs:
   ci:
     strategy:
       matrix:
-        script-name: [test, lint, typecheck]
+        script-name: [coverage, lint, typecheck]
       fail-fast: false
     name: ${{ matrix.script-name }}
     runs-on: ubuntu-latest
