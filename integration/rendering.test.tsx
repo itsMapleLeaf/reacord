@@ -5,7 +5,14 @@ import React from "react"
 import { omit } from "../src/helpers/omit.js"
 import { raise } from "../src/helpers/raise.js"
 import type { ReacordRoot } from "../src/main.js"
-import { Button, createRoot, Embed, EmbedField, Text } from "../src/main.js"
+import {
+  ActionRow,
+  Button,
+  createRoot,
+  Embed,
+  EmbedField,
+  Text,
+} from "../src/main.js"
 import { testBotToken, testChannelId } from "./test-environment.js"
 
 const client = new Client({
@@ -121,6 +128,9 @@ test("kitchen sink", async () => {
         complex <Text>button</Text> text
       </Button>
       <Button disabled>disabled button</Button>
+      <ActionRow>
+        <Button>new action row</Button>
+      </ActionRow>
     </>,
   )
   await assertMessages([
@@ -209,6 +219,17 @@ test("kitchen sink", async () => {
               label: "disabled button",
               style: "SECONDARY",
               disabled: true,
+            },
+          ],
+        },
+        {
+          type: "ACTION_ROW",
+          components: [
+            {
+              type: "BUTTON",
+              label: "new action row",
+              style: "SECONDARY",
+              disabled: false,
             },
           ],
         },

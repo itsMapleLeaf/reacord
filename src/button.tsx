@@ -2,6 +2,7 @@ import type {
   BaseMessageComponentOptions,
   EmojiResolvable,
   MessageActionRowOptions,
+  MessageButtonOptions,
   MessageButtonStyle,
   MessageOptions,
 } from "discord.js"
@@ -36,6 +37,17 @@ class ButtonInstance extends ContainerInstance {
     super({ warnOnNonTextChildren: true })
   }
 
+  private getButtonOptions(): Required<BaseMessageComponentOptions> &
+    MessageButtonOptions {
+    return {
+      ...pick(this.props, "emoji", "disabled"),
+      type: "BUTTON",
+      style: this.props.style ? toUpper(this.props.style) : "SECONDARY",
+      label: this.getChildrenText(),
+      customId: nanoid(),
+    }
+  }
+
   override renderToMessage(options: MessageOptions) {
     options.components ??= []
 
@@ -56,12 +68,10 @@ class ButtonInstance extends ContainerInstance {
       options.components.push(actionRow)
     }
 
-    actionRow.components.push({
-      ...pick(this.props, "emoji", "disabled"),
-      type: "BUTTON",
-      style: this.props.style ? toUpper(this.props.style) : "SECONDARY",
-      label: this.getChildrenText(),
-      customId: nanoid(),
-    })
+    actionRow.components.push(this.getButtonOptions())
+  }
+
+  override renderToActionRow(row: MessageActionRowOptions) {
+    row.components.push(this.getButtonOptions())
   }
 }
