@@ -110,9 +110,14 @@ export class MessageRenderer {
         this.message = await this.message.edit({
           ...options,
 
-          // need to ensure that, if there's no text, it's erased
+          // need to ensure that the proper fields are erased if there's no content
           // eslint-disable-next-line unicorn/no-null
           content: options.content ?? null,
+          // components: options.components?.length
+          //   ? options.components
+          //   : null,
+          // eslint-disable-next-line unicorn/no-null
+          embeds: options.embeds ?? [],
         })
       } else {
         this.message = await this.channel.send(options)
