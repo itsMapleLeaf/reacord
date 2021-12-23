@@ -39,7 +39,7 @@ client.on("ready", async () => {
       )
     }
   }
-  console.log("ready 💖")
+  console.info("ready 💖")
 })
 
 client.on("interactionCreate", async (interaction) => {
