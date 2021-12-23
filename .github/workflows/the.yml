@@ -16,7 +16,7 @@ jobs:
   ci:
     strategy:
       matrix:
-        script-name: [coverage, lint, typecheck]
+        script-name: [coverage, lint, typecheck, build]
       fail-fast: false
     name: ${{ matrix.script-name }}
     runs-on: ubuntu-latest
@@ -28,5 +28,4 @@ jobs:
           node-version: "lts/*"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
       - run: pnpm run ${{ matrix.script-name }}
