@@ -9,15 +9,8 @@ export class ActionQueue {
   private runningPromise?: Promise<void>
 
   add(action: Action) {
-    const lastAction = this.actions[this.actions.length - 1]
-    if (lastAction?.id === action.id) {
-      this.actions[this.actions.length - 1] = action
-    } else {
-      this.actions.push(action)
-    }
-
+    this.actions.push(action)
     this.actions.sort((a, b) => a.priority - b.priority)
-
     this.runActions()
   }
 
