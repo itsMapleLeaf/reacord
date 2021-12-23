@@ -17,9 +17,9 @@
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --colors",
-    "test-watch": "node --experimental-vm-modules --no-warnings --inspect node_modules/jest/bin/jest.js --watch --colors --runInBand",
-    "coverage": "pnpm test -- --coverage",
+    "test": "vitest",
+    "test-watch": "vitest --watch",
+    "coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon -x esmo ./playground/main.tsx"
   },
@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
-    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
+    "c8": "^7.10.0",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "esbuild": "^0.14.6",
@@ -53,12 +53,13 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
     "esmo": "^0.13.0",
-    "jest": "^27.4.5",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "tsup": "^5.11.6",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "vite": "^2.7.6",
+    "vitest": "^0.0.108"
   },
   "eslintConfig": {
     "extends": [
