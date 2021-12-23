@@ -18,9 +18,10 @@
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --colors",
-    "test-watch": "node --experimental-vm-modules --no-warnings --inspect-brk node_modules/jest/bin/jest.js --watch --colors --runInBand",
+    "test-watch": "node --experimental-vm-modules --no-warnings --inspect node_modules/jest/bin/jest.js --watch --colors --runInBand",
     "coverage": "pnpm test -- --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "playground": "nodemon -x esmo ./playground/main.tsx"
   },
   "dependencies": {
     "@types/node": "*",
@@ -51,7 +52,9 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
+    "esmo": "^0.13.0",
     "jest": "^27.4.5",
+    "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "tsup": "^5.11.6",
