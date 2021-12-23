@@ -253,13 +253,18 @@ test("button onClick", async () => {
 test("button click with state", async () => {
   function Counter() {
     const [count, setCount] = useState(0)
-    return <Button onClick={() => setCount(count + 1)}>{count}</Button>
+    return (
+      <>
+        the count is {count}
+        <Button onClick={() => setCount(count + 1)}>increment</Button>
+      </>
+    )
   }
 
   async function assertCount(count: number) {
     await assertMessages([
       {
-        content: "_ _",
+        content: `the count is ${count}`,
         components: [
           {
             type: "ACTION_ROW",
@@ -267,7 +272,7 @@ test("button click with state", async () => {
               {
                 type: "BUTTON",
                 style: "SECONDARY",
-                label: String(count),
+                label: "increment",
                 disabled: false,
               },
             ],

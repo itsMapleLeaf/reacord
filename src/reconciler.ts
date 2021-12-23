@@ -89,7 +89,16 @@ export const reconciler = ReactReconciler<
     type: ElementTag,
     oldProps: Props,
     newProps: Props,
-  ) => createInstance(type, newProps),
+  ) => {
+    const newInstance = createInstance(type, newProps)
+
+    // instance children don't get carried over, so we need to copy them
+    if ("children" in instance && "children" in newInstance) {
+      newInstance.children = instance.children
+    }
+
+    return newInstance
+  },
 
   // returning a non-null value tells react to re-render the whole thing
   // on any prop change
