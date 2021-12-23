@@ -20,9 +20,8 @@ const commands: Command[] = [
     name: "counter",
     description: "shows a counter button",
     run: async (interaction) => {
-      const root = createRoot(interaction.channel!)
       await interaction.reply("a")
-      await root.render(<Counter />)
+      await createRoot(interaction.channel!).render(<Counter />)
     },
   },
 ]
