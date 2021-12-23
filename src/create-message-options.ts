@@ -1,83 +1,14 @@
 import type {
   BaseMessageComponentOptions,
-  ButtonInteraction,
-  ColorResolvable,
-  EmojiResolvable,
   MessageActionRowOptions,
   MessageEmbedOptions,
   MessageOptions,
 } from "discord.js"
-import type { ButtonStyle } from "./components/button.js"
 import { last } from "./helpers/last.js"
 import { toUpper } from "./helpers/to-upper.js"
+import type { EmbedNode, MessageNode, Node } from "./node"
 
-export type MessageNode = {
-  type: "message"
-  children: Node[]
-}
-
-export type TextNode = {
-  type: "text"
-  text: string
-}
-
-type TextElementNode = {
-  type: "textElement"
-  children: Node[]
-}
-
-type EmbedNode = {
-  type: "embed"
-  title?: string
-  color?: ColorResolvable
-  url?: string
-  timestamp?: Date | number | string
-  imageUrl?: string
-  thumbnailUrl?: string
-  author?: {
-    name: string
-    url?: string
-    iconUrl?: string
-  }
-  footer?: {
-    text: string
-    iconUrl?: string
-  }
-  children: Node[]
-}
-
-type EmbedFieldNode = {
-  type: "embedField"
-  name: string
-  inline?: boolean
-  children: Node[]
-}
-
-type ActionRowNode = {
-  type: "actionRow"
-  children: Node[]
-}
-
-type ButtonNode = {
-  type: "button"
-  style?: ButtonStyle
-  emoji?: EmojiResolvable
-  disabled?: boolean
-  customId: string
-  onClick: (interaction: ButtonInteraction) => void
-  children: Node[]
-}
-
-export type Node =
-  | MessageNode
-  | TextNode
-  | TextElementNode
-  | EmbedNode
-  | EmbedFieldNode
-  | ActionRowNode
-  | ButtonNode
-
-export function getMessageOptions(node: MessageNode): MessageOptions {
+export function createMessageOptions(node: MessageNode): MessageOptions {
   if (node.children.length === 0) {
     // can't send an empty message
     return { content: "_ _" }
@@ -183,7 +114,7 @@ function addActionRowItems(components: ActionRowOptions[], nodes: Node[]) {
     if (node.type === "button") {
       actionRow.components.push({
         type: "BUTTON",
-        label: node.children.map(getNodeText).join("") || "_ _",
+        label: node.children.map(getNodeText).join(""),
         style: node.style ? toUpper(node.style) : "SECONDARY",
         emoji: node.emoji,
         disabled: node.disabled,
@@ -191,22 +122,4 @@ function addActionRowItems(components: ActionRowOptions[], nodes: Node[]) {
       })
     }
   }
-}
-
-type InteractionHandler = {
-  type: "button"
-  customId: string
-  onClick: (interaction: ButtonInteraction) => void
-}
-
-export function collectInteractionHandlers(node: Node): InteractionHandler[] {
-  if (node.type === "button") {
-    return [{ type: "button", customId: node.customId, onClick: node.onClick }]
-  }
-
-  if ("children" in node) {
-    return node.children.flatMap(collectInteractionHandlers)
-  }
-
-  return []
 }

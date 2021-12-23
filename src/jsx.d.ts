@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type { Node } from "./node-tree"
+import type { Node } from "./node"
 
 declare global {
   namespace JSX {

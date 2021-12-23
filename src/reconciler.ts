@@ -3,7 +3,7 @@ import { inspect } from "node:util"
 import ReactReconciler from "react-reconciler"
 import type { ChannelRenderer } from "./channel-renderer.js"
 import { raise } from "./helpers/raise.js"
-import type { MessageNode, Node, TextNode } from "./node-tree.js"
+import type { MessageNode, Node, TextNode } from "./node.js"
 
 type ElementTag = string
 

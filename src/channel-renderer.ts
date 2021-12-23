@@ -7,8 +7,9 @@ import type {
 } from "discord.js"
 import type { Action } from "./action-queue.js"
 import { ActionQueue } from "./action-queue.js"
-import type { MessageNode } from "./node-tree.js"
-import { collectInteractionHandlers, getMessageOptions } from "./node-tree.js"
+import { collectInteractionHandlers } from "./collect-interaction-handlers"
+import { createMessageOptions } from "./create-message-options"
+import type { MessageNode } from "./node.js"
 
 export class ChannelRenderer {
   private channel: TextBasedChannels
@@ -60,12 +61,12 @@ export class ChannelRenderer {
     return this.actions.done()
   }
 
-  private createUpdateMessageAction(tree: MessageNode): Action {
+  private createUpdateMessageAction(node: MessageNode): Action {
     return {
       id: "updateMessage",
       priority: 0,
       run: async () => {
-        const options = getMessageOptions(tree)
+        const options = createMessageOptions(node)
 
         // eslint-disable-next-line unicorn/prefer-ternary
         if (this.message) {
