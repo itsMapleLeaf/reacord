@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/no-null */
 import { inspect } from "node:util"
 import ReactReconciler from "react-reconciler"
+import type { ChannelRenderer } from "./channel-renderer.js"
 import { raise } from "./helpers/raise.js"
 import type { MessageNode, Node, TextNode } from "./node-tree.js"
-import type { MessageRenderer } from "./renderer.js"
 
 type ElementTag = string
 
@@ -27,7 +27,7 @@ type ChildSet = MessageNode
 export const reconciler = ReactReconciler<
   string, // Type (jsx tag),
   Props, // Props,
-  MessageRenderer, // Container,
+  ChannelRenderer, // Container,
   Node, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
@@ -65,11 +65,11 @@ export const reconciler = ReactReconciler<
     childSet.children.push(child)
   },
 
-  finalizeContainerChildren: (container: MessageRenderer, children: ChildSet) =>
+  finalizeContainerChildren: (container: ChannelRenderer, children: ChildSet) =>
     false,
 
   replaceContainerChildren: (
-    container: MessageRenderer,
+    container: ChannelRenderer,
     children: ChildSet,
   ) => {
     container.render(children)

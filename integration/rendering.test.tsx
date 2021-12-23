@@ -323,7 +323,7 @@ async function clickButton(index = 0) {
     filter: (interaction) => interaction.customId === customId,
     time: 1000,
   })
-  await root.complete()
+  await root.done()
 }
 
 function createButtonInteraction(customId: string) {
