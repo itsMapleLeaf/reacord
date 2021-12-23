@@ -246,7 +246,7 @@ test("kitchen sink", async () => {
 
 test("button onClick", async () => {
   let clicked = false
-  await root.render(<Button onClick={() => (clicked = true)} />)
+  await root.render(<Button onClick={() => (clicked = true)} emoji="➕" />)
   await clickButton()
   await waitForWithTimeout(() => clicked, 1000)
 })
