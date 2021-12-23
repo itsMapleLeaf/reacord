@@ -82,6 +82,8 @@ export class ChannelRenderer {
         } else {
           this.message = await this.channel.send(options)
         }
+
+        this.tree = node
       },
     }
   }
