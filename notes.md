@@ -1,6 +1,8 @@
 # core features
 
 - [x] rendering core
+- [ ] render to interaction
+- [ ] ephemeral messages
 - [x] message content
 - embed
   - [x] color
@@ -16,7 +18,8 @@
   - [ ] links
   - [ ] select
   - [ ] action row
-  - [ ] button onClick
+  - [x] button onClick
+  - [ ] select onChange
 
 # cool ideas / polish
 
