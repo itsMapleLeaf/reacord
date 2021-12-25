@@ -27,7 +27,6 @@
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-reconciler": "^0.26.4",
-    "immer": "^9.0.7",
     "nanoid": "^3.1.30",
     "react-reconciler": "^0.26.2",
     "rxjs": "^7.4.0"
@@ -43,8 +42,6 @@
     "c8": "^7.10.0",
     "discord.js": "^13.4.0",
     "dotenv": "^10.0.0",
-    "esbuild": "^0.14.8",
-    "esbuild-jest": "^0.5.0",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
