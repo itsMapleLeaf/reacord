@@ -1,114 +1,102 @@
-/* eslint-disable unicorn/no-null */
-import { inspect } from "node:util"
+import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
-import type { ChannelRenderer } from "./channel-renderer.js"
 import { raise } from "./helpers/raise.js"
-import type { MessageNode, Node, TextNode } from "./node.js"
+import { Node } from "./node.js"
+import type { Renderer } from "./renderer.js"
+import { TextNode } from "./text.js"
 
-type ElementTag = string
-
-type Props = Record<string, unknown>
-
-const createInstance = (type: string, props: Props): Node => {
-  if (type !== "reacord-element") {
-    raise(`createInstance: unknown type: ${type}`)
-  }
-
-  if (typeof props.createNode !== "function") {
-    const actual = inspect(props.createNode)
-    raise(`invalid createNode function, received: ${actual}`)
-  }
-
-  return props.createNode()
-}
-
-type ChildSet = MessageNode
-
-export const reconciler = ReactReconciler<
-  string, // Type (jsx tag),
-  Props, // Props,
-  ChannelRenderer, // Container,
-  Node, // Instance,
+const config: HostConfig<
+  string, // Type,
+  Record<string, unknown>, // Props,
+  Renderer, // Container,
+  Node<unknown>, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
   never, // PublicInstance,
-  null, // HostContext,
-  [], // UpdatePayload,
-  ChildSet, // ChildSet,
-  unknown, // TimeoutHandle,
-  unknown // NoTimeout
->({
+  never, // HostContext,
+  true, // UpdatePayload,
+  never, // ChildSet,
+  number, // TimeoutHandle,
+  number // NoTimeout,
+> = {
+  // config
   now: Date.now,
-  isPrimaryRenderer: true,
-  supportsMutation: false,
-  supportsPersistence: true,
+  supportsMutation: true,
+  supportsPersistence: false,
   supportsHydration: false,
-  scheduleTimeout: setTimeout,
-  cancelTimeout: clearTimeout,
+  isPrimaryRenderer: true,
+  scheduleTimeout: global.setTimeout,
+  cancelTimeout: global.clearTimeout,
   noTimeout: -1,
 
+  // eslint-disable-next-line unicorn/no-null
   getRootHostContext: () => null,
   getChildHostContext: (parentContext) => parentContext,
+
+  createInstance: (type, props) => {
+    if (type !== "reacord-element") {
+      raise(`Unknown element type: ${type}`)
+    }
+
+    if (typeof props.createNode !== "function") {
+      raise(`Missing createNode function`)
+    }
+
+    const node = props.createNode(props.props)
+    if (!(node instanceof Node)) {
+      raise(`createNode function did not return a Node`)
+    }
+
+    return node
+  },
+  createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
 
-  createInstance,
-
-  createTextInstance: (text) => ({ type: "text", text }),
-
-  createContainerChildSet: (): ChildSet => ({
-    type: "message",
-    children: [],
-  }),
-
-  appendChildToContainerChildSet: (childSet: ChildSet, child: Node) => {
-    childSet.children.push(child)
+  clearContainer: (renderer) => {
+    renderer.nodes.clear()
   },
-
-  finalizeContainerChildren: (container: ChannelRenderer, children: ChildSet) =>
-    false,
-
-  replaceContainerChildren: (
-    container: ChannelRenderer,
-    children: ChildSet,
-  ) => {
-    container.render(children)
+  appendChildToContainer: (renderer, child) => {
+    renderer.nodes.add(child)
+  },
+  removeChildFromContainer: (renderer, child) => {
+    renderer.nodes.remove(child)
+  },
+  insertInContainerBefore: (renderer, child, before) => {
+    renderer.nodes.addBefore(child, before)
   },
 
   appendInitialChild: (parent, child) => {
-    if ("children" in parent) {
-      parent.children.push(child)
-    } else {
-      raise(`${parent.type} cannot have children`)
-    }
+    parent.children.add(child)
+  },
+  appendChild: (parent, child) => {
+    parent.children.add(child)
+  },
+  removeChild: (parent, child) => {
+    parent.children.remove(child)
+  },
+  insertBefore: (parent, child, before) => {
+    parent.children.addBefore(child, before)
   },
 
-  cloneInstance: (
-    instance: Node,
-    _: unknown,
-    type: ElementTag,
-    oldProps: Props,
-    newProps: Props,
-  ) => {
-    const newInstance = createInstance(type, newProps)
-
-    // instance children don't get carried over, so we need to copy them
-    if ("children" in instance && "children" in newInstance) {
-      newInstance.children = instance.children
-    }
-
-    return newInstance
+  prepareUpdate: () => true,
+  commitUpdate: (node, payload, type, oldProps, newProps) => {
+    node.setProps(newProps.props)
+  },
+  commitTextUpdate: (node, oldText, newText) => {
+    node.setProps(newText)
   },
 
-  // returning a non-null value tells react to re-render the whole thing
-  // on any prop change
-  //
-  // we can probably optimize this to actually compare old/new props though
-  prepareUpdate: () => [],
+  // eslint-disable-next-line unicorn/no-null
+  prepareForCommit: () => null,
+  resetAfterCommit: (renderer) => {
+    renderer.render()
+  },
+
+  preparePortalMount: () => raise("Portals are not supported"),
+  getPublicInstance: () => raise("Refs are currently not supported"),
 
   finalizeInitialChildren: () => false,
-  prepareForCommit: (container) => null,
-  resetAfterCommit: () => null,
-  getPublicInstance: () => raise("Not implemented"),
-  preparePortalMount: () => raise("Not implemented"),
-})
+}
+
+export const reconciler = ReactReconciler(config)

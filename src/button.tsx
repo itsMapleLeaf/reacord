@@ -9,8 +9,9 @@ import type {
 import { MessageActionRow } from "discord.js"
 import { nanoid } from "nanoid"
 import React from "react"
-import { last } from "../src/helpers/last.js"
-import { toUpper } from "../src/helpers/to-upper.js"
+import { ReacordElement } from "./element.js"
+import { last } from "./helpers/last.js"
+import { toUpper } from "./helpers/to-upper.js"
 import { Node } from "./node.js"
 
 export type ButtonProps = {
@@ -23,7 +24,7 @@ export type ButtonProps = {
 
 export function Button(props: ButtonProps) {
   return (
-    <reacord-element props={props} createNode={() => new ButtonNode(props)} />
+    <ReacordElement props={props} createNode={() => new ButtonNode(props)} />
   )
 }
 

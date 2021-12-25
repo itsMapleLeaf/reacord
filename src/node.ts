@@ -1,72 +1,24 @@
-import type {
-  ButtonInteraction,
-  ColorResolvable,
-  EmojiResolvable,
-} from "discord.js"
-import type { ButtonStyle } from "./components/button.jsx"
+/* eslint-disable class-methods-use-this */
+import type { MessageComponentInteraction, MessageOptions } from "discord.js"
+import { Container } from "./container.js"
 
-export type MessageNode = {
-  type: "message"
-  children: Node[]
-}
+export abstract class Node<Props> {
+  readonly children = new Container<Node<unknown>>()
+  protected props: Props
 
-export type TextNode = {
-  type: "text"
-  text: string
-}
-
-type TextElementNode = {
-  type: "textElement"
-  children: Node[]
-}
-
-export type EmbedNode = {
-  type: "embed"
-  title?: string
-  color?: ColorResolvable
-  url?: string
-  timestamp?: Date | number | string
-  imageUrl?: string
-  thumbnailUrl?: string
-  author?: {
-    name: string
-    url?: string
-    iconUrl?: string
+  constructor(initialProps: Props) {
+    this.props = initialProps
   }
-  footer?: {
-    text: string
-    iconUrl?: string
+
+  setProps(props: Props) {
+    this.props = props
   }
-  children: Node[]
-}
 
-type EmbedFieldNode = {
-  type: "embedField"
-  name: string
-  inline?: boolean
-  children: Node[]
-}
+  modifyMessageOptions(options: MessageOptions) {}
 
-type ActionRowNode = {
-  type: "actionRow"
-  children: Node[]
+  handleInteraction(
+    interaction: MessageComponentInteraction,
+  ): true | undefined {
+    return undefined
+  }
 }
-
-type ButtonNode = {
-  type: "button"
-  style?: ButtonStyle
-  emoji?: EmojiResolvable
-  disabled?: boolean
-  customId: string
-  onClick: (interaction: ButtonInteraction) => void
-  children: Node[]
-}
-
-export type Node =
-  | MessageNode
-  | TextNode
-  | TextElementNode
-  | EmbedNode
-  | EmbedFieldNode
-  | ActionRowNode
-  | ButtonNode

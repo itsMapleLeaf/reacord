@@ -1,5 +1,0 @@
-export * from "./button"
-export * from "./embed/embed"
-export * from "./embed/embed-field"
-export * from "./embed/embed-title"
-export * from "./reacord"

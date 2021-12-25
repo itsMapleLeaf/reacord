@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 export function omit<Subject extends object, Key extends keyof Subject>(
   subject: Subject,
   ...keys: Key[]
