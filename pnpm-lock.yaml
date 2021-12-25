@@ -30,6 +30,7 @@ importers:
       prettier: ^2.5.1
       react: ^17.0.2
       react-reconciler: ^0.26.2
+      react-tree-reconciler: ^1.2.0
       tsup: ^5.11.7
       typescript: ^4.5.4
       vite: ^2.7.6
@@ -41,6 +42,7 @@ importers:
       immer: 9.0.7
       nanoid: 3.1.30
       react-reconciler: 0.26.2_react@17.0.2
+      react-tree-reconciler: 1.2.0_cfedea9b3ed0faf0dded75c187406c5e
     devDependencies:
       '@itsmapleleaf/configs': 1.1.2
       '@typescript-eslint/eslint-plugin': 5.8.0_836011a006f4f5d67178564baf2b6d34
@@ -4826,6 +4828,18 @@ packages:
       object-assign: 4.1.1
       react: 17.0.2
       scheduler: 0.20.2
+    dev: false
+
+  /react-tree-reconciler/1.2.0_cfedea9b3ed0faf0dded75c187406c5e:
+    resolution: {integrity: sha512-DmILQhig+Nnh1tOrYFn7Tary077qW943vdjYqRUWLpYLMP5vS/+k0ICNTPQVNaLQJhh4nDCvVUhFxcSSTzYvHA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@types/react': '*'
+    dependencies:
+      '@types/react': 17.0.37
+      react-reconciler: 0.26.2_react@17.0.2
+    transitivePeerDependencies:
+      - react
     dev: false
 
   /react/17.0.2:
