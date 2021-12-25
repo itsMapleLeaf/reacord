@@ -3,6 +3,7 @@ import type {
   MessageComponentInteraction,
   MessageOptions,
 } from "discord.js"
+import type { Subscription } from "rxjs"
 import { Subject } from "rxjs"
 import { concatMap } from "rxjs/operators"
 import { Container } from "./container.js"
@@ -12,20 +13,43 @@ import type { Node } from "./node.js"
 // so we know whether to call reply() or followUp()
 const repliedInteractionIds = new Set<string>()
 
+type UpdatePayload = {
+  options: MessageOptions
+  action: "update" | "deactivate"
+}
+
 export class Renderer {
   readonly nodes = new Container<Node<unknown>>()
   private componentInteraction?: MessageComponentInteraction
   private messageId?: string
-  private updates = new Subject<MessageOptions>()
+  private updates = new Subject<UpdatePayload>()
+  private updateSubscription: Subscription
+  private active = true
 
   constructor(private interaction: CommandInteraction) {
-    this.updates
-      .pipe(concatMap((options) => this.updateMessage(options)))
+    this.updateSubscription = this.updates
+      .pipe(concatMap((payload) => this.updateMessage(payload)))
       .subscribe()
   }
 
   render() {
-    this.updates.next(this.getMessageOptions())
+    if (!this.active) {
+      console.warn("Attempted to update a deactivated message")
+      return
+    }
+
+    this.updates.next({
+      options: this.getMessageOptions(),
+      action: "update",
+    })
+  }
+
+  deactivate() {
+    this.active = false
+    this.updates.next({
+      options: this.getMessageOptions(),
+      action: "deactivate",
+    })
   }
 
   handleInteraction(interaction: MessageComponentInteraction) {
@@ -49,7 +73,28 @@ export class Renderer {
     return options
   }
 
-  private async updateMessage(options: MessageOptions) {
+  private async updateMessage({ options, action }: UpdatePayload) {
+    if (action === "deactivate" && this.messageId) {
+      this.updateSubscription.unsubscribe()
+
+      const message = await this.interaction.channel?.messages.fetch(
+        this.messageId,
+      )
+      if (!message) return
+
+      for (const actionRow of message.components) {
+        for (const component of actionRow.components) {
+          component.setDisabled(true)
+        }
+      }
+
+      await this.interaction.channel?.messages.edit(message.id, {
+        components: message.components,
+      })
+
+      return
+    }
+
     if (this.componentInteraction) {
       const promise = this.componentInteraction.update(options)
       this.componentInteraction = undefined

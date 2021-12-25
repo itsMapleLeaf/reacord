@@ -4,7 +4,7 @@ import { EmbedField } from "../src.new/embed/embed-field.js"
 import { EmbedTitle } from "../src.new/embed/embed-title.js"
 import { Embed } from "../src.new/embed/embed.js"
 
-export function Counter() {
+export function Counter(props: { onDeactivate: () => void }) {
   const [count, setCount] = React.useState(0)
   const [embedVisible, setEmbedVisible] = React.useState(false)
 
@@ -32,6 +32,7 @@ export function Counter() {
       {!embedVisible && (
         <Button label="show embed" onClick={() => setEmbedVisible(true)} />
       )}
+      <Button style="danger" label="deactivate" onClick={props.onDeactivate} />
     </>
   )
 }

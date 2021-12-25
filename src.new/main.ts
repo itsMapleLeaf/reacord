@@ -8,15 +8,32 @@ import type { OpaqueRoot } from "react-reconciler"
 import { reconciler } from "./reconciler.js"
 import { Renderer } from "./renderer.js"
 
-export class InstanceManager {
-  private instances = new Set<Instance>()
+export type ReacordConfig = {
+  /**
+   * A Discord.js client. Reacord will listen to interaction events
+   * and send them to active instances. */
+  client: Client
 
-  private constructor() {}
+  /**
+   * The max number of active instances.
+   * When this limit is exceeded, the oldest instances will be disabled.
+   */
+  maxInstances?: number
+}
 
-  static create(client: Client) {
-    const manager = new InstanceManager()
+export class Reacord {
+  private instances: Instance[] = []
 
-    client.on("interactionCreate", (interaction) => {
+  private constructor(private readonly config: ReacordConfig) {}
+
+  private get maxInstances() {
+    return this.config.maxInstances ?? 50
+  }
+
+  static create(config: ReacordConfig) {
+    const manager = new Reacord(config)
+
+    config.client.on("interactionCreate", (interaction) => {
       if (!interaction.isMessageComponent()) return
       for (const instance of manager.instances) {
         if (instance.handleInteraction(interaction)) return
@@ -26,14 +43,23 @@ export class InstanceManager {
     return manager
   }
 
-  create(interaction: CommandInteraction) {
+  reply(interaction: CommandInteraction) {
     const instance = new Instance(interaction)
-    this.instances.add(instance)
-    return instance
+    this.instances.push(instance)
+
+    if (this.instances.length > this.maxInstances) {
+      this.deactivate(this.instances[0]!)
+    }
+
+    return {
+      render: (content: ReactNode) => instance.render(content),
+      deactivate: () => this.deactivate(instance),
+    }
   }
 
-  destroy(instance: Instance) {
-    this.instances.delete(instance)
+  private deactivate(instance: Instance) {
+    this.instances = this.instances.filter((it) => it !== instance)
+    instance.deactivate()
   }
 }
 
@@ -48,6 +74,10 @@ class Instance {
 
   render(content: ReactNode) {
     reconciler.updateContainer(content, this.container)
+  }
+
+  deactivate() {
+    this.renderer.deactivate()
   }
 
   handleInteraction(interaction: MessageComponentInteraction) {
