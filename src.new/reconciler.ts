@@ -1,16 +1,15 @@
 import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
 import { raise } from "../src/helpers/raise.js"
-import { ButtonNode } from "./components/button.js"
-import type { Node } from "./node.js"
+import { Node } from "./node.js"
 import type { Renderer } from "./renderer.js"
-import { TextNode } from "./text-node.js"
+import { TextNode } from "./text.js"
 
 const config: HostConfig<
   string, // Type,
   Record<string, unknown>, // Props,
   Renderer, // Container,
-  Node, // Instance,
+  Node<unknown>, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
@@ -35,8 +34,20 @@ const config: HostConfig<
   getChildHostContext: () => ({}),
 
   createInstance: (type, props) => {
-    if (type === "reacord-button") return new ButtonNode(props)
-    raise(`Unknown type: ${type}`)
+    if (type !== "reacord-element") {
+      raise(`Unknown element type: ${type}`)
+    }
+
+    if (typeof props.createNode !== "function") {
+      raise(`Missing createNode function`)
+    }
+
+    const node = props.createNode(props.props)
+    if (!(node instanceof Node)) {
+      raise(`createNode function did not return a Node`)
+    }
+
+    return node
   },
   createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
@@ -50,14 +61,17 @@ const config: HostConfig<
   removeChildFromContainer: (renderer, child) => {
     renderer.remove(child)
   },
+  insertInContainerBefore: (renderer, child, before) => {
+    renderer.addBefore(child, before)
+  },
 
   // eslint-disable-next-line unicorn/no-null
   prepareUpdate: () => true,
   commitUpdate: (node, payload, type, oldProps, newProps) => {
-    node.props = newProps
+    node.setProps(newProps.props)
   },
   commitTextUpdate: (node, oldText, newText) => {
-    node.text = newText
+    node.setProps(newText)
   },
 
   // eslint-disable-next-line unicorn/no-null

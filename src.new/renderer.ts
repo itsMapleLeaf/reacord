@@ -3,29 +3,32 @@ import type {
   MessageComponentInteraction,
   MessageOptions,
 } from "discord.js"
-import { MessageActionRow } from "discord.js"
-import { last } from "../src/helpers/last.js"
-import { toUpper } from "../src/helpers/to-upper.js"
-import { ButtonNode } from "./components/button.js"
 import type { Node } from "./node.js"
-import { TextNode } from "./text-node.js"
 
 export class Renderer {
-  private nodes = new Set<Node | TextNode>()
+  private nodes: Array<Node<unknown>> = []
   private componentInteraction?: MessageComponentInteraction
 
   constructor(private interaction: CommandInteraction) {}
 
-  add(child: Node | TextNode) {
-    this.nodes.add(child)
+  add(node: Node<unknown>) {
+    this.nodes.push(node)
   }
 
-  remove(child: Node | TextNode) {
-    this.nodes.delete(child)
+  addBefore(node: Node<unknown>, before: Node<unknown>) {
+    let index = this.nodes.indexOf(before)
+    if (index === -1) {
+      index = this.nodes.length
+    }
+    this.nodes.splice(index, 0, node)
+  }
+
+  remove(node: Node<unknown>) {
+    this.nodes = this.nodes.filter((n) => n !== node)
   }
 
   clear() {
-    this.nodes.clear()
+    this.nodes = []
   }
 
   render() {
@@ -41,54 +44,23 @@ export class Renderer {
   }
 
   handleInteraction(interaction: MessageComponentInteraction) {
-    if (interaction.isButton()) {
+    for (const node of this.nodes) {
       this.componentInteraction = interaction
-      this.getButtonCallback(interaction.customId)?.(interaction)
-      return true
+      if (node.handleInteraction(interaction)) {
+        return true
+      }
     }
-
-    return false
   }
 
   private getMessageOptions(): MessageOptions {
-    let content = ""
-    let components: MessageActionRow[] = []
-
-    for (const child of this.nodes) {
-      if (child instanceof TextNode) {
-        content += child.text
-      }
-
-      if (child instanceof ButtonNode) {
-        let actionRow = last(components)
-        if (
-          !actionRow ||
-          actionRow.components.length >= 5 ||
-          actionRow.components[0]?.type === "SELECT_MENU"
-        ) {
-          actionRow = new MessageActionRow()
-          components.push(actionRow)
-        }
-
-        actionRow.addComponents({
-          type: "BUTTON",
-          customId: child.customId,
-          style: toUpper(child.props.style ?? "secondary"),
-          disabled: child.props.disabled,
-          emoji: child.props.emoji,
-          label: child.props.label,
-        })
-      }
+    const options: MessageOptions = {
+      content: "",
+      embeds: [],
+      components: [],
     }
-
-    return { content, components }
-  }
-
-  private getButtonCallback(customId: string) {
-    for (const child of this.nodes) {
-      if (child instanceof ButtonNode && child.customId === customId) {
-        return child.props.onClick
-      }
+    for (const node of this.nodes) {
+      node.modifyMessageOptions(options)
     }
+    return options
   }
 }
