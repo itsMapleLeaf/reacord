@@ -30,7 +30,7 @@ importers:
       prettier: ^2.5.1
       react: ^17.0.2
       react-reconciler: ^0.26.2
-      react-tree-reconciler: ^1.2.0
+      rxjs: ^7.4.0
       tsup: ^5.11.7
       typescript: ^4.5.4
       vite: ^2.7.6
@@ -42,7 +42,7 @@ importers:
       immer: 9.0.7
       nanoid: 3.1.30
       react-reconciler: 0.26.2_react@17.0.2
-      react-tree-reconciler: 1.2.0_cfedea9b3ed0faf0dded75c187406c5e
+      rxjs: 7.4.0
     devDependencies:
       '@itsmapleleaf/configs': 1.1.2
       '@typescript-eslint/eslint-plugin': 5.8.0_836011a006f4f5d67178564baf2b6d34
@@ -4830,18 +4830,6 @@ packages:
       scheduler: 0.20.2
     dev: false
 
-  /react-tree-reconciler/1.2.0_cfedea9b3ed0faf0dded75c187406c5e:
-    resolution: {integrity: sha512-DmILQhig+Nnh1tOrYFn7Tary077qW943vdjYqRUWLpYLMP5vS/+k0ICNTPQVNaLQJhh4nDCvVUhFxcSSTzYvHA==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      '@types/react': '*'
-    dependencies:
-      '@types/react': 17.0.37
-      react-reconciler: 0.26.2_react@17.0.2
-    transitivePeerDependencies:
-      - react
-    dev: false
-
   /react/17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
     engines: {node: '>=0.10.0'}
@@ -5050,7 +5038,6 @@ packages:
     resolution: {integrity: sha512-7SQDi7xeTMCJpqViXh8gL/lebcwlp3d831F05+9B44A4B0WfsEwUQHR64gsH1kvJ+Ep/J9K2+n1hVl1CsGN23w==}
     dependencies:
       tslib: 2.1.0
-    dev: true
 
   /safe-buffer/5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -5536,7 +5523,6 @@ packages:
 
   /tslib/2.1.0:
     resolution: {integrity: sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==}
-    dev: true
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}

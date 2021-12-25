@@ -30,7 +30,7 @@
     "immer": "^9.0.7",
     "nanoid": "^3.1.30",
     "react-reconciler": "^0.26.2",
-    "react-tree-reconciler": "^1.2.0"
+    "rxjs": "^7.4.0"
   },
   "peerDependencies": {
     "discord.js": "^13.3",

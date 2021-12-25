@@ -17,6 +17,7 @@ createCommandHandler(client, [
     description: "shows a counter button",
     run: (interaction) => {
       manager.create(interaction).render(<Counter />)
+      manager.create(interaction).render(<Counter />)
     },
   },
 ])

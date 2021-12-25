@@ -3,25 +3,29 @@ import type {
   MessageComponentInteraction,
   MessageOptions,
 } from "discord.js"
+import { Subject } from "rxjs"
+import { concatMap } from "rxjs/operators"
 import { Container } from "./container.js"
 import type { Node } from "./node.js"
+
+// keep track of interaction ids which have replies,
+// so we know whether to call reply() or followUp()
+const repliedInteractionIds = new Set<string>()
 
 export class Renderer {
   readonly nodes = new Container<Node<unknown>>()
   private componentInteraction?: MessageComponentInteraction
+  private messageId?: string
+  private updates = new Subject<MessageOptions>()
 
-  constructor(private interaction: CommandInteraction) {}
+  constructor(private interaction: CommandInteraction) {
+    this.updates
+      .pipe(concatMap((options) => this.updateMessage(options)))
+      .subscribe()
+  }
 
   render() {
-    const options = this.getMessageOptions()
-    if (this.componentInteraction) {
-      this.componentInteraction.update(options).catch(console.error)
-      this.componentInteraction = undefined
-    } else if (this.interaction.replied) {
-      this.interaction.editReply(options).catch(console.error)
-    } else {
-      this.interaction.reply(options).catch(console.error)
-    }
+    this.updates.next(this.getMessageOptions())
   }
 
   handleInteraction(interaction: MessageComponentInteraction) {
@@ -43,5 +47,35 @@ export class Renderer {
       node.modifyMessageOptions(options)
     }
     return options
+  }
+
+  private async updateMessage(options: MessageOptions) {
+    if (this.componentInteraction) {
+      const promise = this.componentInteraction.update(options)
+      this.componentInteraction = undefined
+      await promise
+      return
+    }
+
+    if (this.messageId) {
+      await this.interaction.channel?.messages.edit(this.messageId, options)
+      return
+    }
+
+    if (repliedInteractionIds.has(this.interaction.id)) {
+      const message = await this.interaction.followUp({
+        ...options,
+        fetchReply: true,
+      })
+      this.messageId = message.id
+      return
+    }
+
+    repliedInteractionIds.add(this.interaction.id)
+    const message = await this.interaction.reply({
+      ...options,
+      fetchReply: true,
+    })
+    this.messageId = message.id
   }
 }
