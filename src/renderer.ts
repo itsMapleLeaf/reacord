@@ -29,7 +29,7 @@ export class Renderer {
   constructor(private interaction: CommandInteraction) {
     this.updateSubscription = this.updates
       .pipe(concatMap((payload) => this.updateMessage(payload)))
-      .subscribe()
+      .subscribe({ error: console.error })
   }
 
   render() {
