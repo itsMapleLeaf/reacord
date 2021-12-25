@@ -1,6 +1,8 @@
 import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
 import { raise } from "../src/helpers/raise.js"
+import { ButtonNode } from "./components/button.js"
+import type { Node } from "./node.js"
 import type { RootNode } from "./root-node.js"
 import { TextNode } from "./text-node.js"
 
@@ -8,7 +10,7 @@ const config: HostConfig<
   string, // Type,
   Record<string, unknown>, // Props,
   RootNode, // Container,
-  never, // Instance,
+  Node, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
@@ -32,7 +34,10 @@ const config: HostConfig<
   getRootHostContext: () => ({}),
   getChildHostContext: () => ({}),
 
-  createInstance: () => raise("not implemented"),
+  createInstance: (type, props) => {
+    if (type === "reacord-button") return new ButtonNode(props)
+    raise(`Unknown type: ${type}`)
+  },
   createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
 

@@ -1,12 +1,21 @@
 import type { CommandInteraction, MessageOptions } from "discord.js"
-import type { TextNode } from "./text-node.js"
+import { MessageActionRow } from "discord.js"
+import { nanoid } from "nanoid"
+import { last } from "../src/helpers/last.js"
+import { toUpper } from "../src/helpers/to-upper.js"
+import { ButtonNode } from "./components/button.js"
+import { Node } from "./node.js"
+import { TextNode } from "./text-node.js"
 
-export class RootNode {
-  private children = new Set<TextNode>()
+export class RootNode extends Node {
+  readonly name = "root"
+  private children = new Set<Node>()
 
-  constructor(private interaction: CommandInteraction) {}
+  constructor(private interaction: CommandInteraction) {
+    super()
+  }
 
-  add(child: TextNode) {
+  add(child: Node) {
     this.children.add(child)
   }
 
@@ -14,7 +23,7 @@ export class RootNode {
     this.children.clear()
   }
 
-  remove(child: TextNode) {
+  remove(child: Node) {
     this.children.delete(child)
   }
 
@@ -22,13 +31,37 @@ export class RootNode {
     this.interaction.reply(this.getMessageOptions()).catch(console.error)
   }
 
-  getMessageOptions() {
-    const options: MessageOptions = {}
+  private getMessageOptions(): MessageOptions {
+    let content = ""
+    let components: MessageActionRow[] = []
 
     for (const child of this.children) {
-      options.content = (options.content ?? "") + child.text
+      if (child instanceof TextNode) {
+        content += child.text
+      }
+
+      if (child instanceof ButtonNode) {
+        let actionRow = last(components)
+        if (
+          !actionRow ||
+          actionRow.components.length >= 5 ||
+          actionRow.components[0]?.type === "SELECT_MENU"
+        ) {
+          actionRow = new MessageActionRow()
+          components.push(actionRow)
+        }
+
+        actionRow.addComponents({
+          type: "BUTTON",
+          customId: nanoid(),
+          style: toUpper(child.props.style ?? "secondary"),
+          disabled: child.props.disabled,
+          emoji: child.props.emoji,
+          label: child.props.label,
+        })
+      }
     }
 
-    return options
+    return { content, components }
   }
 }
