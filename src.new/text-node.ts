@@ -1,8 +1,4 @@
-import { Node } from "./node.js"
-
-export class TextNode extends Node {
+export class TextNode {
   readonly name = "text"
-  constructor(public text: string) {
-    super()
-  }
+  constructor(public text: string) {}
 }

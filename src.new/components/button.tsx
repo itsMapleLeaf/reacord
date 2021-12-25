@@ -3,6 +3,7 @@ import type {
   MessageButtonStyle,
   MessageComponentInteraction,
 } from "discord.js"
+import { nanoid } from "nanoid"
 import React from "react"
 import { Node } from "../node.js"
 
@@ -22,6 +23,8 @@ export function Button(props: ButtonProps) {
 
 export class ButtonNode extends Node {
   readonly name = "button"
+  readonly customId = nanoid()
+
   constructor(public props: ButtonProps) {
     super()
   }

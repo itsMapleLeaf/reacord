@@ -9,7 +9,7 @@ const client = new Client({
   intents: ["GUILDS"],
 })
 
-const manager = new InstanceManager()
+const manager = InstanceManager.create(client)
 
 createCommandHandler(client, [
   {

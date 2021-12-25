@@ -3,20 +3,20 @@ import ReactReconciler from "react-reconciler"
 import { raise } from "../src/helpers/raise.js"
 import { ButtonNode } from "./components/button.js"
 import type { Node } from "./node.js"
-import type { RootNode } from "./root-node.js"
+import type { Renderer } from "./renderer.js"
 import { TextNode } from "./text-node.js"
 
 const config: HostConfig<
   string, // Type,
   Record<string, unknown>, // Props,
-  RootNode, // Container,
+  Renderer, // Container,
   Node, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
   never, // PublicInstance,
   {}, // HostContext,
-  never, // UpdatePayload,
+  true, // UpdatePayload,
   never, // ChildSet,
   number, // TimeoutHandle,
   number // NoTimeout,
@@ -41,27 +41,29 @@ const config: HostConfig<
   createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
 
-  clearContainer: (root) => {
-    root.clear()
+  clearContainer: (renderer) => {
+    renderer.clear()
   },
-  appendChildToContainer: (root, child) => {
-    root.add(child)
+  appendChildToContainer: (renderer, child) => {
+    renderer.add(child)
   },
-  removeChildFromContainer: (root, child) => {
-    root.remove(child)
+  removeChildFromContainer: (renderer, child) => {
+    renderer.remove(child)
   },
 
   // eslint-disable-next-line unicorn/no-null
-  prepareUpdate: () => null,
-  commitUpdate: () => {},
+  prepareUpdate: () => true,
+  commitUpdate: (node, payload, type, oldProps, newProps) => {
+    node.props = newProps
+  },
   commitTextUpdate: (node, oldText, newText) => {
     node.text = newText
   },
 
   // eslint-disable-next-line unicorn/no-null
   prepareForCommit: () => null,
-  resetAfterCommit: (root) => {
-    root.render()
+  resetAfterCommit: (renderer) => {
+    renderer.render()
   },
 
   preparePortalMount: () => raise("Portals are not supported"),

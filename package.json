@@ -21,7 +21,7 @@
     "test-watch": "vitest --watch",
     "coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
-    "playground": "nodemon -x esmo ./playground/main.tsx"
+    "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx"
   },
   "dependencies": {
     "@types/node": "*",
