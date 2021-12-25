@@ -14,7 +14,7 @@ const config: HostConfig<
   never, // SuspenseInstance,
   never, // HydratableInstance,
   never, // PublicInstance,
-  {}, // HostContext,
+  never, // HostContext,
   true, // UpdatePayload,
   never, // ChildSet,
   number, // TimeoutHandle,
@@ -30,8 +30,9 @@ const config: HostConfig<
   cancelTimeout: global.clearTimeout,
   noTimeout: -1,
 
-  getRootHostContext: () => ({}),
-  getChildHostContext: () => ({}),
+  // eslint-disable-next-line unicorn/no-null
+  getRootHostContext: () => null,
+  getChildHostContext: (parentContext) => parentContext,
 
   createInstance: (type, props) => {
     if (type !== "reacord-element") {
@@ -78,7 +79,6 @@ const config: HostConfig<
     parent.children.addBefore(child, before)
   },
 
-  // eslint-disable-next-line unicorn/no-null
   prepareUpdate: () => true,
   commitUpdate: (node, payload, type, oldProps, newProps) => {
     node.setProps(newProps.props)
