@@ -11,7 +11,11 @@ export function withLoggedMethodCalls<T extends object>(value: T) {
       return (...values: any[]) => {
         console.info(
           `${String(property)}(${values
-            .map((value) => inspect(value, { depth: 1 }))
+            .map((value) =>
+              typeof value === "object" && value !== null
+                ? value.constructor.name
+                : inspect(value, { colors: true }),
+            )
             .join(", ")})`,
         )
         return value.apply(target, values)
