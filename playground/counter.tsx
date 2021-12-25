@@ -10,15 +10,12 @@ export function Counter() {
     <>
       this button was clicked {count} times
       {embedVisible && (
-        <Embed
-          title="the counter"
-          fields={[
-            {
-              name: "is it even?",
-              value: count % 2 === 0 ? "yes" : "no",
-            },
-          ]}
-        />
+        <Embed>
+          <Embed.Title>the counter</Embed.Title>
+          <Embed.Field name="is it even?">
+            {count % 2 === 0 ? "yes" : "no"}
+          </Embed.Field>
+        </Embed>
       )}
       {embedVisible && (
         <Button label="hide embed" onClick={() => setEmbedVisible(false)} />

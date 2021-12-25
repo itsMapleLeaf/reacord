@@ -53,16 +53,29 @@ const config: HostConfig<
   shouldSetTextContent: () => false,
 
   clearContainer: (renderer) => {
-    renderer.clear()
+    renderer.nodes.clear()
   },
   appendChildToContainer: (renderer, child) => {
-    renderer.add(child)
+    renderer.nodes.add(child)
   },
   removeChildFromContainer: (renderer, child) => {
-    renderer.remove(child)
+    renderer.nodes.remove(child)
   },
   insertInContainerBefore: (renderer, child, before) => {
-    renderer.addBefore(child, before)
+    renderer.nodes.addBefore(child, before)
+  },
+
+  appendInitialChild: (parent, child) => {
+    parent.children.add(child)
+  },
+  appendChild: (parent, child) => {
+    parent.children.add(child)
+  },
+  removeChild: (parent, child) => {
+    parent.children.remove(child)
+  },
+  insertBefore: (parent, child, before) => {
+    parent.children.addBefore(child, before)
   },
 
   // eslint-disable-next-line unicorn/no-null
@@ -83,7 +96,6 @@ const config: HostConfig<
   preparePortalMount: () => raise("Portals are not supported"),
   getPublicInstance: () => raise("Refs are currently not supported"),
 
-  appendInitialChild: () => raise("not implemented"),
   finalizeInitialChildren: () => false,
 }
 

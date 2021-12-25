@@ -3,33 +3,14 @@ import type {
   MessageComponentInteraction,
   MessageOptions,
 } from "discord.js"
+import { Container } from "./container.js"
 import type { Node } from "./node.js"
 
 export class Renderer {
-  private nodes: Array<Node<unknown>> = []
+  readonly nodes = new Container<Node<unknown>>()
   private componentInteraction?: MessageComponentInteraction
 
   constructor(private interaction: CommandInteraction) {}
-
-  add(node: Node<unknown>) {
-    this.nodes.push(node)
-  }
-
-  addBefore(node: Node<unknown>, before: Node<unknown>) {
-    let index = this.nodes.indexOf(before)
-    if (index === -1) {
-      index = this.nodes.length
-    }
-    this.nodes.splice(index, 0, node)
-  }
-
-  remove(node: Node<unknown>) {
-    this.nodes = this.nodes.filter((n) => n !== node)
-  }
-
-  clear() {
-    this.nodes = []
-  }
 
   render() {
     const options = this.getMessageOptions()
