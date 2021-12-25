@@ -1,8 +1,5 @@
 import * as React from "react"
-import { Button } from "../src.new/button.js"
-import { EmbedField } from "../src.new/embed/embed-field.js"
-import { EmbedTitle } from "../src.new/embed/embed-title.js"
-import { Embed } from "../src.new/embed/embed.js"
+import { Button, Embed, EmbedField, EmbedTitle } from "../src.new/main"
 
 export function Counter(props: { onDeactivate: () => void }) {
   const [count, setCount] = React.useState(0)

@@ -1,6 +1,6 @@
-import { MessageEmbedOptions } from "discord.js"
+import type { MessageEmbedOptions } from "discord.js"
 import React from "react"
-import { ReacordElement } from "../element.jsx"
+import { ReacordElement } from "../element.js"
 import { EmbedChildNode } from "./embed-child.js"
 
 export type EmbedTitleProps = {
