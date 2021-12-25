@@ -1,6 +1,8 @@
 import * as React from "react"
 import { Button } from "../src.new/button.js"
-import { Embed } from "../src.new/embed.js"
+import { EmbedField } from "../src.new/embed/embed-field.js"
+import { EmbedTitle } from "../src.new/embed/embed-title.js"
+import { Embed } from "../src.new/embed/embed.js"
 
 export function Counter() {
   const [count, setCount] = React.useState(0)
@@ -11,10 +13,12 @@ export function Counter() {
       this button was clicked {count} times
       {embedVisible && (
         <Embed>
-          <Embed.Title>the counter</Embed.Title>
-          <Embed.Field name="is it even?">
-            {count % 2 === 0 ? "yes" : "no"}
-          </Embed.Field>
+          <EmbedTitle>the counter</EmbedTitle>
+          {count > 0 && (
+            <EmbedField name="is it even?">
+              {count % 2 === 0 ? "yes" : "no"}
+            </EmbedField>
+          )}
         </Embed>
       )}
       {embedVisible && (
