@@ -1,10 +1,6 @@
 import React from "react"
-import {
-  Link,
-  Reacord,
-  TestAdapter,
-  TestCommandInteraction,
-} from "../library/main"
+import { Link, Reacord } from "../library/main"
+import { TestAdapter, TestCommandInteraction } from "../library/testing"
 import { assertMessages } from "./assert-messages"
 
 const adapter = new TestAdapter()

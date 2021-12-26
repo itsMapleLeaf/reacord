@@ -21,7 +21,8 @@
     "test-watch": "pnpm test -- --watch",
     "coverage": "pnpm test -- --coverage",
     "typecheck": "tsc --noEmit",
-    "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx"
+    "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx",
+    "docs": "typedoc library/main.ts --out docs --excludePrivate --excludeProtected --excludeInternal"
   },
   "dependencies": {
     "@types/node": "*",
@@ -67,6 +68,7 @@
     "react": "^17.0.2",
     "tsup": "^5.11.9",
     "type-fest": "^2.8.0",
+    "typedoc": "^0.22.10",
     "typescript": "^4.5.4"
   },
   "resolutions": {

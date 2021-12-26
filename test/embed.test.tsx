@@ -8,9 +8,8 @@ import {
   EmbedThumbnail,
   EmbedTitle,
   Reacord,
-  TestAdapter,
-  TestCommandInteraction,
 } from "../library/main"
+import { TestAdapter, TestCommandInteraction } from "../library/testing"
 import { assertMessages } from "./assert-messages"
 
 const adapter = new TestAdapter()

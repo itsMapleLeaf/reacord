@@ -1,13 +1,6 @@
 import * as React from "react"
-import {
-  Button,
-  Embed,
-  EmbedField,
-  EmbedTitle,
-  Reacord,
-  TestAdapter,
-  TestCommandInteraction,
-} from "../library/main"
+import { Button, Embed, EmbedField, EmbedTitle, Reacord } from "../library/main"
+import { TestAdapter, TestCommandInteraction } from "../library/testing"
 import { assertMessages } from "./assert-messages"
 
 test("rendering behavior", async () => {

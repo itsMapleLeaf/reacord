@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["library/main.ts"],
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "categoryOrder": ["Classes", "Functions", "*"],
+  "categorizeByGroup": false
+}

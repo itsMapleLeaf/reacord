@@ -1,5 +1,4 @@
 import React from "react"
-import type { CamelCasedPropertiesDeep } from "type-fest"
 import { snakeCaseDeep } from "../../helpers/convert-object-property-case"
 import { omit } from "../../helpers/omit"
 import { ReacordElement } from "../element.js"
@@ -8,10 +7,17 @@ import { Node } from "../node.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
-export type EmbedProps = Omit<
-  CamelCasedPropertiesDeep<EmbedOptions>,
-  "timestamp"
-> & {
+export type EmbedProps = {
+  title?: string
+  description?: string
+  url?: string
+  color?: number
+  fields?: Array<{ name: string; value: string; inline?: boolean }>
+  author?: { name: string; url?: string; iconUrl?: string }
+  thumbnail?: { url: string }
+  image?: { url: string }
+  video?: { url: string }
+  footer?: { text: string; iconUrl?: string }
   timestamp?: string | number | Date
   children?: React.ReactNode
 }

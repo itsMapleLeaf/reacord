@@ -8,6 +8,9 @@ import type { Adapter } from "./adapter"
 export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
   constructor(private client: Discord.Client) {}
 
+  /**
+   * @internal
+   */
   addComponentInteractionListener(
     listener: (interaction: ComponentInteraction) => void,
   ) {
@@ -18,6 +21,9 @@ export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
     })
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line class-methods-use-this
   createCommandInteraction(
     interaction: Discord.CommandInteraction,

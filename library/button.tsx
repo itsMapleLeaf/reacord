@@ -2,7 +2,7 @@ import { nanoid } from "nanoid"
 import React from "react"
 import { last } from "../helpers/last.js"
 import { ReacordElement } from "./element.js"
-import type { ButtonInteraction, ComponentInteraction } from "./interaction"
+import type { ComponentInteraction } from "./interaction"
 import type { MessageOptions } from "./message"
 import { Node } from "./node.js"
 
@@ -11,8 +11,10 @@ export type ButtonProps = {
   style?: "primary" | "secondary" | "success" | "danger"
   disabled?: boolean
   emoji?: string
-  onClick: (interaction: ButtonInteraction) => void
+  onClick: (event: ButtonClickEvent) => void
 }
+
+export type ButtonClickEvent = {}
 
 export function Button(props: ButtonProps) {
   return (

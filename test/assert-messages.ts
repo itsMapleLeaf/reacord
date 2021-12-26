@@ -1,7 +1,7 @@
 import { nextTick } from "node:process"
 import { promisify } from "node:util"
 import { omit } from "../helpers/omit"
-import type { TestAdapter } from "../library/main"
+import type { TestAdapter } from "../library/testing"
 
 const nextTickPromise = promisify(nextTick)
 
