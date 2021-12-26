@@ -9,5 +9,10 @@ const config = {
   },
   verbose: true,
   cache: false,
+  coverageReporters: ["text", "text-summary", "html"],
+  coveragePathIgnorePatterns: [
+    "library/adapter/discord-js-adapter",
+    "library/adapter/test-adapter",
+  ],
 }
 export default config
