@@ -35,6 +35,11 @@
     "discord.js": "^13.3",
     "react": ">=17"
   },
+  "peerDependenciesMeta": {
+    "discord.js": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^5.8.0",

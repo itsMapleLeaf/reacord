@@ -1,13 +1,10 @@
-import type { Client, CommandInteraction } from "discord.js"
 import type { ReactNode } from "react"
+import type { Adapter } from "./adapter"
 import { reconciler } from "./reconciler.js"
 import { Renderer } from "./renderer.js"
 
-export type ReacordConfig = {
-  /**
-   * A Discord.js client. Reacord will listen to interaction events
-   * and send them to active instances. */
-  client: Client
+export type ReacordConfig<InteractionInit> = {
+  adapter: Adapter<InteractionInit>
 
   /**
    * The max number of active instances.
@@ -21,34 +18,30 @@ export type ReacordInstance = {
   deactivate: () => void
 }
 
-export class Reacord {
+export class Reacord<InteractionInit> {
   private renderers: Renderer[] = []
 
-  private constructor(private readonly config: ReacordConfig) {}
+  constructor(private readonly config: ReacordConfig<InteractionInit>) {
+    config.adapter.addComponentInteractionListener((interaction) => {
+      for (const renderer of this.renderers) {
+        if (renderer.handleComponentInteraction(interaction)) return
+      }
+    })
+  }
 
   private get maxInstances() {
     return this.config.maxInstances ?? 50
   }
 
-  static create(config: ReacordConfig) {
-    const manager = new Reacord(config)
-
-    config.client.on("interactionCreate", (interaction) => {
-      if (!interaction.isMessageComponent()) return
-      for (const renderer of manager.renderers) {
-        if (renderer.handleInteraction(interaction)) return
-      }
-    })
-
-    return manager
-  }
-
-  reply(interaction: CommandInteraction): ReacordInstance {
+  createCommandReply(target: InteractionInit): ReacordInstance {
     if (this.renderers.length > this.maxInstances) {
       this.deactivate(this.renderers[0]!)
     }
 
-    const renderer = new Renderer(interaction)
+    const renderer = new Renderer(
+      this.config.adapter.createCommandInteraction(target),
+    )
+
     this.renderers.push(renderer)
 
     const container = reconciler.createContainer(renderer, 0, false, {})

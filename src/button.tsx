@@ -1,24 +1,16 @@
-import type {
-  ButtonInteraction,
-  CacheType,
-  EmojiResolvable,
-  MessageButtonStyle,
-  MessageComponentInteraction,
-  MessageOptions,
-} from "discord.js"
-import { MessageActionRow } from "discord.js"
 import { nanoid } from "nanoid"
 import React from "react"
 import { ReacordElement } from "./element.js"
 import { last } from "./helpers/last.js"
-import { toUpper } from "./helpers/to-upper.js"
+import type { ButtonInteraction, ComponentInteraction } from "./interaction"
+import type { MessageOptions } from "./message"
 import { Node } from "./node.js"
 
 export type ButtonProps = {
   label?: string
-  style?: Exclude<Lowercase<MessageButtonStyle>, "link">
+  style?: "primary" | "secondary" | "success" | "danger"
   disabled?: boolean
-  emoji?: EmojiResolvable
+  emoji?: string
   onClick: (interaction: ButtonInteraction) => void
 }
 
@@ -31,44 +23,38 @@ export function Button(props: ButtonProps) {
 class ButtonNode extends Node<ButtonProps> {
   private customId = nanoid()
 
-  private get buttonOptions() {
-    return {
-      type: "BUTTON",
+  override modifyMessageOptions(options: MessageOptions): void {
+    options.actionRows ??= []
+
+    let actionRow = last(options.actionRows)
+
+    if (
+      actionRow == undefined ||
+      actionRow.length >= 5 ||
+      actionRow[0]?.type === "select"
+    ) {
+      actionRow = []
+      options.actionRows.push(actionRow)
+    }
+
+    actionRow.push({
+      type: "button",
       customId: this.customId,
-      style: toUpper(this.props.style ?? "secondary"),
+      style: this.props.style ?? "secondary",
       disabled: this.props.disabled,
       emoji: this.props.emoji,
       label: this.props.label,
-    } as const
+    })
   }
 
-  override modifyMessageOptions(options: MessageOptions): void {
-    options.components ??= []
-
-    let actionRow = last(options.components)
-
+  override handleComponentInteraction(interaction: ComponentInteraction) {
     if (
-      !actionRow ||
-      actionRow.components.length >= 5 ||
-      actionRow.components[0]?.type === "SELECT_MENU"
+      interaction.type === "button" &&
+      interaction.customId === this.customId
     ) {
-      actionRow = new MessageActionRow()
-      options.components.push(actionRow)
-    }
-
-    if (actionRow instanceof MessageActionRow) {
-      actionRow.addComponents(this.buttonOptions)
-    } else {
-      actionRow.components.push(this.buttonOptions)
-    }
-  }
-
-  override handleInteraction(
-    interaction: MessageComponentInteraction<CacheType>,
-  ) {
-    if (interaction.isButton() && interaction.customId === this.customId) {
       this.props.onClick(interaction)
       return true
     }
+    return false
   }
 }

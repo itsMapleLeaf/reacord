@@ -1,7 +1,7 @@
-import type { MessageEmbedOptions } from "discord.js"
 import React from "react"
 import { ReacordElement } from "../element.js"
 import { EmbedChildNode } from "./embed-child.js"
+import type { EmbedOptions } from "./embed-options"
 
 export type EmbedTitleProps = {
   children: string
@@ -18,7 +18,7 @@ export function EmbedTitle(props: EmbedTitleProps) {
 }
 
 class EmbedTitleNode extends EmbedChildNode<EmbedTitleProps> {
-  override modifyEmbedOptions(options: MessageEmbedOptions): void {
+  override modifyEmbedOptions(options: EmbedOptions): void {
     options.title = this.props.children
     options.url = this.props.url
   }

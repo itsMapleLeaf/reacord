@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import type { MessageComponentInteraction, MessageOptions } from "discord.js"
 import { Container } from "./container.js"
+import type { ComponentInteraction } from "./interaction"
+import type { MessageOptions } from "./message"
 
 export abstract class Node<Props> {
   readonly children = new Container<Node<unknown>>()
@@ -16,9 +17,7 @@ export abstract class Node<Props> {
 
   modifyMessageOptions(options: MessageOptions) {}
 
-  handleInteraction(
-    interaction: MessageComponentInteraction,
-  ): true | undefined {
-    return undefined
+  handleComponentInteraction(interaction: ComponentInteraction): boolean {
+    return false
   }
 }

@@ -1,7 +1,7 @@
-import type { MessageEmbedOptions } from "discord.js"
 import React from "react"
 import { ReacordElement } from "../element.js"
 import { EmbedChildNode } from "./embed-child.js"
+import type { EmbedOptions } from "./embed-options"
 
 export type EmbedFieldProps = {
   name: string
@@ -19,7 +19,7 @@ export function EmbedField(props: EmbedFieldProps) {
 }
 
 class EmbedFieldNode extends EmbedChildNode<EmbedFieldProps> {
-  override modifyEmbedOptions(options: MessageEmbedOptions): void {
+  override modifyEmbedOptions(options: EmbedOptions): void {
     options.fields ??= []
     options.fields.push({
       name: this.props.name,

@@ -1,17 +1,17 @@
 # core features
 
-- [x] rendering core
-- [ ] render to interaction
+- [ ] render to channel
+- [x] render to interaction
 - [ ] ephemeral messages
 - [x] message content
 - embed
   - [x] color
-  - [x] author
+  - [ ] author
   - [x] description
   - [x] title - text children, url
-  - [x] footer - icon url, timestamp, text children
-  - [x] thumbnail - url
-  - [x] image - url
+  - [ ] footer - icon url, timestamp, text children
+  - [ ] thumbnail - url
+  - [ ] image - url
   - [x] fields - name, value, inline
 - message components
   - [x] buttons
@@ -20,11 +20,16 @@
   - [ ] action row
   - [x] button onClick
   - [ ] select onChange
+- [x] deactivate
+- [ ] destroy
 
 # cool ideas / polish
 
+- [ ] message property on reacord instance
 - [ ] files
 - [ ] stickers
 - [ ] user mention component
 - [ ] channel mention component
 - [ ] timestamp component
+- [ ] `useMessage`
+- [ ] `useReactions`

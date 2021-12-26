@@ -1,12 +1,9 @@
-import type {
-  CommandInteraction,
-  MessageComponentInteraction,
-  MessageOptions,
-} from "discord.js"
 import type { Subscription } from "rxjs"
 import { Subject } from "rxjs"
 import { concatMap } from "rxjs/operators"
 import { Container } from "./container.js"
+import type { CommandInteraction, ComponentInteraction } from "./interaction"
+import type { Message, MessageOptions } from "./message"
 import type { Node } from "./node.js"
 
 // keep track of interaction ids which have replies,
@@ -20,8 +17,8 @@ type UpdatePayload = {
 
 export class Renderer {
   readonly nodes = new Container<Node<unknown>>()
-  private componentInteraction?: MessageComponentInteraction
-  private messageId?: string
+  private componentInteraction?: ComponentInteraction
+  private message?: Message
   private updates = new Subject<UpdatePayload>()
   private updateSubscription: Subscription
   private active = true
@@ -52,10 +49,10 @@ export class Renderer {
     })
   }
 
-  handleInteraction(interaction: MessageComponentInteraction) {
+  handleComponentInteraction(interaction: ComponentInteraction) {
+    this.componentInteraction = interaction
     for (const node of this.nodes) {
-      this.componentInteraction = interaction
-      if (node.handleInteraction(interaction)) {
+      if (node.handleComponentInteraction(interaction)) {
         return true
       }
     }
@@ -65,7 +62,7 @@ export class Renderer {
     const options: MessageOptions = {
       content: "",
       embeds: [],
-      components: [],
+      actionRows: [],
     }
     for (const node of this.nodes) {
       node.modifyMessageOptions(options)
@@ -74,24 +71,9 @@ export class Renderer {
   }
 
   private async updateMessage({ options, action }: UpdatePayload) {
-    if (action === "deactivate" && this.messageId) {
+    if (action === "deactivate" && this.message) {
       this.updateSubscription.unsubscribe()
-
-      const message = await this.interaction.channel?.messages.fetch(
-        this.messageId,
-      )
-      if (!message) return
-
-      for (const actionRow of message.components) {
-        for (const component of actionRow.components) {
-          component.setDisabled(true)
-        }
-      }
-
-      await this.interaction.channel?.messages.edit(message.id, {
-        components: message.components,
-      })
-
+      await this.message.disableComponents()
       return
     }
 
@@ -102,25 +84,17 @@ export class Renderer {
       return
     }
 
-    if (this.messageId) {
-      await this.interaction.channel?.messages.edit(this.messageId, options)
+    if (this.message) {
+      await this.message.edit(options)
       return
     }
 
     if (repliedInteractionIds.has(this.interaction.id)) {
-      const message = await this.interaction.followUp({
-        ...options,
-        fetchReply: true,
-      })
-      this.messageId = message.id
+      this.message = await this.interaction.followUp(options)
       return
     }
 
     repliedInteractionIds.add(this.interaction.id)
-    const message = await this.interaction.reply({
-      ...options,
-      fetchReply: true,
-    })
-    this.messageId = message.id
+    this.message = await this.interaction.reply(options)
   }
 }

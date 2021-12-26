@@ -1,6 +1,6 @@
-import type { MessageEmbedOptions } from "discord.js"
 import { Node } from "../node.js"
+import type { EmbedOptions } from "./embed-options"
 
 export abstract class EmbedChildNode<Props> extends Node<Props> {
-  abstract modifyEmbedOptions(options: MessageEmbedOptions): void
+  abstract modifyEmbedOptions(options: EmbedOptions): void
 }
