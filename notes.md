@@ -16,7 +16,7 @@
   - [x] test
 - message components
   - [x] buttons
-  - [ ] links
+  - [x] links
   - [ ] select
   - [ ] action row
   - [x] button onClick
