@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 import React from "react"
+import { last } from "../helpers/last.js"
 import { ReacordElement } from "./element.js"
-import { last } from "./helpers/last.js"
 import type { ButtonInteraction, ComponentInteraction } from "./interaction"
 import type { MessageOptions } from "./message"
 import { Node } from "./node.js"

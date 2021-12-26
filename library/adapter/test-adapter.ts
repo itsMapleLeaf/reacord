@@ -1,12 +1,12 @@
 import { nanoid } from "nanoid"
-import type { Adapter } from "./adapter"
-import { raise } from "./helpers/raise"
+import { raise } from "../../helpers/raise"
 import type {
   ButtonInteraction,
   CommandInteraction,
   ComponentInteraction,
-} from "./interaction"
-import type { Message, MessageButtonOptions, MessageOptions } from "./message"
+} from "../interaction"
+import type { Message, MessageButtonOptions, MessageOptions } from "../message"
+import type { Adapter } from "./adapter"
 
 export class TestAdapter implements Adapter<{}> {
   readonly messages: TestMessage[] = []

@@ -1,8 +1,7 @@
 import { Client } from "discord.js"
 import "dotenv/config"
 import React from "react"
-import { DiscordJsAdapter } from "../src/discord-js-adapter"
-import { Reacord } from "../src/main.js"
+import { DiscordJsAdapter, Reacord } from "../library/main.js"
 import { createCommandHandler } from "./command-handler.js"
 import { Counter } from "./counter.js"
 

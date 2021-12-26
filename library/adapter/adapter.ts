@@ -1,4 +1,4 @@
-import type { CommandInteraction, ComponentInteraction } from "./interaction"
+import type { CommandInteraction, ComponentInteraction } from "../interaction"
 
 export type Adapter<InteractionInit> = {
   addComponentInteractionListener(

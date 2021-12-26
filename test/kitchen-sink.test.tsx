@@ -1,9 +1,16 @@
 import { nextTick } from "node:process"
 import { promisify } from "node:util"
 import * as React from "react"
-import { omit } from "../src/helpers/omit"
-import { Button, Embed, EmbedField, EmbedTitle, Reacord } from "../src/main"
-import { TestAdapter, TestCommandInteraction } from "../src/test-adapter"
+import { omit } from "../helpers/omit"
+import {
+  Button,
+  Embed,
+  EmbedField,
+  EmbedTitle,
+  Reacord,
+  TestAdapter,
+  TestCommandInteraction,
+} from "../library/main"
 
 const nextTickPromise = promisify(nextTick)
 

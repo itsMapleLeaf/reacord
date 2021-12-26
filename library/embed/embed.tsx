@@ -1,6 +1,6 @@
 import React from "react"
+import { omit } from "../../helpers/omit"
 import { ReacordElement } from "../element.js"
-import { omit } from "../helpers/omit"
 import type { MessageOptions } from "../message"
 import { Node } from "../node.js"
 import { EmbedChildNode } from "./embed-child.js"

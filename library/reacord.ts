@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type { Adapter } from "./adapter"
+import type { Adapter } from "./adapter/adapter"
 import { reconciler } from "./reconciler.js"
 import { Renderer } from "./renderer.js"
 

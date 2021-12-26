@@ -1,9 +1,9 @@
 import type * as Discord from "discord.js"
+import { raise } from "../../helpers/raise"
+import { toUpper } from "../../helpers/to-upper"
+import type { CommandInteraction, ComponentInteraction } from "../interaction"
+import type { Message, MessageOptions } from "../message"
 import type { Adapter } from "./adapter"
-import { raise } from "./helpers/raise"
-import { toUpper } from "./helpers/to-upper"
-import type { CommandInteraction, ComponentInteraction } from "./interaction"
-import type { Message, MessageOptions } from "./message"
 
 export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
   constructor(private client: Discord.Client) {}
@@ -18,6 +18,7 @@ export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
     })
   }
 
+  // eslint-disable-next-line class-methods-use-this
   createCommandInteraction(
     interaction: Discord.CommandInteraction,
   ): CommandInteraction {
