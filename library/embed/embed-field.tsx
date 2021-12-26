@@ -5,8 +5,9 @@ import type { EmbedOptions } from "./embed-options"
 
 export type EmbedFieldProps = {
   name: string
+  value?: string
   inline?: boolean
-  children: string
+  children?: string
 }
 
 export function EmbedField(props: EmbedFieldProps) {
@@ -23,7 +24,7 @@ class EmbedFieldNode extends EmbedChildNode<EmbedFieldProps> {
     options.fields ??= []
     options.fields.push({
       name: this.props.name,
-      value: this.props.children,
+      value: this.props.value ?? this.props.children ?? "",
       inline: this.props.inline,
     })
   }

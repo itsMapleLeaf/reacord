@@ -6,13 +6,14 @@
 - [x] message content
 - embed
   - [x] color
-  - [ ] author
+  - [x] author
   - [x] description
   - [x] title - text children, url
-  - [ ] footer - icon url, timestamp, text children
-  - [ ] thumbnail - url
-  - [ ] image - url
+  - [x] footer - icon url, timestamp, text children
+  - [x] thumbnail - url
+  - [x] image - url
   - [x] fields - name, value, inline
+  - [x] test
 - message components
   - [x] buttons
   - [ ] links
@@ -22,6 +23,7 @@
   - [ ] select onChange
 - [x] deactivate
 - [ ] destroy
+- [ ] docs
 
 # cool ideas / polish
 

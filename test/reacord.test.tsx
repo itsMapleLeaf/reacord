@@ -1,7 +1,4 @@
-import { nextTick } from "node:process"
-import { promisify } from "node:util"
 import * as React from "react"
-import { omit } from "../helpers/omit"
 import {
   Button,
   Embed,
@@ -11,10 +8,9 @@ import {
   TestAdapter,
   TestCommandInteraction,
 } from "../library/main"
+import { assertMessages } from "./assert-messages"
 
-const nextTickPromise = promisify(nextTick)
-
-test("kitchen-sink", async () => {
+test("rendering behavior", async () => {
   const adapter = new TestAdapter()
   const reacord = new Reacord({ adapter })
 
@@ -284,21 +280,4 @@ function KitchenSinkCounter(props: { onDeactivate: () => void }) {
       <Button style="danger" label="deactivate" onClick={props.onDeactivate} />
     </>
   )
-}
-
-function extractMessageDataSample(adapter: TestAdapter) {
-  return adapter.messages.map((message) => ({
-    ...message.options,
-    actionRows: message.options.actionRows.map((row) =>
-      row.map((component) => omit(component, ["customId"])),
-    ),
-  }))
-}
-
-async function assertMessages(
-  adapter: TestAdapter,
-  expected: ReturnType<typeof extractMessageDataSample>,
-) {
-  await nextTickPromise()
-  expect(extractMessageDataSample(adapter)).toEqual(expected)
 }
