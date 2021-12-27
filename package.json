@@ -17,7 +17,7 @@
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js --colors",
     "test-watch": "pnpm test -- --watch",
     "coverage": "pnpm test -- --coverage",
     "typecheck": "tsc --noEmit",
