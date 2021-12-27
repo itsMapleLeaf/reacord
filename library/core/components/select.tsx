@@ -4,8 +4,7 @@ import React from "react"
 import { isInstanceOf } from "../../../helpers/is-instance-of"
 import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
-import type { MessageOptions } from "../../internal/message"
-import { getNextActionRow } from "../../internal/message"
+import type { ActionRow, MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 import { OptionNode } from "./option-node"
 
@@ -39,7 +38,8 @@ class SelectNode extends Node<SelectProps> {
   readonly customId = nanoid()
 
   override modifyMessageOptions(message: MessageOptions): void {
-    const actionRow = getNextActionRow(message)
+    const actionRow: ActionRow = []
+    message.actionRows.push(actionRow)
 
     const options = [...this.children]
       .filter(isInstanceOf(OptionNode))
