@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid"
 import React from "react"
-import { last } from "../../../helpers/last.js"
 import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
 import type { MessageOptions } from "../../internal/message"
+import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 
 export type ButtonProps = {
@@ -26,20 +26,7 @@ class ButtonNode extends Node<ButtonProps> {
   private customId = nanoid()
 
   override modifyMessageOptions(options: MessageOptions): void {
-    options.actionRows ??= []
-
-    let actionRow = last(options.actionRows)
-
-    if (
-      actionRow == undefined ||
-      actionRow.length >= 5 ||
-      actionRow[0]?.type === "select"
-    ) {
-      actionRow = []
-      options.actionRows.push(actionRow)
-    }
-
-    actionRow.push({
+    getNextActionRow(options).push({
       type: "button",
       customId: this.customId,
       style: this.props.style ?? "secondary",

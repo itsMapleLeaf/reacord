@@ -1,7 +1,7 @@
 import React from "react"
-import { last } from "../../../helpers/last.js"
 import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
+import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 
 export type LinkProps = {
@@ -18,18 +18,7 @@ export function Link(props: LinkProps) {
 
 class LinkNode extends Node<LinkProps> {
   override modifyMessageOptions(options: MessageOptions): void {
-    let actionRow = last(options.actionRows)
-
-    if (
-      actionRow == undefined ||
-      actionRow.length >= 5 ||
-      actionRow[0]?.type === "select"
-    ) {
-      actionRow = []
-      options.actionRows.push(actionRow)
-    }
-
-    actionRow.push({
+    getNextActionRow(options).push({
       type: "link",
       disabled: this.props.disabled,
       emoji: this.props.emoji,
