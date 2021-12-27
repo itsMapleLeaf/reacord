@@ -1,4 +1,4 @@
-name: the
+name: main
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
-          node-version: "lts/*"
+          node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ${{ matrix.script-name }}
