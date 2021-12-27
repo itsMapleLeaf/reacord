@@ -4,6 +4,7 @@ import { omit } from "../../../helpers/omit"
 import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
+import { TextNode } from "../../internal/text-node"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
@@ -42,6 +43,9 @@ class EmbedNode extends Node<EmbedProps> {
     for (const child of this.children) {
       if (child instanceof EmbedChildNode) {
         child.modifyEmbedOptions(embed)
+      }
+      if (child instanceof TextNode) {
+        embed.description = (embed.description || "") + child.props
       }
     }
 

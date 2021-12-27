@@ -7,14 +7,8 @@ import {
   EmbedImage,
   EmbedThumbnail,
   EmbedTitle,
-  Reacord,
 } from "../library/main"
-import { TestAdapter, TestCommandInteraction } from "../library/testing"
 import { setupReacordTesting } from "./setup-testing"
-
-const adapter = new TestAdapter()
-const reacord = new Reacord({ adapter })
-const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
 
 const { assertRender } = setupReacordTesting()
 
@@ -44,6 +38,7 @@ test("kitchen sink", async () => {
         content: "",
         embeds: [
           {
+            description: "description text",
             author: {
               icon_url: "https://example.com/author.png",
               name: "author",
