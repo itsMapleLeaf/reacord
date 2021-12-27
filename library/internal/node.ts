@@ -5,15 +5,8 @@ import type { MessageOptions } from "./message"
 
 export abstract class Node<Props> {
   readonly children = new Container<Node<unknown>>()
-  protected props: Props
 
-  constructor(initialProps: Props) {
-    this.props = initialProps
-  }
-
-  setProps(props: Props) {
-    this.props = props
-  }
+  constructor(public props: Props) {}
 
   modifyMessageOptions(options: MessageOptions) {}
 

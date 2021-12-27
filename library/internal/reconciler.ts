@@ -81,10 +81,10 @@ const config: HostConfig<
 
   prepareUpdate: () => true,
   commitUpdate: (node, payload, type, oldProps, newProps) => {
-    node.setProps(newProps.props)
+    node.props = newProps.props
   },
   commitTextUpdate: (node, oldText, newText) => {
-    node.setProps(newText)
+    node.props = newText
   },
 
   // eslint-disable-next-line unicorn/no-null
