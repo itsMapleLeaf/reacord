@@ -8,6 +8,7 @@ importers:
   .:
     specifiers:
       '@itsmapleleaf/configs': ^1.1.2
+      '@jest/globals': ^27.4.4
       '@types/jest': ^27.0.3
       '@types/lodash-es': ^4.17.5
       '@types/node': '*'
@@ -50,6 +51,7 @@ importers:
       rxjs: 7.4.0
     devDependencies:
       '@itsmapleleaf/configs': 1.1.2
+      '@jest/globals': 27.4.4
       '@types/jest': 27.0.3
       '@types/lodash-es': 4.17.5
       '@typescript-eslint/eslint-plugin': 5.8.0_836011a006f4f5d67178564baf2b6d34
