@@ -241,6 +241,10 @@ test("rendering behavior", async () => {
   ])
 })
 
+// test multiple instances that can be updated independently,
+// + old instances getting deactivated once the limit is reached
+test.todo("multiple instances")
+
 function KitchenSinkCounter(props: { onDeactivate: () => void }) {
   const [count, setCount] = React.useState(0)
   const [embedVisible, setEmbedVisible] = React.useState(false)
