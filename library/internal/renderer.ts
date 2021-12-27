@@ -10,10 +10,9 @@ import type { Node } from "./node.js"
 // so we know whether to call reply() or followUp()
 const repliedInteractionIds = new Set<string>()
 
-type UpdatePayload = {
-  options: MessageOptions
-  action: "update" | "deactivate"
-}
+type UpdatePayload =
+  | { action: "update" | "deactivate"; options: MessageOptions }
+  | { action: "destroy" }
 
 export class Renderer {
   readonly nodes = new Container<Node<unknown>>()
@@ -49,6 +48,11 @@ export class Renderer {
     })
   }
 
+  destroy() {
+    this.active = false
+    this.updates.next({ action: "destroy" })
+  }
+
   handleComponentInteraction(interaction: ComponentInteraction) {
     this.componentInteraction = interaction
     for (const node of this.nodes) {
@@ -70,31 +74,37 @@ export class Renderer {
     return options
   }
 
-  private async updateMessage({ options, action }: UpdatePayload) {
-    if (action === "deactivate" && this.message) {
+  private async updateMessage(payload: UpdatePayload) {
+    if (payload.action === "destroy") {
       this.updateSubscription.unsubscribe()
-      await this.message.disableComponents()
+      await this.message?.delete()
+      return
+    }
+
+    if (payload.action === "deactivate") {
+      this.updateSubscription.unsubscribe()
+      await this.message?.disableComponents()
       return
     }
 
     if (this.componentInteraction) {
-      const promise = this.componentInteraction.update(options)
+      const promise = this.componentInteraction.update(payload.options)
       this.componentInteraction = undefined
       await promise
       return
     }
 
     if (this.message) {
-      await this.message.edit(options)
+      await this.message.edit(payload.options)
       return
     }
 
     if (repliedInteractionIds.has(this.interaction.id)) {
-      this.message = await this.interaction.followUp(options)
+      this.message = await this.interaction.followUp(payload.options)
       return
     }
 
     repliedInteractionIds.add(this.interaction.id)
-    this.message = await this.interaction.reply(options)
+    this.message = await this.interaction.reply(payload.options)
   }
 }

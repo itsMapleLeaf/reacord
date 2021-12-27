@@ -17,7 +17,7 @@ import type {
 } from "./internal/message"
 
 export class TestAdapter implements Adapter<TestCommandInteraction> {
-  readonly messages: TestMessage[] = []
+  messages: TestMessage[] = []
 
   private componentInteractionListener: (
     interaction: ComponentInteraction,
@@ -60,6 +60,10 @@ export class TestAdapter implements Adapter<TestCommandInteraction> {
     raise(`Couldn't find select with placeholder "${placeholder}"`)
   }
 
+  removeMessage(message: TestMessage) {
+    this.messages = this.messages.filter((m) => m !== message)
+  }
+
   private createButtonActions(
     button: MessageButtonOptions,
     message: TestMessage,
@@ -88,7 +92,7 @@ export class TestAdapter implements Adapter<TestCommandInteraction> {
 }
 
 export class TestMessage implements Message {
-  constructor(public options: MessageOptions) {}
+  constructor(public options: MessageOptions, private adapter: TestAdapter) {}
 
   async edit(options: MessageOptions): Promise<void> {
     this.options = options
@@ -103,6 +107,10 @@ export class TestMessage implements Message {
       }
     }
   }
+
+  async delete(): Promise<void> {
+    this.adapter.removeMessage(this)
+  }
 }
 
 export class TestCommandInteraction implements CommandInteraction {
@@ -113,7 +121,7 @@ export class TestCommandInteraction implements CommandInteraction {
   constructor(private adapter: TestAdapter) {}
 
   private createMesssage(messageOptions: MessageOptions): Message {
-    const message = new TestMessage(messageOptions)
+    const message = new TestMessage(messageOptions, this.adapter)
     this.adapter.messages.push(message)
     return message
   }

@@ -3,9 +3,9 @@ import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
 import { TestCommandInteraction } from "../library/testing"
 import { setupReacordTesting } from "./setup-testing"
 
-const { reacord, adapter, assertMessages } = setupReacordTesting()
-
 test("rendering behavior", async () => {
+  const { reacord, adapter, assertMessages } = setupReacordTesting()
+
   const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
   reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
@@ -239,6 +239,32 @@ test("rendering behavior", async () => {
       ],
     },
   ])
+})
+
+test("delete", async () => {
+  const { reacord, adapter, assertMessages } = setupReacordTesting()
+
+  const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
+  reply.render(
+    <>
+      some text
+      <Embed>some embed</Embed>
+      <Button label="some button" onClick={() => {}} />
+    </>,
+  )
+
+  await assertMessages([
+    {
+      content: "some text",
+      embeds: [{ description: "some embed" }],
+      actionRows: [
+        [{ type: "button", style: "secondary", label: "some button" }],
+      ],
+    },
+  ])
+
+  reply.destroy()
+  await assertMessages([])
 })
 
 // test multiple instances that can be updated independently,

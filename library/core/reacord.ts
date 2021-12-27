@@ -16,6 +16,7 @@ export type ReacordConfig<InteractionInit> = {
 export type ReacordInstance = {
   render: (content: ReactNode) => void
   deactivate: () => void
+  destroy: () => void
 }
 
 export class Reacord<InteractionInit> {
@@ -52,6 +53,10 @@ export class Reacord<InteractionInit> {
       },
       deactivate: () => {
         this.deactivate(renderer)
+      },
+      destroy: () => {
+        this.renderers = this.renderers.filter((it) => it !== renderer)
+        renderer.destroy()
       },
     }
   }

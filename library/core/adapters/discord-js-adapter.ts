@@ -100,6 +100,9 @@ function createReacordMessage(message: Discord.Message): Message {
         components: message.components,
       })
     },
+    delete: async () => {
+      await message.delete()
+    },
   }
 }
 

@@ -22,8 +22,13 @@
   - [x] action row
   - [x] button onClick
 - [x] deactivate
-- [ ] destroy
+- [x] destroy
 - [ ] docs
+
+# internal
+
+- [ ] combine `MessageOptions` and `Message` into a single message object (?)
+- [ ] consider always calling `deferUpdate` on component interactions
 
 # cool ideas / polish
 
