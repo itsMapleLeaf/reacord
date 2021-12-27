@@ -30,7 +30,7 @@
     "@types/react-reconciler": "^0.26.4",
     "nanoid": "^3.1.30",
     "react-reconciler": "^0.26.2",
-    "rxjs": "^7.4.0"
+    "rxjs": "^7.5.0"
   },
   "peerDependencies": {
     "discord.js": "^13.3",
@@ -46,8 +46,8 @@
     "@jest/globals": "^27.4.4",
     "@types/jest": "^27.0.3",
     "@types/lodash-es": "^4.17.5",
-    "@typescript-eslint/eslint-plugin": "^5.8.0",
-    "@typescript-eslint/parser": "^5.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
     "c8": "^7.10.0",
     "discord.js": "^13.4.0",
     "dotenv": "^10.0.0",
