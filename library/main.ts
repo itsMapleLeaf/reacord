@@ -1,5 +1,6 @@
 export * from "./core/adapters/adapter"
 export * from "./core/adapters/discord-js-adapter"
+export * from "./core/components/action-row"
 export * from "./core/components/button"
 export * from "./core/components/embed"
 export * from "./core/components/embed-author"

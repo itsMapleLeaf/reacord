@@ -9,7 +9,7 @@ export type MessageOptions = {
   actionRows: ActionRow[]
 }
 
-type ActionRow = Array<
+export type ActionRow = Array<
   MessageButtonOptions | MessageLinkOptions | MessageSelectOptions
 >
 
