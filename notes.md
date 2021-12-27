@@ -35,3 +35,5 @@
 - [ ] timestamp component
 - [ ] `useMessage`
 - [ ] `useReactions`
+- [ ] max instance count per guild
+- [ ] max instance count per channel
