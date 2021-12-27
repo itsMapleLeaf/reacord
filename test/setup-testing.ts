@@ -1,6 +1,7 @@
 import { nextTick } from "node:process"
 import { promisify } from "node:util"
 import type { ReactNode } from "react"
+import { logPretty } from "../helpers/log-pretty"
 import { omit } from "../helpers/omit"
 import { Reacord } from "../library/main"
 import { TestAdapter, TestCommandInteraction } from "../library/testing"
@@ -25,12 +26,17 @@ export function setupReacordTesting() {
     await assertMessages(expected)
   }
 
+  function logMessages() {
+    logPretty(sampleMessages(adapter))
+  }
+
   return {
     reacord,
     adapter,
     reply,
     assertMessages,
     assertRender,
+    logMessages,
   }
 }
 
