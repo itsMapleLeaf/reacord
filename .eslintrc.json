@@ -4,7 +4,8 @@
     "**/node_modules/**",
     "**/coverage/**",
     "**/dist/**",
-    "**/.vscode/**"
+    "**/.vscode/**",
+    "**/docs/**"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"
