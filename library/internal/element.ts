@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import React from "react"
-import type { Node } from "./node.js"
+import type { Node } from "./node"
 
 export function ReacordElement<Props>(props: {
   props: Props

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
-import type { Adapter } from "./adapter/adapter"
-import { reconciler } from "./reconciler.js"
-import { Renderer } from "./renderer.js"
+import { reconciler } from "../internal/reconciler.js"
+import { Renderer } from "../internal/renderer.js"
+import type { Adapter } from "./adapters/adapter"
 
 export type ReacordConfig<InteractionInit> = {
   adapter: Adapter<InteractionInit>

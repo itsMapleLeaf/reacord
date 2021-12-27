@@ -1,9 +1,9 @@
 import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
-import { raise } from "../helpers/raise.js"
+import { raise } from "../../helpers/raise.js"
 import { Node } from "./node.js"
 import type { Renderer } from "./renderer.js"
-import { TextNode } from "./text.js"
+import { TextNode } from "./text-node.js"
 
 const config: HostConfig<
   string, // Type,

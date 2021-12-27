@@ -1,8 +1,11 @@
 import type * as Discord from "discord.js"
-import { raise } from "../../helpers/raise"
-import { toUpper } from "../../helpers/to-upper"
-import type { CommandInteraction, ComponentInteraction } from "../interaction"
-import type { Message, MessageOptions } from "../message"
+import { raise } from "../../../helpers/raise"
+import { toUpper } from "../../../helpers/to-upper"
+import type {
+  CommandInteraction,
+  ComponentInteraction,
+} from "../../internal/interaction"
+import type { Message, MessageOptions } from "../../internal/message"
 import type { Adapter } from "./adapter"
 
 export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {

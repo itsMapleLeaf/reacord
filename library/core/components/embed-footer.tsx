@@ -1,5 +1,5 @@
 import React from "react"
-import { ReacordElement } from "../element.js"
+import { ReacordElement } from "../../internal/element.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 

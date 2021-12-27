@@ -1,10 +1,10 @@
 import { nanoid } from "nanoid"
 import React from "react"
-import { last } from "../helpers/last.js"
-import { ReacordElement } from "./element.js"
-import type { ComponentInteraction } from "./interaction"
-import type { MessageOptions } from "./message"
-import { Node } from "./node.js"
+import { last } from "../../../helpers/last.js"
+import { ReacordElement } from "../../internal/element.js"
+import type { ComponentInteraction } from "../../internal/interaction"
+import type { MessageOptions } from "../../internal/message"
+import { Node } from "../../internal/node.js"
 
 export type ButtonProps = {
   label?: string

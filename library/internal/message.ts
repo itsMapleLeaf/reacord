@@ -1,4 +1,4 @@
-import type { EmbedOptions } from "./embed/embed-options"
+import type { EmbedOptions } from "../core/components/embed-options"
 
 export type MessageOptions = {
   content: string
