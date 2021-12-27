@@ -74,19 +74,5 @@
   "resolutions": {
     "esbuild": "latest"
   },
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/@itsmapleleaf/configs/eslint"
-    ],
-    "ignorePatterns": [
-      "**/node_modules/**",
-      "**/coverage/**",
-      "**/dist/**",
-      "**/.vscode/**"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  },
   "prettier": "@itsmapleleaf/configs/prettier"
 }
