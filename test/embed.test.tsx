@@ -10,16 +10,18 @@ import {
   Reacord,
 } from "../library/main"
 import { TestAdapter, TestCommandInteraction } from "../library/testing"
-import { assertMessages } from "./assert-messages"
+import { setupReacordTesting } from "./setup-testing"
 
 const adapter = new TestAdapter()
 const reacord = new Reacord({ adapter })
 const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
 
+const { assertRender } = setupReacordTesting()
+
 test("kitchen sink", async () => {
   const now = new Date()
 
-  reply.render(
+  await assertRender(
     <>
       <Embed color={0xfe_ee_ef}>
         <EmbedAuthor name="author" iconUrl="https://example.com/author.png" />
@@ -36,50 +38,49 @@ test("kitchen sink", async () => {
         />
       </Embed>
     </>,
+    [
+      {
+        actionRows: [],
+        content: "",
+        embeds: [
+          {
+            author: {
+              icon_url: "https://example.com/author.png",
+              name: "author",
+            },
+            color: 0xfe_ee_ef,
+            fields: [
+              {
+                inline: true,
+                name: "field name",
+                value: "field value",
+              },
+              {
+                name: "block field",
+                value: "block field value",
+              },
+            ],
+            footer: {
+              icon_url: "https://example.com/footer.png",
+              text: "footer text",
+            },
+            image: {
+              url: "https://example.com/image.png",
+            },
+            thumbnail: {
+              url: "https://example.com/thumbnail.png",
+            },
+            timestamp: now.toISOString(),
+            title: "title text",
+          },
+        ],
+      },
+    ],
   )
-
-  await assertMessages(adapter, [
-    {
-      actionRows: [],
-      content: "",
-      embeds: [
-        {
-          author: {
-            icon_url: "https://example.com/author.png",
-            name: "author",
-          },
-          color: 0xfe_ee_ef,
-          fields: [
-            {
-              inline: true,
-              name: "field name",
-              value: "field value",
-            },
-            {
-              name: "block field",
-              value: "block field value",
-            },
-          ],
-          footer: {
-            icon_url: "https://example.com/footer.png",
-            text: "footer text",
-          },
-          image: {
-            url: "https://example.com/image.png",
-          },
-          thumbnail: {
-            url: "https://example.com/thumbnail.png",
-          },
-          timestamp: now.toISOString(),
-          title: "title text",
-        },
-      ],
-    },
-  ])
 })
 
 test("author variants", async () => {
-  reply.render(
+  await assertRender(
     <>
       <Embed>
         <EmbedAuthor iconUrl="https://example.com/author.png">
@@ -90,32 +91,31 @@ test("author variants", async () => {
         <EmbedAuthor iconUrl="https://example.com/author.png" />
       </Embed>
     </>,
+    [
+      {
+        content: "",
+        actionRows: [],
+        embeds: [
+          {
+            author: {
+              icon_url: "https://example.com/author.png",
+              name: "author name",
+            },
+          },
+          {
+            author: {
+              icon_url: "https://example.com/author.png",
+              name: "",
+            },
+          },
+        ],
+      },
+    ],
   )
-
-  await assertMessages(adapter, [
-    {
-      content: "",
-      actionRows: [],
-      embeds: [
-        {
-          author: {
-            icon_url: "https://example.com/author.png",
-            name: "author name",
-          },
-        },
-        {
-          author: {
-            icon_url: "https://example.com/author.png",
-            name: "",
-          },
-        },
-      ],
-    },
-  ])
 })
 
 test("field variants", async () => {
-  reply.render(
+  await assertRender(
     <>
       <Embed>
         <EmbedField name="field name" value="field value" />
@@ -126,43 +126,43 @@ test("field variants", async () => {
         <EmbedField name="field name" />
       </Embed>
     </>,
+    [
+      {
+        content: "",
+        actionRows: [],
+        embeds: [
+          {
+            fields: [
+              {
+                name: "field name",
+                value: "field value",
+              },
+              {
+                inline: true,
+                name: "field name",
+                value: "field value",
+              },
+              {
+                inline: true,
+                name: "field name",
+                value: "field value",
+              },
+              {
+                name: "field name",
+                value: "",
+              },
+            ],
+          },
+        ],
+      },
+    ],
   )
-
-  await assertMessages(adapter, [
-    {
-      content: "",
-      actionRows: [],
-      embeds: [
-        {
-          fields: [
-            {
-              name: "field name",
-              value: "field value",
-            },
-            {
-              inline: true,
-              name: "field name",
-              value: "field value",
-            },
-            {
-              inline: true,
-              name: "field name",
-              value: "field value",
-            },
-            {
-              name: "field name",
-              value: "",
-            },
-          ],
-        },
-      ],
-    },
-  ])
 })
 
 test("footer variants", async () => {
   const now = new Date()
-  reply.render(
+
+  await assertRender(
     <>
       <Embed>
         <EmbedFooter text="footer text" />
@@ -180,46 +180,45 @@ test("footer variants", async () => {
         <EmbedFooter iconUrl="https://example.com/footer.png" timestamp={now} />
       </Embed>
     </>,
+    [
+      {
+        content: "",
+        actionRows: [],
+        embeds: [
+          {
+            footer: {
+              text: "footer text",
+            },
+          },
+          {
+            footer: {
+              icon_url: "https://example.com/footer.png",
+              text: "footer text",
+            },
+          },
+          {
+            footer: {
+              text: "footer text",
+            },
+            timestamp: now.toISOString(),
+          },
+          {
+            footer: {
+              icon_url: "https://example.com/footer.png",
+              text: "",
+            },
+            timestamp: now.toISOString(),
+          },
+        ],
+      },
+    ],
   )
-
-  await assertMessages(adapter, [
-    {
-      content: "",
-      actionRows: [],
-      embeds: [
-        {
-          footer: {
-            text: "footer text",
-          },
-        },
-        {
-          footer: {
-            icon_url: "https://example.com/footer.png",
-            text: "footer text",
-          },
-        },
-        {
-          footer: {
-            text: "footer text",
-          },
-          timestamp: now.toISOString(),
-        },
-        {
-          footer: {
-            icon_url: "https://example.com/footer.png",
-            text: "",
-          },
-          timestamp: now.toISOString(),
-        },
-      ],
-    },
-  ])
 })
 
 test("embed props", async () => {
   const now = new Date()
 
-  reply.render(
+  await assertRender(
     <Embed
       title="title text"
       description="description text"
@@ -246,36 +245,35 @@ test("embed props", async () => {
         { name: "block field", value: "block field value" },
       ]}
     />,
+    [
+      {
+        content: "",
+        actionRows: [],
+        embeds: [
+          {
+            title: "title text",
+            description: "description text",
+            url: "https://example.com/",
+            color: 0xfe_ee_ef,
+            timestamp: now.toISOString(),
+            author: {
+              name: "author name",
+              url: "https://example.com/author",
+              icon_url: "https://example.com/author.png",
+            },
+            thumbnail: { url: "https://example.com/thumbnail.png" },
+            image: { url: "https://example.com/image.png" },
+            footer: {
+              text: "footer text",
+              icon_url: "https://example.com/footer.png",
+            },
+            fields: [
+              { name: "field name", value: "field value", inline: true },
+              { name: "block field", value: "block field value" },
+            ],
+          },
+        ],
+      },
+    ],
   )
-
-  await assertMessages(adapter, [
-    {
-      content: "",
-      actionRows: [],
-      embeds: [
-        {
-          title: "title text",
-          description: "description text",
-          url: "https://example.com/",
-          color: 0xfe_ee_ef,
-          timestamp: now.toISOString(),
-          author: {
-            name: "author name",
-            url: "https://example.com/author",
-            icon_url: "https://example.com/author.png",
-          },
-          thumbnail: { url: "https://example.com/thumbnail.png" },
-          image: { url: "https://example.com/image.png" },
-          footer: {
-            text: "footer text",
-            icon_url: "https://example.com/footer.png",
-          },
-          fields: [
-            { name: "field name", value: "field value", inline: true },
-            { name: "block field", value: "block field value" },
-          ],
-        },
-      ],
-    },
-  ])
 })

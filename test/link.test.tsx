@@ -1,45 +1,41 @@
 import React from "react"
-import { Link, Reacord } from "../library/main"
-import { TestAdapter, TestCommandInteraction } from "../library/testing"
-import { assertMessages } from "./assert-messages"
+import { Link } from "../library/main"
+import { setupReacordTesting } from "./setup-testing"
 
-const adapter = new TestAdapter()
-const reacord = new Reacord({ adapter })
-const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
+const { assertRender } = setupReacordTesting()
 
 test("link", async () => {
-  reply.render(
+  await assertRender(
     <>
       <Link url="https://example.com/">link text</Link>
       <Link label="link text" url="https://example.com/" />
       <Link label="link text" url="https://example.com/" disabled />
     </>,
-  )
-
-  await assertMessages(adapter, [
-    {
-      content: "",
-      embeds: [],
-      actionRows: [
-        [
-          {
-            type: "link",
-            url: "https://example.com/",
-            label: "link text",
-          },
-          {
-            type: "link",
-            url: "https://example.com/",
-            label: "link text",
-          },
-          {
-            type: "link",
-            url: "https://example.com/",
-            label: "link text",
-            disabled: true,
-          },
+    [
+      {
+        content: "",
+        embeds: [],
+        actionRows: [
+          [
+            {
+              type: "link",
+              url: "https://example.com/",
+              label: "link text",
+            },
+            {
+              type: "link",
+              url: "https://example.com/",
+              label: "link text",
+            },
+            {
+              type: "link",
+              url: "https://example.com/",
+              label: "link text",
+              disabled: true,
+            },
+          ],
         ],
-      ],
-    },
-  ])
+      },
+    ],
+  )
 })

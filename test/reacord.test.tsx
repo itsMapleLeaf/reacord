@@ -1,16 +1,15 @@
 import * as React from "react"
-import { Button, Embed, EmbedField, EmbedTitle, Reacord } from "../library/main"
-import { TestAdapter, TestCommandInteraction } from "../library/testing"
-import { assertMessages } from "./assert-messages"
+import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
+import { TestCommandInteraction } from "../library/testing"
+import { setupReacordTesting } from "./setup-testing"
+
+const { reacord, adapter, assertMessages } = setupReacordTesting()
 
 test("rendering behavior", async () => {
-  const adapter = new TestAdapter()
-  const reacord = new Reacord({ adapter })
-
   const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
   reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 0",
       embeds: [],
@@ -37,7 +36,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("show embed").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 0",
       embeds: [{ title: "the counter" }],
@@ -64,7 +63,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("clicc").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 1",
       embeds: [
@@ -96,7 +95,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("clicc").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 2",
       embeds: [
@@ -128,7 +127,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("hide embed").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 2",
       embeds: [],
@@ -155,7 +154,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("clicc").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -182,7 +181,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("deactivate").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -212,7 +211,7 @@ test("rendering behavior", async () => {
   ])
 
   adapter.findButtonByLabel("clicc").click()
-  await assertMessages(adapter, [
+  await assertMessages([
     {
       content: "count: 3",
       embeds: [],
