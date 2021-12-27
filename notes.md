@@ -19,7 +19,7 @@
   - [x] links
   - [x] select
   - [x] select onChange
-  - [ ] action row
+  - [x] action row
   - [x] button onClick
 - [x] deactivate
 - [ ] destroy
