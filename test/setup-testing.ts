@@ -38,7 +38,9 @@ function sampleMessages(adapter: TestAdapter) {
   return adapter.messages.map((message) => ({
     ...message.options,
     actionRows: message.options.actionRows.map((row) =>
-      row.map((component) => omit(component, ["customId"])),
+      row.map((component) =>
+        omit(component, ["customId", "onClick", "onSelect", "onSelectValue"]),
+      ),
     ),
   }))
 }

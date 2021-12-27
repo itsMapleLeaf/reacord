@@ -7,11 +7,13 @@ import type {
   ButtonInteraction,
   CommandInteraction,
   ComponentInteraction,
+  SelectInteraction,
 } from "./internal/interaction"
 import type {
   Message,
   MessageButtonOptions,
   MessageOptions,
+  MessageSelectOptions,
 } from "./internal/message"
 
 export class TestAdapter implements Adapter<TestCommandInteraction> {
@@ -44,6 +46,20 @@ export class TestAdapter implements Adapter<TestCommandInteraction> {
     raise(`Couldn't find button with label "${label}"`)
   }
 
+  findSelectByPlaceholder(placeholder: string) {
+    for (const message of this.messages) {
+      for (const component of message.options.actionRows.flat()) {
+        if (
+          component.type === "select" &&
+          component.placeholder === placeholder
+        ) {
+          return this.createSelectActions(component, message)
+        }
+      }
+    }
+    raise(`Couldn't find select with placeholder "${placeholder}"`)
+  }
+
   private createButtonActions(
     button: MessageButtonOptions,
     message: TestMessage,
@@ -52,6 +68,19 @@ export class TestAdapter implements Adapter<TestCommandInteraction> {
       click: () => {
         this.componentInteractionListener(
           new TestButtonInteraction(button.customId, message),
+        )
+      },
+    }
+  }
+
+  private createSelectActions(
+    component: MessageSelectOptions,
+    message: TestMessage,
+  ) {
+    return {
+      select: (...values: string[]) => {
+        this.componentInteractionListener(
+          new TestSelectInteraction(component.customId, message, values),
         )
       },
     }
@@ -104,6 +133,22 @@ export class TestButtonInteraction implements ButtonInteraction {
   readonly channelId = "test-channel-id"
 
   constructor(readonly customId: string, readonly message: TestMessage) {}
+
+  async update(options: MessageOptions): Promise<void> {
+    this.message.options = options
+  }
+}
+
+export class TestSelectInteraction implements SelectInteraction {
+  readonly type = "select"
+  readonly id = nanoid()
+  readonly channelId = "test-channel-id"
+
+  constructor(
+    readonly customId: string,
+    readonly message: TestMessage,
+    readonly values: string[],
+  ) {}
 
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options

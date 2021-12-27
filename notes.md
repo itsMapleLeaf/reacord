@@ -17,10 +17,10 @@
 - message components
   - [x] buttons
   - [x] links
-  - [ ] select
+  - [x] select
+  - [x] select onChange
   - [ ] action row
   - [x] button onClick
-  - [ ] select onChange
 - [x] deactivate
 - [ ] destroy
 - [ ] docs
@@ -37,3 +37,5 @@
 - [ ] `useReactions`
 - [ ] max instance count per guild
 - [ ] max instance count per channel
+- [ ] uncontrolled select
+- [ ] single class/helper function for testing `ReacordTester`

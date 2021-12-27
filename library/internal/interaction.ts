@@ -25,5 +25,6 @@ export type SelectInteraction = {
   id: string
   channelId: string
   customId: string
+  values: string[]
   update(options: MessageOptions): Promise<void>
 }

@@ -1,9 +1,10 @@
 import { Client } from "discord.js"
 import "dotenv/config"
 import React from "react"
-import { DiscordJsAdapter, Reacord } from "../library/main.js"
-import { createCommandHandler } from "./command-handler.js"
-import { Counter } from "./counter.js"
+import { DiscordJsAdapter, Reacord } from "../library/main"
+import { createCommandHandler } from "./command-handler"
+import { Counter } from "./counter"
+import { FruitSelect } from "./fruit-select"
 
 const client = new Client({
   intents: ["GUILDS"],
@@ -21,6 +22,13 @@ createCommandHandler(client, [
     run: (interaction) => {
       const reply = reacord.createCommandReply(interaction)
       reply.render(<Counter onDeactivate={() => reply.deactivate()} />)
+    },
+  },
+  {
+    name: "select",
+    description: "shows a select",
+    run: (interaction) => {
+      reacord.createCommandReply(interaction).render(<FruitSelect />)
     },
   },
 ])

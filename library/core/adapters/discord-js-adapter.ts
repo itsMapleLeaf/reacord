@@ -18,7 +18,7 @@ export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
     listener: (interaction: ComponentInteraction) => void,
   ) {
     this.client.on("interactionCreate", (interaction) => {
-      if (interaction.isButton()) {
+      if (interaction.isMessageComponent()) {
         listener(createReacordComponentInteraction(interaction))
       }
     })
@@ -56,15 +56,32 @@ export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
 function createReacordComponentInteraction(
   interaction: Discord.MessageComponentInteraction,
 ): ComponentInteraction {
-  return {
-    type: "button",
-    id: interaction.id,
-    channelId: interaction.channelId,
-    customId: interaction.customId,
-    update: async (options) => {
-      await interaction.update(getDiscordMessageOptions(options))
-    },
+  if (interaction.isButton()) {
+    return {
+      type: "button",
+      id: interaction.id,
+      channelId: interaction.channelId,
+      customId: interaction.customId,
+      update: async (options) => {
+        await interaction.update(getDiscordMessageOptions(options))
+      },
+    }
   }
+
+  if (interaction.isSelectMenu()) {
+    return {
+      type: "select",
+      id: interaction.id,
+      channelId: interaction.channelId,
+      customId: interaction.customId,
+      values: interaction.values,
+      update: async (options) => {
+        await interaction.update(getDiscordMessageOptions(options))
+      },
+    }
+  }
+
+  raise(`Unsupported component interaction type: ${interaction.type}`)
 }
 
 function createReacordMessage(message: Discord.Message): Message {
@@ -94,19 +111,33 @@ function getDiscordMessageOptions(
     embeds: options.embeds,
     components: options.actionRows.map((row) => ({
       type: "ACTION_ROW",
-      components: row.map((component) => {
-        if (component.type === "button") {
-          return {
-            type: "BUTTON",
-            customId: component.customId,
-            label: component.label ?? "",
-            style: toUpper(component.style ?? "secondary"),
-            disabled: component.disabled,
-            emoji: component.emoji,
+      components: row.map(
+        (component): Discord.MessageActionRowComponentOptions => {
+          if (component.type === "button") {
+            return {
+              type: "BUTTON",
+              customId: component.customId,
+              label: component.label ?? "",
+              style: toUpper(component.style ?? "secondary"),
+              disabled: component.disabled,
+              emoji: component.emoji,
+            }
           }
-        }
-        raise(`Unsupported component type: ${component.type}`)
-      }),
+
+          if (component.type === "select") {
+            return {
+              ...component,
+              type: "SELECT_MENU",
+              options: component.options.map((option) => ({
+                ...option,
+                default: component.values?.includes(option.value),
+              })),
+            }
+          }
+
+          raise(`Unsupported component type: ${component.type}`)
+        },
+      ),
     })),
   }
 }
