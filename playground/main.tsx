@@ -21,7 +21,7 @@ createCommandHandler(client, [
     description: "shows a counter button",
     run: (interaction) => {
       const reply = reacord.createCommandReply(interaction)
-      reply.render(<Counter onDeactivate={() => reply.deactivate()} />)
+      reply.render(<Counter onDeactivate={() => reply.destroy()} />)
     },
   },
   {
