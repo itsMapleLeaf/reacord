@@ -1,6 +1,7 @@
 import type * as Discord from "discord.js"
 import { raise } from "../../../helpers/raise"
 import { toUpper } from "../../../helpers/to-upper"
+import type { Channel } from "../../internal/channel"
 import type {
   CommandInteraction,
   ComponentInteraction,
@@ -8,7 +9,12 @@ import type {
 import type { Message, MessageOptions } from "../../internal/message"
 import type { Adapter } from "./adapter"
 
-export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
+type DiscordJsAdapterGenerics = {
+  commandReplyInit: Discord.CommandInteraction
+  channelInit: Discord.TextBasedChannel
+}
+
+export class DiscordJsAdapter implements Adapter<DiscordJsAdapterGenerics> {
   constructor(private client: Discord.Client) {}
 
   /**
@@ -48,6 +54,19 @@ export class DiscordJsAdapter implements Adapter<Discord.CommandInteraction> {
           fetchReply: true,
         })
         return createReacordMessage(message as Discord.Message)
+      },
+    }
+  }
+
+  /**
+   * @internal
+   */
+  // eslint-disable-next-line class-methods-use-this
+  createChannel(channel: Discord.TextBasedChannel): Channel {
+    return {
+      send: async (options) => {
+        const message = await channel.send(getDiscordMessageOptions(options))
+        return createReacordMessage(message)
       },
     }
   }

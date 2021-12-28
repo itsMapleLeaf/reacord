@@ -6,7 +6,7 @@ import { setupReacordTesting } from "./setup-testing"
 test("rendering behavior", async () => {
   const { reacord, adapter, assertMessages } = setupReacordTesting()
 
-  const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
+  const reply = reacord.reply(new TestCommandInteraction(adapter))
   reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
   await assertMessages([
@@ -244,7 +244,7 @@ test("rendering behavior", async () => {
 test("delete", async () => {
   const { reacord, adapter, assertMessages } = setupReacordTesting()
 
-  const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
+  const reply = reacord.reply(new TestCommandInteraction(adapter))
   reply.render(
     <>
       some text

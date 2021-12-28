@@ -20,7 +20,7 @@ createCommandHandler(client, [
     name: "counter",
     description: "shows a counter button",
     run: (interaction) => {
-      const reply = reacord.createCommandReply(interaction)
+      const reply = reacord.reply(interaction)
       reply.render(<Counter onDeactivate={() => reply.destroy()} />)
     },
   },
@@ -28,7 +28,7 @@ createCommandHandler(client, [
     name: "select",
     description: "shows a select",
     run: (interaction) => {
-      reacord.createCommandReply(interaction).render(<FruitSelect />)
+      reacord.reply(interaction).render(<FruitSelect />)
     },
   },
 ])

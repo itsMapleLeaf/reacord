@@ -9,9 +9,9 @@ import { TestAdapter, TestCommandInteraction } from "../library/testing"
 const nextTickPromise = promisify(nextTick)
 
 export function setupReacordTesting() {
-  const adapter = new TestAdapter()
+  const adapter = TestAdapter.create()
   const reacord = new Reacord({ adapter })
-  const reply = reacord.createCommandReply(new TestCommandInteraction(adapter))
+  const reply = reacord.reply(new TestCommandInteraction(adapter))
 
   async function assertMessages(expected: ReturnType<typeof sampleMessages>) {
     await nextTickPromise() // wait for the render to complete

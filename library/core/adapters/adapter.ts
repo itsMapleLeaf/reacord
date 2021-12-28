@@ -1,9 +1,15 @@
+import type { Channel } from "../../internal/channel"
 import type {
   CommandInteraction,
   ComponentInteraction,
 } from "../../internal/interaction"
 
-export type Adapter<CommandReplyInit> = {
+export type AdapterGenerics = {
+  commandReplyInit: unknown
+  channelInit: unknown
+}
+
+export type Adapter<Generics extends AdapterGenerics> = {
   /**
    * @internal
    */
@@ -14,5 +20,12 @@ export type Adapter<CommandReplyInit> = {
   /**
    * @internal
    */
-  createCommandInteraction(init: CommandReplyInit): CommandInteraction
+  createCommandInteraction(
+    init: Generics["commandReplyInit"],
+  ): CommandInteraction
+
+  /**
+   * @internal
+   */
+  createChannel(init: Generics["channelInit"]): Channel
 }

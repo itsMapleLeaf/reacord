@@ -1,32 +1,24 @@
-import type { Subscription } from "rxjs"
 import { Subject } from "rxjs"
 import { concatMap } from "rxjs/operators"
 import { Container } from "./container.js"
-import type { CommandInteraction, ComponentInteraction } from "./interaction"
+import type { ComponentInteraction } from "./interaction"
 import type { Message, MessageOptions } from "./message"
 import type { Node } from "./node.js"
-
-// keep track of interaction ids which have replies,
-// so we know whether to call reply() or followUp()
-const repliedInteractionIds = new Set<string>()
 
 type UpdatePayload =
   | { action: "update" | "deactivate"; options: MessageOptions }
   | { action: "destroy" }
 
-export class Renderer {
+export abstract class Renderer {
   readonly nodes = new Container<Node<unknown>>()
   private componentInteraction?: ComponentInteraction
   private message?: Message
-  private updates = new Subject<UpdatePayload>()
-  private updateSubscription: Subscription
   private active = true
+  private updates = new Subject<UpdatePayload>()
 
-  constructor(private interaction: CommandInteraction) {
-    this.updateSubscription = this.updates
-      .pipe(concatMap((payload) => this.updateMessage(payload)))
-      .subscribe({ error: console.error })
-  }
+  private updateSubscription = this.updates
+    .pipe(concatMap((payload) => this.updateMessage(payload)))
+    .subscribe({ error: console.error })
 
   render() {
     if (!this.active) {
@@ -61,6 +53,8 @@ export class Renderer {
       }
     }
   }
+
+  protected abstract createMessage(options: MessageOptions): Promise<Message>
 
   private getMessageOptions(): MessageOptions {
     const options: MessageOptions = {
@@ -99,12 +93,6 @@ export class Renderer {
       return
     }
 
-    if (repliedInteractionIds.has(this.interaction.id)) {
-      this.message = await this.interaction.followUp(payload.options)
-      return
-    }
-
-    repliedInteractionIds.add(this.interaction.id)
-    this.message = await this.interaction.reply(payload.options)
+    this.message = await this.createMessage(payload.options)
   }
 }

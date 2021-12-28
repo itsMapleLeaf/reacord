@@ -3,6 +3,7 @@
 import { nanoid } from "nanoid"
 import { raise } from "../helpers/raise"
 import type { Adapter } from "./core/adapters/adapter"
+import type { Channel } from "./internal/channel"
 import type {
   ButtonInteraction,
   CommandInteraction,
@@ -16,8 +17,19 @@ import type {
   MessageSelectOptions,
 } from "./internal/message"
 
-export class TestAdapter implements Adapter<TestCommandInteraction> {
+type TestAdapterGenerics = {
+  commandReplyInit: TestCommandInteraction
+  channelInit: TestChannel
+}
+
+export class TestAdapter implements Adapter<TestAdapterGenerics> {
   messages: TestMessage[] = []
+
+  private constructor() {}
+
+  static create(): Adapter<TestAdapterGenerics> & TestAdapter {
+    return new TestAdapter()
+  }
 
   private componentInteractionListener: (
     interaction: ComponentInteraction,
@@ -33,6 +45,10 @@ export class TestAdapter implements Adapter<TestCommandInteraction> {
     interaction: CommandInteraction,
   ): CommandInteraction {
     return interaction
+  }
+
+  createChannel(channel: TestChannel): Channel {
+    return channel
   }
 
   findButtonByLabel(label: string) {
@@ -160,5 +176,15 @@ export class TestSelectInteraction implements SelectInteraction {
 
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options
+  }
+}
+
+export class TestChannel implements Channel {
+  constructor(private adapter: TestAdapter) {}
+
+  async send(messageOptions: MessageOptions): Promise<Message> {
+    const message = new TestMessage(messageOptions, this.adapter)
+    this.adapter.messages.push(message)
+    return message
   }
 }

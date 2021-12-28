@@ -1,10 +1,12 @@
 import type { ReactNode } from "react"
+import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
+import { CommandReplyRenderer } from "../internal/command-reply-renderer.js"
 import { reconciler } from "../internal/reconciler.js"
-import { Renderer } from "../internal/renderer.js"
-import type { Adapter } from "./adapters/adapter"
+import type { Renderer } from "../internal/renderer"
+import type { Adapter, AdapterGenerics } from "./adapters/adapter"
 
-export type ReacordConfig<InteractionInit> = {
-  adapter: Adapter<InteractionInit>
+export type ReacordConfig<Generics extends AdapterGenerics> = {
+  adapter: Adapter<Generics>
 
   /**
    * The max number of active instances.
@@ -19,10 +21,10 @@ export type ReacordInstance = {
   destroy: () => void
 }
 
-export class Reacord<InteractionInit> {
+export class Reacord<Generics extends AdapterGenerics> {
   private renderers: Renderer[] = []
 
-  constructor(private readonly config: ReacordConfig<InteractionInit>) {
+  constructor(private readonly config: ReacordConfig<Generics>) {
     config.adapter.addComponentInteractionListener((interaction) => {
       for (const renderer of this.renderers) {
         if (renderer.handleComponentInteraction(interaction)) return
@@ -34,14 +36,24 @@ export class Reacord<InteractionInit> {
     return this.config.maxInstances ?? 50
   }
 
-  createCommandReply(target: InteractionInit): ReacordInstance {
+  send(init: Generics["channelInit"]): ReacordInstance {
+    return this.createInstance(
+      new ChannelMessageRenderer(this.config.adapter.createChannel(init)),
+    )
+  }
+
+  reply(init: Generics["commandReplyInit"]): ReacordInstance {
+    return this.createInstance(
+      new CommandReplyRenderer(
+        this.config.adapter.createCommandInteraction(init),
+      ),
+    )
+  }
+
+  private createInstance(renderer: Renderer) {
     if (this.renderers.length > this.maxInstances) {
       this.deactivate(this.renderers[0]!)
     }
-
-    const renderer = new Renderer(
-      this.config.adapter.createCommandInteraction(target),
-    )
 
     this.renderers.push(renderer)
 
