@@ -1,43 +1,35 @@
 import type * as Discord from "discord.js"
-import { raise } from "../../../helpers/raise"
-import { toUpper } from "../../../helpers/to-upper"
-import type { Channel } from "../../internal/channel"
-import type {
-  CommandInteraction,
-  ComponentInteraction,
-} from "../../internal/interaction"
-import type { Message, MessageOptions } from "../../internal/message"
-import type { Adapter } from "./adapter"
+import { raise } from "../../helpers/raise"
+import { toUpper } from "../../helpers/to-upper"
+import type { ComponentInteraction } from "../internal/interaction"
+import type { Message, MessageOptions } from "../internal/message"
+import type { ReacordConfig, ReacordInstance } from "./reacord"
+import { Reacord } from "./reacord"
 
-type DiscordJsAdapterGenerics = {
-  commandReplyInit: Discord.CommandInteraction
-  channelInit: Discord.TextBasedChannel
-}
+export class ReacordDiscordJs extends Reacord {
+  constructor(client: Discord.Client, config: ReacordConfig = {}) {
+    super(config)
 
-export class DiscordJsAdapter implements Adapter<DiscordJsAdapterGenerics> {
-  constructor(private client: Discord.Client) {}
-
-  /**
-   * @internal
-   */
-  addComponentInteractionListener(
-    listener: (interaction: ComponentInteraction) => void,
-  ) {
-    this.client.on("interactionCreate", (interaction) => {
+    client.on("interactionCreate", (interaction) => {
       if (interaction.isMessageComponent()) {
-        listener(createReacordComponentInteraction(interaction))
+        this.handleComponentInteraction(
+          createReacordComponentInteraction(interaction),
+        )
       }
     })
   }
 
-  /**
-   * @internal
-   */
-  // eslint-disable-next-line class-methods-use-this
-  createCommandInteraction(
-    interaction: Discord.CommandInteraction,
-  ): CommandInteraction {
-    return {
+  override send(channel: Discord.TextBasedChannel): ReacordInstance {
+    return this.createChannelRendererInstance({
+      send: async (options) => {
+        const message = await channel.send(getDiscordMessageOptions(options))
+        return createReacordMessage(message)
+      },
+    })
+  }
+
+  override reply(interaction: Discord.CommandInteraction): ReacordInstance {
+    return this.createCommandReplyRendererInstance({
       type: "command",
       id: interaction.id,
       channelId: interaction.channelId,
@@ -55,20 +47,7 @@ export class DiscordJsAdapter implements Adapter<DiscordJsAdapterGenerics> {
         })
         return createReacordMessage(message as Discord.Message)
       },
-    }
-  }
-
-  /**
-   * @internal
-   */
-  // eslint-disable-next-line class-methods-use-this
-  createChannel(channel: Discord.TextBasedChannel): Channel {
-    return {
-      send: async (options) => {
-        const message = await channel.send(getDiscordMessageOptions(options))
-        return createReacordMessage(message)
-      },
-    }
+    })
   }
 }
 
@@ -103,33 +82,14 @@ function createReacordComponentInteraction(
   raise(`Unsupported component interaction type: ${interaction.type}`)
 }
 
-function createReacordMessage(message: Discord.Message): Message {
-  return {
-    edit: async (options) => {
-      await message.edit(getDiscordMessageOptions(options))
-    },
-    disableComponents: async () => {
-      for (const actionRow of message.components) {
-        for (const component of actionRow.components) {
-          component.setDisabled(true)
-        }
-      }
-
-      await message.edit({
-        components: message.components,
-      })
-    },
-    delete: async () => {
-      await message.delete()
-    },
-  }
-}
-
+// TODO: this could be a part of the core library,
+// and also handle some edge cases, e.g. empty messages
 function getDiscordMessageOptions(
   options: MessageOptions,
 ): Discord.MessageOptions {
   return {
-    content: options.content,
+    // eslint-disable-next-line unicorn/no-null
+    content: options.content || null,
     embeds: options.embeds,
     components: options.actionRows.map((row) => ({
       type: "ACTION_ROW",
@@ -161,5 +121,27 @@ function getDiscordMessageOptions(
         },
       ),
     })),
+  }
+}
+
+function createReacordMessage(message: Discord.Message): Message {
+  return {
+    edit: async (options) => {
+      await message.edit(getDiscordMessageOptions(options))
+    },
+    disableComponents: async () => {
+      for (const actionRow of message.components) {
+        for (const component of actionRow.components) {
+          component.setDisabled(true)
+        }
+      }
+
+      await message.edit({
+        components: message.components,
+      })
+    },
+    delete: async () => {
+      await message.delete()
+    },
   }
 }

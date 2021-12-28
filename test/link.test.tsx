@@ -1,11 +1,11 @@
 import React from "react"
+import { ReacordTester } from "../library/core/reacord-tester"
 import { Link } from "../library/main"
-import { setupReacordTesting } from "./setup-testing"
 
-const { assertRender } = setupReacordTesting()
+const tester = new ReacordTester()
 
 test("link", async () => {
-  await assertRender(
+  await tester.assertRender(
     <>
       <Link url="https://example.com/">link text</Link>
       <Link label="link text" url="https://example.com/" />

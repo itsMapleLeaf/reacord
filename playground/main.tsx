@@ -1,7 +1,7 @@
 import { Client } from "discord.js"
 import "dotenv/config"
 import React from "react"
-import { DiscordJsAdapter, Reacord } from "../library/main"
+import { ReacordDiscordJs } from "../library/main"
 import { createCommandHandler } from "./command-handler"
 import { Counter } from "./counter"
 import { FruitSelect } from "./fruit-select"
@@ -10,10 +10,38 @@ const client = new Client({
   intents: ["GUILDS"],
 })
 
-const reacord = new Reacord({
-  adapter: new DiscordJsAdapter(client),
-  maxInstances: 2,
-})
+const reacord = new ReacordDiscordJs(client)
+
+// client.on("ready", async () => {
+//   const now = new Date()
+
+//   function UptimeCounter() {
+//     const [uptime, setUptime] = React.useState(0)
+
+//     React.useEffect(() => {
+//       const interval = setInterval(() => {
+//         setUptime(Date.now() - now.getTime())
+//       }, 5000)
+//       return () => clearInterval(interval)
+//     }, [])
+
+//     return (
+//       <Embed>this bot has been running for {prettyMilliseconds(uptime)}</Embed>
+//     )
+//   }
+
+//   const channelId = "671787605624487941"
+
+//   const channel =
+//     client.channels.cache.get(channelId) ||
+//     (await client.channels.fetch(channelId))
+
+//   if (!channel?.isText()) {
+//     throw new Error("channel is not text")
+//   }
+
+//   reacord.send(channel).render(<UptimeCounter />)
+// })
 
 createCommandHandler(client, [
   {

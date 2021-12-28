@@ -1,11 +1,9 @@
 import { jest } from "@jest/globals"
 import React, { useState } from "react"
-import { Button, Option, Select } from "../library/main"
-import { setupReacordTesting } from "./setup-testing"
-
-const { adapter, reply, assertRender, assertMessages } = setupReacordTesting()
+import { Button, Option, ReacordTester, Select } from "../library/main"
 
 test("single select", async () => {
+  const tester = new ReacordTester()
   const onSelect = jest.fn()
 
   function TestSelect() {
@@ -30,7 +28,7 @@ test("single select", async () => {
   }
 
   async function assertSelect(values: string[], disabled = false) {
-    await assertMessages([
+    await tester.assertMessages([
       {
         content: "",
         embeds: [],
@@ -54,23 +52,26 @@ test("single select", async () => {
     ])
   }
 
+  const reply = tester.reply()
+
   reply.render(<TestSelect />)
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  adapter.findSelectByPlaceholder("choose one").select("2")
+  tester.findSelectByPlaceholder("choose one").select("2")
   await assertSelect(["2"])
   expect(onSelect).toHaveBeenCalledWith({ values: ["2"] })
 
-  adapter.findButtonByLabel("disable").click()
+  tester.findButtonByLabel("disable").click()
   await assertSelect(["2"], true)
 
-  adapter.findSelectByPlaceholder("choose one").select("1")
+  tester.findSelectByPlaceholder("choose one").select("1")
   await assertSelect(["2"], true)
   expect(onSelect).toHaveBeenCalledTimes(1)
 })
 
 test("multiple select", async () => {
+  const tester = new ReacordTester()
   const onSelect = jest.fn()
 
   function TestSelect() {
@@ -91,7 +92,7 @@ test("multiple select", async () => {
   }
 
   async function assertSelect(values: string[]) {
-    await assertMessages([
+    await tester.assertMessages([
       {
         content: "",
         embeds: [],
@@ -115,31 +116,34 @@ test("multiple select", async () => {
     ])
   }
 
+  const reply = tester.reply()
+
   reply.render(<TestSelect />)
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  adapter.findSelectByPlaceholder("select").select("1", "3")
+  tester.findSelectByPlaceholder("select").select("1", "3")
   await assertSelect(expect.arrayContaining(["1", "3"]))
   expect(onSelect).toHaveBeenCalledWith({
     values: expect.arrayContaining(["1", "3"]),
   })
 
-  adapter.findSelectByPlaceholder("select").select("2")
+  tester.findSelectByPlaceholder("select").select("2")
   await assertSelect(expect.arrayContaining(["2"]))
   expect(onSelect).toHaveBeenCalledWith({
     values: expect.arrayContaining(["2"]),
   })
 
-  adapter.findSelectByPlaceholder("select").select()
+  tester.findSelectByPlaceholder("select").select()
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledWith({ values: [] })
 })
 
 test("optional onSelect + unknown value", async () => {
-  reply.render(<Select placeholder="select" />)
-  adapter.findSelectByPlaceholder("select").select("something")
-  await assertMessages([
+  const tester = new ReacordTester()
+  tester.reply().render(<Select placeholder="select" />)
+  tester.findSelectByPlaceholder("select").select("something")
+  await tester.assertMessages([
     {
       content: "",
       embeds: [],

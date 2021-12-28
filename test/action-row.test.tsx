@@ -1,11 +1,11 @@
 import React from "react"
+import { ReacordTester } from "../library/core/reacord-tester"
 import { ActionRow, Button, Select } from "../library/main"
-import { setupReacordTesting } from "./setup-testing"
 
-const { assertRender } = setupReacordTesting()
+const testing = new ReacordTester()
 
 test("action row", async () => {
-  await assertRender(
+  await testing.assertRender(
     <>
       <Button label="outside button" onClick={() => {}} />
       <ActionRow>

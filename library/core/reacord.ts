@@ -1,13 +1,15 @@
 import type { ReactNode } from "react"
+import type { Channel } from "../internal/channel"
 import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
 import { CommandReplyRenderer } from "../internal/command-reply-renderer.js"
+import type {
+  CommandInteraction,
+  ComponentInteraction,
+} from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
 import type { Renderer } from "../internal/renderer"
-import type { Adapter, AdapterGenerics } from "./adapters/adapter"
 
-export type ReacordConfig<Generics extends AdapterGenerics> = {
-  adapter: Adapter<Generics>
-
+export type ReacordConfig = {
   /**
    * The max number of active instances.
    * When this limit is exceeded, the oldest instances will be disabled.
@@ -21,33 +23,37 @@ export type ReacordInstance = {
   destroy: () => void
 }
 
-export class Reacord<Generics extends AdapterGenerics> {
+export type ComponentInteractionListener = (
+  interaction: ComponentInteraction,
+) => void
+
+export abstract class Reacord {
   private renderers: Renderer[] = []
 
-  constructor(private readonly config: ReacordConfig<Generics>) {
-    config.adapter.addComponentInteractionListener((interaction) => {
-      for (const renderer of this.renderers) {
-        if (renderer.handleComponentInteraction(interaction)) return
-      }
-    })
+  constructor(private readonly config: ReacordConfig = {}) {}
+
+  abstract send(channel: unknown): ReacordInstance
+
+  abstract reply(commandInteraction: unknown): ReacordInstance
+
+  protected handleComponentInteraction(interaction: ComponentInteraction) {
+    for (const renderer of this.renderers) {
+      if (renderer.handleComponentInteraction(interaction)) return
+    }
   }
 
   private get maxInstances() {
     return this.config.maxInstances ?? 50
   }
 
-  send(init: Generics["channelInit"]): ReacordInstance {
-    return this.createInstance(
-      new ChannelMessageRenderer(this.config.adapter.createChannel(init)),
-    )
+  protected createChannelRendererInstance(channel: Channel) {
+    return this.createInstance(new ChannelMessageRenderer(channel))
   }
 
-  reply(init: Generics["commandReplyInit"]): ReacordInstance {
-    return this.createInstance(
-      new CommandReplyRenderer(
-        this.config.adapter.createCommandInteraction(init),
-      ),
-    )
+  protected createCommandReplyRendererInstance(
+    commandInteraction: CommandInteraction,
+  ): ReacordInstance {
+    return this.createInstance(new CommandReplyRenderer(commandInteraction))
   }
 
   private createInstance(renderer: Renderer) {

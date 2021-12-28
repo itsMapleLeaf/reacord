@@ -1,6 +1,6 @@
 # core features
 
-- [ ] render to channel
+- [x] render to channel
 - [x] render to interaction
 - [ ] ephemeral messages
 - [x] message content
@@ -43,5 +43,6 @@
 - [ ] max instance count per guild
 - [ ] max instance count per channel
 - [ ] uncontrolled select
-- [ ] single class/helper function for testing `ReacordTester`
-- [ ] some failsafes and fallbacks in DJS adapter
+- [x] single class/helper function for testing `ReacordTester`
+- [ ] handle deletion outside of reacord
+- [ ] for more easily writing adapters, address discord API nuances at the reacord level instead of the adapter level. the goal being that adapters can just take the objects and send them to discord

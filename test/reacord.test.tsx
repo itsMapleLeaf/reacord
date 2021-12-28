@@ -1,15 +1,19 @@
 import * as React from "react"
-import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
-import { TestCommandInteraction } from "../library/testing"
-import { setupReacordTesting } from "./setup-testing"
+import {
+  Button,
+  Embed,
+  EmbedField,
+  EmbedTitle,
+  ReacordTester,
+} from "../library/main"
 
 test("rendering behavior", async () => {
-  const { reacord, adapter, assertMessages } = setupReacordTesting()
+  const tester = new ReacordTester()
 
-  const reply = reacord.reply(new TestCommandInteraction(adapter))
+  const reply = tester.reply()
   reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
-  await assertMessages([
+  await tester.assertMessages([
     {
       content: "count: 0",
       embeds: [],
@@ -35,8 +39,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("show embed").click()
-  await assertMessages([
+  tester.findButtonByLabel("show embed").click()
+  await tester.assertMessages([
     {
       content: "count: 0",
       embeds: [{ title: "the counter" }],
@@ -62,8 +66,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("clicc").click()
-  await assertMessages([
+  tester.findButtonByLabel("clicc").click()
+  await tester.assertMessages([
     {
       content: "count: 1",
       embeds: [
@@ -94,8 +98,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("clicc").click()
-  await assertMessages([
+  tester.findButtonByLabel("clicc").click()
+  await tester.assertMessages([
     {
       content: "count: 2",
       embeds: [
@@ -126,8 +130,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("hide embed").click()
-  await assertMessages([
+  tester.findButtonByLabel("hide embed").click()
+  await tester.assertMessages([
     {
       content: "count: 2",
       embeds: [],
@@ -153,8 +157,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("clicc").click()
-  await assertMessages([
+  tester.findButtonByLabel("clicc").click()
+  await tester.assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -180,8 +184,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("deactivate").click()
-  await assertMessages([
+  tester.findButtonByLabel("deactivate").click()
+  await tester.assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -210,8 +214,8 @@ test("rendering behavior", async () => {
     },
   ])
 
-  adapter.findButtonByLabel("clicc").click()
-  await assertMessages([
+  tester.findButtonByLabel("clicc").click()
+  await tester.assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -242,9 +246,9 @@ test("rendering behavior", async () => {
 })
 
 test("delete", async () => {
-  const { reacord, adapter, assertMessages } = setupReacordTesting()
+  const tester = new ReacordTester()
 
-  const reply = reacord.reply(new TestCommandInteraction(adapter))
+  const reply = tester.reply()
   reply.render(
     <>
       some text
@@ -253,7 +257,7 @@ test("delete", async () => {
     </>,
   )
 
-  await assertMessages([
+  await tester.assertMessages([
     {
       content: "some text",
       embeds: [{ description: "some embed" }],
@@ -264,7 +268,7 @@ test("delete", async () => {
   ])
 
   reply.destroy()
-  await assertMessages([])
+  await tester.assertMessages([])
 })
 
 // test multiple instances that can be updated independently,

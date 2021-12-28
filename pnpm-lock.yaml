@@ -35,6 +35,7 @@ importers:
       nanoid: ^3.1.30
       nodemon: ^2.0.15
       prettier: ^2.5.1
+      pretty-ms: ^7.0.1
       react: ^17.0.2
       react-reconciler: ^0.26.2
       rxjs: ^7.5.0
@@ -74,6 +75,7 @@ importers:
       lodash-es: 4.17.21
       nodemon: 2.0.15
       prettier: 2.5.1
+      pretty-ms: 7.0.1
       react: 17.0.2
       tsup: 5.11.9_typescript@4.5.4
       type-fest: 2.8.0
@@ -5534,6 +5536,11 @@ packages:
       lines-and-columns: 1.2.4
     dev: true
 
+  /parse-ms/2.1.0:
+    resolution: {integrity: sha512-kHt7kzLoS9VBZfUsiKjv43mr91ea+U05EyKkEtqp7vNbHxmaVuEqN7XxeEVnGrMtYOAxGrDElSi96K7EgO1zCA==}
+    engines: {node: '>=6'}
+    dev: true
+
   /parse5/6.0.1:
     resolution: {integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==}
     dev: true
@@ -5684,6 +5691,13 @@ packages:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+    dev: true
+
+  /pretty-ms/7.0.1:
+    resolution: {integrity: sha512-973driJZvxiGOQ5ONsFhOF/DtzPMOMtgC11kCpUrPGMTgqp2q/1gwzCquocrN33is0VZ5GFHXZYMM9l6h67v2Q==}
+    engines: {node: '>=10'}
+    dependencies:
+      parse-ms: 2.1.0
     dev: true
 
   /progress/2.0.3:
