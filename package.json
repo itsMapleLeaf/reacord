@@ -30,7 +30,7 @@
     "@types/react-reconciler": "^0.26.4",
     "nanoid": "^3.1.30",
     "react-reconciler": "^0.26.2",
-    "rxjs": "^7.5.0"
+    "rxjs": "^7.5.1"
   },
   "peerDependencies": {
     "discord.js": "^13.3",

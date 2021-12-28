@@ -38,7 +38,7 @@ importers:
       pretty-ms: ^7.0.1
       react: ^17.0.2
       react-reconciler: ^0.26.2
-      rxjs: ^7.5.0
+      rxjs: ^7.5.1
       tsup: ^5.11.9
       type-fest: ^2.8.0
       typedoc: ^0.22.10
@@ -49,7 +49,7 @@ importers:
       '@types/react-reconciler': 0.26.4
       nanoid: 3.1.30
       react-reconciler: 0.26.2_react@17.0.2
-      rxjs: 7.5.0
+      rxjs: 7.5.1
     devDependencies:
       '@itsmapleleaf/configs': 1.1.2
       '@jest/globals': 27.4.4
@@ -2630,14 +2630,12 @@ packages:
     dev: true
     optional: true
 
-  /esbuild-register/3.3.0_esbuild@0.14.8:
-    resolution: {integrity: sha512-X4irLPLJwwuy8WSI9KsG2htKOoQBveVbmjYGBeBNnha+9IL56wffjj4VeU5zDb3PQtWaE7cdAML87L3rZUYhZw==}
+  /esbuild-register/3.3.1_esbuild@0.14.8:
+    resolution: {integrity: sha512-DjK9rOeo+Dhq8DXKy52DF2+O7zNPXkFRg9lZfqXDGLU6AzrULxBJZPOOFcH6WCNfkwqymKOZoNvd/ncCvEjwdw==}
     peerDependencies:
       esbuild: '>=0.12 <1'
     dependencies:
       esbuild: 0.14.8
-      jsonc-parser: 3.0.0
-      tsconfig-paths: 3.12.0
     dev: true
 
   /esbuild-sunos-64/0.14.6:
@@ -3040,7 +3038,7 @@ packages:
       cross-spawn: 7.0.3
       esbuild: 0.14.8
       esbuild-node-loader: 0.6.3_typescript@4.5.4
-      esbuild-register: 3.3.0_esbuild@0.14.8
+      esbuild-register: 3.3.1_esbuild@0.14.8
       import-meta-resolve: 1.1.1
     transitivePeerDependencies:
       - typescript
@@ -3784,7 +3782,7 @@ packages:
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
-      rxjs: 7.5.0
+      rxjs: 7.5.1
       string-width: 4.2.3
       strip-ansi: 6.0.1
       through: 2.3.8
@@ -6013,8 +6011,8 @@ packages:
       tslib: 1.14.1
     dev: true
 
-  /rxjs/7.5.0:
-    resolution: {integrity: sha512-fuCKAfFawVYX0pyFlETtYnXI+5iiY9Dftgk+VdgeOq+Qyi9ZDWckHZRDaXRt5WCNbbLkmAheoSGDiceyCIKNZA==}
+  /rxjs/7.5.1:
+    resolution: {integrity: sha512-KExVEeZWxMZnZhUZtsJcFwz8IvPvgu4G2Z2QyqjZQzUGr32KDYuSxrEYO4w3tFFNbfLozcrKUTvTPi+E9ywJkQ==}
     dependencies:
       tslib: 2.3.1
 
