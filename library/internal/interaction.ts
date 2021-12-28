@@ -18,6 +18,7 @@ export type ButtonInteraction = {
   channelId: string
   customId: string
   update(options: MessageOptions): Promise<void>
+  deferUpdate(): Promise<void>
 }
 
 export type SelectInteraction = {
@@ -27,4 +28,5 @@ export type SelectInteraction = {
   customId: string
   values: string[]
   update(options: MessageOptions): Promise<void>
+  deferUpdate(): Promise<void>
 }

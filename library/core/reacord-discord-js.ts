@@ -84,6 +84,7 @@ function createReacordComponentInteraction(
       update: async (options) => {
         await interaction.update(getDiscordMessageOptions(options))
       },
+      deferUpdate: () => interaction.deferUpdate(),
     }
   }
 
@@ -97,6 +98,7 @@ function createReacordComponentInteraction(
       update: async (options) => {
         await interaction.update(getDiscordMessageOptions(options))
       },
+      deferUpdate: () => interaction.deferUpdate(),
     }
   }
 
@@ -106,13 +108,13 @@ function createReacordComponentInteraction(
 // TODO: this could be a part of the core library,
 // and also handle some edge cases, e.g. empty messages
 function getDiscordMessageOptions(
-  options: MessageOptions,
+  reacordOptions: MessageOptions,
 ): Discord.MessageOptions {
-  return {
+  const options: Discord.MessageOptions = {
     // eslint-disable-next-line unicorn/no-null
-    content: options.content || null,
-    embeds: options.embeds,
-    components: options.actionRows.map((row) => ({
+    content: reacordOptions.content || null,
+    embeds: reacordOptions.embeds,
+    components: reacordOptions.actionRows.map((row) => ({
       type: "ACTION_ROW",
       components: row.map(
         (component): Discord.MessageActionRowComponentOptions => {
@@ -143,6 +145,12 @@ function getDiscordMessageOptions(
       ),
     })),
   }
+
+  if (!options.content && !options.embeds?.length) {
+    options.content = "_ _"
+  }
+
+  return options
 }
 
 function createReacordMessage(message: Discord.Message): Message {

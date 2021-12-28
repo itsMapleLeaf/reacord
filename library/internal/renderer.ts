@@ -4,6 +4,7 @@ import { Container } from "./container.js"
 import type { ComponentInteraction } from "./interaction"
 import type { Message, MessageOptions } from "./message"
 import type { Node } from "./node.js"
+import { Timeout } from "./timeout"
 
 type UpdatePayload =
   | { action: "update" | "deactivate"; options: MessageOptions }
@@ -19,6 +20,10 @@ export abstract class Renderer {
   private updateSubscription = this.updates
     .pipe(concatMap((payload) => this.updateMessage(payload)))
     .subscribe({ error: console.error })
+
+  private deferUpdateTimeout = new Timeout(500, () => {
+    this.componentInteraction?.deferUpdate().catch(console.error)
+  })
 
   render() {
     if (!this.active) {
@@ -47,6 +52,7 @@ export abstract class Renderer {
 
   handleComponentInteraction(interaction: ComponentInteraction) {
     this.componentInteraction = interaction
+    this.deferUpdateTimeout.run()
     for (const node of this.nodes) {
       if (node.handleComponentInteraction(interaction)) {
         return true
@@ -84,6 +90,7 @@ export abstract class Renderer {
     if (this.componentInteraction) {
       const promise = this.componentInteraction.update(payload.options)
       this.componentInteraction = undefined
+      this.deferUpdateTimeout.cancel()
       await promise
       return
     }

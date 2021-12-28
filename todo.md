@@ -28,7 +28,7 @@
 # internal
 
 - [ ] combine `MessageOptions` and `Message` into a single message object (?)
-- [ ] consider always calling `deferUpdate` on component interactions
+- [x] consider always calling `deferUpdate` on component interactions
 
 # cool ideas / polish
 
@@ -45,4 +45,4 @@
 - [ ] uncontrolled select
 - [x] single class/helper function for testing `ReacordTester`
 - [ ] handle deletion outside of reacord
-- [ ] for more easily writing adapters, address discord API nuances at the reacord level instead of the adapter level. the goal being that adapters can just take the objects and send them to discord
+- [ ] for more easily writing adapters, address discord API nuances at the reacord level instead of the adapter level. the goal being that adapters can just take the objects and send them to discord. probably make use of discord api types for this

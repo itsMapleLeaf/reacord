@@ -1,7 +1,7 @@
 import { Client } from "discord.js"
 import "dotenv/config"
 import React from "react"
-import { ReacordDiscordJs } from "../library/main"
+import { Button, ReacordDiscordJs } from "../library/main"
 import { createCommandHandler } from "./command-handler"
 import { Counter } from "./counter"
 import { FruitSelect } from "./fruit-select"
@@ -36,6 +36,16 @@ client.on("ready", () => {
 })
 
 createCommandHandler(client, [
+  {
+    name: "button",
+    description: "it's a button",
+    run: (interaction) => {
+      reacord.reply(
+        interaction,
+        <Button label="clic" onClick={() => console.log("was clic")} />,
+      )
+    },
+  },
   {
     name: "counter",
     description: "shows a counter button",
