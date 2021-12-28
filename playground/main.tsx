@@ -42,7 +42,7 @@ createCommandHandler(client, [
     run: (interaction) => {
       reacord.reply(
         interaction,
-        <Button label="clic" onClick={() => console.log("was clic")} />,
+        <Button label="clic" onClick={() => console.info("was clic")} />,
       )
     },
   },
