@@ -1,5 +1,6 @@
 {
   "entryPoints": ["library/main.ts"],
+  "out": "docs",
   "excludeInternal": true,
   "excludePrivate": true,
   "excludeProtected": true,

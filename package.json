@@ -22,7 +22,7 @@
     "coverage": "pnpm test -- --coverage",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx",
-    "docs": "typedoc library/main.ts --out docs --excludePrivate --excludeProtected --excludeInternal"
+    "docs": "typedoc && git add docs && git commit -m 'docs'"
   },
   "dependencies": {
     "@types/node": "*",
