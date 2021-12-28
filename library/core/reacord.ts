@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import type { ComponentInteraction } from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
-import type { Renderer } from "../internal/renderer"
+import type { Renderer } from "../internal/renderers/renderer"
 
 export type ReacordConfig = {
   /**

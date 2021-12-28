@@ -1,10 +1,10 @@
 import type * as Discord from "discord.js"
 import { raise } from "../../helpers/raise"
 import { toUpper } from "../../helpers/to-upper"
-import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
-import { CommandReplyRenderer } from "../internal/command-reply-renderer"
 import type { ComponentInteraction } from "../internal/interaction"
 import type { Message, MessageOptions } from "../internal/message"
+import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
+import { CommandReplyRenderer } from "../internal/renderers/command-reply-renderer"
 import type { ReacordConfig, ReacordInstance } from "./reacord"
 import { Reacord } from "./reacord"
 

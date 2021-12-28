@@ -1,5 +1,5 @@
-import type { Channel } from "./channel"
-import type { Message, MessageOptions } from "./message"
+import type { Channel } from "../channel"
+import type { Message, MessageOptions } from "../message"
 import { Renderer } from "./renderer"
 
 export class ChannelMessageRenderer extends Renderer {

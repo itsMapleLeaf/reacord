@@ -8,8 +8,6 @@ import { logPretty } from "../../helpers/log-pretty"
 import { omit } from "../../helpers/omit"
 import { raise } from "../../helpers/raise"
 import type { Channel } from "../internal/channel"
-import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
-import { CommandReplyRenderer } from "../internal/command-reply-renderer"
 import { Container } from "../internal/container"
 import type {
   ButtonInteraction,
@@ -22,6 +20,8 @@ import type {
   MessageOptions,
   MessageSelectOptions,
 } from "../internal/message"
+import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
+import { CommandReplyRenderer } from "../internal/renderers/command-reply-renderer"
 import type { ReacordInstance } from "./reacord"
 import { Reacord } from "./reacord"
 

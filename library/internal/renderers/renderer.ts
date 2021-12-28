@@ -1,10 +1,10 @@
 import { Subject } from "rxjs"
 import { concatMap } from "rxjs/operators"
-import { Container } from "./container.js"
-import type { ComponentInteraction } from "./interaction"
-import type { Message, MessageOptions } from "./message"
-import type { Node } from "./node.js"
-import { Timeout } from "./timeout"
+import { Container } from "../container.js"
+import type { ComponentInteraction } from "../interaction"
+import type { Message, MessageOptions } from "../message"
+import type { Node } from "../node.js"
+import { Timeout } from "../timeout"
 
 type UpdatePayload =
   | { action: "update" | "deactivate"; options: MessageOptions }

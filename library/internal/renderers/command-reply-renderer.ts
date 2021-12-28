@@ -1,5 +1,5 @@
-import type { CommandInteraction } from "./interaction"
-import type { Message, MessageOptions } from "./message"
+import type { CommandInteraction } from "../interaction"
+import type { Message, MessageOptions } from "../message"
 import { Renderer } from "./renderer"
 
 // keep track of interaction ids which have replies,
