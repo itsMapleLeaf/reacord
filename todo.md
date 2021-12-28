@@ -2,7 +2,7 @@
 
 - [x] render to channel
 - [x] render to interaction
-- [ ] ephemeral messages
+- [x] ephemeral messages
 - [x] message content
 - embed
   - [x] color
@@ -21,6 +21,8 @@
   - [x] select onChange
   - [x] action row
   - [x] button onClick
+  - [ ] button click event
+  - [ ] select change event
 - [x] deactivate
 - [x] destroy
 - [ ] docs

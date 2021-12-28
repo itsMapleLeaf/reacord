@@ -52,6 +52,10 @@ export class ReacordTester extends Reacord {
     )
   }
 
+  override ephemeralReply(): ReacordInstance {
+    return this.reply()
+  }
+
   async assertMessages(expected: ReturnType<this["sampleMessages"]>) {
     await nextTickPromise()
     expect(this.sampleMessages()).toEqual(expected)

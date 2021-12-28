@@ -72,6 +72,34 @@ export class ReacordDiscordJs extends Reacord {
       initialContent,
     )
   }
+
+  override ephemeralReply(
+    interaction: Discord.CommandInteraction,
+    initialContent?: React.ReactNode,
+  ): ReacordInstance {
+    return this.createInstance(
+      new CommandReplyRenderer({
+        type: "command",
+        id: interaction.id,
+        channelId: interaction.channelId,
+        reply: async (options) => {
+          await interaction.reply({
+            ...getDiscordMessageOptions(options),
+            ephemeral: true,
+          })
+          return createEphemeralReacordMessage()
+        },
+        followUp: async (options) => {
+          await interaction.followUp({
+            ...getDiscordMessageOptions(options),
+            ephemeral: true,
+          })
+          return createEphemeralReacordMessage()
+        },
+      }),
+      initialContent,
+    )
+  }
 }
 
 function createReacordComponentInteraction(
@@ -173,6 +201,23 @@ function createReacordMessage(message: Discord.Message): Message {
     },
     delete: async () => {
       await message.delete()
+    },
+  }
+}
+
+function createEphemeralReacordMessage(): Message {
+  return {
+    edit: () => {
+      console.warn("Ephemeral messages can't be edited")
+      return Promise.resolve()
+    },
+    disableComponents: () => {
+      console.warn("Ephemeral messages can't be edited")
+      return Promise.resolve()
+    },
+    delete: () => {
+      console.warn("Ephemeral messages can't be deleted")
+      return Promise.resolve()
     },
   }
 }

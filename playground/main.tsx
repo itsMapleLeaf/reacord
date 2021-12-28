@@ -61,6 +61,21 @@ createCommandHandler(client, [
       reacord.reply(interaction, <FruitSelect />)
     },
   },
+  {
+    name: "ephemeral-button",
+    description: "button which shows ephemeral messages",
+    run: (interaction) => {
+      reacord.reply(
+        interaction,
+        <Button
+          label="clic"
+          onClick={() => {
+            reacord.ephemeralReply(interaction, "you clic")
+          }}
+        />,
+      )
+    },
+  },
 ])
 
 await client.login(process.env.TEST_BOT_TOKEN)

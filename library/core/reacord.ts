@@ -28,6 +28,7 @@ export abstract class Reacord {
 
   abstract send(...args: unknown[]): ReacordInstance
   abstract reply(...args: unknown[]): ReacordInstance
+  abstract ephemeralReply(...args: unknown[]): ReacordInstance
 
   protected handleComponentInteraction(interaction: ComponentInteraction) {
     for (const renderer of this.renderers) {
