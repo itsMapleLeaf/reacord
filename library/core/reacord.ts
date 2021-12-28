@@ -26,12 +26,8 @@ export abstract class Reacord {
 
   constructor(private readonly config: ReacordConfig = {}) {}
 
-  abstract send(channel: unknown, initialContent?: ReactNode): ReacordInstance
-
-  abstract reply(
-    commandInteraction: unknown,
-    initialContent?: ReactNode,
-  ): ReacordInstance
+  abstract send(...args: unknown[]): ReacordInstance
+  abstract reply(...args: unknown[]): ReacordInstance
 
   protected handleComponentInteraction(interaction: ComponentInteraction) {
     for (const renderer of this.renderers) {
