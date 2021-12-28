@@ -7,7 +7,7 @@ import type { ReacordConfig, ReacordInstance } from "./reacord"
 import { Reacord } from "./reacord"
 
 export class ReacordDiscordJs extends Reacord {
-  constructor(client: Discord.Client, config: ReacordConfig = {}) {
+  constructor(private client: Discord.Client, config: ReacordConfig = {}) {
     super(config)
 
     client.on("interactionCreate", (interaction) => {
@@ -19,35 +19,56 @@ export class ReacordDiscordJs extends Reacord {
     })
   }
 
-  override send(channel: Discord.TextBasedChannel): ReacordInstance {
-    return this.createChannelRendererInstance({
-      send: async (options) => {
-        const message = await channel.send(getDiscordMessageOptions(options))
-        return createReacordMessage(message)
+  override send(
+    channelId: string,
+    initialContent?: React.ReactNode,
+  ): ReacordInstance {
+    return this.createChannelRendererInstance(
+      {
+        send: async (options) => {
+          const channel =
+            this.client.channels.cache.get(channelId) ??
+            (await this.client.channels.fetch(channelId)) ??
+            raise(`Channel ${channelId} not found`)
+
+          if (!channel.isText()) {
+            raise(`Channel ${channelId} is not a text channel`)
+          }
+
+          const message = await channel.send(getDiscordMessageOptions(options))
+          return createReacordMessage(message)
+        },
       },
-    })
+      initialContent,
+    )
   }
 
-  override reply(interaction: Discord.CommandInteraction): ReacordInstance {
-    return this.createCommandReplyRendererInstance({
-      type: "command",
-      id: interaction.id,
-      channelId: interaction.channelId,
-      reply: async (options) => {
-        const message = await interaction.reply({
-          ...getDiscordMessageOptions(options),
-          fetchReply: true,
-        })
-        return createReacordMessage(message as Discord.Message)
+  override reply(
+    interaction: Discord.CommandInteraction,
+    initialContent?: React.ReactNode,
+  ): ReacordInstance {
+    return this.createCommandReplyRendererInstance(
+      {
+        type: "command",
+        id: interaction.id,
+        channelId: interaction.channelId,
+        reply: async (options) => {
+          const message = await interaction.reply({
+            ...getDiscordMessageOptions(options),
+            fetchReply: true,
+          })
+          return createReacordMessage(message as Discord.Message)
+        },
+        followUp: async (options) => {
+          const message = await interaction.followUp({
+            ...getDiscordMessageOptions(options),
+            fetchReply: true,
+          })
+          return createReacordMessage(message as Discord.Message)
+        },
       },
-      followUp: async (options) => {
-        const message = await interaction.followUp({
-          ...getDiscordMessageOptions(options),
-          fetchReply: true,
-        })
-        return createReacordMessage(message as Discord.Message)
-      },
-    })
+      initialContent,
+    )
   }
 }
 

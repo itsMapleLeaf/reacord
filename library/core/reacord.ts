@@ -32,9 +32,12 @@ export abstract class Reacord {
 
   constructor(private readonly config: ReacordConfig = {}) {}
 
-  abstract send(channel: unknown): ReacordInstance
+  abstract send(channel: unknown, initialContent?: ReactNode): ReacordInstance
 
-  abstract reply(commandInteraction: unknown): ReacordInstance
+  abstract reply(
+    commandInteraction: unknown,
+    initialContent?: ReactNode,
+  ): ReacordInstance
 
   protected handleComponentInteraction(interaction: ComponentInteraction) {
     for (const renderer of this.renderers) {
@@ -46,17 +49,27 @@ export abstract class Reacord {
     return this.config.maxInstances ?? 50
   }
 
-  protected createChannelRendererInstance(channel: Channel) {
-    return this.createInstance(new ChannelMessageRenderer(channel))
+  protected createChannelRendererInstance(
+    channel: Channel,
+    initialContent?: ReactNode,
+  ) {
+    return this.createInstance(
+      new ChannelMessageRenderer(channel),
+      initialContent,
+    )
   }
 
   protected createCommandReplyRendererInstance(
     commandInteraction: CommandInteraction,
+    initialContent?: ReactNode,
   ): ReacordInstance {
-    return this.createInstance(new CommandReplyRenderer(commandInteraction))
+    return this.createInstance(
+      new CommandReplyRenderer(commandInteraction),
+      initialContent,
+    )
   }
 
-  private createInstance(renderer: Renderer) {
+  private createInstance(renderer: Renderer, initialContent?: ReactNode) {
     if (this.renderers.length > this.maxInstances) {
       this.deactivate(this.renderers[0]!)
     }
@@ -64,6 +77,10 @@ export abstract class Reacord {
     this.renderers.push(renderer)
 
     const container = reconciler.createContainer(renderer, 0, false, {})
+
+    if (initialContent !== undefined) {
+      reconciler.updateContainer(initialContent, container)
+    }
 
     return {
       render: (content: ReactNode) => {

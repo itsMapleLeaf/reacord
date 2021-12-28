@@ -19,7 +19,6 @@ export function createCommandHandler(client: Client, commands: Command[]) {
         )
       }
     }
-    console.info("ready 💖")
   })
 
   client.on("interactionCreate", async (interaction) => {

@@ -12,36 +12,28 @@ const client = new Client({
 
 const reacord = new ReacordDiscordJs(client)
 
-// client.on("ready", async () => {
-//   const now = new Date()
+client.on("ready", () => {
+  console.info("ready 💖")
 
-//   function UptimeCounter() {
-//     const [uptime, setUptime] = React.useState(0)
+  // const now = new Date()
 
-//     React.useEffect(() => {
-//       const interval = setInterval(() => {
-//         setUptime(Date.now() - now.getTime())
-//       }, 5000)
-//       return () => clearInterval(interval)
-//     }, [])
+  // function UptimeCounter() {
+  //   const [uptime, setUptime] = React.useState(0)
 
-//     return (
-//       <Embed>this bot has been running for {prettyMilliseconds(uptime)}</Embed>
-//     )
-//   }
+  //   React.useEffect(() => {
+  //     const interval = setInterval(() => {
+  //       setUptime(Date.now() - now.getTime())
+  //     }, 5000)
+  //     return () => clearInterval(interval)
+  //   }, [])
 
-//   const channelId = "671787605624487941"
+  //   return (
+  //     <Embed>this bot has been running for {prettyMilliseconds(uptime)}</Embed>
+  //   )
+  // }
 
-//   const channel =
-//     client.channels.cache.get(channelId) ||
-//     (await client.channels.fetch(channelId))
-
-//   if (!channel?.isText()) {
-//     throw new Error("channel is not text")
-//   }
-
-//   reacord.send(channel).render(<UptimeCounter />)
-// })
+  // reacord.send("671787605624487941", <UptimeCounter />)
+})
 
 createCommandHandler(client, [
   {
@@ -56,7 +48,7 @@ createCommandHandler(client, [
     name: "select",
     description: "shows a select",
     run: (interaction) => {
-      reacord.reply(interaction).render(<FruitSelect />)
+      reacord.reply(interaction, <FruitSelect />)
     },
   },
 ])
