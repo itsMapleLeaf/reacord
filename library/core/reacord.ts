@@ -1,11 +1,5 @@
 import type { ReactNode } from "react"
-import type { Channel } from "../internal/channel"
-import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
-import { CommandReplyRenderer } from "../internal/command-reply-renderer.js"
-import type {
-  CommandInteraction,
-  ComponentInteraction,
-} from "../internal/interaction"
+import type { ComponentInteraction } from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
 import type { Renderer } from "../internal/renderer"
 
@@ -49,27 +43,7 @@ export abstract class Reacord {
     return this.config.maxInstances ?? 50
   }
 
-  protected createChannelRendererInstance(
-    channel: Channel,
-    initialContent?: ReactNode,
-  ) {
-    return this.createInstance(
-      new ChannelMessageRenderer(channel),
-      initialContent,
-    )
-  }
-
-  protected createCommandReplyRendererInstance(
-    commandInteraction: CommandInteraction,
-    initialContent?: ReactNode,
-  ): ReacordInstance {
-    return this.createInstance(
-      new CommandReplyRenderer(commandInteraction),
-      initialContent,
-    )
-  }
-
-  private createInstance(renderer: Renderer, initialContent?: ReactNode) {
+  protected createInstance(renderer: Renderer, initialContent?: ReactNode) {
     if (this.renderers.length > this.maxInstances) {
       this.deactivate(this.renderers[0]!)
     }

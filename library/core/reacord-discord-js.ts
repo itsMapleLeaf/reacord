@@ -1,6 +1,8 @@
 import type * as Discord from "discord.js"
 import { raise } from "../../helpers/raise"
 import { toUpper } from "../../helpers/to-upper"
+import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
+import { CommandReplyRenderer } from "../internal/command-reply-renderer"
 import type { ComponentInteraction } from "../internal/interaction"
 import type { Message, MessageOptions } from "../internal/message"
 import type { ReacordConfig, ReacordInstance } from "./reacord"
@@ -23,8 +25,8 @@ export class ReacordDiscordJs extends Reacord {
     channelId: string,
     initialContent?: React.ReactNode,
   ): ReacordInstance {
-    return this.createChannelRendererInstance(
-      {
+    return this.createInstance(
+      new ChannelMessageRenderer({
         send: async (options) => {
           const channel =
             this.client.channels.cache.get(channelId) ??
@@ -38,7 +40,7 @@ export class ReacordDiscordJs extends Reacord {
           const message = await channel.send(getDiscordMessageOptions(options))
           return createReacordMessage(message)
         },
-      },
+      }),
       initialContent,
     )
   }
@@ -47,8 +49,8 @@ export class ReacordDiscordJs extends Reacord {
     interaction: Discord.CommandInteraction,
     initialContent?: React.ReactNode,
   ): ReacordInstance {
-    return this.createCommandReplyRendererInstance(
-      {
+    return this.createInstance(
+      new CommandReplyRenderer({
         type: "command",
         id: interaction.id,
         channelId: interaction.channelId,
@@ -66,7 +68,7 @@ export class ReacordDiscordJs extends Reacord {
           })
           return createReacordMessage(message as Discord.Message)
         },
-      },
+      }),
       initialContent,
     )
   }

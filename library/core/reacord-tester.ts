@@ -8,6 +8,8 @@ import { logPretty } from "../../helpers/log-pretty"
 import { omit } from "../../helpers/omit"
 import { raise } from "../../helpers/raise"
 import type { Channel } from "../internal/channel"
+import { ChannelMessageRenderer } from "../internal/channel-message-renderer"
+import { CommandReplyRenderer } from "../internal/command-reply-renderer"
 import { Container } from "../internal/container"
 import type {
   ButtonInteraction,
@@ -36,15 +38,17 @@ export class ReacordTester extends Reacord {
     return [...this.messageContainer]
   }
 
-  send(): ReacordInstance {
-    return this.createChannelRendererInstance(
-      new TestChannel(this.messageContainer),
+  override send(): ReacordInstance {
+    return this.createInstance(
+      new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
     )
   }
 
-  reply(): ReacordInstance {
-    return this.createCommandReplyRendererInstance(
-      new TestCommandInteraction(this.messageContainer),
+  override reply(): ReacordInstance {
+    return this.createInstance(
+      new CommandReplyRenderer(
+        new TestCommandInteraction(this.messageContainer),
+      ),
     )
   }
 
@@ -177,8 +181,7 @@ class TestCommandInteraction implements CommandInteraction {
   }
 }
 
-class TestButtonInteraction implements ButtonInteraction {
-  readonly type = "button"
+class TestInteraction {
   readonly id = nanoid()
   readonly channelId = "test-channel-id"
 
@@ -187,21 +190,29 @@ class TestButtonInteraction implements ButtonInteraction {
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options
   }
+
+  async deferUpdate(): Promise<void> {}
 }
 
-class TestSelectInteraction implements SelectInteraction {
+class TestButtonInteraction
+  extends TestInteraction
+  implements ButtonInteraction
+{
+  readonly type = "button"
+}
+
+class TestSelectInteraction
+  extends TestInteraction
+  implements SelectInteraction
+{
   readonly type = "select"
-  readonly id = nanoid()
-  readonly channelId = "test-channel-id"
 
   constructor(
-    readonly customId: string,
-    readonly message: TestMessage,
+    customId: string,
+    message: TestMessage,
     readonly values: string[],
-  ) {}
-
-  async update(options: MessageOptions): Promise<void> {
-    this.message.options = options
+  ) {
+    super(customId, message)
   }
 }
 
