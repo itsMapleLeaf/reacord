@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["../library/main.ts"],
+  "json": "./app/docs.json",
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "categoryOrder": ["Classes", "Functions", "*"],
+  "categorizeByGroup": false,
+  "preserveWatchOutput": true
+}

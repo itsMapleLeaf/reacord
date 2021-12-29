@@ -1,1 +1,1 @@
-workspaces: ['.', docs]
+workspaces: [packages/*]
