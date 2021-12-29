@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": [".", "../library"],
+  "exclude": ["node_modules", ".cache", "api", "public"]
+}

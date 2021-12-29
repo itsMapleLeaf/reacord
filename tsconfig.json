@@ -1,12 +1,15 @@
 {
   "extends": "@itsmapleleaf/configs/tsconfig.base",
   "compilerOptions": {
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "jsx": "react-jsx"
   },
   "exclude": [
     "**/node_modules/**",
     "**/coverage/**",
     "**/dist/**",
-    "**/docs/**"
+    "**/.cache/**",
+    "**/api/_build/**",
+    "**/public/**"
   ]
 }
