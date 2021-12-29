@@ -15,7 +15,7 @@ export function FruitSelect() {
       <Select
         placeholder="choose a fruit"
         value={value}
-        onSelectValue={setValue}
+        onChangeValue={setValue}
       >
         <Option value="🍎" />
         <Option value="🍌" />

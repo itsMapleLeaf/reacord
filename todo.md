@@ -21,8 +21,14 @@
   - [x] select onChange
   - [x] action row
   - [x] button onClick
-  - [ ] button click event
-  - [ ] select change event
+  - component events
+    - [x] reply / send functions
+    - [x] select values
+    - [ ] message.\*
+    - [ ] channel.\*
+    - [ ] guild.\*
+    - [ ] guild.member.\*
+    - [ ] user.\*
 - [x] deactivate
 - [x] destroy
 - [ ] docs
@@ -48,3 +54,5 @@
 - [x] single class/helper function for testing `ReacordTester`
 - [ ] handle deletion outside of reacord
 - [ ] for more easily writing adapters, address discord API nuances at the reacord level instead of the adapter level. the goal being that adapters can just take the objects and send them to discord. probably make use of discord api types for this
+- [ ] allow users to specify their own customId for components
+  - this could be an easy and intuitive way to make component interactions work over bot restarts... among other interesting things

@@ -6,6 +6,7 @@ import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
 import type { ActionRow, MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
+import type { ComponentEvent } from "../component-event"
 import { OptionNode } from "./option-node"
 
 export type SelectProps = {
@@ -17,12 +18,12 @@ export type SelectProps = {
   minValues?: number
   maxValues?: number
   disabled?: boolean
-  onSelect?: (event: SelectEvent) => void
-  onSelectValue?: (value: string) => void
-  onSelectMultiple?: (values: string[]) => void
+  onChange?: (event: SelectChangeEvent) => void
+  onChangeValue?: (value: string, event: SelectChangeEvent) => void
+  onChangeMultiple?: (values: string[], event: SelectChangeEvent) => void
 }
 
-export type SelectEvent = {
+export type SelectChangeEvent = ComponentEvent & {
   values: string[]
 }
 
@@ -52,9 +53,9 @@ class SelectNode extends Node<SelectProps> {
       minValues = 0,
       maxValues = 25,
       children,
-      onSelect,
-      onSelectValue,
-      onSelectMultiple,
+      onChange,
+      onChangeValue,
+      onChangeMultiple,
       ...props
     } = this.props
 
@@ -72,18 +73,18 @@ class SelectNode extends Node<SelectProps> {
   override handleComponentInteraction(
     interaction: ComponentInteraction,
   ): boolean {
-    if (
+    const isSelectInteraction =
       interaction.type === "select" &&
       interaction.customId === this.customId &&
       !this.props.disabled
-    ) {
-      this.props.onSelect?.({ values: interaction.values })
-      this.props.onSelectMultiple?.(interaction.values)
-      if (interaction.values[0]) {
-        this.props.onSelectValue?.(interaction.values[0])
-      }
-      return true
+
+    if (!isSelectInteraction) return false
+
+    this.props.onChange?.(interaction.event)
+    this.props.onChangeMultiple?.(interaction.event.values, interaction.event)
+    if (interaction.event.values[0]) {
+      this.props.onChangeValue?.(interaction.event.values[0], interaction.event)
     }
-    return false
+    return true
   }
 }

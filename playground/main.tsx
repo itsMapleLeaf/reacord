@@ -67,12 +67,16 @@ createCommandHandler(client, [
     run: (interaction) => {
       reacord.reply(
         interaction,
-        <Button
-          label="clic"
-          onClick={() => {
-            reacord.ephemeralReply(interaction, "you clic")
-          }}
-        />,
+        <>
+          <Button
+            label="public clic"
+            onClick={() => reacord.reply(interaction, "you clic")}
+          />
+          <Button
+            label="clic"
+            onClick={(event) => event.ephemeralReply("you clic")}
+          />
+        </>,
       )
     },
   },

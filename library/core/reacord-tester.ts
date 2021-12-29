@@ -21,8 +21,10 @@ import type {
   MessageSelectOptions,
 } from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
-import { CommandReplyRenderer } from "../internal/renderers/command-reply-renderer"
-import type { ReacordInstance } from "./reacord"
+import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
+import type { ButtonClickEvent } from "./components/button"
+import type { SelectChangeEvent } from "./components/select"
+import type { ReacordInstance } from "./instance"
 import { Reacord } from "./reacord"
 
 const nextTickPromise = promisify(nextTick)
@@ -46,7 +48,7 @@ export class ReacordTester extends Reacord {
 
   override reply(): ReacordInstance {
     return this.createInstance(
-      new CommandReplyRenderer(
+      new InteractionReplyRenderer(
         new TestCommandInteraction(this.messageContainer),
       ),
     )
@@ -111,6 +113,10 @@ export class ReacordTester extends Reacord {
     raise(`Couldn't find select with placeholder "${placeholder}"`)
   }
 
+  createMessage(options: MessageOptions) {
+    return new TestMessage(options, this.messageContainer)
+  }
+
   private createButtonActions(
     button: MessageButtonOptions,
     message: TestMessage,
@@ -118,7 +124,7 @@ export class ReacordTester extends Reacord {
     return {
       click: () => {
         this.handleComponentInteraction(
-          new TestButtonInteraction(button.customId, message),
+          new TestButtonInteraction(button.customId, message, this),
         )
       },
     }
@@ -131,7 +137,7 @@ export class ReacordTester extends Reacord {
     return {
       select: (...values: string[]) => {
         this.handleComponentInteraction(
-          new TestSelectInteraction(component.customId, message, values),
+          new TestSelectInteraction(component.customId, message, values, this),
         )
       },
     }
@@ -189,13 +195,25 @@ class TestInteraction {
   readonly id = nanoid()
   readonly channelId = "test-channel-id"
 
-  constructor(readonly customId: string, readonly message: TestMessage) {}
+  constructor(
+    readonly customId: string,
+    readonly message: TestMessage,
+    private tester: ReacordTester,
+  ) {}
 
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options
   }
 
   async deferUpdate(): Promise<void> {}
+
+  async reply(messageOptions: MessageOptions): Promise<Message> {
+    return this.tester.createMessage(messageOptions)
+  }
+
+  async followUp(messageOptions: MessageOptions): Promise<Message> {
+    return this.tester.createMessage(messageOptions)
+  }
 }
 
 class TestButtonInteraction
@@ -203,6 +221,12 @@ class TestButtonInteraction
   implements ButtonInteraction
 {
   readonly type = "button"
+  readonly event: ButtonClickEvent
+
+  constructor(customId: string, message: TestMessage, tester: ReacordTester) {
+    super(customId, message, tester)
+    this.event = new TestButtonClickEvent(tester)
+  }
 }
 
 class TestSelectInteraction
@@ -210,13 +234,41 @@ class TestSelectInteraction
   implements SelectInteraction
 {
   readonly type = "select"
+  readonly event: SelectChangeEvent
 
   constructor(
     customId: string,
     message: TestMessage,
     readonly values: string[],
+    tester: ReacordTester,
   ) {
-    super(customId, message)
+    super(customId, message, tester)
+    this.event = new TestSelectChangeEvent(values, tester)
+  }
+}
+
+class TestComponentEvent {
+  constructor(private tester: ReacordTester) {}
+
+  reply(content?: ReactNode): ReacordInstance {
+    return this.tester.reply()
+  }
+
+  ephemeralReply(content?: ReactNode): ReacordInstance {
+    return this.tester.ephemeralReply()
+  }
+}
+
+class TestButtonClickEvent
+  extends TestComponentEvent
+  implements ButtonClickEvent {}
+
+class TestSelectChangeEvent
+  extends TestComponentEvent
+  implements SelectChangeEvent
+{
+  constructor(readonly values: string[], tester: ReacordTester) {
+    super(tester)
   }
 }
 

@@ -1,4 +1,4 @@
-import type { CommandInteraction } from "../interaction"
+import type { Interaction } from "../interaction"
 import type { Message, MessageOptions } from "../message"
 import { Renderer } from "./renderer"
 
@@ -6,8 +6,8 @@ import { Renderer } from "./renderer"
 // so we know whether to call reply() or followUp()
 const repliedInteractionIds = new Set<string>()
 
-export class CommandReplyRenderer extends Renderer {
-  constructor(private interaction: CommandInteraction) {
+export class InteractionReplyRenderer extends Renderer {
+  constructor(private interaction: Interaction) {
     super()
   }
 

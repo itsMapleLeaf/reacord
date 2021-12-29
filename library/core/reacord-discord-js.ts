@@ -1,11 +1,15 @@
+/* eslint-disable class-methods-use-this */
 import type * as Discord from "discord.js"
+import type { ReactNode } from "react"
+import type { Except } from "type-fest"
 import { raise } from "../../helpers/raise"
 import { toUpper } from "../../helpers/to-upper"
 import type { ComponentInteraction } from "../internal/interaction"
 import type { Message, MessageOptions } from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
-import { CommandReplyRenderer } from "../internal/renderers/command-reply-renderer"
-import type { ReacordConfig, ReacordInstance } from "./reacord"
+import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
+import type { ReacordInstance } from "./instance"
+import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
 export class ReacordDiscordJs extends Reacord {
@@ -15,7 +19,7 @@ export class ReacordDiscordJs extends Reacord {
     client.on("interactionCreate", (interaction) => {
       if (interaction.isMessageComponent()) {
         this.handleComponentInteraction(
-          createReacordComponentInteraction(interaction),
+          this.createReacordComponentInteraction(interaction),
         )
       }
     })
@@ -26,21 +30,7 @@ export class ReacordDiscordJs extends Reacord {
     initialContent?: React.ReactNode,
   ): ReacordInstance {
     return this.createInstance(
-      new ChannelMessageRenderer({
-        send: async (options) => {
-          const channel =
-            this.client.channels.cache.get(channelId) ??
-            (await this.client.channels.fetch(channelId)) ??
-            raise(`Channel ${channelId} not found`)
-
-          if (!channel.isText()) {
-            raise(`Channel ${channelId} is not a text channel`)
-          }
-
-          const message = await channel.send(getDiscordMessageOptions(options))
-          return createReacordMessage(message)
-        },
-      }),
+      this.createChannelRenderer(channelId),
       initialContent,
     )
   }
@@ -50,25 +40,7 @@ export class ReacordDiscordJs extends Reacord {
     initialContent?: React.ReactNode,
   ): ReacordInstance {
     return this.createInstance(
-      new CommandReplyRenderer({
-        type: "command",
-        id: interaction.id,
-        channelId: interaction.channelId,
-        reply: async (options) => {
-          const message = await interaction.reply({
-            ...getDiscordMessageOptions(options),
-            fetchReply: true,
-          })
-          return createReacordMessage(message as Discord.Message)
-        },
-        followUp: async (options) => {
-          const message = await interaction.followUp({
-            ...getDiscordMessageOptions(options),
-            fetchReply: true,
-          })
-          return createReacordMessage(message as Discord.Message)
-        },
-      }),
+      this.createInteractionReplyRenderer(interaction),
       initialContent,
     )
   }
@@ -78,61 +50,180 @@ export class ReacordDiscordJs extends Reacord {
     initialContent?: React.ReactNode,
   ): ReacordInstance {
     return this.createInstance(
-      new CommandReplyRenderer({
-        type: "command",
-        id: interaction.id,
-        channelId: interaction.channelId,
-        reply: async (options) => {
-          await interaction.reply({
-            ...getDiscordMessageOptions(options),
-            ephemeral: true,
-          })
-          return createEphemeralReacordMessage()
-        },
-        followUp: async (options) => {
-          await interaction.followUp({
-            ...getDiscordMessageOptions(options),
-            ephemeral: true,
-          })
-          return createEphemeralReacordMessage()
-        },
-      }),
+      this.createEphemeralInteractionReplyRenderer(interaction),
       initialContent,
     )
   }
+
+  private createChannelRenderer(channelId: string) {
+    return new ChannelMessageRenderer({
+      send: async (options) => {
+        const channel =
+          this.client.channels.cache.get(channelId) ??
+          (await this.client.channels.fetch(channelId)) ??
+          raise(`Channel ${channelId} not found`)
+
+        if (!channel.isText()) {
+          raise(`Channel ${channelId} is not a text channel`)
+        }
+
+        const message = await channel.send(getDiscordMessageOptions(options))
+        return createReacordMessage(message)
+      },
+    })
+  }
+
+  private createInteractionReplyRenderer(
+    interaction:
+      | Discord.CommandInteraction
+      | Discord.MessageComponentInteraction,
+  ) {
+    return new InteractionReplyRenderer({
+      type: "command",
+      id: interaction.id,
+      reply: async (options) => {
+        const message = await interaction.reply({
+          ...getDiscordMessageOptions(options),
+          fetchReply: true,
+        })
+        return createReacordMessage(message as Discord.Message)
+      },
+      followUp: async (options) => {
+        const message = await interaction.followUp({
+          ...getDiscordMessageOptions(options),
+          fetchReply: true,
+        })
+        return createReacordMessage(message as Discord.Message)
+      },
+    })
+  }
+
+  private createEphemeralInteractionReplyRenderer(
+    interaction:
+      | Discord.CommandInteraction
+      | Discord.MessageComponentInteraction,
+  ) {
+    return new InteractionReplyRenderer({
+      type: "command",
+      id: interaction.id,
+      reply: async (options) => {
+        await interaction.reply({
+          ...getDiscordMessageOptions(options),
+          ephemeral: true,
+        })
+        return createEphemeralReacordMessage()
+      },
+      followUp: async (options) => {
+        await interaction.followUp({
+          ...getDiscordMessageOptions(options),
+          ephemeral: true,
+        })
+        return createEphemeralReacordMessage()
+      },
+    })
+  }
+
+  private createReacordComponentInteraction(
+    interaction: Discord.MessageComponentInteraction,
+  ): ComponentInteraction {
+    const baseProps: Except<ComponentInteraction, "type"> = {
+      id: interaction.id,
+      customId: interaction.customId,
+      update: async (options: MessageOptions) => {
+        await interaction.update(getDiscordMessageOptions(options))
+      },
+      deferUpdate: async () => {
+        if (interaction.replied || interaction.deferred) return
+        await interaction.deferUpdate()
+      },
+      reply: async (options) => {
+        const message = await interaction.reply({
+          ...getDiscordMessageOptions(options),
+          fetchReply: true,
+        })
+        return createReacordMessage(message as Discord.Message)
+      },
+      followUp: async (options) => {
+        const message = await interaction.followUp({
+          ...getDiscordMessageOptions(options),
+          fetchReply: true,
+        })
+        return createReacordMessage(message as Discord.Message)
+      },
+      event: {
+        reply: (content?: ReactNode) =>
+          this.createInstance(
+            this.createInteractionReplyRenderer(interaction),
+            content,
+          ),
+
+        ephemeralReply: (content: ReactNode) =>
+          this.createInstance(
+            this.createEphemeralInteractionReplyRenderer(interaction),
+            content,
+          ),
+      },
+    }
+
+    if (interaction.isButton()) {
+      return {
+        ...baseProps,
+        type: "button",
+      }
+    }
+
+    if (interaction.isSelectMenu()) {
+      return {
+        ...baseProps,
+        type: "select",
+        event: {
+          ...baseProps.event,
+          values: interaction.values,
+        },
+      }
+    }
+
+    raise(`Unsupported component interaction type: ${interaction.type}`)
+  }
 }
 
-function createReacordComponentInteraction(
-  interaction: Discord.MessageComponentInteraction,
-): ComponentInteraction {
-  if (interaction.isButton()) {
-    return {
-      type: "button",
-      id: interaction.id,
-      channelId: interaction.channelId,
-      customId: interaction.customId,
-      update: async (options) => {
-        await interaction.update(getDiscordMessageOptions(options))
-      },
-      deferUpdate: () => interaction.deferUpdate(),
-    }
-  }
+function createReacordMessage(message: Discord.Message): Message {
+  return {
+    edit: async (options) => {
+      await message.edit(getDiscordMessageOptions(options))
+    },
+    disableComponents: async () => {
+      for (const actionRow of message.components) {
+        for (const component of actionRow.components) {
+          component.setDisabled(true)
+        }
+      }
 
-  if (interaction.isSelectMenu()) {
-    return {
-      type: "select",
-      id: interaction.id,
-      channelId: interaction.channelId,
-      customId: interaction.customId,
-      values: interaction.values,
-      update: async (options) => {
-        await interaction.update(getDiscordMessageOptions(options))
-      },
-      deferUpdate: () => interaction.deferUpdate(),
-    }
+      await message.edit({
+        components: message.components,
+      })
+    },
+    delete: async () => {
+      await message.delete()
+    },
   }
+}
 
-  raise(`Unsupported component interaction type: ${interaction.type}`)
+function createEphemeralReacordMessage(): Message {
+  return {
+    edit: () => {
+      console.warn("Ephemeral messages can't be edited")
+      return Promise.resolve()
+    },
+    disableComponents: () => {
+      console.warn("Ephemeral messages can't be edited")
+      return Promise.resolve()
+    },
+    delete: () => {
+      console.warn("Ephemeral messages can't be deleted")
+      return Promise.resolve()
+    },
+  }
 }
 
 // TODO: this could be a part of the core library,
@@ -181,43 +272,4 @@ function getDiscordMessageOptions(
   }
 
   return options
-}
-
-function createReacordMessage(message: Discord.Message): Message {
-  return {
-    edit: async (options) => {
-      await message.edit(getDiscordMessageOptions(options))
-    },
-    disableComponents: async () => {
-      for (const actionRow of message.components) {
-        for (const component of actionRow.components) {
-          component.setDisabled(true)
-        }
-      }
-
-      await message.edit({
-        components: message.components,
-      })
-    },
-    delete: async () => {
-      await message.delete()
-    },
-  }
-}
-
-function createEphemeralReacordMessage(): Message {
-  return {
-    edit: () => {
-      console.warn("Ephemeral messages can't be edited")
-      return Promise.resolve()
-    },
-    disableComponents: () => {
-      console.warn("Ephemeral messages can't be edited")
-      return Promise.resolve()
-    },
-    delete: () => {
-      console.warn("Ephemeral messages can't be deleted")
-      return Promise.resolve()
-    },
-  }
 }

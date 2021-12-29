@@ -5,6 +5,7 @@ import type { ComponentInteraction } from "../../internal/interaction"
 import type { MessageOptions } from "../../internal/message"
 import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
+import type { ComponentEvent } from "../component-event"
 
 export type ButtonProps = {
   label?: string
@@ -14,7 +15,7 @@ export type ButtonProps = {
   onClick: (event: ButtonClickEvent) => void
 }
 
-export type ButtonClickEvent = {}
+export type ButtonClickEvent = ComponentEvent
 
 export function Button(props: ButtonProps) {
   return (
@@ -41,7 +42,7 @@ class ButtonNode extends Node<ButtonProps> {
       interaction.type === "button" &&
       interaction.customId === this.customId
     ) {
-      this.props.onClick(interaction)
+      this.props.onClick(interaction.event)
       return true
     }
     return false

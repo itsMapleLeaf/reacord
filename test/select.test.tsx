@@ -14,8 +14,8 @@ test("single select", async () => {
         <Select
           placeholder="choose one"
           value={value}
-          onSelect={onSelect}
-          onSelectValue={setValue}
+          onChange={onSelect}
+          onChangeValue={setValue}
           disabled={disabled}
         >
           <Option value="1" />
@@ -60,7 +60,9 @@ test("single select", async () => {
 
   tester.findSelectByPlaceholder("choose one").select("2")
   await assertSelect(["2"])
-  expect(onSelect).toHaveBeenCalledWith({ values: ["2"] })
+  expect(onSelect).toHaveBeenCalledWith(
+    expect.objectContaining({ values: ["2"] }),
+  )
 
   tester.findButtonByLabel("disable").click()
   await assertSelect(["2"], true)
@@ -81,8 +83,8 @@ test("multiple select", async () => {
         placeholder="select"
         multiple
         values={values}
-        onSelect={onSelect}
-        onSelectMultiple={setValues}
+        onChange={onSelect}
+        onChangeMultiple={setValues}
       >
         <Option value="1">one</Option>
         <Option value="2">two</Option>
@@ -124,19 +126,19 @@ test("multiple select", async () => {
 
   tester.findSelectByPlaceholder("select").select("1", "3")
   await assertSelect(expect.arrayContaining(["1", "3"]))
-  expect(onSelect).toHaveBeenCalledWith({
-    values: expect.arrayContaining(["1", "3"]),
-  })
+  expect(onSelect).toHaveBeenCalledWith(
+    expect.objectContaining({ values: expect.arrayContaining(["1", "3"]) }),
+  )
 
   tester.findSelectByPlaceholder("select").select("2")
   await assertSelect(expect.arrayContaining(["2"]))
-  expect(onSelect).toHaveBeenCalledWith({
-    values: expect.arrayContaining(["2"]),
-  })
+  expect(onSelect).toHaveBeenCalledWith(
+    expect.objectContaining({ values: expect.arrayContaining(["2"]) }),
+  )
 
   tester.findSelectByPlaceholder("select").select()
   await assertSelect([])
-  expect(onSelect).toHaveBeenCalledWith({ values: [] })
+  expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ values: [] }))
 })
 
 test("optional onSelect + unknown value", async () => {

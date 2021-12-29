@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import type { ComponentInteraction } from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
 import type { Renderer } from "../internal/renderers/renderer"
+import type { ReacordInstance } from "./instance"
 
 export type ReacordConfig = {
   /**
@@ -9,12 +10,6 @@ export type ReacordConfig = {
    * When this limit is exceeded, the oldest instances will be disabled.
    */
   maxInstances?: number
-}
-
-export type ReacordInstance = {
-  render: (content: ReactNode) => void
-  deactivate: () => void
-  destroy: () => void
 }
 
 export type ComponentInteractionListener = (
