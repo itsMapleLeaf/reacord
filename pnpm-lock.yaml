@@ -4,33 +4,49 @@ importers:
 
   packages/docs:
     specifiers:
+      '@itsmapleleaf/configs': ^1.1.2
       '@remix-run/dev': ^1.1.1
-      '@remix-run/express': ^1.1.1
       '@remix-run/react': ^1.1.1
+      '@remix-run/serve': ^1.1.1
       '@types/react': ^17.0.24
       '@types/react-dom': ^17.0.9
-      compression: ^1.7.4
-      cross-env: ^7.0.3
-      express: ^4.17.1
-      morgan: ^1.10.0
+      '@typescript-eslint/eslint-plugin': ^5.8.1
+      '@typescript-eslint/parser': ^5.8.1
+      eslint: ^8.5.0
+      eslint-config-prettier: ^8.3.0
+      eslint-import-resolver-typescript: ^2.5.0
+      eslint-plugin-import: ^2.25.3
+      eslint-plugin-jsx-a11y: ^6.5.1
+      eslint-plugin-react: ^7.28.0
+      eslint-plugin-react-hooks: ^4.3.0
+      eslint-plugin-unicorn: ^39.0.0
+      prettier: ^2.5.1
       react: ^17.0.2
       react-dom: ^17.0.2
       remix: ^1.1.1
       typescript: ^4.1.2
     dependencies:
-      '@remix-run/express': 1.1.1_c249933f376ca18b25ea8a9b07171fbd
       '@remix-run/react': 1.1.1_react-dom@17.0.2+react@17.0.2
-      compression: 1.7.4
-      cross-env: 7.0.3
-      express: 4.17.2
-      morgan: 1.10.0
+      '@remix-run/serve': 1.1.1_react-dom@17.0.2+react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       remix: 1.1.1
     devDependencies:
+      '@itsmapleleaf/configs': 1.1.2
       '@remix-run/dev': 1.1.1
       '@types/react': 17.0.38
       '@types/react-dom': 17.0.11
+      '@typescript-eslint/eslint-plugin': 5.8.1_3a47348159e115370aa4cba56aba33b6
+      '@typescript-eslint/parser': 5.8.1_eslint@8.5.0+typescript@4.5.4
+      eslint: 8.5.0
+      eslint-config-prettier: 8.3.0_eslint@8.5.0
+      eslint-import-resolver-typescript: 2.5.0_f385d671d5f1c72a868db745a891bc1f
+      eslint-plugin-import: 2.25.3_eslint@8.5.0
+      eslint-plugin-jsx-a11y: 6.5.1_eslint@8.5.0
+      eslint-plugin-react: 7.28.0_eslint@8.5.0
+      eslint-plugin-react-hooks: 4.3.0_eslint@8.5.0
+      eslint-plugin-unicorn: 39.0.0_eslint@8.5.0
+      prettier: 2.5.1
       typescript: 4.5.4
 
   packages/reacord:
@@ -908,6 +924,19 @@ packages:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
+    dev: false
+
+  /@remix-run/serve/1.1.1_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-l9ibxAMFud808OjK0izIWwIP/jCuHsTBdV4FDA6K1Gwjom9uIHyXbBtJNIDYQuoSdRp7F2zM06TkT8jBXLKV2A==}
+    hasBin: true
+    dependencies:
+      '@remix-run/express': 1.1.1_c249933f376ca18b25ea8a9b07171fbd
+      compression: 1.7.4
+      express: 4.17.2
+      morgan: 1.10.0
+    transitivePeerDependencies:
+      - react
+      - react-dom
     dev: false
 
   /@remix-run/server-runtime/1.1.1_react-dom@17.0.2+react@17.0.2:
@@ -2434,14 +2463,6 @@ packages:
       p-map: 3.0.0
     dev: true
 
-  /cross-env/7.0.3:
-    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
-    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
-    dev: false
-
   /cross-spawn/6.0.5:
     resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
     engines: {node: '>=4.8'}
@@ -2460,6 +2481,7 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+    dev: true
 
   /crypto-random-string/2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
@@ -4982,6 +5004,7 @@ packages:
 
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
+    dev: true
 
   /isobject/2.1.0:
     resolution: {integrity: sha1-8GVWEJaj8dou9GJy+BXIQNh+DIk=}
@@ -7039,6 +7062,7 @@ packages:
   /path-key/3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
     engines: {node: '>=8'}
+    dev: true
 
   /path-key/4.0.0:
     resolution: {integrity: sha512-haREypq7xkM7ErfgIyA0z+Bj4AGKlMSdlQE2jvJo6huWD1EdkKYV+G/T4nq0YEF2vgTT8kqMFKo1uHn950r4SQ==}
@@ -7772,6 +7796,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       shebang-regex: 3.0.0
+    dev: true
 
   /shebang-regex/1.0.0:
     resolution: {integrity: sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=}
@@ -7781,6 +7806,7 @@ packages:
   /shebang-regex/3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+    dev: true
 
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -8765,6 +8791,7 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+    dev: true
 
   /widest-line/3.1.0:
     resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}

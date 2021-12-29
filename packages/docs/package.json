@@ -7,23 +7,48 @@
     "prepare": "remix setup node",
     "build": "remix build",
     "dev": "remix dev",
-    "start": "remix-serve build"
+    "start": "remix-serve build",
+    "lint": "eslint --ext js,ts,tsx .",
+    "lint-fix": "pnpm lint -- --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@remix-run/react": "^1.1.1",
+    "@remix-run/serve": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "remix": "^1.1.1",
-    "@remix-run/serve": "^1.1.1"
+    "remix": "^1.1.1"
   },
   "devDependencies": {
+    "@itsmapleleaf/configs": "^1.1.2",
     "@remix-run/dev": "^1.1.1",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-unicorn": "^39.0.0",
+    "prettier": "^2.5.1",
     "typescript": "^4.1.2"
   },
   "engines": {
     "node": ">=14"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@itsmapleleaf/configs/eslint"
+    ],
+    "ignorePatterns": [
+      "**/node_modules/**",
+      "**/.vscode/**"
+    ]
+  },
+  "prettier": "@itsmapleleaf/configs/prettier"
 }
