@@ -37,6 +37,7 @@
 
 - [ ] combine `MessageOptions` and `Message` into a single message object (?)
 - [x] consider always calling `deferUpdate` on component interactions
+- [ ] more unit tests instead of integration tests probably
 
 # cool ideas / polish
 
