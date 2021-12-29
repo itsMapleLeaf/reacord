@@ -5,27 +5,28 @@
   "license": "",
   "scripts": {
     "prepare": "remix setup node && pnpm build",
-    "dev": "concurrently 'typedoc' 'remix dev' 'tailwindcss --output app/tailwind.css & typedoc'",
-    "build": "typedoc && tailwindcss --output app/tailwind.css && remix build",
+    "dev": "concurrently 'typedoc' 'remix dev'",
+    "build": "typedoc && remix build",
     "start": "remix-serve build"
   },
   "dependencies": {
     "@remix-run/react": "^1.1.1",
     "@remix-run/serve": "^1.1.1",
+    "autoprefixer": "^10.4.1",
+    "postcss": "^8.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "remix": "^1.1.1"
+    "remix": "^1.1.1",
+    "remix-tailwind": "^0.2.1",
+    "tailwindcss": "^3.0.8"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
     "@remix-run/dev": "^1.1.1",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
-    "autoprefixer": "^10.4.1",
     "concurrently": "^6.5.1",
-    "postcss": "^8.4.5",
     "prettier": "^2.5.1",
-    "tailwindcss": "^3.0.8",
     "typedoc": "^0.22.10",
     "typescript": "^4.1.2"
   },
