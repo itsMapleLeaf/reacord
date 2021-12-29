@@ -70,7 +70,12 @@ createCommandHandler(client, [
         <>
           <Button
             label="public clic"
-            onClick={() => reacord.reply(interaction, "you clic")}
+            onClick={(event) =>
+              reacord.reply(
+                interaction,
+                `${event.guild?.member.displayName} clic`,
+              )
+            }
           />
           <Button
             label="clic"

@@ -22,6 +22,12 @@ import type {
 } from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
+import type {
+  ChannelInfo,
+  GuildInfo,
+  MessageInfo,
+  UserInfo,
+} from "./component-event"
 import type { ButtonClickEvent } from "./components/button"
 import type { SelectChangeEvent } from "./components/select"
 import type { ReacordInstance } from "./instance"
@@ -249,6 +255,11 @@ class TestSelectInteraction
 
 class TestComponentEvent {
   constructor(private tester: ReacordTester) {}
+
+  message: MessageInfo = {} as any // todo
+  channel: ChannelInfo = {} as any // todo
+  user: UserInfo = {} as any // todo
+  guild: GuildInfo = {} as any // todo
 
   reply(content?: ReactNode): ReacordInstance {
     return this.tester.reply()

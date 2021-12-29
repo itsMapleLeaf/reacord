@@ -24,11 +24,11 @@
   - component events
     - [x] reply / send functions
     - [x] select values
-    - [ ] message.\*
-    - [ ] channel.\*
-    - [ ] guild.\*
-    - [ ] guild.member.\*
-    - [ ] user.\*
+    - [x] message.\*
+    - [x] channel.\*
+    - [x] guild.\*
+    - [x] guild.member.\*
+    - [x] user.\*
 - [x] deactivate
 - [x] destroy
 - [ ] docs

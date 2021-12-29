@@ -1,13 +1,22 @@
 /* eslint-disable class-methods-use-this */
-import type * as Discord from "discord.js"
+import * as Discord from "discord.js"
 import type { ReactNode } from "react"
 import type { Except } from "type-fest"
+import { pick } from "../../helpers/pick"
+import { pruneNullishValues } from "../../helpers/prune-null-values"
 import { raise } from "../../helpers/raise"
 import { toUpper } from "../../helpers/to-upper"
 import type { ComponentInteraction } from "../internal/interaction"
 import type { Message, MessageOptions } from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
+import type {
+  ChannelInfo,
+  GuildInfo,
+  GuildMemberInfo,
+  MessageInfo,
+  UserInfo,
+} from "./component-event"
 import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
@@ -126,6 +135,81 @@ export class ReacordDiscordJs extends Reacord {
   private createReacordComponentInteraction(
     interaction: Discord.MessageComponentInteraction,
   ): ComponentInteraction {
+    // todo please dear god clean this up
+    const channel: ChannelInfo = interaction.channel
+      ? {
+          ...pick(pruneNullishValues(interaction.channel), [
+            "topic",
+            "nsfw",
+            "lastMessageId",
+            "ownerId",
+            "parentId",
+            "rateLimitPerUser",
+          ]),
+          id: interaction.channelId,
+        }
+      : raise("Non-channel interactions are not supported")
+
+    const message: MessageInfo =
+      interaction.message instanceof Discord.Message
+        ? {
+            ...pick(interaction.message, [
+              "id",
+              "channelId",
+              "authorId",
+              "content",
+              "tts",
+              "mentionEveryone",
+            ]),
+            timestamp: new Date(
+              interaction.message.createdTimestamp,
+            ).toISOString(),
+            editedTimestamp: interaction.message.editedTimestamp
+              ? new Date(interaction.message.editedTimestamp).toISOString()
+              : undefined,
+            mentions: interaction.message.mentions.users.map((u) => u.id),
+          }
+        : raise("Message not found")
+
+    const member: GuildMemberInfo | undefined =
+      interaction.member instanceof Discord.GuildMember
+        ? {
+            ...pick(pruneNullishValues(interaction.member), [
+              "id",
+              "nick",
+              "displayName",
+              "avatarUrl",
+              "displayAvatarUrl",
+              "color",
+              "pending",
+            ]),
+            displayName: interaction.member.displayName,
+            roles: [...interaction.member.roles.cache.map((role) => role.id)],
+            joinedAt: interaction.member.joinedAt?.toISOString(),
+            premiumSince: interaction.member.premiumSince?.toISOString(),
+            communicationDisabledUntil:
+              interaction.member.communicationDisabledUntil?.toISOString(),
+          }
+        : undefined
+
+    const guild: GuildInfo | undefined = interaction.guild
+      ? {
+          ...pick(pruneNullishValues(interaction.guild), ["id", "name"]),
+          member: member ?? raise("unexpected: member is undefined"),
+        }
+      : undefined
+
+    const user: UserInfo = {
+      ...pick(pruneNullishValues(interaction.user), [
+        "id",
+        "username",
+        "discriminator",
+        "tag",
+      ]),
+      avatarUrl: interaction.user.avatarURL()!,
+      accentColor: interaction.user.accentColor ?? undefined,
+    }
+
     const baseProps: Except<ComponentInteraction, "type"> = {
       id: interaction.id,
       customId: interaction.customId,
@@ -151,6 +235,11 @@ export class ReacordDiscordJs extends Reacord {
         return createReacordMessage(message as Discord.Message)
       },
       event: {
+        channel,
+        message,
+        user,
+        guild,
+
         reply: (content?: ReactNode) =>
           this.createInstance(
             this.createInteractionReplyRenderer(interaction),
