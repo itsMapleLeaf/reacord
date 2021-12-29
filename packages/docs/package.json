@@ -4,8 +4,8 @@
   "description": "",
   "license": "",
   "scripts": {
-    "prepare": "remix setup node && pnpm build",
-    "dev": "concurrently 'typedoc' 'remix dev'",
+    "prepare": "remix setup node && typedoc",
+    "dev": "concurrently 'remix dev' 'typedoc'",
     "build": "typedoc && remix build",
     "start": "remix-serve build"
   },
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
     "@remix-run/dev": "^1.1.1",
+    "@types/node": "*",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "concurrently": "^6.5.1",

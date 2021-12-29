@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "remix"
 import { useLoaderData } from "remix"
-import type { DocsJson } from "~/load-docs.server"
-import { loadDocs } from "~/load-docs.server"
+import type { DocsJson } from "~/docs.server"
+import { loadDocs } from "~/docs.server"
 
 export const loader: LoaderFunction = () => loadDocs()
 
