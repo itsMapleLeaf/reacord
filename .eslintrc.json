@@ -1,0 +1,17 @@
+{
+  "extends": ["./node_modules/@itsmapleleaf/configs/eslint"],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/.cache/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/coverage/**"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.base.json"
+  },
+  "rules": {
+    "import/no-unused-modules": "off",
+    "unicorn/prevent-abbreviations": "off"
+  }
+}

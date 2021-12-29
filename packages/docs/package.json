@@ -4,13 +4,10 @@
   "description": "",
   "license": "",
   "scripts": {
-    "prepare": "remix setup node & typedoc",
-    "dev": "concurrently typedoc 'remix dev'",
-    "build": "typedoc && remix build",
-    "start": "remix-serve build",
-    "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "pnpm lint -- --fix",
-    "format": "prettier --write ."
+    "prepare": "remix setup node && pnpm build",
+    "dev": "concurrently 'typedoc' 'remix dev' 'tailwindcss --output app/tailwind.css & typedoc'",
+    "build": "typedoc && tailwindcss --output app/tailwind.css && remix build",
+    "start": "remix-serve build"
   },
   "dependencies": {
     "@remix-run/react": "^1.1.1",
@@ -24,40 +21,17 @@
     "@remix-run/dev": "^1.1.1",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
-    "@typescript-eslint/parser": "^5.8.1",
+    "autoprefixer": "^10.4.1",
     "concurrently": "^6.5.1",
-    "eslint": "^8.5.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "eslint-plugin-unicorn": "^39.0.0",
+    "postcss": "^8.4.5",
     "prettier": "^2.5.1",
-    "typescript": "^4.1.2",
-    "typedoc": "^0.22.10"
+    "tailwindcss": "^3.0.8",
+    "typedoc": "^0.22.10",
+    "typescript": "^4.1.2"
   },
   "engines": {
     "node": ">=14"
   },
   "sideEffects": false,
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/@itsmapleleaf/configs/eslint"
-    ],
-    "ignorePatterns": [
-      "**/node_modules/**",
-      "**/.vscode/**"
-    ],
-    "parserOptions": {
-      "project": "./node_modules/@itsmapleleaf/tsconfig.base.json"
-    },
-    "rules": {
-      "import/no-unused-modules": "off",
-      "unicorn/prevent-abbreviations": "off"
-    }
-  },
   "prettier": "@itsmapleleaf/configs/prettier"
 }

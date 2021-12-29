@@ -5,3 +5,4 @@ node_modules
 .env
 .vscode
 app/docs.json
+app/tailwind.css
