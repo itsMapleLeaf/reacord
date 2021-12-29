@@ -4,9 +4,9 @@
   "description": "",
   "license": "",
   "scripts": {
-    "prepare": "remix setup node",
-    "build": "remix build",
-    "dev": "remix dev",
+    "prepare": "remix setup node & typedoc",
+    "dev": "concurrently typedoc 'remix dev'",
+    "build": "typedoc && remix build",
     "start": "remix-serve build",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
@@ -26,6 +26,7 @@
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
+    "concurrently": "^6.5.1",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -35,7 +36,8 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
     "prettier": "^2.5.1",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "typedoc": "^0.22.10"
   },
   "engines": {
     "node": ">=14"
