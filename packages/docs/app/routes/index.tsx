@@ -9,7 +9,9 @@ export default function Index() {
   const data: DocsJson = useLoaderData()
   return (
     <main>
-      <pre>{JSON.stringify(data, undefined, 2)}</pre>
+      <pre className="w-full overflow-x-auto">
+        {JSON.stringify(data, undefined, 2)}
+      </pre>
     </main>
   )
 }

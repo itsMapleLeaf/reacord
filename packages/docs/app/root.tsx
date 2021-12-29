@@ -1,5 +1,3 @@
-import clsx from "clsx"
-import { useEffect, useState } from "react"
 import type { LinksFunction, MetaFunction } from "remix"
 import {
   Links,
@@ -9,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "remix"
+import { Header } from "~/components/header"
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" }
@@ -28,8 +27,12 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header />
-        <div className="m-auto max-w-screen-xl mt-8">
+        <Header>
+          <div className="m-auto max-w-screen-xl px-4">
+            <h1 className="text-3xl font-light">reacord</h1>
+          </div>
+        </Header>
+        <div className="m-auto max-w-screen-xl px-4 mt-8">
           <Outlet />
         </div>
         <ScrollRestoration />
@@ -38,37 +41,4 @@ export default function App() {
       </body>
     </html>
   )
-}
-
-function Header() {
-  const isScrolled = useScrolled()
-  return (
-    <header
-      className={clsx(
-        isScrolled ? "bg-slate-700/30" : "bg-slate-800",
-        "shadow-md sticky top-0 px-4 py-3 backdrop-blur-sm transition",
-      )}
-    >
-      <div className="m-auto max-w-screen-xl">
-        <h1 className="text-3xl font-light">reacord</h1>
-      </div>
-    </header>
-  )
-}
-
-function useScrolled() {
-  const [isScrolled, setScrolled] = useState(
-    typeof window !== "undefined" && window.scrollY > 0,
-  )
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 0)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  return isScrolled
 }
