@@ -2,9 +2,7 @@ name: main
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
   workflow_dispatch:
 
 env:
@@ -13,12 +11,20 @@ env:
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
 
 jobs:
-  ci:
+  run-scripts:
     strategy:
       matrix:
-        script-name: [coverage, lint, typecheck, build]
+        scripts:
+          - workspace: reacord
+            script: coverage
+          - workspace: reacord
+            script: lint
+          - workspace: reacord
+            script: typecheck
+          - workspace: reacord
+            script: build
       fail-fast: false
-    name: ${{ matrix.script-name }}
+    name: ${{ matrix.scripts.workspace }} - ${{ matrix.scripts.script }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -28,4 +34,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run ${{ matrix.script-name }}
+      - run: pnpm run -C packages/${{ matrix.scripts.workspace }} ${{ matrix.scripts.script }}
