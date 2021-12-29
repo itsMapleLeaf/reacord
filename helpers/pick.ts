@@ -1,11 +1,13 @@
+import type { LoosePick, UnknownRecord } from "./types"
+
 // eslint-disable-next-line import/no-unused-modules
-export function pick<T, K extends keyof T>(
+export function pick<T, K extends keyof T | PropertyKey>(
   object: T,
-  ...keys: K[]
-): Pick<T, K> {
+  keys: K[],
+): LoosePick<T, K> {
   const result: any = {}
   for (const key of keys) {
-    const value = object[key]
+    const value = (object as UnknownRecord)[key]
     if (value !== undefined) {
       result[key] = value
     }
