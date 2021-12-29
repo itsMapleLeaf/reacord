@@ -8,7 +8,7 @@
     "**/docs/**"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./node_modules/@itsmapleleaf/tsconfig.base.json"
   },
   "rules": {
     // this rule causes a bunch of error notifications to pop up when moving files around

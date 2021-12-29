@@ -50,7 +50,14 @@
     "ignorePatterns": [
       "**/node_modules/**",
       "**/.vscode/**"
-    ]
+    ],
+    "parserOptions": {
+      "project": "./node_modules/@itsmapleleaf/tsconfig.base.json"
+    },
+    "rules": {
+      "import/no-unused-modules": "off",
+      "unicorn/prevent-abbreviations": "off"
+    }
   },
   "prettier": "@itsmapleleaf/configs/prettier"
 }
