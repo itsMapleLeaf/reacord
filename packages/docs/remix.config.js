@@ -1,7 +1,8 @@
+// @ts-nocheck
+/* eslint-disable unicorn/prefer-module */
 /**
  * @type {import('@remix-run/dev/config').AppConfig}
  */
-// eslint-disable-next-line unicorn/prefer-module
 module.exports = {
   appDirectory: "app",
   assetsBuildDirectory: "public/build",
@@ -9,4 +10,12 @@ module.exports = {
   serverBuildDirectory: "build",
   devServerPort: 8002,
   ignoredRouteFiles: [".*"],
+  mdx: async (filename) => {
+    const highlight = await import("rehype-prism-plus").then(
+      (mod) => mod.default,
+    )
+    return {
+      rehypePlugins: [highlight],
+    }
+  },
 }
