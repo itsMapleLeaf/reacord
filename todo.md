@@ -31,7 +31,16 @@
     - [x] user.\*
 - [x] deactivate
 - [x] destroy
-- [ ] docs
+- docs
+  - [x] core layout and styling
+  - [ ] mobile nav: at a breakpoint, remove all desktop navigation and use a drawer w/ a floating menu button on the bottom right
+  - guides
+    - [ ] getting started
+    - [ ] embeds
+    - [ ] buttons and links
+    - [ ] select menus
+  - [ ] api reference - may be able to use typedoc markdown output + custom TOC sidebar
+  - [ ] anchor links on markdown headings
 
 # internal
 
