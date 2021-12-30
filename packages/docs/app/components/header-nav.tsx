@@ -8,9 +8,7 @@ export function HeaderNav() {
   return (
     <nav className="flex justify-between items-center">
       <Link to="/">
-        <h1 className="text-3xl font-light">
-          reacord <CodeIcon className="inline w-8 align-sub opacity-50" />
-        </h1>
+        <h1 className="text-3xl font-light">reacord</h1>
       </Link>
       <div className="flex gap-4">
         <Link className={linkClass} to="/docs/guides/getting-started">
