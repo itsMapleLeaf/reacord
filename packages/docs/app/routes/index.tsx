@@ -1,5 +1,5 @@
 import { Link } from "remix"
-import LandingExample from "~/landing-example.mdx"
+import LandingExample from "~/components/landing-example.mdx"
 
 export default function Landing() {
   return (

@@ -1,17 +1,11 @@
-import { CodeIcon } from "@heroicons/react/outline"
-import {
-  DatabaseIcon,
-  DocumentTextIcon,
-  ExternalLinkIcon,
-} from "@heroicons/react/solid"
 import type { LoaderFunction } from "remix"
 import { Link, Outlet, useLoaderData } from "remix"
-import { ExternalLink } from "~/components/external-link"
 import { HeaderLayout } from "~/components/header-layout"
+import { HeaderNav } from "~/components/header-nav"
 import { SideNav } from "~/components/side-nav"
 import { SidebarLayout } from "~/components/sidebar-layout"
-import type { ContentIndexEntry } from "~/create-index.server"
-import { createContentIndex } from "~/create-index.server"
+import type { ContentIndexEntry } from "~/helpers/create-index.server"
+import { createContentIndex } from "~/helpers/create-index.server"
 import { linkClass } from "~/styles"
 
 type LoaderData = ContentIndexEntry[]
@@ -45,31 +39,5 @@ export default function Docs() {
         />
       }
     />
-  )
-}
-
-function HeaderNav() {
-  return (
-    <nav className="flex justify-between items-center">
-      <Link to="/">
-        <h1 className="text-3xl font-light">
-          reacord <CodeIcon className="inline w-8 align-sub opacity-50" />
-        </h1>
-      </Link>
-      <div className="flex gap-4">
-        <Link className={linkClass} to="/docs/guides/getting-started">
-          <DocumentTextIcon className="inline align-sub w-5" /> Guides
-        </Link>
-        <Link className={linkClass} to="/docs/api">
-          <DatabaseIcon className="inline align-sub w-5" /> API Reference
-        </Link>
-        <ExternalLink
-          className={linkClass}
-          href="https://github.com/itsMapleLeaf/reacord"
-        >
-          <ExternalLinkIcon className="inline align-sub w-5" /> GitHub
-        </ExternalLink>
-      </div>
-    </nav>
   )
 }
