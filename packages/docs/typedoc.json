@@ -1,10 +1,11 @@
 {
   "entryPoints": ["../reacord/library/main.ts"],
+  "out": ["public/docs/api"],
   "tsconfig": "../reacord/tsconfig.json",
-  "json": "./app/docs.json",
   "excludeInternal": true,
   "excludePrivate": true,
   "excludeProtected": true,
   "categorizeByGroup": false,
-  "preserveWatchOutput": true
+  "preserveWatchOutput": true,
+  "githubPages": false
 }
