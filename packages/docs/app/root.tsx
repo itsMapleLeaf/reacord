@@ -10,7 +10,10 @@ import {
 import prismThemeCss from "./prism-theme.css"
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" }
+  return {
+    title: "Reacord",
+    description: "Create interactive Discord messages using React and JSX.",
+  }
 }
 
 export const links: LinksFunction = () => [
