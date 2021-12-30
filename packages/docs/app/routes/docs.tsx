@@ -6,7 +6,7 @@ import { SideNav } from "~/components/side-nav"
 import { SidebarLayout } from "~/components/sidebar-layout"
 import type { ContentIndexEntry } from "~/helpers/create-index.server"
 import { createContentIndex } from "~/helpers/create-index.server"
-import { linkClass } from "~/styles"
+import { docsProseClass, linkClass } from "~/styles"
 
 type LoaderData = ContentIndexEntry[]
 
@@ -32,7 +32,7 @@ export default function Docs() {
             </SideNav>
           }
           body={
-            <section className="prose max-w-none prose-invert prose-h1:font-light flex-1 prose-h1:mb-4 prose-p:my-4 prose-pre:text-[15px] prose-pre:font-monospace prose-h2:font-light h-[200vh]">
+            <section className={docsProseClass}>
               <Outlet />
             </section>
           }
