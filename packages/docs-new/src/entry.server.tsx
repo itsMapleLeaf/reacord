@@ -14,6 +14,10 @@ export async function render(url: string) {
     </StaticRouter>,
   )
 
+  const scriptSource = import.meta.env.PROD
+    ? "/entry.client.js"
+    : "/src/entry.client.tsx"
+
   return /* HTML */ `
     <!DOCTYPE html>
     <head>
@@ -27,6 +31,7 @@ export async function render(url: string) {
       />
       <link rel="stylesheet" href="/src/tailwind.css" />
       ${renderToString(<>{headTags}</>)}
+      <script type="module" src="${scriptSource}"></script>
     </head>
     <body>
       ${app}
