@@ -1,5 +1,9 @@
 import clsx from "clsx"
 
+export const maxWidthContainer = clsx`
+  mx-auto w-full max-w-screen-lg px-4
+`
+
 export const linkClass = clsx`
   font-medium inline-block relative
   opacity-60 hover:opacity-100 transition-opacity

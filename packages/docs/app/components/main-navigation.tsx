@@ -4,9 +4,9 @@ import { Link } from "remix"
 import { ExternalLink } from "~/components/external-link"
 import { linkClass } from "~/styles"
 
-export function HeaderNav() {
+export function MainNavigation() {
   return (
-    <nav className="flex justify-between items-center">
+    <nav className="flex justify-between items-center h-16">
       <Link to="/">
         <h1 className="text-3xl font-light">reacord</h1>
       </Link>
