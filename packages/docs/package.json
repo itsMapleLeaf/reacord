@@ -4,8 +4,8 @@
   "description": "",
   "license": "",
   "scripts": {
-    "prepare": "remix setup node && typedoc",
-    "dev": "concurrently 'remix dev' 'typedoc'",
+    "prepare": "remix setup node",
+    "dev": "concurrently 'remix dev' 'typedoc --watch'",
     "build": "typedoc && remix build",
     "start": "remix-serve build"
   },
