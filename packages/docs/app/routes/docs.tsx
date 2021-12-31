@@ -20,11 +20,11 @@ export default function Docs() {
     <>
       <HeaderPanel>
         <div className={maxWidthContainer}>
-          <MainNavigation />
+          <MainNavigation guideRoutes={data} />
         </div>
       </HeaderPanel>
       <main className={clsx(maxWidthContainer, "mt-8 flex items-start gap-4")}>
-        <nav className="w-64 sticky top-24">
+        <nav className="w-48 sticky top-24 hidden md:block">
           <h2 className="text-2xl">Guides</h2>
           <ul className="mt-3 flex flex-col gap-2 items-start">
             {data.map(({ title, route }) => (
@@ -49,7 +49,7 @@ function HeaderPanel({ children }: { children: React.ReactNode }) {
 
   const className = clsx(
     isScrolled ? "bg-slate-700/30" : "bg-slate-800",
-    "shadow-md sticky top-0 backdrop-blur-sm transition z-10 flex",
+    "shadow sticky top-0 backdrop-blur-sm transition z-10 flex",
   )
 
   return <header className={className}>{children}</header>

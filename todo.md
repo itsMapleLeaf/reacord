@@ -33,7 +33,7 @@
 - [x] destroy
 - docs
   - [x] core layout and styling
-  - [ ] mobile nav: at a breakpoint, remove all desktop navigation and use a drawer w/ a floating menu button on the bottom right
+  - [x] mobile nav: at a breakpoint, remove all desktop navigation and use a drawer w/ a floating menu button on the bottom right
   - [ ] each page should have a link at the bottom to the previous and next pages
   - guides
     - [x] getting started / setup
@@ -44,7 +44,9 @@
     - [ ] embeds
     - [ ] buttons and links
     - [ ] select menus
-  - [ ] api reference - may be able to use typedoc markdown output + custom TOC sidebar
+  - api reference
+    - [x] rendering and making it available
+    - [ ] adding doc comments to source
   - [ ] anchor links on markdown headings
 
 # internal
