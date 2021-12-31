@@ -1,7 +1,6 @@
 import compression from "compression"
 import express, { Router } from "express"
 import { resolve } from "node:path"
-import { renderToString } from "react-dom/server"
 import { createServer as createViteServer } from "vite"
 import type * as entryModule from "./entry.server"
 
@@ -20,10 +19,7 @@ async function createDevelopmentRouter() {
           "/src/entry.server.tsx",
         )) as typeof entryModule
 
-        const html = await vite.transformIndexHtml(
-          url,
-          renderToString(await render(url)),
-        )
+        const html = await vite.transformIndexHtml(url, await render(url))
 
         res.status(200).set({ "Content-Type": "text/html" }).end(html)
       } catch (error: any) {
@@ -47,7 +43,7 @@ function createProductionRouter() {
         res
           .status(200)
           .set({ "Content-Type": "text/html" })
-          .end(renderToString(await render(req.originalUrl)))
+          .end(await render(req.originalUrl))
       } catch (error: any) {
         console.error(error)
         res.status(500).end(error.stack || error.message)
