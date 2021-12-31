@@ -1,14 +1,14 @@
 import { createRoot } from "react-dom"
 import { HeadProvider } from "react-head"
-import { ReactLocation } from "react-location"
+import { BrowserRouter } from "react-router-dom"
 import { App } from "./app"
 
-const location = new ReactLocation()
-
 createRoot(document.querySelector("#app")!).render(
-  <HeadProvider>
-    <App location={location} />
-  </HeadProvider>,
+  <BrowserRouter>
+    <HeadProvider>
+      <App />
+    </HeadProvider>
+  </BrowserRouter>,
 )
 
 declare module "react-dom" {
