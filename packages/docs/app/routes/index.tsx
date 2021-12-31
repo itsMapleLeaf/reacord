@@ -1,3 +1,4 @@
+import packageJson from "reacord/package.json"
 import { Link } from "remix"
 import LandingExample from "~/components/landing-example.mdx"
 
@@ -11,9 +12,7 @@ export default function Landing() {
             <LandingExample />
           </section>
         </div>
-        <p className="px-8 text-2xl font-light">
-          Create interactive Discord messages using React and JSX.
-        </p>
+        <p className="px-8 text-2xl font-light">{packageJson.description}</p>
         <Link
           to="/docs/guides/getting-started"
           className="inline-block px-4 py-3 text-xl transition rounded-lg bg-emerald-700 hover:translate-y-[-2px] hover:bg-emerald-800 hover:shadow-md "

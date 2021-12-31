@@ -1,15 +1,21 @@
 {
   "name": "reacord",
   "type": "module",
-  "description": "send reactive discord messages using react components ⚛",
+  "description": "Create interactive Discord messages using React.",
   "version": "0.0.0",
   "types": "./dist/main.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
-    "import": "./dist/main.js",
-    "require": "./dist/main.cjs"
+    ".": {
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs"
+    },
+    "./package.json": {
+      "import": "./package.json",
+      "require": "./package.json"
+    }
   },
   "scripts": {
     "build": "tsup-node library/main.ts --target node16 --format cjs,esm --dts --sourcemap",

@@ -1,3 +1,4 @@
+import packageJson from "reacord/package.json"
 import type { LinksFunction, MetaFunction } from "remix"
 import {
   Links,
@@ -9,12 +10,10 @@ import {
 } from "remix"
 import prismThemeCss from "./prism-theme.css"
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "Reacord",
-    description: "Create interactive Discord messages using React and JSX.",
-  }
-}
+export const meta: MetaFunction = () => ({
+  title: "Reacord",
+  description: packageJson.description,
+})
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: prismThemeCss },
