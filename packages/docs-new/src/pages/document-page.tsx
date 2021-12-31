@@ -1,10 +1,13 @@
-import { Outlet } from "react-location"
+import { Suspense } from "react"
+import { Outlet } from "react-router"
 
 export function DocumentPage() {
   return (
     <>
       <h1>Docs</h1>
-      <Outlet />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   )
 }

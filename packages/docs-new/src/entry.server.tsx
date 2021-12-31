@@ -1,20 +1,20 @@
 import { renderToString } from "react-dom/server"
 import { HeadProvider } from "react-head"
-import { createMemoryHistory, ReactLocation } from "react-location"
+import { StaticRouter } from "react-router-dom/server"
 import { App } from "./app"
 
 export async function render(url: string) {
   const headTags: React.ReactElement[] = []
 
-  const location = new ReactLocation({
-    history: createMemoryHistory({ initialEntries: [url] }),
-  })
-
-  const app = renderToString(
-    <HeadProvider headTags={headTags}>
-      <App location={location} />
-    </HeadProvider>,
+  const app = (
+    <StaticRouter location={url}>
+      <HeadProvider headTags={headTags}>
+        <App />
+      </HeadProvider>
+    </StaticRouter>
   )
+
+  const appHtml = renderToString(app)
 
   const scriptSource = import.meta.env.PROD
     ? "/entry.client.js"
@@ -36,7 +36,7 @@ export async function render(url: string) {
       <script type="module" src="${scriptSource}"></script>
     </head>
     <body>
-      <div id="app" style="display: contents">${app}</div>
+      <div id="app" style="display: contents">${appHtml}</div>
     </body>
   `
 }
