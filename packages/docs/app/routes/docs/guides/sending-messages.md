@@ -77,3 +77,11 @@ const reacord = new ReacordDiscordJs(client, {
   maxInstances: 3,
 })
 ```
+
+## Discord Slash Commands
+
+<aside className="opacity-75 italic">
+This section also applies to other kinds of application commands, such as context menu commands.
+</aside>
+
+todo

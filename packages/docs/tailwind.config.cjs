@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prefer-module */
 // eslint-disable-next-line unicorn/prefer-module
 module.exports = {
-  content: ["./app/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx,md,mdx}"],
   theme: {
     fontFamily: {
       sans: ["Rubik", "sans-serif"],

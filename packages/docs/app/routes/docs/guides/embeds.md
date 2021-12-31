@@ -1,9 +1,10 @@
 ---
+order: 2
 meta:
   title: Embeds
-  description: Using dmbed components
+  description: Using embed components
 ---
 
 # Embeds
 
-just do it lol
+todo
