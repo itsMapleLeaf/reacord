@@ -2,6 +2,8 @@ name: deploy docs
 on:
   push:
     branches: [main]
+    paths: [packages/docs/**, reacord/**/*.ts]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
