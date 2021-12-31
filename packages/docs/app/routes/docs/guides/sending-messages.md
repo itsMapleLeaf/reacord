@@ -32,16 +32,17 @@ Components rendered through this instance can include state and effects, and the
 
 ```jsx
 function Uptime() {
-  const [uptime, setUptime] = useState(0)
+  const [startTime] = useState(Date.now())
+  const [currentTime, setCurrentTime] = useState(Date.now())
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setUptime(Date.now())
+      currentTime(Date.now())
     }, 3000)
     return () => clearInterval(interval)
   }, [])
 
-  return <>this message has been shown for {uptime}ms</>
+  return <>this message has been shown for {currentTime - startTime}ms</>
 }
 
 client.on("ready", () => {
