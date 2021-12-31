@@ -15,16 +15,20 @@ jobs:
     strategy:
       matrix:
         scripts:
-          - workspace: reacord
+          - name: test
+            workspace: reacord
             script: coverage
-          - workspace: reacord
+          - name: lint
+            workspace: .
             script: lint
-          - workspace: reacord
+          - name: typecheck
+            workspace: reacord
             script: typecheck
-          - workspace: reacord
+          - name: build
+            workspace: reacord
             script: build
       fail-fast: false
-    name: ${{ matrix.scripts.workspace }} - ${{ matrix.scripts.script }}
+    name: ${{ matrix.scripts.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
