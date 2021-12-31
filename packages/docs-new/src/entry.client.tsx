@@ -1,13 +1,13 @@
 import { hydrate } from "react-dom"
+import { HeadProvider } from "react-head"
 import { BrowserRouter } from "react-router-dom"
-import { Root } from "./root"
-import { AppRoutes } from "./routes"
+import { App } from "./app"
 
 hydrate(
-  <Root>
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
-  </Root>,
-  document,
+  <BrowserRouter>
+    <HeadProvider>
+      <App />
+    </HeadProvider>
+  </BrowserRouter>,
+  document.body,
 )
