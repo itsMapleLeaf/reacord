@@ -1,6 +1,4 @@
-import { Counter } from "./counter"
-
-export function Root() {
+export function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -16,10 +14,7 @@ export function Root() {
           }
         />
       </head>
-      <body>
-        <h1>hi</h1>
-        <Counter />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
