@@ -16,7 +16,7 @@ pre[class*="language-"] {
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
-  line-height: 1.5;
+  line-height: 1.7;
   -moz-tab-size: 4;
   -o-tab-size: 4;
   tab-size: 4;
@@ -123,4 +123,11 @@ pre[class*="language-"] {
 
 .token.entity {
   cursor: help;
+}
+
+.code-line.highlight-line {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 0 1rem;
+  margin: 0 -1rem;
+  display: block;
 }

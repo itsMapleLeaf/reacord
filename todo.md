@@ -34,8 +34,13 @@
 - docs
   - [x] core layout and styling
   - [ ] mobile nav: at a breakpoint, remove all desktop navigation and use a drawer w/ a floating menu button on the bottom right
+  - [ ] each page should have a link at the bottom to the previous and next pages
   - guides
-    - [ ] getting started
+    - [x] getting started / setup
+    - instances
+      - [x] sending channel messages
+      - [ ] sending command replies
+      - [x] cleaning up instances
     - [ ] embeds
     - [ ] buttons and links
     - [ ] select menus

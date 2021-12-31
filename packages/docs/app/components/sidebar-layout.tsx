@@ -1,5 +1,4 @@
 import type { ReactNode } from "react"
-import { useEffect, useRef, useState } from "react"
 
 export function SidebarLayout({
   sidebar,
@@ -8,19 +7,10 @@ export function SidebarLayout({
   sidebar: ReactNode
   body: ReactNode
 }) {
-  const [offsetTop, setOffsetTop] = useState(0)
-  const sidebarRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setOffsetTop(sidebarRef.current?.offsetTop ?? 0)
-  }, [sidebarRef])
-
   return (
     <div className="flex items-start gap-6">
-      <div className="w-64 sticky" style={{ top: offsetTop }} ref={sidebarRef}>
-        {sidebar}
-      </div>
-      <div className="flex-1">{body}</div>
+      <div className="w-64 sticky top-24">{sidebar}</div>
+      <div className="flex-1 min-w-0">{body}</div>
     </div>
   )
 }

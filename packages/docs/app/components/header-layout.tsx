@@ -14,12 +14,12 @@ export function HeaderLayout({
       <header
         className={clsx(
           isScrolled ? "bg-slate-700/30" : "bg-slate-800",
-          "shadow-md sticky top-0 py-3 backdrop-blur-sm transition z-10",
+          "shadow-md sticky top-0 py-3 backdrop-blur-sm transition z-10 h-16 flex",
         )}
       >
-        <div className="m-auto max-w-screen-lg px-6">{header}</div>
+        <div className="m-auto w-full max-w-screen-lg px-6">{header}</div>
       </header>
-      <div className="m-auto max-w-screen-lg px-6 mt-6">{body}</div>
+      <div className="m-auto max-w-screen-lg px-6 mt-8">{body}</div>
     </div>
   )
 }

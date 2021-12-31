@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import type { LoaderFunction } from "remix"
 import { Link, Outlet, useLoaderData } from "remix"
 import { HeaderLayout } from "~/components/header-layout"
@@ -32,7 +33,7 @@ export default function Docs() {
             </SideNav>
           }
           body={
-            <section className={docsProseClass}>
+            <section className={clsx(docsProseClass, "pb-8")}>
               <Outlet />
             </section>
           }

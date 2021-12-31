@@ -13,6 +13,8 @@ export const docsProseClass = clsx`
   prose-h2:font-light
   prose-h3:font-light
   prose-p:my-4
-  prose-pre:text-[15px] prose-pre:font-monospace
+  prose-a:font-medium prose-a:text-emerald-400 hover:prose-a:no-underline
+  prose-strong:font-medium prose-strong:text-emerald-400
+  prose-pre:text-[15px] prose-pre:font-monospace prose-pre:overflow-x-auto
   max-w-none
 `

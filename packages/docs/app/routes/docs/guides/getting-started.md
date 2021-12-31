@@ -7,25 +7,38 @@ meta:
 
 # Getting Started
 
-welcome
+This guide assumes some familiarity with JavaScript, [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
 
-- install it and do the thing
-- then do another thing
+**Note:** Ensure your project has support for running code with JSX. I recommend using [esno](https://npm.im/esno).
 
-## here's a code block
+## Install
 
-```tsx
-import React from "react"
+```bash
+# npm
+npm install reacord discord.js
 
-function Counter() {
-  const [count, setCount] = useState(0)
-  return (
-    <>
-      You clicked {count} times
-      <Button onClick={() => setCount(count + 1)}>Click me</Button>
-    </>
-  )
-}
+# yarn
+yarn add reacord discord.js
+
+# pnpm
+pnpm add reacord discord.js
 ```
 
-yeah
+## Setup
+
+Create a Discord.js client and a Reacord instance:
+
+```js
+// main.js
+import { Client } from "discord.js"
+import { ReacordDiscordJs } from "reacord"
+
+const client = new Client()
+const reacord = new ReacordDiscordJs(client)
+
+client.on("ready", () => {
+  console.log("Ready!")
+})
+
+await client.login(process.env.BOT_TOKEN)
+```
