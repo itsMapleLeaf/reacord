@@ -16,16 +16,16 @@ jobs:
       matrix:
         scripts:
           - name: test
-            workspace: reacord
+            cwd: packages/reacord
             script: coverage
           - name: lint
-            workspace: .
+            cwd: "."
             script: lint
           - name: typecheck
-            workspace: reacord
+            cwd: packages/reacord
             script: typecheck
           - name: build
-            workspace: reacord
+            cwd: packages/reacord
             script: build
       fail-fast: false
     name: ${{ matrix.scripts.name }}
@@ -38,4 +38,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run -C packages/${{ matrix.scripts.workspace }} ${{ matrix.scripts.script }}
+      - run: pnpm run -C ${{ matrix.scripts.cwd }} ${{ matrix.scripts.script }}
