@@ -17,6 +17,7 @@
     "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
+    "@mapbox/rehype-prism": "^0.8.0",
     "@tailwindcss/typography": "^0.5.0",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.13",
@@ -28,8 +29,11 @@
     "compression": "^1.7.4",
     "esno": "^0.13.0",
     "postcss": "^8.4.5",
+    "rehype-highlight": "^5.0.2",
+    "remark-frontmatter": "^4.0.1",
     "tailwindcss": "^3.0.8",
     "typescript": "^4.5.4",
-    "vite": "^2.7.10"
+    "vite": "^2.7.10",
+    "xdm": "^3.3.1"
   }
 }
