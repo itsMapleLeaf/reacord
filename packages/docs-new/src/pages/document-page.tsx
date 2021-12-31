@@ -1,10 +1,10 @@
-import GettingStarted from "../docs/getting-started.md"
+import { Outlet } from "react-location"
 
 export function DocumentPage() {
   return (
     <>
       <h1>Docs</h1>
-      <GettingStarted />
+      <Outlet />
     </>
   )
 }

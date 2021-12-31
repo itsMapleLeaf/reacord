@@ -129,7 +129,7 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-head: ^3.4.0
-      react-router: ^6.2.1
+      react-location: ^3.3.0
       react-router-dom: ^6.2.1
       rehype-highlight: ^5.0.2
       remark-frontmatter: ^4.0.1
@@ -143,7 +143,6 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-head: 3.4.0_react-dom@17.0.2+react@17.0.2
-      react-router: 6.2.1_react@17.0.2
       react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
     devDependencies:
       '@mapbox/rehype-prism': 0.8.0
@@ -158,6 +157,7 @@ importers:
       compression: 1.7.4
       esno: 0.13.0_typescript@4.5.4
       postcss: 8.4.5
+      react-location: 3.3.0_react-dom@17.0.2+react@17.0.2
       rehype-highlight: 5.0.2
       remark-frontmatter: 4.0.1
       tailwindcss: 3.0.8_cefe482e8d38053bbf3d5815e0c551b3
@@ -2171,6 +2171,12 @@ packages:
       babel-preset-current-node-syntax: 1.0.1_@babel+core@7.16.5
     dev: true
 
+  /babylon/7.0.0-beta.47:
+    resolution: {integrity: sha512-+rq2cr4GDhtToEzKFD6KZZMDBXhjFAr9JjPw9pAppZACeEWqNM294j+NdBzkSHYXwzzBmVjZ3nEVJlOhbR2gOQ==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+    dev: true
+
   /bail/2.0.2:
     resolution: {integrity: sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw==}
 
@@ -2919,6 +2925,11 @@ packages:
 
   /core-js-pure/3.20.1:
     resolution: {integrity: sha512-yeNNr3L9cEBwNy6vhhIJ0nko7fE7uFO6PgawcacGt2VWep4WqQx0RiqlkgSP7kqUMC1IKdfO9qPeWXcUheHLVQ==}
+    requiresBuild: true
+    dev: true
+
+  /core-js/3.20.1:
+    resolution: {integrity: sha512-btdpStYFQScnNVQ5slVcr858KP0YWYjV16eGJQw8Gg7CWtu/2qNvIM3qVRIR3n1pK2R9NNOrTevbvAYxajwEjg==}
     requiresBuild: true
     dev: true
 
@@ -4197,6 +4208,16 @@ packages:
       to-regex: 3.0.2
     dev: true
 
+  /fast-async/7.0.6:
+    resolution: {integrity: sha512-/iUa3eSQC+Xh5tN6QcVLsEsN7b1DaPIoTZo++VpLLIxtdNW2tEmMZex4TcrMeRnBwMOpZwue2CB171wjt5Kgqg==}
+    dependencies:
+      '@babel/generator': 7.16.5
+      '@babel/helper-module-imports': 7.16.7
+      babylon: 7.0.0-beta.47
+      nodent-runtime: 3.2.1
+      nodent-transform: 3.2.9
+    dev: true
+
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     dev: true
@@ -4893,7 +4914,6 @@ packages:
     resolution: {integrity: sha512-uPSF6lAJb3nSePJ43hN3eKj1dTWpN9gMod0ZssbFTIsen+WehTmEadgL+kg78xLJFdRfrrC//SavDzmRVdE+Ig==}
     dependencies:
       '@babel/runtime': 7.16.5
-    dev: false
 
   /homedir-polyfill/1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
@@ -7280,6 +7300,15 @@ packages:
       update-notifier: 5.1.0
     dev: true
 
+  /nodent-runtime/3.2.1:
+    resolution: {integrity: sha512-7Ws63oC+215smeKJQCxzrK21VFVlCFBkwl0MOObt0HOpVQXs3u483sAmtkF33nNqZ5rSOQjB76fgyPBmAUrtCA==}
+    requiresBuild: true
+    dev: true
+
+  /nodent-transform/3.2.9:
+    resolution: {integrity: sha512-4a5FH4WLi+daH/CGD5o/JWRR8W5tlCkd3nrDSkxbOzscJTyTUITltvOJeQjg3HJ1YgEuNyiPhQbvbtRjkQBByQ==}
+    dev: true
+
   /nopt/1.0.10:
     resolution: {integrity: sha1-bd0hvSoxQXuScn3Vhfim83YI6+4=}
     hasBin: true
@@ -8162,6 +8191,21 @@ packages:
 
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+    dev: true
+
+  /react-location/3.3.0_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-0ME2sVcldYcTGB4DxbD+00wuXHY9NeACjhub3+MKOsBxnTSMQ5P2XWZZwql5IyL9Fj9IL1CjdUnoT4hCL1bCCQ==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@babel/runtime': 7.16.5
+      core-js: 3.20.1
+      fast-async: 7.0.6
+      history: 5.2.0
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      ts-toolbelt: 9.6.0
     dev: true
 
   /react-reconciler/0.26.2_react@17.0.2:
@@ -9455,6 +9499,10 @@ packages:
 
   /ts-mixer/6.0.0:
     resolution: {integrity: sha512-nXIb1fvdY5CBSrDIblLn73NW0qRDk5yJ0Sk1qPBF560OdJfQp9jhl+0tzcY09OZ9U+6GpeoI9RjwoIKFIoB9MQ==}
+    dev: true
+
+  /ts-toolbelt/9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
     dev: true
 
   /tsconfig-paths/3.12.0:

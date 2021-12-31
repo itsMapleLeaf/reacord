@@ -1,17 +1,19 @@
 import { renderToString } from "react-dom/server"
 import { HeadProvider } from "react-head"
-import { StaticRouter } from "react-router-dom/server"
+import { createMemoryHistory, ReactLocation } from "react-location"
 import { App } from "./app"
 
 export async function render(url: string) {
   const headTags: React.ReactElement[] = []
 
+  const location = new ReactLocation({
+    history: createMemoryHistory({ initialEntries: [url] }),
+  })
+
   const app = renderToString(
-    <StaticRouter location={url}>
-      <HeadProvider headTags={headTags}>
-        <App />
-      </HeadProvider>
-    </StaticRouter>,
+    <HeadProvider headTags={headTags}>
+      <App location={location} />
+    </HeadProvider>,
   )
 
   const scriptSource = import.meta.env.PROD

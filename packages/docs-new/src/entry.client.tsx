@@ -1,13 +1,13 @@
 import { hydrate } from "react-dom"
 import { HeadProvider } from "react-head"
-import { BrowserRouter } from "react-router-dom"
+import { ReactLocation } from "react-location"
 import { App } from "./app"
 
+const location = new ReactLocation()
+
 hydrate(
-  <BrowserRouter>
-    <HeadProvider>
-      <App />
-    </HeadProvider>
-  </BrowserRouter>,
+  <HeadProvider>
+    <App location={location} />
+  </HeadProvider>,
   document.querySelector("#app"),
 )
