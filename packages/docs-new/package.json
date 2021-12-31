@@ -3,9 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "esmo src/server.ts",
+    "dev": "esmo server.ts",
     "build": "esmo build.ts",
-    "start": "NODE_ENV=production esmo src/server.ts"
+    "start": "NODE_ENV=production esmo server.ts"
   },
   "dependencies": {
     "express": "^4.17.2",

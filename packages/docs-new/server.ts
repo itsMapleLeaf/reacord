@@ -2,7 +2,7 @@ import compression from "compression"
 import express, { Router } from "express"
 import { resolve } from "node:path"
 import { createServer as createViteServer } from "vite"
-import type * as entryModule from "./entry.server"
+import type * as entryModule from "./src/entry.server"
 
 async function createDevelopmentRouter() {
   const vite = await createViteServer({
@@ -37,7 +37,7 @@ function createProductionRouter() {
     .use("*", async (req, res) => {
       try {
         const { render }: typeof entryModule = await import(
-          "../dist/server/entry.server"
+          "./dist/server/entry.server"
         )
 
         res

@@ -2,8 +2,8 @@ import { description } from "reacord/package.json"
 import { Meta, Title } from "react-head"
 import { Route, Routes } from "react-router"
 import { Link } from "react-router-dom"
-import { DocumentPage } from "./document-page"
-import { LandingPage } from "./landing-page"
+import { DocumentPage } from "./pages/document-page"
+import { LandingPage } from "./pages/landing-page"
 
 export function App() {
   return (
