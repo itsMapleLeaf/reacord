@@ -10,15 +10,13 @@ export default function Landing() {
       <header className={maxWidthContainer}>
         <MainNavigation />
       </header>
-      <div className="pt-0 px-4 pb-8 m-auto">
-        <main className="max-w-screen-md px-4 py-6 m-auto space-y-5 rounded-lg shadow-md bg-slate-800">
+      <div className="px-4 pb-8 flex flex-1">
+        <main className="px-4 py-6 rounded-lg shadow-md bg-slate-800 space-y-5 m-auto w-full max-w-xl">
           <h1 className="text-6xl font-light">reacord</h1>
-          <div className="overflow-x-auto">
-            <section className="mx-auto text-sm shadow w-fit sm:text-base">
-              <LandingExample />
-            </section>
-          </div>
-          <p className="px-8 text-2xl font-light">{packageJson.description}</p>
+          <section className="mx-auto shadow text-sm sm:text-base">
+            <LandingExample />
+          </section>
+          <p className="text-2xl font-light">{packageJson.description}</p>
           <Link
             to="/docs/guides/getting-started"
             className="inline-block px-4 py-3 text-xl transition rounded-lg bg-emerald-700 hover:translate-y-[-2px] hover:bg-emerald-800 hover:shadow-md"
