@@ -1,13 +1,12 @@
 import { description } from "reacord/package.json"
 import { Meta, Title } from "react-head"
-import { Route, Routes } from "react-router"
-import { Link } from "react-router-dom"
-import { DocumentPage } from "./pages/document-page"
-import { LandingPage } from "./pages/landing-page"
+import type { ReactLocation } from "react-location"
+import { Link, Outlet, Router } from "react-location"
+import { routes } from "./routes"
 
-export function App() {
+export function App({ location }: { location: ReactLocation }) {
   return (
-    <>
+    <Router location={location} routes={routes}>
       <Title>Reacord</Title>
       <Meta name="description" content={description} />
       <nav>
@@ -15,10 +14,7 @@ export function App() {
         <Link to="docs/getting-started">Getting Started</Link>{" "}
         <Link to="docs/api">API Reference</Link>
       </nav>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="docs/*" element={<DocumentPage />} />
-      </Routes>
-    </>
+      <Outlet />
+    </Router>
   )
 }
