@@ -34,7 +34,7 @@ export async function render(url: string) {
       <script type="module" src="${scriptSource}"></script>
     </head>
     <body>
-      ${app}
+      <div id="app" style="display: contents">${app}</div>
     </body>
   `
 }

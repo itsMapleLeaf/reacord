@@ -9,5 +9,5 @@ hydrate(
       <App />
     </HeadProvider>
   </BrowserRouter>,
-  document.body,
+  document.querySelector("#app"),
 )
