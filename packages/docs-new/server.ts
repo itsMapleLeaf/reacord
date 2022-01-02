@@ -1,6 +1,7 @@
 import compression from "compression"
 import express, { Router } from "express"
-import { resolve } from "node:path"
+import { readFile } from "node:fs/promises"
+import { join, resolve } from "node:path"
 import { createServer as createViteServer } from "vite"
 import type * as entryModule from "./src/entry.server"
 
@@ -19,7 +20,15 @@ async function createDevelopmentRouter() {
           "/src/entry.server.tsx",
         )) as typeof entryModule
 
-        const html = await vite.transformIndexHtml(url, await render(url))
+        const htmlTemplate = await readFile(
+          join(vite.config.root, "index.html"),
+          "utf8",
+        )
+
+        const html = await vite.transformIndexHtml(
+          url,
+          render(url, htmlTemplate),
+        )
 
         res.status(200).set({ "Content-Type": "text/html" }).end(html)
       } catch (error: any) {
@@ -33,17 +42,19 @@ async function createDevelopmentRouter() {
 function createProductionRouter() {
   return Router()
     .use(compression())
-    .use(express.static(resolve("dist/client")))
+    .use(express.static(resolve("dist/client"), { index: false }))
     .use("*", async (req, res) => {
       try {
         const { render }: typeof entryModule = await import(
           "./dist/server/entry.server"
         )
 
+        const htmlTemplate = await readFile("dist/client/index.html", "utf8")
+
         res
           .status(200)
           .set({ "Content-Type": "text/html" })
-          .end(await render(req.originalUrl))
+          .end(render(req.originalUrl, htmlTemplate))
       } catch (error: any) {
         console.error(error)
         res.status(500).end(error.stack || error.message)

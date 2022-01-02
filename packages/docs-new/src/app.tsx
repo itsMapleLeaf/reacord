@@ -1,42 +1,34 @@
 import { description } from "reacord/package.json"
 import { lazy, Suspense } from "react"
 import { Meta, Title } from "react-head"
-import { Link, Route, Routes } from "react-router-dom"
-import { lazyNamed } from "./helpers/lazy-named"
+import { Route, Routes } from "react-router-dom"
+import { GuidePageLayout } from "./components/guide-page-layout"
+import { LandingPage } from "./pages/landing-page"
 
 export function App() {
   return (
     <>
       <Title>Reacord</Title>
       <Meta name="description" content={description} />
-      <nav>
-        <Link to="/">Home</Link>{" "}
-        <Link to="docs/getting-started">Getting Started</Link>{" "}
-        <Link to="docs/api">API Reference</Link>
-      </nav>
-      <Suspense fallback={<></>}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="docs" element={<DocumentPageLayout />}>
-            {docs.map(({ route, component: Component }) => (
-              <Route key={route} path={route} element={<Component />} />
-            ))}
-          </Route>
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="docs" element={<GuidePageLayout />}>
+          {docs.map(({ route, component: Component }) => (
+            <Route
+              key={route}
+              path={route}
+              element={
+                <Suspense fallback={<></>}>
+                  <Component />
+                </Suspense>
+              }
+            />
+          ))}
+        </Route>
+      </Routes>
     </>
   )
 }
-
-const LandingPage = lazyNamed(
-  "LandingPage",
-  () => import("./pages/landing-page"),
-)
-
-const DocumentPageLayout = lazyNamed(
-  "DocumentPage",
-  () => import("./pages/document-page"),
-)
 
 const docs = Object.entries(import.meta.glob("./docs/*.md")).map(
   ([path, loadModule]) => ({
