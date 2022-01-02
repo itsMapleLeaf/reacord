@@ -1,3 +1,4 @@
+// @ts-expect-error
 import rehypePrism from "@mapbox/rehype-prism"
 import react from "@vitejs/plugin-react"
 import remarkFrontmatter from "remark-frontmatter"
