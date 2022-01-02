@@ -8,7 +8,7 @@ import { inlineIconClass } from "../styles/components"
 
 export const mainLinks: AppLinkProps[] = [
   {
-    type: "router",
+    type: "internal",
     to: "/docs/getting-started",
     label: (
       <>

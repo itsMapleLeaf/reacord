@@ -1,14 +1,18 @@
+import React from "react"
 import { createRoot } from "react-dom"
 import { HeadProvider } from "react-head"
-import { BrowserRouter } from "react-router-dom"
+import type { PageContextBuiltInClient } from "vite-plugin-ssr/client"
+import { getPage } from "vite-plugin-ssr/client"
 import { App } from "./app"
 
+const context = await getPage<PageContextBuiltInClient>()
+
 createRoot(document.querySelector("#app")!).render(
-  <BrowserRouter>
-    <HeadProvider>
-      <App />
-    </HeadProvider>
-  </BrowserRouter>,
+  <HeadProvider>
+    <App>
+      <context.Page />
+    </App>
+  </HeadProvider>,
 )
 
 declare module "react-dom" {

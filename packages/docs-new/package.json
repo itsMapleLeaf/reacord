@@ -4,22 +4,23 @@
   "private": true,
   "scripts": {
     "dev": "esmo server.ts",
-    "build": "esmo build.ts",
+    "build": "vite build && vite build --ssr",
     "start": "NODE_ENV=production esmo server.ts"
   },
   "dependencies": {
-    "express": "^4.17.2",
-    "reacord": "workspace:*",
-    "react": "^18.0.0-rc.0",
-    "react-dom": "^18.0.0-rc.0",
-    "react-head": "^3.4.0",
-    "react-router": "^6.2.1",
-    "react-router-dom": "^6.2.1",
     "@heroicons/react": "^1.0.5",
     "@reach/rect": "^0.16.0",
     "clsx": "^1.1.1",
+    "express": "^4.17.2",
     "gray-matter": "^4.0.3",
-    "react-focus-on": "^3.5.4"
+    "reacord": "workspace:*",
+    "react": "^18.0.0-rc.0",
+    "react-dom": "^18.0.0-rc.0",
+    "react-focus-on": "^3.5.4",
+    "react-head": "^3.4.0",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "vite-plugin-ssr": "^0.3.42"
   },
   "devDependencies": {
     "@mapbox/rehype-prism": "^0.8.0",

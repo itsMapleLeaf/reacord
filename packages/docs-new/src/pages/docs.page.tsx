@@ -1,4 +1,6 @@
 import clsx from "clsx"
+import { AppLink } from "../components/app-link"
+import { MainNavigation } from "../components/main-navigation"
 import { guideLinks } from "../data/guide-links"
 import { useScrolled } from "../hooks/dom/use-scrolled"
 import {
@@ -6,10 +8,10 @@ import {
   linkClass,
   maxWidthContainer,
 } from "../styles/components"
-import { AppLink } from "./app-link"
-import { MainNavigation } from "./main-navigation"
 
-export function GuidePageLayout() {
+export { DocsPage as Page }
+
+function DocsPage() {
   return (
     <>
       <HeaderPanel>
