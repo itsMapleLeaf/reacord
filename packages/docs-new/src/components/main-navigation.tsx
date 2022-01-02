@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { AppLink } from "../components/app-link"
 import { guideLinks } from "../data/guide-links"
 import { mainLinks } from "../data/main-links"
@@ -8,9 +7,9 @@ import { PopoverMenu } from "./popover-menu"
 export function MainNavigation() {
   return (
     <nav className="flex justify-between items-center h-16">
-      <Link to="/">
+      <a href="/">
         <h1 className="text-3xl font-light">reacord</h1>
-      </Link>
+      </a>
       <div className="hidden md:flex gap-4">
         {mainLinks.map((link) => (
           <AppLink {...link} key={link.to} className={linkClass} />

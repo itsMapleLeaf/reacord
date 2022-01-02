@@ -1,76 +1,39 @@
-import compression from "compression"
-import express, { Router } from "express"
-import { readFile } from "node:fs/promises"
-import { join, resolve } from "node:path"
-import { createServer as createViteServer } from "vite"
-import type * as entryModule from "./src/entry.server"
+import express from "express"
+import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
+import { createPageRenderer } from "vite-plugin-ssr"
 
-async function createDevelopmentRouter() {
-  const vite = await createViteServer({
-    server: { middlewareMode: "ssr" },
-  })
-
-  return Router()
-    .use(vite.middlewares)
-    .use("*", async (req, res) => {
-      const url = req.originalUrl
-
-      try {
-        const { render } = (await vite.ssrLoadModule(
-          "/src/entry.server.tsx",
-        )) as typeof entryModule
-
-        const htmlTemplate = await readFile(
-          join(vite.config.root, "index.html"),
-          "utf8",
-        )
-
-        const html = await vite.transformIndexHtml(
-          url,
-          render(url, htmlTemplate),
-        )
-
-        res.status(200).set({ "Content-Type": "text/html" }).end(html)
-      } catch (error: any) {
-        vite.ssrFixStacktrace(error)
-        console.error(error)
-        res.status(500).end(error.stack || error.message)
-      }
-    })
-}
-
-function createProductionRouter() {
-  return Router()
-    .use(compression())
-    .use(express.static(resolve("dist/client"), { index: false }))
-    .use("*", async (req, res) => {
-      try {
-        const { render }: typeof entryModule = await import(
-          "./dist/server/entry.server"
-        )
-
-        const htmlTemplate = await readFile("dist/client/index.html", "utf8")
-
-        res
-          .status(200)
-          .set({ "Content-Type": "text/html" })
-          .end(render(req.originalUrl, htmlTemplate))
-      } catch (error: any) {
-        console.error(error)
-        res.status(500).end(error.stack || error.message)
-      }
-    })
-}
+const isProduction = process.env.NODE_ENV === "production"
+const root = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 
-if (process.env.NODE_ENV === "production") {
-  app.use(createProductionRouter())
+let viteDevServer
+if (isProduction) {
+  app.use(express.static(join(root, "dist/client")))
 } else {
-  app.use(await createDevelopmentRouter())
+  const vite = await import("vite")
+  viteDevServer = await vite.createServer({
+    root,
+    server: { middlewareMode: "ssr" },
+  })
+  app.use(viteDevServer.middlewares)
 }
+
+const renderPage = createPageRenderer({ viteDevServer, isProduction, root })
+app.get("*", async (req, res, next) => {
+  const url = req.originalUrl
+  const pageContextInit = {
+    url,
+  }
+  const pageContext = await renderPage(pageContextInit)
+  const { httpResponse } = pageContext
+  if (!httpResponse) return next()
+  const { body, statusCode, contentType } = httpResponse
+  res.status(statusCode).type(contentType).send(body)
+})
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
-  console.log(`listening on http://localhost:${port}`)
+  console.info(`Server running at http://localhost:${port}`)
 })
