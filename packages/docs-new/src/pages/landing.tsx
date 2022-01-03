@@ -5,7 +5,7 @@ import { renderMarkdownFile } from "../helpers/markdown"
 import { Html } from "../html"
 import { maxWidthContainer } from "../styles/components"
 
-const exampleHtml = await renderMarkdownFile(
+const landingExample = await renderMarkdownFile(
   new URL("../components/landing-example.md", import.meta.url).pathname,
 )
 
@@ -21,7 +21,7 @@ export function Landing() {
             <h1 className="text-6xl font-light">reacord</h1>
             <section
               className="mx-auto text-sm sm:text-base"
-              dangerouslySetInnerHTML={{ __html: exampleHtml }}
+              dangerouslySetInnerHTML={{ __html: landingExample.html }}
             />
             <p className="text-2xl font-light">{packageJson.description}</p>
             <a
