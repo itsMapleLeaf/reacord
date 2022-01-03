@@ -31,6 +31,8 @@ export function Html({
         <link href="/tailwind.css" rel="stylesheet" />
         <link href="/prism-theme.css" rel="stylesheet" />
 
+        <script type="module" src="/popover-menu.client.js" />
+
         <title>{title}</title>
       </head>
       <body>{children}</body>
