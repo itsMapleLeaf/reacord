@@ -1,8 +1,7 @@
 ---
 order: 0
-meta:
-  title: Getting Started
-  description: Learn how to get started with Reacord.
+title: Getting Started
+description: Learn how to get started with Reacord.
 ---
 
 # Getting Started
