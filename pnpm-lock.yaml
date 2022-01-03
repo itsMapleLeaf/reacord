@@ -41,79 +41,6 @@ importers:
       '@mapbox/rehype-prism': ^0.8.0
       '@reach/rect': ^0.16.0
       '@tailwindcss/typography': ^0.5.0
-      '@types/compression': ^1.7.2
-      '@types/express': ^4.17.13
-      '@types/markdown-it': ^12.2.3
-      '@types/node': '*'
-      '@types/react': ^17.0.38
-      '@types/react-dom': ^17.0.9
-      '@vitejs/plugin-react': ^1.1.3
-      autoprefixer: ^10.4.1
-      clsx: ^1.1.1
-      compression: ^1.7.4
-      esno: ^0.13.0
-      express: ^4.17.2
-      fast-glob: ^3.2.7
-      gray-matter: ^4.0.3
-      markdown-it: ^12.3.0
-      markdown-it-prism: ^2.2.1
-      postcss: ^8.4.5
-      reacord: workspace:*
-      react: ^18.0.0-rc.0
-      react-dom: ^18.0.0-rc.0
-      react-focus-on: ^3.5.4
-      react-head: ^3.4.0
-      react-router: ^6.2.1
-      react-router-dom: ^6.2.1
-      tailwindcss: ^3.0.8
-      type-fest: ^2.8.0
-      typescript: ^4.5.4
-      vite: ^2.7.10
-      vite-plugin-markdown: ^2.0.2
-      vite-plugin-ssr: ^0.3.42
-    dependencies:
-      '@heroicons/react': 1.0.5_react@18.0.0-rc.0
-      '@reach/rect': 0.16.0_757a802188413a36d4f24237d13b8e90
-      clsx: 1.1.1
-      express: 4.17.2
-      gray-matter: 4.0.3
-      reacord: link:../reacord
-      react: 18.0.0-rc.0
-      react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
-      react-focus-on: 3.5.4_2fa291bfae6e56080648438396754a97
-      react-head: 3.4.0_757a802188413a36d4f24237d13b8e90
-      react-router: 6.2.1_react@18.0.0-rc.0
-      react-router-dom: 6.2.1_757a802188413a36d4f24237d13b8e90
-      vite-plugin-ssr: 0.3.42_vite@2.7.10
-    devDependencies:
-      '@mapbox/rehype-prism': 0.8.0
-      '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.8
-      '@types/compression': 1.7.2
-      '@types/express': 4.17.13
-      '@types/markdown-it': 12.2.3
-      '@types/node': 17.0.5
-      '@types/react': 17.0.38
-      '@types/react-dom': 17.0.11
-      '@vitejs/plugin-react': 1.1.3
-      autoprefixer: 10.4.1_postcss@8.4.5
-      compression: 1.7.4
-      esno: 0.13.0_typescript@4.5.4
-      fast-glob: 3.2.7
-      markdown-it: 12.3.0
-      markdown-it-prism: 2.2.1
-      postcss: 8.4.5
-      tailwindcss: 3.0.8_cefe482e8d38053bbf3d5815e0c551b3
-      type-fest: 2.8.0
-      typescript: 4.5.4
-      vite: 2.7.10
-      vite-plugin-markdown: 2.0.2_vite@2.7.10
-
-  packages/docs-new:
-    specifiers:
-      '@heroicons/react': ^1.0.5
-      '@mapbox/rehype-prism': ^0.8.0
-      '@reach/rect': ^0.16.0
-      '@tailwindcss/typography': ^0.5.0
       '@tinyhttp/app': ^2.0.15
       '@tinyhttp/logger': ^1.3.0
       '@types/browser-sync': ^2.26.3
@@ -133,7 +60,7 @@ importers:
       clsx: ^1.1.1
       compression: ^1.7.4
       debounce-fn: ^5.1.0
-      esbuild: ^0.14.10
+      esbuild: latest
       esno: ^0.13.0
       execa: ^6.0.0
       express: ^4.17.2
@@ -246,9 +173,6 @@ importers:
       vite: 2.7.10
       vite-plugin-markdown: 2.0.2_vite@2.7.10
       wait-on: 6.0.0
-
-  packages/docs/dist/server:
-    specifiers: {}
 
   packages/reacord:
     specifiers:
