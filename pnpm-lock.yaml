@@ -51,6 +51,7 @@ importers:
       '@types/nodemon': ^1.19.1
       '@types/react': ^17.0.38
       '@types/react-dom': ^17.0.9
+      '@types/tailwindcss': ^3.0.0
       '@types/update-notifier': ^5.1.0
       '@types/wait-on': ^5.3.1
       '@vitejs/plugin-react': ^1.1.3
@@ -145,6 +146,7 @@ importers:
       '@types/nodemon': 1.19.1
       '@types/react': 17.0.38
       '@types/react-dom': 17.0.11
+      '@types/tailwindcss': 3.0.0
       '@types/update-notifier': 5.1.0
       '@types/wait-on': 5.3.1
       '@vitejs/plugin-react': 1.1.3
@@ -1570,6 +1572,10 @@ packages:
 
   /@types/stack-utils/2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
+    dev: true
+
+  /@types/tailwindcss/3.0.0:
+    resolution: {integrity: sha512-322KvIsPYb5ryo+I60WN2Os7uBkdkc6G6n1SGcQZJAma6bygaOkEFJVWX8yy8wKo5yhnsOHb7L4LyBrcRnN29Q==}
     dev: true
 
   /@types/through/0.0.30:
