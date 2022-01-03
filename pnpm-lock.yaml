@@ -53,6 +53,7 @@ importers:
       compression: ^1.7.4
       esno: ^0.13.0
       express: ^4.17.2
+      fast-glob: ^3.2.7
       gray-matter: ^4.0.3
       markdown-it: ^12.3.0
       markdown-it-prism: ^2.2.1
@@ -97,6 +98,7 @@ importers:
       autoprefixer: 10.4.1_postcss@8.4.5
       compression: 1.7.4
       esno: 0.13.0_typescript@4.5.4
+      fast-glob: 3.2.7
       markdown-it: 12.3.0
       markdown-it-prism: 2.2.1
       postcss: 8.4.5
