@@ -8,15 +8,6 @@ description: Sending messages by creating Reacord instances
 
 You can send messages via Reacord to a channel like so.
 
-<details>
-  <summary>In case you're unaware, click here to see how to get a channel ID.</summary>
-
-1. Enable "Developer Mode" in your Discord client settings.
-   ![Enabling developer mode](/images/developer-mode.png)
-1. Right click any channel, and select "Copy ID".
-![Copying the channel ID](/images/copy-channel-id.png)
-</details>
-
 ```jsx
 const channelId = "abc123deadbeef"
 
