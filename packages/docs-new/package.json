@@ -27,6 +27,7 @@
     "@tailwindcss/typography": "^0.5.0",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.13",
+    "@types/markdown-it": "^12.2.3",
     "@types/node": "*",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.9",
@@ -34,12 +35,13 @@
     "autoprefixer": "^10.4.1",
     "compression": "^1.7.4",
     "esno": "^0.13.0",
+    "markdown-it": "^12.3.0",
+    "markdown-it-prism": "^2.2.1",
     "postcss": "^8.4.5",
-    "rehype-highlight": "^5.0.2",
-    "remark-frontmatter": "^4.0.1",
     "tailwindcss": "^3.0.8",
+    "type-fest": "^2.8.0",
     "typescript": "^4.5.4",
     "vite": "^2.7.10",
-    "xdm": "^3.3.1"
+    "vite-plugin-markdown": "^2.0.2"
   }
 }
