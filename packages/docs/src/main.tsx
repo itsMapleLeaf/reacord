@@ -6,6 +6,7 @@ import httpTerminator from "http-terminator"
 import pino from "pino"
 import pinoHttp from "pino-http"
 import * as React from "react"
+import { fromProjectRoot } from "./constants"
 import { renderMarkdownFile } from "./helpers/markdown"
 import { sendJsx } from "./helpers/send-jsx"
 import { serveCompiledScript } from "./helpers/serve-compiled-script"
@@ -29,19 +30,19 @@ const router = Router()
 
   .get(
     "/prism-theme.css",
-    serveFile(new URL("./styles/prism-theme.css", import.meta.url).pathname),
+    serveFile(fromProjectRoot("src/styles/prism-theme.css")),
   )
 
   .get(
     "/popover-menu.client.js",
     await serveCompiledScript(
-      new URL("./components/popover-menu.client.tsx", import.meta.url).pathname,
+      fromProjectRoot("src/components/popover-menu.client.tsx"),
     ),
   )
 
   .get("/docs/*", async (req: Request<{ 0: string }>, res) => {
     const { html, data } = await renderMarkdownFile(
-      `src/docs/${req.params[0]}.md`,
+      fromProjectRoot(`src/docs/${req.params[0]}.md`),
     )
     sendJsx(
       res,

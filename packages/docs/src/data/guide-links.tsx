@@ -3,8 +3,9 @@ import grayMatter from "gray-matter"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import type { AppLinkProps } from "../components/app-link"
+import { fromProjectRoot } from "../constants"
 
-const docsFolderPath = new URL("../docs", import.meta.url).pathname
+const docsFolderPath = fromProjectRoot("src/docs")
 const guideFiles = await glob("**/*.md", { cwd: docsFolderPath })
 
 const entries = await Promise.all(

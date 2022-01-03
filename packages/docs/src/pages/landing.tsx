@@ -1,12 +1,13 @@
 import packageJson from "reacord/package.json"
 import React from "react"
 import { MainNavigation } from "../components/main-navigation"
+import { fromProjectRoot } from "../constants"
 import { renderMarkdownFile } from "../helpers/markdown"
 import { Html } from "../html"
 import { maxWidthContainer } from "../styles/components"
 
 const landingExample = await renderMarkdownFile(
-  new URL("../components/landing-example.md", import.meta.url).pathname,
+  fromProjectRoot("src/components/landing-example.md"),
 )
 
 export function Landing() {
