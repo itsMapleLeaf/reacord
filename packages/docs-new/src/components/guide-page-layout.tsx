@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { guideLinks } from "../data/guide-links"
+import { guideLinks } from "../data/guide-links.preval"
 import { useScrolled } from "../hooks/dom/use-scrolled"
 import {
   docsProseClass,
