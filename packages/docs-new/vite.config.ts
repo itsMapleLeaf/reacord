@@ -4,9 +4,13 @@ import react from "@vitejs/plugin-react"
 import remarkFrontmatter from "remark-frontmatter"
 import { defineConfig } from "vite"
 import ssr from "vite-plugin-ssr/plugin"
-import xdm from "xdm/rollup"
+import xdm from "xdm/rollup.js"
+import { preval } from "./plugins/preval"
 
 export default defineConfig({
+  build: {
+    target: ["node16", "chrome89", "firefox89"],
+  },
   plugins: [
     ssr(),
     react(),
@@ -14,6 +18,7 @@ export default defineConfig({
       remarkPlugins: [remarkFrontmatter],
       rehypePlugins: [rehypePrism],
     }),
+    preval(),
   ],
   resolve: {
     alias: {
