@@ -16,16 +16,12 @@ jobs:
       matrix:
         scripts:
           - name: test
-            cwd: packages/reacord
             script: coverage
           - name: lint
-            cwd: "."
             script: lint
           - name: typecheck
-            cwd: packages/reacord
             script: typecheck
           - name: build
-            cwd: packages/reacord
             script: build
       fail-fast: false
     name: ${{ matrix.scripts.name }}
@@ -38,4 +34,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run -C ${{ matrix.scripts.cwd }} ${{ matrix.scripts.script }}
+      - run: pnpm run --dir ${{ matrix.scripts.cwd }} --recursive ${{ matrix.scripts.script }}
