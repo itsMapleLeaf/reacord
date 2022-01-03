@@ -7,6 +7,7 @@ import pinoHttp from "pino-http"
 import * as React from "react"
 import { renderMarkdownFile } from "./helpers/markdown"
 import { sendJsx } from "./helpers/send-jsx"
+import { serveCompiledScript } from "./helpers/serve-compiled-script"
 import { serveFile } from "./helpers/serve-file"
 import { serveTailwindCss } from "./helpers/tailwind"
 import DocsPage from "./pages/docs"
@@ -23,6 +24,13 @@ const app = express()
   .get(
     "/prism-theme.css",
     serveFile(new URL("./styles/prism-theme.css", import.meta.url).pathname),
+  )
+
+  .get(
+    "/popover-menu.client.js",
+    await serveCompiledScript(
+      new URL("./components/popover-menu.client.tsx", import.meta.url).pathname,
+    ),
   )
 
   .get("/docs/*", async (req: Request<{ 0: string }>, res) => {

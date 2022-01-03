@@ -1,14 +1,9 @@
 import React from "react"
 import { guideLinks } from "../data/guide-links"
 import { mainLinks } from "../data/main-links"
-import { createHydrater } from "../helpers/hydration"
 import { linkClass } from "../styles/components"
 import { AppLink } from "./app-link"
-import type { MainNavigationMobileMenuData } from "./main-navigation-mobile-menu"
-
-const MenuHydrater = await createHydrater<MainNavigationMobileMenuData>(
-  new URL("./main-navigation-mobile-menu.tsx", import.meta.url).pathname,
-)
+import { PopoverMenu } from "./popover-menu"
 
 export function MainNavigation() {
   return (
@@ -22,7 +17,23 @@ export function MainNavigation() {
         ))}
       </div>
       <div className="md:hidden" id="main-navigation-popover">
-        <MenuHydrater data={{ guideLinks }} />
+        <PopoverMenu>
+          {mainLinks.map((link) => (
+            <AppLink
+              {...link}
+              key={link.to}
+              className={PopoverMenu.itemClass}
+            />
+          ))}
+          <hr className="border-0 h-[2px] bg-black/50" />
+          {guideLinks.map((link) => (
+            <AppLink
+              {...link}
+              key={link.to}
+              className={PopoverMenu.itemClass}
+            />
+          ))}
+        </PopoverMenu>
       </div>
     </nav>
   )
