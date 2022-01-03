@@ -34,20 +34,27 @@
 - docs
   - [x] core layout and styling
   - [x] mobile nav: at a breakpoint, remove all desktop navigation and use a drawer w/ a floating menu button on the bottom right
-  - [ ] each page should have a link at the bottom to the previous and next pages
+  - [x] automatically generate sidebar links
   - guides
     - [x] getting started / setup
     - instances
       - [x] sending channel messages
-      - [ ] sending command replies
       - [x] cleaning up instances
+      - [ ] sending command replies
     - [ ] embeds
     - [ ] buttons and links
     - [ ] select menus
   - api reference
     - [x] rendering and making it available
-    - [ ] adding doc comments to source
-  - [ ] anchor links on markdown headings
+
+# docs polish
+
+- [ ] remove client-side react hydration
+- [ ] use a small script for the popover menu toggle
+- [ ] adding doc comments to source
+- [ ] docs: use literate-ts to typecheck code blocks
+- [ ] each page should have a link at the bottom to the previous and next pages
+- [ ] anchor links on markdown headings
 
 # internal
 
