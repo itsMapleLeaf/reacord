@@ -2,12 +2,12 @@
   "name": "reacord-docs-new",
   "type": "module",
   "private": true,
-  "main": "./src/main.tsx",
+  "main": "./dist/main.js",
   "scripts": {
+    "build": "tsup --minify",
     "dev": "esmo --no-warnings scripts/dev.ts | pino-colada",
-    "serve": "esmo --experimental-import-meta-resolve --no-warnings --enable-source-maps src/main.tsx",
-    "build": "tsup src/main.tsx --target node16 --format esm --sourcemap --minify",
-    "start": "NODE_ENV=production node  --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps dist/main.js | pino-colada",
+    "start": "NODE_ENV=production pnpm serve | pino-colada",
+    "serve": "node --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps dist/main.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
