@@ -3,7 +3,6 @@ import React from "react"
 import { AppLink } from "../components/app-link"
 import { MainNavigation } from "../components/main-navigation"
 import { guideLinks } from "../data/guide-links"
-import { useScrolled } from "../hooks/dom/use-scrolled"
 import { Html } from "../html"
 import {
   docsProseClass,
@@ -22,11 +21,11 @@ export default function DocsPage({
 }) {
   return (
     <Html title={`${title} | Reacord`} description={description}>
-      <HeaderPanel>
+      <header className="bg-slate-700/30 shadow sticky top-0 backdrop-blur-sm transition z-10 flex">
         <div className={maxWidthContainer}>
           <MainNavigation />
         </div>
-      </HeaderPanel>
+      </header>
       <main className={clsx(maxWidthContainer, "mt-8 flex items-start gap-4")}>
         <nav className="w-48 sticky top-24 hidden md:block">
           <h2 className="text-2xl">Guides</h2>
@@ -45,15 +44,4 @@ export default function DocsPage({
       </main>
     </Html>
   )
-}
-
-function HeaderPanel({ children }: { children: React.ReactNode }) {
-  const isScrolled = useScrolled()
-
-  const className = clsx(
-    isScrolled ? "bg-slate-700/30" : "bg-slate-800",
-    "shadow sticky top-0 backdrop-blur-sm transition z-10 flex",
-  )
-
-  return <header className={className}>{children}</header>
 }
