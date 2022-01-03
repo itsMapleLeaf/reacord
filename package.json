@@ -5,8 +5,10 @@
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write ."
   },
+  "dependencies": {
+    "@itsmapleleaf/configs": "^1.1.2"
+  },
   "devDependencies": {
-    "@itsmapleleaf/configs": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
     "eslint": "^8.5.0",
