@@ -1,8 +1,9 @@
 import browserSync from "browser-sync"
+import chokidar from "chokidar"
 import type { ExecaChildProcess } from "execa"
 import { execa } from "execa"
-import { watch } from "node:fs/promises"
 import pino from "pino"
+import { concatMap, debounceTime, map, Observable, tap } from "rxjs"
 import waitOn from "wait-on"
 import packageJson from "../package.json"
 
@@ -38,7 +39,7 @@ async function startApp() {
     }
   })
 
-  await waitOn({ resources: ["tcp:localhost:3000"] })
+  await waitOn({ resources: ["http-get://localhost:3000"] })
 
   console.info("App running")
 }
@@ -68,8 +69,17 @@ browser.init({
   logLevel: "silent",
 })
 
-for await (const info of watch("src", { recursive: true })) {
-  console.info(`Changed: ${info.filename}`)
-  await startApp()
-  browser.reload()
-}
+new Observable<string>((subscriber) => {
+  chokidar
+    .watch(".", { ignored: /node_modules/, ignoreInitial: true })
+    .on("all", (_, path) => subscriber.next(path))
+})
+  .pipe(
+    tap((path) => console.info(`Changed:`, path)),
+    debounceTime(100),
+    concatMap(startApp),
+    map(() => browser.reload()),
+  )
+  .subscribe()
+
+// chokidar.watch(".", { ignored: /node_modules/, ignoreInitial: true }).on('all', )
