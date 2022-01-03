@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "esmo server.ts",
     "build": "vite build && vite build --ssr",
-    "start": "NODE_ENV=production esmo server.ts"
+    "start": "NODE_ENV=production esmo server.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
