@@ -1,7 +1,7 @@
-import { AppLink } from "../components/app-link"
 import { guideLinks } from "../data/guide-links.preval"
 import { mainLinks } from "../data/main-links"
 import { linkClass } from "../styles/components"
+import { AppLink } from "./app-link"
 import { PopoverMenu } from "./popover-menu"
 
 export function MainNavigation() {
