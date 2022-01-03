@@ -1,3 +1,4 @@
+import React from "react"
 import { ExternalLink } from "./external-link"
 
 export type AppLinkProps = {
