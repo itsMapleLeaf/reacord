@@ -51,6 +51,7 @@
     "@types/nodemon": "^1.19.1",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.9",
+    "@types/tailwindcss": "^3.0.0",
     "@types/update-notifier": "^5.1.0",
     "@types/wait-on": "^5.3.1",
     "@vitejs/plugin-react": "^1.1.3",
