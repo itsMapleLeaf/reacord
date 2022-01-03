@@ -3,6 +3,7 @@ import { AppLink } from "../components/app-link"
 import { MainNavigation } from "../components/main-navigation"
 import { guideLinks } from "../data/guide-links.preval"
 import { useScrolled } from "../hooks/dom/use-scrolled"
+import { useRouteParams } from "../route-context"
 import {
   docsProseClass,
   linkClass,
@@ -10,6 +11,7 @@ import {
 } from "../styles/components"
 
 export default function DocsPage() {
+  const params = useRouteParams()
   return (
     <>
       <HeaderPanel>
@@ -30,6 +32,7 @@ export default function DocsPage() {
         </nav>
         <section className={clsx(docsProseClass, "pb-8 flex-1 min-w-0")}>
           {/* todo */}
+          {JSON.stringify(params, undefined, 2)}
         </section>
       </main>
     </>
