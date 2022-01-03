@@ -5,12 +5,11 @@
   "main": "./src/main.tsx",
   "scripts": {
     "dev": "esmo --no-warnings scripts/dev.ts | pino-colada",
-    "serve": "esmo --experimental-import-meta-resolve --no-warnings --enable-source-maps src/main.tsx",
-    "start": "NODE_ENV=production pnpm serve | pino-colada",
+    "build": "tsup src/main.tsx --target node16 --format esm --sourcemap --minify",
+    "start": "NODE_ENV=production node  --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps dist/main.js | pino-colada",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@heroicons/react": "^1.0.5",
     "@tailwindcss/typography": "^0.5.0",
     "clsx": "^1.1.1",
     "compression": "^1.7.4",
@@ -33,6 +32,7 @@
     "tailwindcss": "^3.0.8"
   },
   "devDependencies": {
+    "@heroicons/react": "^1.0.5",
     "@types/browser-sync": "^2.26.3",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.13",
@@ -46,6 +46,7 @@
     "browser-sync": "^2.27.7",
     "chokidar": "^3.5.2",
     "execa": "^6.0.0",
+    "tsup": "^5.11.10",
     "type-fest": "^2.8.0",
     "typescript": "^4.5.4",
     "wait-on": "^6.0.0"

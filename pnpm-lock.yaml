@@ -72,11 +72,11 @@ importers:
       react: ^18.0.0-rc.0
       react-dom: ^18.0.0-rc.0
       tailwindcss: ^3.0.8
+      tsup: ^5.11.10
       type-fest: ^2.8.0
       typescript: ^4.5.4
       wait-on: ^6.0.0
     dependencies:
-      '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.8
       clsx: 1.1.1
       compression: 1.7.4
@@ -98,6 +98,7 @@ importers:
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       tailwindcss: 3.0.8_cefe482e8d38053bbf3d5815e0c551b3
     devDependencies:
+      '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@types/browser-sync': 2.26.3
       '@types/compression': 1.7.2
       '@types/express': 4.17.13
@@ -111,6 +112,7 @@ importers:
       browser-sync: 2.27.7
       chokidar: 3.5.2
       execa: 6.0.0
+      tsup: 5.11.10_typescript@4.5.4
       type-fest: 2.8.0
       typescript: 4.5.4
       wait-on: 6.0.0
@@ -605,7 +607,7 @@ packages:
       react: '>= 16'
     dependencies:
       react: 18.0.0-rc.0
-    dev: false
+    dev: true
 
   /@humanwhocodes/config-array/0.9.2:
     resolution: {integrity: sha512-UXOuFCGcwciWckOpmfKDq/GyhlTf9pN/BzG//x8p8zTOFEcGuA68ANXheFS0AGvy3qgZqLBUkMs7hqzqCKOVwA==}
@@ -7755,6 +7757,35 @@ packages:
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
+
+  /tsup/5.11.10_typescript@4.5.4:
+    resolution: {integrity: sha512-z8YzbPyF8Vvj37h+TY84AfvlmKZtBTRuWwRETWUbfckMj854WeLkuRQV8vRyoY8bLJQhnKWlLge/3fVbFZGERg==}
+    hasBin: true
+    peerDependencies:
+      typescript: ^4.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 2.2.0_esbuild@0.14.10
+      cac: 6.7.12
+      chokidar: 3.5.2
+      debug: 4.3.3
+      esbuild: 0.14.10
+      execa: 5.1.1
+      globby: 11.0.4
+      joycon: 3.1.1
+      postcss-load-config: 3.1.0
+      resolve-from: 5.0.0
+      rollup: 2.62.0
+      source-map: 0.7.3
+      sucrase: 3.20.3
+      tree-kill: 1.2.2
+      typescript: 4.5.4
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
 
   /tsup/5.11.9_typescript@4.5.4:
     resolution: {integrity: sha512-APFcd9qKblMVO35O5OyIcfa4lwBrVNinwtifUojO78I6j0aDhS4fQ06gq6vF1b/+Z83pYDWNb0R2fmO9PX3IVQ==}
