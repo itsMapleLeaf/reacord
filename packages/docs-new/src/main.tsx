@@ -2,6 +2,7 @@ import compression from "compression"
 import express from "express"
 import httpTerminator from "http-terminator"
 import pino from "pino"
+import pinoHttp from "pino-http"
 import * as React from "react"
 import { sendJsx } from "./helpers/send-jsx"
 import { serveFile } from "./helpers/serve-file"
@@ -12,6 +13,7 @@ const logger = pino()
 const port = process.env.PORT || 3000
 
 const app = express()
+  .use(pinoHttp({ logger }))
   .use(compression())
   .get("/tailwind.css", serveTailwindCss())
 

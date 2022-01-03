@@ -21,6 +21,7 @@
     "http-terminator": "^3.0.4",
     "pino": "^7.6.2",
     "pino-colada": "^2.2.2",
+    "pino-http": "^6.5.0",
     "pino-pretty": "^7.3.0",
     "reacord": "workspace:*",
     "react": "^18.0.0-rc.0",
