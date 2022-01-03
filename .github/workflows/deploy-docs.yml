@@ -2,7 +2,7 @@ name: deploy docs
 on:
   push:
     branches: [main]
-    paths: [packages/docs/**, reacord/**/*.ts]
+    paths: [packages/docs/**, reacord/library/**/*.ts]
 
 jobs:
   deploy:
