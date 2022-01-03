@@ -5,7 +5,6 @@
   "main": "./src/main.tsx",
   "scripts": {
     "dev": "esmo --no-warnings scripts/dev.ts | pino-colada",
-    "build": "vite build && vite build --ssr",
     "serve": "esmo --experimental-import-meta-resolve --no-warnings --enable-source-maps src/main.tsx",
     "start": "NODE_ENV=production pnpm serve",
     "typecheck": "tsc --noEmit"
