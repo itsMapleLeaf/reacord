@@ -5,17 +5,20 @@ import type { Result } from "postcss"
 import postcss from "postcss"
 import tailwindcss from "tailwindcss"
 
-const tailwindTemplate = await readFile(
-  fileURLToPath(await import.meta.resolve!("tailwindcss/tailwind.css")),
-  "utf-8",
+const tailwindTemplatePath = fileURLToPath(
+  await import.meta.resolve!("tailwindcss/tailwind.css"),
 )
+
+const tailwindTemplate = await readFile(tailwindTemplatePath, "utf-8")
 
 let result: Result | undefined
 
 export function serveTailwindCss(): RequestHandler {
   return async (req, res) => {
     if (!result || process.env.NODE_ENV !== "production") {
-      result = await postcss(tailwindcss).process(tailwindTemplate)
+      result = await postcss(tailwindcss).process(tailwindTemplate, {
+        from: tailwindTemplatePath,
+      })
     }
     res.set("Content-Type", "text/css").send(result.css)
   }
