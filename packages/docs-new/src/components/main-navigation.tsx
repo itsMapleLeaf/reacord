@@ -1,38 +1,14 @@
-import { build } from "esbuild"
-import { readFile } from "node:fs/promises"
-import { dirname } from "node:path"
 import React from "react"
 import { guideLinks } from "../data/guide-links"
 import { mainLinks } from "../data/main-links"
+import { createHydrater } from "../helpers/hydration"
 import { linkClass } from "../styles/components"
-import type { AppLinkProps } from "./app-link"
 import { AppLink } from "./app-link"
-import { PopoverMenu } from "./popover-menu"
-import { Script } from "./script"
+import type { MainNavigationMobileMenuData } from "./main-navigation-mobile-menu"
 
-const clientSourcePath = new URL(
-  "./main-navigation.client.tsx",
-  import.meta.url,
-).pathname
-
-const clientOutput = await build({
-  bundle: true,
-  stdin: {
-    contents: await readFile(clientSourcePath, "utf-8"),
-    sourcefile: clientSourcePath,
-    loader: "tsx",
-    resolveDir: dirname(clientSourcePath),
-  },
-  target: ["chrome89", "firefox89"],
-  format: "esm",
-  write: false,
-})
-
-export type MainNavigationClientData = {
-  guideLinks: AppLinkProps[]
-}
-
-const data: MainNavigationClientData = { guideLinks }
+const MenuHydrater = await createHydrater<MainNavigationMobileMenuData>(
+  new URL("./main-navigation-mobile-menu.tsx", import.meta.url).pathname,
+)
 
 export function MainNavigation() {
   return (
@@ -46,28 +22,8 @@ export function MainNavigation() {
         ))}
       </div>
       <div className="md:hidden" id="main-navigation-popover">
-        <PopoverMenu>
-          {mainLinks.map((link) => (
-            <AppLink
-              {...link}
-              key={link.to}
-              className={PopoverMenu.itemClass}
-            />
-          ))}
-          <hr className="border-0 h-[2px] bg-black/50" />
-          {data.guideLinks.map((link) => (
-            <AppLink
-              {...link}
-              key={link.to}
-              className={PopoverMenu.itemClass}
-            />
-          ))}
-        </PopoverMenu>
+        <MenuHydrater data={{ guideLinks }} />
       </div>
-      <Script id="main-navigation-popover-data" type="application/json">
-        {JSON.stringify(data)}
-      </Script>
-      <Script>{clientOutput.outputFiles[0]?.text!}</Script>
     </nav>
   )
 }
