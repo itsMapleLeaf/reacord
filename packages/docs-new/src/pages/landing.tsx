@@ -1,8 +1,13 @@
 import packageJson from "reacord/package.json"
 import React from "react"
 import { MainNavigation } from "../components/main-navigation"
+import { renderMarkdownFile } from "../helpers/markdown"
 import { Html } from "../html"
 import { maxWidthContainer } from "../styles/components"
+
+const exampleHtml = await renderMarkdownFile(
+  new URL("../components/landing-example.md", import.meta.url).pathname,
+)
 
 export function Landing() {
   return (
@@ -16,8 +21,7 @@ export function Landing() {
             <h1 className="text-6xl font-light">reacord</h1>
             <section
               className="mx-auto text-sm sm:text-base"
-              // todo
-              // dangerouslySetInnerHTML={{ __html: landingExampleHtml }}
+              dangerouslySetInnerHTML={{ __html: exampleHtml }}
             />
             <p className="text-2xl font-light">{packageJson.description}</p>
             <a
