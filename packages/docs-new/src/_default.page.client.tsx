@@ -10,7 +10,7 @@ const context = await getPage<PageContextBuiltInClient>()
 
 createRoot(document.querySelector("#app")!).render(
   <HeadProvider>
-    <RouteContextProvider value={{ routeParams: {}, ...context }}>
+    <RouteContextProvider value={{ routeParams: {}, ...(context as any) }}>
       <App>
         <context.Page />
       </App>

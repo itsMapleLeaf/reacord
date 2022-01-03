@@ -1,3 +1,4 @@
+import compression from "compression"
 import express from "express"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -7,6 +8,8 @@ const isProduction = process.env.NODE_ENV === "production"
 const root = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
+
+app.use(compression())
 
 let viteDevServer
 if (isProduction) {

@@ -1,19 +1,23 @@
 import clsx from "clsx"
+import { Meta, Title } from "react-head"
 import { AppLink } from "../components/app-link"
 import { MainNavigation } from "../components/main-navigation"
 import { guideLinks } from "../data/guide-links.preval"
 import { useScrolled } from "../hooks/dom/use-scrolled"
-import { useRouteParams } from "../route-context"
+import { usePageData } from "../route-context"
 import {
   docsProseClass,
   linkClass,
   maxWidthContainer,
 } from "../styles/components"
+import type { DocsPageProps } from "./docs.page.server"
 
 export default function DocsPage() {
-  const params = useRouteParams()
+  const data = usePageData<DocsPageProps>()
   return (
     <>
+      <Title>{data.title} | Reacord</Title>
+      <Meta name="description" content={data.description} />
       <HeaderPanel>
         <div className={maxWidthContainer}>
           <MainNavigation />
@@ -30,10 +34,10 @@ export default function DocsPage() {
             ))}
           </ul>
         </nav>
-        <section className={clsx(docsProseClass, "pb-8 flex-1 min-w-0")}>
-          {/* todo */}
-          {JSON.stringify(params, undefined, 2)}
-        </section>
+        <section
+          className={clsx(docsProseClass, "pb-8 flex-1 min-w-0")}
+          dangerouslySetInnerHTML={{ __html: data.content }}
+        />
       </main>
     </>
   )

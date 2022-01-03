@@ -6,7 +6,7 @@ import { dangerouslySkipEscape, escapeInject } from "vite-plugin-ssr"
 import { App } from "./app"
 import { RouteContextProvider } from "./route-context"
 
-export const passToClient = ["routeParams"]
+export const passToClient = ["routeParams", "pageData"]
 
 export function render(context: PageContextBuiltIn) {
   const headTags: React.ReactElement[] = []
