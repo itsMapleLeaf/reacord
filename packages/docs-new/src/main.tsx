@@ -1,12 +1,14 @@
 import compression from "compression"
-import type { Request, Response } from "express"
+import type { Response } from "express"
 import express from "express"
+import httpTerminator from "http-terminator"
+import pino from "pino"
 import * as React from "react"
 import { renderToStaticMarkup } from "react-dom/server.js"
+import { serveFile } from "./helpers/serve-file"
 import { serveTailwindCss } from "./helpers/tailwind"
 import { Landing } from "./pages/landing"
 
-const projectRoot = new URL("..", import.meta.url).pathname
 const logger = pino()
 const port = process.env.PORT || 3000
 
@@ -18,6 +20,11 @@ function sendJsx(res: Response, jsx: React.ReactElement) {
 const app = express()
   .use(compression())
   .get("/tailwind.css", serveTailwindCss())
+
+  .get(
+    "/prism-theme.css",
+    serveFile(new URL("./styles/prism-theme.css", import.meta.url).pathname),
+  )
 
   .get("/", (req, res) => {
     sendJsx(res, <Landing />)

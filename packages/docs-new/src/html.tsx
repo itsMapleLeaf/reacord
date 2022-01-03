@@ -29,6 +29,7 @@ export function Html({
           rel="stylesheet"
         />
         <link href="/tailwind.css" rel="stylesheet" />
+        <link href="/prism-theme.css" rel="stylesheet" />
 
         <title>{title}</title>
       </head>
