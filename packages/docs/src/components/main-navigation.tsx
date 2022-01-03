@@ -1,4 +1,5 @@
-import { guideLinks } from "../data/guide-links.preval"
+import React from "react"
+import { guideLinks } from "../data/guide-links"
 import { mainLinks } from "../data/main-links"
 import { linkClass } from "../styles/components"
 import { AppLink } from "./app-link"
@@ -15,7 +16,7 @@ export function MainNavigation() {
           <AppLink {...link} key={link.to} className={linkClass} />
         ))}
       </div>
-      <div className="md:hidden">
+      <div className="md:hidden" id="main-navigation-popover">
         <PopoverMenu>
           {mainLinks.map((link) => (
             <AppLink

@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react"
+import React from "react"
 
 export function ExternalLink(props: ComponentPropsWithoutRef<"a">) {
   return (

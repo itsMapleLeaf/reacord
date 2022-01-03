@@ -3,6 +3,7 @@ import {
   DocumentTextIcon,
   ExternalLinkIcon,
 } from "@heroicons/react/solid"
+import React from "react"
 import type { AppLinkProps } from "../components/app-link"
 import { inlineIconClass } from "../styles/components"
 
