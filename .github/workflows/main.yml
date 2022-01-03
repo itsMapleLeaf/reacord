@@ -34,4 +34,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run --dir ${{ matrix.scripts.cwd }} --recursive ${{ matrix.scripts.script }}
+      - run: pnpm run --recursive ${{ matrix.scripts.script }}
