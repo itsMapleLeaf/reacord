@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 
-import "react"
-declare module "react" {
-  export function createContext<Value>(): Context<Value | undefined>
+declare module "*.md" {
+  import type { ComponentType } from "react"
+  export const attributes: Record<string, any>
+  export const html: string
+  export const ReactComponent: ComponentType
 }

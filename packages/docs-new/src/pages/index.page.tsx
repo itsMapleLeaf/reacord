@@ -1,5 +1,5 @@
 import packageJson from "reacord/package.json"
-import LandingExample from "../components/landing-example.md"
+import { html as landingExampleHtml } from "../components/landing-example.md"
 import { MainNavigation } from "../components/main-navigation"
 import { maxWidthContainer } from "../styles/components"
 
@@ -12,9 +12,10 @@ export default function LandingPage() {
       <div className="px-4 pb-8 flex flex-1">
         <main className="px-4 py-6 rounded-lg shadow bg-slate-800 space-y-5 m-auto w-full max-w-xl">
           <h1 className="text-6xl font-light">reacord</h1>
-          <section className="mx-auto text-sm sm:text-base">
-            <LandingExample />
-          </section>
+          <section
+            className="mx-auto text-sm sm:text-base"
+            dangerouslySetInnerHTML={{ __html: landingExampleHtml }}
+          />
           <p className="text-2xl font-light">{packageJson.description}</p>
           <a
             href="/docs/getting-started"

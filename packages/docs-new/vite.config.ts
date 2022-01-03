@@ -1,11 +1,14 @@
-// @ts-expect-error
-import rehypePrism from "@mapbox/rehype-prism"
 import react from "@vitejs/plugin-react"
-import remarkFrontmatter from "remark-frontmatter"
+import MarkdownIt from "markdown-it"
+import prism from "markdown-it-prism"
+import { createRequire } from "node:module"
 import { defineConfig } from "vite"
+import type * as markdownType from "vite-plugin-markdown"
 import ssr from "vite-plugin-ssr/plugin"
-import xdm from "xdm/rollup.js"
 import { preval } from "./plugins/preval"
+
+const require = createRequire(import.meta.url)
+const markdown: typeof markdownType = require("vite-plugin-markdown")
 
 export default defineConfig({
   build: {
@@ -14,9 +17,12 @@ export default defineConfig({
   plugins: [
     ssr(),
     react(),
-    xdm({
-      remarkPlugins: [remarkFrontmatter],
-      rehypePlugins: [rehypePrism],
+    markdown.default({
+      mode: [markdown.Mode.HTML],
+      markdownIt: new MarkdownIt({
+        html: true,
+        linkify: true,
+      }).use(prism),
     }),
     preval(),
   ],
