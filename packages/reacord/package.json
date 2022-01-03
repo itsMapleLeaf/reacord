@@ -20,9 +20,6 @@
   "scripts": {
     "build": "tsup-node library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build -- --watch",
-    "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "pnpm lint -- --fix",
-    "format": "prettier --write .",
     "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js --colors",
     "test-watch": "pnpm test -- --watch",
     "coverage": "pnpm test -- --coverage",
