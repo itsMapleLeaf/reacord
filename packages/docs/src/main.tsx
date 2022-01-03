@@ -1,6 +1,7 @@
 import compression from "compression"
-import type { Request } from "express"
+import type { ErrorRequestHandler, Request } from "express"
 import express from "express"
+import Router from "express-promise-router"
 import httpTerminator from "http-terminator"
 import pino from "pino"
 import pinoHttp from "pino-http"
@@ -16,7 +17,12 @@ import { Landing } from "./pages/landing"
 const logger = pino()
 const port = process.env.PORT || 3000
 
-const app = express()
+const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
+  response.status(500).send(error.message)
+  logger.error(error)
+}
+
+const router = Router()
   .use(pinoHttp({ logger }))
   .use(compression())
   .get("/tailwind.css", serveTailwindCss())
@@ -51,9 +57,13 @@ const app = express()
     sendJsx(res, <Landing />)
   })
 
-const server = app.listen(port, () => {
-  logger.info(`Server is running on https://localhost:${port}`)
-})
+  .use(errorHandler)
+
+const server = express()
+  .use(router)
+  .listen(port, () => {
+    logger.info(`Server is running on https://localhost:${port}`)
+  })
 
 const terminator = httpTerminator.createHttpTerminator({ server })
 
