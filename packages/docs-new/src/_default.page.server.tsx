@@ -4,6 +4,7 @@ import { HeadProvider } from "react-head"
 import type { PageContextBuiltIn } from "vite-plugin-ssr"
 import { dangerouslySkipEscape, escapeInject } from "vite-plugin-ssr"
 import { App } from "./app"
+import { RouteContextProvider } from "./route-context"
 
 export const passToClient = ["routeParams"]
 
@@ -12,9 +13,11 @@ export function render(context: PageContextBuiltIn) {
 
   const pageHtml = renderToString(
     <HeadProvider headTags={headTags}>
-      <App>
-        <context.Page />
-      </App>
+      <RouteContextProvider value={context}>
+        <App>
+          <context.Page />
+        </App>
+      </RouteContextProvider>
     </HeadProvider>,
   )
 
