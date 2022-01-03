@@ -5,6 +5,7 @@
   "main": "./src/main.tsx",
   "scripts": {
     "dev": "esmo --no-warnings scripts/dev.ts | pino-colada",
+    "serve": "esmo --experimental-import-meta-resolve --no-warnings --enable-source-maps src/main.tsx",
     "build": "tsup src/main.tsx --target node16 --format esm --sourcemap --minify",
     "start": "NODE_ENV=production node  --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps dist/main.js | pino-colada",
     "typecheck": "tsc --noEmit"
