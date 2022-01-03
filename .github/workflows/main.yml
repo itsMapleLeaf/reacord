@@ -2,8 +2,8 @@ name: main
 
 on:
   push:
+    branches: [main]
   pull_request:
-  workflow_dispatch:
 
 env:
   TEST_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
