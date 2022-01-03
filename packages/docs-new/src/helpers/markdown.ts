@@ -1,15 +1,15 @@
+import grayMatter from "gray-matter"
+import MarkdownIt from "markdown-it"
+import prism from "markdown-it-prism"
 import { readFile } from "node:fs/promises"
-import rehypeStringify from "rehype-stringify"
-import remarkParse from "remark-parse"
-import remarkRehype from "remark-rehype"
-import { unified } from "unified"
 
-const processor = unified()
-  .use(remarkParse)
-  .use(remarkRehype)
-  .use(rehypeStringify)
+const renderer = new MarkdownIt({
+  html: true,
+  linkify: true,
+}).use(prism)
 
 export async function renderMarkdownFile(filePath: string) {
-  const result = await processor.process(await readFile(filePath))
-  return result.toString()
+  const { data, content } = grayMatter(await readFile(filePath, "utf8"))
+  const html = renderer.render(content)
+  return { html, data }
 }
