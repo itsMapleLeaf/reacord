@@ -1,9 +1,11 @@
 {
-  "name": "reacord-docs",
+  "name": "reacord-docs-new",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "esmo server.ts",
+    "dev": "npm-run-all --parallel --print-label --race dev-*",
+    "dev-nodemon": "nodemon --exec esmo --ext js,ts,tsx --experimental-import-meta-resolve --no-warnings src/main.tsx",
+    "dev-bsync": "wait-on tcp:localhost:3000 && browser-sync start --proxy http://localhost:3000 --watch src",
     "build": "vite build && vite build --ssr",
     "start": "NODE_ENV=production esmo server.ts",
     "typecheck": "tsc --noEmit"
@@ -11,6 +13,8 @@
   "dependencies": {
     "@heroicons/react": "^1.0.5",
     "@reach/rect": "^0.16.0",
+    "@tinyhttp/app": "^2.0.15",
+    "@tinyhttp/logger": "^1.3.0",
     "clsx": "^1.1.1",
     "express": "^4.17.2",
     "gray-matter": "^4.0.3",
@@ -21,29 +25,39 @@
     "react-head": "^3.4.0",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
+    "reload": "^3.2.0",
+    "shrink-ray-current": "^4.1.3",
+    "sirv": "^2.0.0",
     "vite-plugin-ssr": "^0.3.42"
   },
   "devDependencies": {
     "@mapbox/rehype-prism": "^0.8.0",
     "@tailwindcss/typography": "^0.5.0",
+    "@types/browser-sync": "^2.26.3",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.13",
     "@types/markdown-it": "^12.2.3",
     "@types/node": "*",
+    "@types/nodemon": "^1.19.1",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.9",
     "@vitejs/plugin-react": "^1.1.3",
     "autoprefixer": "^10.4.1",
+    "browser-sync": "^2.27.7",
     "compression": "^1.7.4",
     "esno": "^0.13.0",
     "fast-glob": "^3.2.7",
     "markdown-it": "^12.3.0",
     "markdown-it-prism": "^2.2.1",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "polka": "^0.5.2",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.8",
     "type-fest": "^2.8.0",
     "typescript": "^4.5.4",
     "vite": "^2.7.10",
-    "vite-plugin-markdown": "^2.0.2"
+    "vite-plugin-markdown": "^2.0.2",
+    "wait-on": "^6.0.0"
   }
 }
