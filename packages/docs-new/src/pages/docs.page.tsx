@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { AppLink } from "../components/app-link"
 import { MainNavigation } from "../components/main-navigation"
-import { guideLinks } from "../data/guide-links"
+import { guideLinks } from "../data/guide-links.preval"
 import { useScrolled } from "../hooks/dom/use-scrolled"
 import {
   docsProseClass,
@@ -9,9 +9,7 @@ import {
   maxWidthContainer,
 } from "../styles/components"
 
-export { DocsPage as Page }
-
-function DocsPage() {
+export default function DocsPage() {
   return (
     <>
       <HeaderPanel>

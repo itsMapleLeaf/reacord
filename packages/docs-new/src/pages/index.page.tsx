@@ -3,9 +3,7 @@ import LandingExample from "../components/landing-example.md"
 import { MainNavigation } from "../components/main-navigation"
 import { maxWidthContainer } from "../styles/components"
 
-export { LandingPage as Page }
-
-function LandingPage() {
+export default function LandingPage() {
   return (
     <div className="flex flex-col min-w-0 min-h-screen text-center">
       <header className={maxWidthContainer}>
