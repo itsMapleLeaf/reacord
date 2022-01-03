@@ -7,7 +7,7 @@ import { serveTailwindCss } from "./helpers/tailwind"
 import { Landing } from "./pages/landing"
 
 const projectRoot = new URL("..", import.meta.url).pathname
-
+const logger = pino()
 const port = process.env.PORT || 3000
 
 function sendJsx(res: Response, jsx: React.ReactElement) {
@@ -15,7 +15,7 @@ function sendJsx(res: Response, jsx: React.ReactElement) {
   res.send(`<!DOCTYPE html>\n${renderToStaticMarkup(jsx)}`)
 }
 
-express()
+const app = express()
   .use(compression())
   .get("/tailwind.css", serveTailwindCss())
 
@@ -27,6 +27,22 @@ express()
     res.send("doc: " + req.params.docPath)
   })
 
-  .listen(port, () => {
-    console.info(`Server is running on https://localhost:${port}`)
-  })
+const server = app.listen(port, () => {
+  logger.info(`Server is running on https://localhost:${port}`)
+})
+
+const terminator = httpTerminator.createHttpTerminator({ server })
+
+process.on("SIGINT", () => {
+  terminator
+    .terminate()
+    .then(() => {
+      logger.info("Server terminated")
+    })
+    .catch((error) => {
+      logger.error(error)
+    })
+    .finally(() => {
+      process.exit()
+    })
+})
