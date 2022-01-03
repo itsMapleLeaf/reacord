@@ -1,7 +1,6 @@
-/* eslint-disable unicorn/prefer-module */
-// eslint-disable-next-line unicorn/prefer-module
+// @ts-nocheck
 module.exports = {
-  content: ["./app/**/*.{ts,tsx,md,mdx}"],
+  content: ["./src/**/*.{ts,tsx,md}"],
   theme: {
     fontFamily: {
       sans: ["Rubik", "sans-serif"],
