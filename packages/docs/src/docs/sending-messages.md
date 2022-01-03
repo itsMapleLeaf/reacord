@@ -71,7 +71,7 @@ const reacord = new ReacordDiscordJs(client, {
 
 ## Discord Slash Commands
 
-<aside className="opacity-75 italic">
+<aside class="opacity-75 italic border-l-4 pl-3 border-white/50">
 This section also applies to other kinds of application commands, such as context menu commands.
 </aside>
 
