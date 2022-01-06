@@ -1,4 +1,4 @@
-import { MenuAlt4Icon } from "@heroicons/react/outline"
+import { MenuAlt4Icon } from "@heroicons/react/outline/esm"
 import clsx from "clsx"
 import React from "react"
 import { linkClass } from "../styles/components"

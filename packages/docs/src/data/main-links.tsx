@@ -2,7 +2,7 @@ import {
   CodeIcon,
   DocumentTextIcon,
   ExternalLinkIcon,
-} from "@heroicons/react/solid"
+} from "@heroicons/react/solid/esm"
 import React from "react"
 import type { AppLinkProps } from "../components/app-link"
 import { inlineIconClass } from "../styles/components"

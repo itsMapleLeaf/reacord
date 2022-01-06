@@ -2,9 +2,10 @@
   "name": "reacord-docs-new",
   "type": "module",
   "private": true,
+  "source": "./src/main.tsx",
   "main": "./dist/main.js",
   "scripts": {
-    "build": "tsup --minify",
+    "build": "esmo --no-warnings scripts/build.ts",
     "dev": "esmo --no-warnings scripts/dev.ts | pino-colada",
     "start": "NODE_ENV=production pnpm serve | pino-colada",
     "serve": "node --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps dist/main.js",
