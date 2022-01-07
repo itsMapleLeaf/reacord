@@ -4,13 +4,13 @@ import {
   ExternalLinkIcon,
 } from "@heroicons/react/solid/esm"
 import React from "react"
-import type { AppLinkProps } from "../components/app-link"
-import { inlineIconClass } from "../styles/components"
+import { inlineIconClass } from "../ui/components"
+import type { AppLinkProps } from "./app-link"
 
 export const mainLinks: AppLinkProps[] = [
   {
     type: "internal",
-    to: "/docs/getting-started",
+    to: "/guides/getting-started",
     label: (
       <>
         <DocumentTextIcon className={inlineIconClass} /> Guides
@@ -19,7 +19,7 @@ export const mainLinks: AppLinkProps[] = [
   },
   {
     type: "internal",
-    to: "/docs/api",
+    to: "/guides/api",
     label: (
       <>
         <CodeIcon className={inlineIconClass} /> API Reference

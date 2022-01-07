@@ -1,9 +1,9 @@
 import React from "react"
-import { guideLinks } from "../data/guide-links"
-import { mainLinks } from "../data/main-links"
-import { linkClass } from "../styles/components"
+import { linkClass } from "../ui/components"
+import { PopoverMenu } from "../ui/popover-menu"
 import { AppLink } from "./app-link"
-import { PopoverMenu } from "./popover-menu"
+import { guideLinks } from "./guide-links"
+import { mainLinks } from "./main-links"
 
 export function MainNavigation() {
   return (

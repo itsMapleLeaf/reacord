@@ -1,6 +1,11 @@
 import packageJson from "reacord/package.json"
 import type { ReactNode } from "react"
 import React from "react"
+import { useAssetBuilder } from "./asset-builder/asset-builder-context.js"
+
+const tailwindCssPath = new URL(
+  await import.meta.resolve!("tailwindcss/tailwind.css"),
+).pathname
 
 export function Html({
   title = "Reacord",
@@ -11,6 +16,7 @@ export function Html({
   description?: string
   children: ReactNode
 }) {
+  const assets = useAssetBuilder()
   return (
     <html lang="en" className="bg-slate-900 text-slate-100">
       <head>
@@ -28,10 +34,11 @@ export function Html({
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Rubik:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
           rel="stylesheet"
         />
-        <link href="/tailwind.css" rel="stylesheet" />
-        <link href="/prism-theme.css" rel="stylesheet" />
-
-        <script type="module" src="/popover-menu.client.js" />
+        <link href={assets.file(tailwindCssPath)} rel="stylesheet" />
+        <link
+          href={assets.file(new URL("ui/prism-theme.css", import.meta.url))}
+          rel="stylesheet"
+        />
 
         <title>{title}</title>
       </head>

@@ -2,15 +2,14 @@ import glob from "fast-glob"
 import grayMatter from "gray-matter"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
-import type { AppLinkProps } from "../components/app-link"
-import { fromProjectRoot } from "../constants"
+import type { AppLinkProps } from "./app-link"
 
-const docsFolderPath = fromProjectRoot("src/docs")
-const guideFiles = await glob("**/*.md", { cwd: docsFolderPath })
+const docsFolder = new URL("../guides", import.meta.url).pathname
+const guideFiles = await glob("**/*.md", { cwd: docsFolder })
 
 const entries = await Promise.all(
   guideFiles.map(async (file) => {
-    const content = await readFile(join(docsFolderPath, file), "utf-8")
+    const content = await readFile(join(docsFolder, file), "utf-8")
     const { data } = grayMatter(content)
 
     let order = Number(data.order)
@@ -19,7 +18,7 @@ const entries = await Promise.all(
     }
 
     return {
-      route: `/docs/${file.replace(/\.mdx?$/, "")}`,
+      route: `/guides/${file.replace(/\.mdx?$/, "")}`,
       title: String(data.title || ""),
       order,
     }

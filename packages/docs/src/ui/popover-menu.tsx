@@ -1,9 +1,11 @@
 import { MenuAlt4Icon } from "@heroicons/react/outline/esm"
 import clsx from "clsx"
 import React from "react"
-import { linkClass } from "../styles/components"
+import { useAssetBuilder } from "../asset-builder/asset-builder-context.js"
+import { linkClass } from "./components"
 
 export function PopoverMenu({ children }: { children: React.ReactNode }) {
+  const assets = useAssetBuilder()
   return (
     <div data-popover className="relative">
       <button data-popover-button title="Menu" className={linkClass}>
@@ -16,6 +18,10 @@ export function PopoverMenu({ children }: { children: React.ReactNode }) {
       >
         {children}
       </div>
+      <script
+        type="module"
+        src={assets.file(new URL("popover-menu.client.tsx", import.meta.url))}
+      />
     </div>
   )
 }

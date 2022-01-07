@@ -51,7 +51,6 @@ importers:
       '@types/wait-on': ^5.3.1
       autoprefixer: ^10.4.1
       browser-sync: ^2.27.7
-      chokidar: ^3.5.2
       clsx: ^1.1.1
       compression: ^1.7.4
       esbuild: latest
@@ -64,6 +63,7 @@ importers:
       http-terminator: ^3.0.4
       markdown-it: ^12.3.0
       markdown-it-prism: ^2.2.1
+      nodemon: ^2.0.15
       pino: ^7.6.2
       pino-colada: ^2.2.2
       pino-http: ^6.5.0
@@ -78,6 +78,7 @@ importers:
       typescript: ^4.5.4
       wait-on: ^6.0.0
     dependencies:
+      '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.8
       clsx: 1.1.1
       compression: 1.7.4
@@ -99,7 +100,6 @@ importers:
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       tailwindcss: 3.0.8_cefe482e8d38053bbf3d5815e0c551b3
     devDependencies:
-      '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@types/browser-sync': 2.26.3
       '@types/compression': 1.7.2
       '@types/express': 4.17.13
@@ -111,8 +111,8 @@ importers:
       '@types/wait-on': 5.3.1
       autoprefixer: 10.4.1_postcss@8.4.5
       browser-sync: 2.27.7
-      chokidar: 3.5.2
       execa: 6.0.0
+      nodemon: 2.0.15
       rxjs: 7.5.1
       tsup: 5.11.10_typescript@4.5.4
       type-fest: 2.8.0
@@ -355,6 +355,12 @@ packages:
     hasBin: true
     dev: true
 
+  /@babel/parser/7.16.7:
+    resolution: {integrity: sha512-sR4eaSrnM7BV7QPzGfEX5paG/6wrZM3I0HDzfIAK06ESvo9oy3xBuVBxE3MbQaKNhvg8g/ixjMWo2CGpzpHsDA==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+    dev: true
+
   /@babel/plugin-syntax-async-generators/7.8.4_@babel+core@7.16.5:
     resolution: {integrity: sha512-tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==}
     peerDependencies:
@@ -523,7 +529,7 @@ packages:
       '@babel/helper-function-name': 7.16.0
       '@babel/helper-hoist-variables': 7.16.0
       '@babel/helper-split-export-declaration': 7.16.0
-      '@babel/parser': 7.16.6
+      '@babel/parser': 7.16.7
       '@babel/types': 7.16.7
       debug: 4.3.3
       globals: 11.12.0
@@ -609,7 +615,7 @@ packages:
       react: '>= 16'
     dependencies:
       react: 18.0.0-rc.0
-    dev: true
+    dev: false
 
   /@humanwhocodes/config-array/0.9.2:
     resolution: {integrity: sha512-UXOuFCGcwciWckOpmfKDq/GyhlTf9pN/BzG//x8p8zTOFEcGuA68ANXheFS0AGvy3qgZqLBUkMs7hqzqCKOVwA==}

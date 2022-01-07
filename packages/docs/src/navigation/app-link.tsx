@@ -1,5 +1,5 @@
 import React from "react"
-import { ExternalLink } from "./external-link"
+import { ExternalLink } from "../dom/external-link"
 
 export type AppLinkProps = {
   type: "internal" | "external"
