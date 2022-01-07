@@ -59,28 +59,29 @@ export class AssetBuilder {
         const extension = extname(file)
 
         const stats = await stat(file).catch(() => undefined)
-        if (stats?.isFile()) {
-          res
-            .status(200)
-            .type(extension.endsWith("tsx") ? "text/javascript" : extension)
-            .header("Cache-Control", "public, max-age=604800, immutable")
-            .sendFile(file)
-          return
+        if (!stats?.isFile()) {
+          const transformResult = await this.transform(asset)
+          if (!transformResult) return next()
+
+          await mkdir(dirname(file), { recursive: true })
+          await writeFile(file, transformResult.content)
         }
 
-        for (const transformer of this.transformers) {
-          const result = await transformer.transform(asset)
-          if (result) {
-            await mkdir(dirname(file), { recursive: true })
-            await writeFile(file, result.content)
-            return res.type(extension).send(result.content)
-          }
-        }
-
-        next()
+        res
+          .status(200)
+          .type(extension.endsWith("tsx") ? "text/javascript" : extension)
+          .header("Cache-Control", "public, max-age=604800, immutable")
+          .sendFile(file)
       } catch (error) {
         next(error)
       }
+    }
+  }
+
+  private async transform(asset: Asset) {
+    for (const transformer of this.transformers) {
+      const result = await transformer.transform(asset)
+      if (result) return result
     }
   }
 }
