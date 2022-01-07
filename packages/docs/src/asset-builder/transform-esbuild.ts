@@ -10,6 +10,7 @@ export const transformEsbuild: AssetTransformer = {
         target: ["chrome89", "firefox89"],
         format: "esm",
         write: false,
+        minify: process.env.NODE_ENV === "production",
       })
 
       return {
