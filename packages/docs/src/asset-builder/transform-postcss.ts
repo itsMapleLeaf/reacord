@@ -1,14 +1,17 @@
+import { readFile } from "fs/promises"
 import postcss from "postcss"
 import tailwindcss from "tailwindcss"
 import { AssetTransformer } from "./asset-builder.js"
 
 export const transformPostCss: AssetTransformer = {
-  async transform(asset) {
-    if (!asset.file.match(/\.css$/)) return
+  async transform(inputFile) {
+    if (!inputFile.match(/\.css$/)) return
 
-    const result = await postcss(tailwindcss).process(asset.content, {
-      from: asset.file,
-    })
+    const result = await postcss(tailwindcss).process(
+      await readFile(inputFile),
+      { from: inputFile },
+    )
+
     return {
       content: result.css,
       type: "text/css",

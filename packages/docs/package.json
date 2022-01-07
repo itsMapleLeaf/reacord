@@ -5,13 +5,14 @@
   "scripts": {
     "prepare": "node ./scripts/fix-heroicons.js",
     "serve": "esmo --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps src/main.tsx | pino-colada",
-    "dev": "nodemon --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
+    "dev": "nodemon --inspect --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
     "start": "NODE_ENV=production pnpm serve",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
     "@tailwindcss/typography": "^0.5.0",
+    "alpinejs": "^3.7.1",
     "clsx": "^1.1.1",
     "compression": "^1.7.4",
     "esbuild": "^0.14.10",
@@ -46,6 +47,7 @@
     "browser-sync": "^2.27.7",
     "execa": "^6.0.0",
     "nodemon": "^2.0.15",
+    "react-ssr-prepass": "^1.5.0",
     "rxjs": "^7.5.1",
     "tsup": "^5.11.10",
     "type-fest": "^2.8.0",

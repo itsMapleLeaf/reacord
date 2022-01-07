@@ -7,6 +7,9 @@ const tailwindCssPath = new URL(
   await import.meta.resolve!("tailwindcss/tailwind.css"),
 ).pathname
 
+const alpineJs = new URL(await import.meta.resolve!("alpinejs/dist/cdn.js"))
+  .pathname
+
 export function Html({
   title = "Reacord",
   description = packageJson.description,
@@ -35,13 +38,15 @@ export function Html({
           as="style"
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Rubik:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
         />
-        <link rel="stylesheet" href={assets.file(tailwindCssPath)} />
+        <link rel="stylesheet" href={assets.local(tailwindCssPath)} />
         <link
           rel="stylesheet"
-          href={assets.file(new URL("ui/prism-theme.css", import.meta.url))}
+          href={assets.local(new URL("ui/prism-theme.css", import.meta.url))}
         />
 
         <title>{title}</title>
+
+        <script defer src={assets.local(alpineJs, "alpine")} />
       </head>
       <body>{children}</body>
     </html>

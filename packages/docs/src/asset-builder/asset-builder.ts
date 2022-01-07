@@ -1,17 +1,16 @@
-import { RequestHandler } from "express"
+import express, { RequestHandler } from "express"
 import { createHash } from "node:crypto"
-import { readFileSync } from "node:fs"
-import { mkdir, stat, writeFile } from "node:fs/promises"
-import { dirname, extname, join, parse } from "node:path"
+import { mkdir, rm, writeFile } from "node:fs/promises"
+import { dirname, join, parse } from "node:path"
 
-export type Asset = {
-  file: string
+type Asset = {
+  inputFile: string
+  outputFile: string
   url: string
-  content: Buffer
 }
 
 export type AssetTransformer = {
-  transform: (asset: Asset) => Promise<AssetTransformResult | undefined>
+  transform: (inputFile: string) => Promise<AssetTransformResult | undefined>
 }
 
 export type AssetTransformResult = {
@@ -20,68 +19,75 @@ export type AssetTransformResult = {
 }
 
 export class AssetBuilder {
-  // map of asset urls to asset objects
   private library = new Map<string, Asset>()
 
-  constructor(
+  private constructor(
     private cacheFolder: string,
     private transformers: AssetTransformer[],
   ) {}
 
-  // accepts a path to a file, then returns a url to where the built file will be served
-  // the url will include a hash of the file contents
-  file(file: string | URL): string {
-    if (file instanceof URL) {
-      file = file.pathname
-    }
+  static async create(cacheFolder: string, transformers: AssetTransformer[]) {
+    await rm(cacheFolder, { recursive: true })
+    return new AssetBuilder(cacheFolder, transformers)
+  }
 
-    const existing = this.library.get(file)
+  async build(inputFile: string | URL, name?: string): Promise<string> {
+    inputFile = normalizeAsFilePath(inputFile)
+
+    const existing = this.library.get(inputFile)
     if (existing) {
       return existing.url
     }
 
-    const content = readFileSync(file)
-    const hash = createHash("sha256").update(content).digest("hex").slice(0, 8)
+    const transformResult = await this.transform(inputFile)
 
-    const { name, ext } = parse(file)
-    const url = `/${name}.${hash}${ext}`
-    this.library.set(url, { file, url, content })
+    const hash = createHash("sha256")
+      .update(transformResult.content)
+      .digest("hex")
+      .slice(0, 8)
+
+    const parsedInputFile = parse(inputFile)
+    const url = `/${name || parsedInputFile.name}.${hash}${parsedInputFile.ext}`
+    const outputFile = join(this.cacheFolder, url)
+
+    await ensureWrite(outputFile, transformResult.content)
+    this.library.set(inputFile, { inputFile, outputFile, url })
+
     return url
   }
 
-  middleware(): RequestHandler {
-    return async (req, res, next) => {
-      try {
-        const asset = this.library.get(req.path)
-        if (!asset) return next()
+  local(inputFile: string | URL, name?: string): string {
+    inputFile = normalizeAsFilePath(inputFile)
 
-        const file = join(this.cacheFolder, asset.url)
-        const extension = extname(file)
-
-        const stats = await stat(file).catch(() => undefined)
-        if (!stats?.isFile()) {
-          const transformResult = await this.transform(asset)
-          if (!transformResult) return next()
-
-          await mkdir(dirname(file), { recursive: true })
-          await writeFile(file, transformResult.content)
-        }
-
-        res
-          .status(200)
-          .type(extension.endsWith("tsx") ? "text/javascript" : extension)
-          .header("Cache-Control", "public, max-age=604800, immutable")
-          .sendFile(file)
-      } catch (error) {
-        next(error)
-      }
+    const asset = this.library.get(inputFile)
+    if (asset) {
+      return asset.url
     }
+
+    throw this.build(inputFile, name)
   }
 
-  private async transform(asset: Asset) {
+  middleware(): RequestHandler {
+    return express.static(this.cacheFolder, {
+      immutable: true,
+      maxAge: "1y",
+    })
+  }
+
+  private async transform(inputFile: string) {
     for (const transformer of this.transformers) {
-      const result = await transformer.transform(asset)
+      const result = await transformer.transform(inputFile)
       if (result) return result
     }
+    throw new Error(`No transformers found for ${inputFile}`)
   }
+}
+
+async function ensureWrite(file: string, content: string) {
+  await mkdir(dirname(file), { recursive: true })
+  await writeFile(file, content)
+}
+
+function normalizeAsFilePath(file: string | URL) {
+  return new URL(file, "file:").pathname
 }

@@ -49,6 +49,7 @@ importers:
       '@types/react-dom': ^17.0.9
       '@types/tailwindcss': ^3.0.0
       '@types/wait-on': ^5.3.1
+      alpinejs: ^3.7.1
       autoprefixer: ^10.4.1
       browser-sync: ^2.27.7
       clsx: ^1.1.1
@@ -71,6 +72,7 @@ importers:
       reacord: workspace:*
       react: ^18.0.0-rc.0
       react-dom: ^18.0.0-rc.0
+      react-ssr-prepass: ^1.5.0
       rxjs: ^7.5.1
       tailwindcss: ^3.0.8
       tsup: ^5.11.10
@@ -80,6 +82,7 @@ importers:
     dependencies:
       '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.8
+      alpinejs: 3.7.1
       clsx: 1.1.1
       compression: 1.7.4
       esbuild: 0.14.10
@@ -113,6 +116,7 @@ importers:
       browser-sync: 2.27.7
       execa: 6.0.0
       nodemon: 2.0.15
+      react-ssr-prepass: 1.5.0_react@18.0.0-rc.0
       rxjs: 7.5.1
       tsup: 5.11.10_typescript@4.5.4
       type-fest: 2.8.0
@@ -1370,6 +1374,16 @@ packages:
       eslint-visitor-keys: 3.1.0
     dev: true
 
+  /@vue/reactivity/3.1.5:
+    resolution: {integrity: sha512-1tdfLmNjWG6t/CsPldh+foumYFo3cpyCHgBYQ34ylaMsJ+SNHQ1kApMIa8jN+i593zQuaw3AdWH0nJTARzCFhg==}
+    dependencies:
+      '@vue/shared': 3.1.5
+    dev: false
+
+  /@vue/shared/3.1.5:
+    resolution: {integrity: sha512-oJ4F3TnvpXaQwZJNF3ZK+kLPHKarDmJjJ6jyzVNDKH9md1dptjC7lWR//jrGuLdek/U6iltWxqAnYOu8gCiOvA==}
+    dev: false
+
   /abab/2.0.5:
     resolution: {integrity: sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q==}
     dev: true
@@ -1451,6 +1465,12 @@ packages:
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
+
+  /alpinejs/3.7.1:
+    resolution: {integrity: sha512-OJDlhOT50+9REa4cpGHr4WlGBE9ysJEZ+IfN2xwmotUANxp1VSrYgBNBfUWJr9uQ1INhodzvi6UfIWoqQqYOnA==}
+    dependencies:
+      '@vue/reactivity': 3.1.5
+    dev: false
 
   /ansi-align/3.0.1:
     resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
@@ -6668,6 +6688,14 @@ packages:
       react: 17.0.2
       scheduler: 0.20.2
     dev: false
+
+  /react-ssr-prepass/1.5.0_react@18.0.0-rc.0:
+    resolution: {integrity: sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.0.0-rc.0
+    dev: true
 
   /react/17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}

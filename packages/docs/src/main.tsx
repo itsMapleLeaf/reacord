@@ -7,6 +7,7 @@ import pino from "pino"
 import pinoHttp from "pino-http"
 import * as React from "react"
 import { renderToStaticMarkup } from "react-dom/server.js"
+import ssrPrepass from "react-ssr-prepass"
 import { AssetBuilderProvider } from "./asset-builder/asset-builder-context.js"
 import { AssetBuilder } from "./asset-builder/asset-builder.js"
 import { transformEsbuild } from "./asset-builder/transform-esbuild.js"
@@ -20,14 +21,15 @@ import { Landing } from "./landing/landing"
 const logger = pino()
 const port = process.env.PORT || 3000
 
-const assets = new AssetBuilder(fromProjectRoot(".asset-cache"), [
+const assets = await AssetBuilder.create(fromProjectRoot(".asset-cache"), [
   transformEsbuild,
   transformPostCss,
 ])
 
-export function sendJsx(res: Response, jsx: React.ReactElement) {
-  res.set("Content-Type", "text/html")
-  res.send(`<!DOCTYPE html>\n${renderToStaticMarkup(jsx)}`)
+async function render(res: Response, element: React.ReactElement) {
+  element = <React.Suspense fallback={null}>{element}</React.Suspense>
+  await ssrPrepass(element)
+  res.type("html").send(`<!DOCTYPE html>\n${renderToStaticMarkup(element)}`)
 }
 
 const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
@@ -44,7 +46,7 @@ const router = Router()
     const { html, data } = await renderMarkdownFile(
       new URL(`guides/${req.params[0]}.md`, import.meta.url).pathname,
     )
-    sendJsx(
+    await render(
       res,
       <AssetBuilderProvider value={assets}>
         <Html title={`${data.title} | Reacord`} description={data.description}>
@@ -54,8 +56,8 @@ const router = Router()
     )
   })
 
-  .get("/", (req, res) => {
-    sendJsx(
+  .get("/", async (req, res) => {
+    await render(
       res,
       <AssetBuilderProvider value={assets}>
         <Html>
@@ -70,7 +72,7 @@ const router = Router()
 const server = express()
   .use(router)
   .listen(port, () => {
-    logger.info(`Server is running on https://localhost:${port}`)
+    logger.info(`Server is running on http://localhost:${port}`)
   })
 
 const terminator = httpTerminator.createHttpTerminator({ server })
