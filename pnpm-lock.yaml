@@ -86,6 +86,7 @@ importers:
       '@heroicons/react': 1.0.5_react@18.0.0-rc.0
       '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.8
       alpinejs: 3.7.1
+      autoprefixer: 10.4.1_postcss@8.4.5
       clsx: 1.1.1
       compression: 1.7.4
       cross-env: 7.0.3
@@ -106,6 +107,7 @@ importers:
       reacord: link:../reacord
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
+      react-ssr-prepass: 1.5.0_react@18.0.0-rc.0
       tailwindcss: 3.0.8_cefe482e8d38053bbf3d5815e0c551b3
     devDependencies:
       '@types/browser-sync': 2.26.3
@@ -118,11 +120,9 @@ importers:
       '@types/react-dom': 17.0.11
       '@types/tailwindcss': 3.0.0
       '@types/wait-on': 5.3.1
-      autoprefixer: 10.4.1_postcss@8.4.5
       browser-sync: 2.27.7
       execa: 6.0.0
       nodemon: 2.0.15
-      react-ssr-prepass: 1.5.0_react@18.0.0-rc.0
       rxjs: 7.5.1
       tsup: 5.11.10_typescript@4.5.4
       type-fest: 2.8.0
@@ -1704,7 +1704,7 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.5
       postcss-value-parser: 4.2.0
-    dev: true
+    dev: false
 
   /axe-core/4.3.5:
     resolution: {integrity: sha512-WKTW1+xAzhMS5dJsxWkliixlO/PqC4VhmO9T4juNYcaTg9jzWiJsou6m5pxWYGfigWbwzJWeFY6z47a+4neRXA==}
@@ -4077,7 +4077,7 @@ packages:
 
   /fraction.js/4.1.2:
     resolution: {integrity: sha512-o2RiJQ6DZaR/5+Si0qJUIy637QMRudSi9kU/FFzx9EZazrIdnBgpU+3sEWCxAVhH2RtxW2Oz+T4p2o8uOPVcgA==}
-    dev: true
+    dev: false
 
   /fragment-cache/0.2.1:
     resolution: {integrity: sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=}
@@ -6094,7 +6094,7 @@ packages:
   /normalize-range/0.1.2:
     resolution: {integrity: sha1-LRDAa9/TEuqXd2laTShDlFa3WUI=}
     engines: {node: '>=0.10.0'}
-    dev: true
+    dev: false
 
   /normalize-url/4.5.1:
     resolution: {integrity: sha512-9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==}
@@ -6954,6 +6954,7 @@ packages:
 
   /postcss-value-parser/4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
+    dev: false
 
   /postcss/8.4.5:
     resolution: {integrity: sha512-jBDboWM8qpaqwkMwItqTQTiFikhs/67OYVvblFFTM7MrZjt6yMKd6r2kgXizEbTTljacm4NldIlZnhbjr84QYg==}
@@ -7168,7 +7169,7 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.0.0-rc.0
-    dev: true
+    dev: false
 
   /react/17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
