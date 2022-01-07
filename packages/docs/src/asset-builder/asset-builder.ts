@@ -28,7 +28,7 @@ export class AssetBuilder {
   ) {}
 
   static async create(cacheFolder: string, transformers: AssetTransformer[]) {
-    await rm(cacheFolder, { recursive: true })
+    await rm(cacheFolder, { recursive: true }).catch()
     return new AssetBuilder(cacheFolder, transformers)
   }
 
