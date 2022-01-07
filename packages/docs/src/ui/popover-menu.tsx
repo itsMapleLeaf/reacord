@@ -1,27 +1,26 @@
 import { MenuAlt4Icon } from "@heroicons/react/outline/esm"
 import clsx from "clsx"
 import React from "react"
-import { useAssetBuilder } from "../asset-builder/asset-builder-context.js"
 import { linkClass } from "./components"
 
 export function PopoverMenu({ children }: { children: React.ReactNode }) {
-  const assets = useAssetBuilder()
   return (
-    <div data-popover className="relative">
-      <button data-popover-button title="Menu" className={linkClass}>
+    <div className="relative" x-data="{ open: false }">
+      <button title="Menu" className={linkClass} x-on:click="open = !open">
         <MenuAlt4Icon className="w-6" />
       </button>
       <div
-        data-popover-panel
-        hidden
-        className="absolute w-48 bg-slate-800 rounded-lg shadow overflow-hidden max-h-[calc(100vh-4rem)] overflow-y-auto right-0 top-[calc(100%+8px)]"
+        className={`
+          w-48 max-h-[calc(100vh-4rem)]
+          absolute right-0 top-[calc(100%+8px)]
+          bg-slate-800 shadow rounded-lg
+          overflow-hidden overflow-y-auto 
+          transition-all
+        `}
+        x-bind:class="open ? 'visible opacity-100' : 'invisible opacity-0 translate-y-3'"
       >
         {children}
       </div>
-      <script
-        type="module"
-        src={assets.file(new URL("popover-menu.client.tsx", import.meta.url))}
-      />
     </div>
   )
 }
