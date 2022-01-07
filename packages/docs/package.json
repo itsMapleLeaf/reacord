@@ -3,6 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "prepare": "node ./scripts/fix-heroicons.js",
     "serve": "esmo --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps src/main.tsx | pino-colada",
     "dev": "nodemon --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
     "start": "NODE_ENV=production pnpm serve",
