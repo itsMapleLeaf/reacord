@@ -24,5 +24,6 @@
   },
   "resolutions": {
     "esbuild": "latest"
-  }
+  },
+  "prettier": "@itsmapleleaf/configs/prettier"
 }

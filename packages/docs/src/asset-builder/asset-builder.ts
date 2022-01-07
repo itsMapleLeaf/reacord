@@ -1,4 +1,5 @@
-import express, { RequestHandler } from "express"
+import type { RequestHandler } from "express"
+import express from "express"
 import { createHash } from "node:crypto"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { dirname, join, parse } from "node:path"

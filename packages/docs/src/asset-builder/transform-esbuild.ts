@@ -1,9 +1,9 @@
 import { build } from "esbuild"
-import { AssetTransformer } from "./asset-builder.js"
+import type { AssetTransformer } from "./asset-builder.js"
 
 export const transformEsbuild: AssetTransformer = {
   async transform(inputFile) {
-    if (inputFile.match(/\.[jt]sx?$/)) {
+    if (/\.[jt]sx?$/.test(inputFile)) {
       const scriptBuild = await build({
         entryPoints: [inputFile],
         bundle: true,

@@ -27,7 +27,7 @@ const assets = await AssetBuilder.create(fromProjectRoot(".asset-cache"), [
 ])
 
 async function render(res: Response, element: React.ReactElement) {
-  element = <React.Suspense fallback={null}>{element}</React.Suspense>
+  element = <React.Suspense fallback={<></>}>{element}</React.Suspense>
   await ssrPrepass(element)
   res.type("html").send(`<!DOCTYPE html>\n${renderToStaticMarkup(element)}`)
 }

@@ -1,13 +1,14 @@
 import autoprefixer from "autoprefixer"
 import cssnano from "cssnano"
-import { readFile } from "fs/promises"
-import postcss, { AcceptedPlugin } from "postcss"
+import { readFile } from "node:fs/promises"
+import type { AcceptedPlugin } from "postcss"
+import postcss from "postcss"
 import tailwindcss from "tailwindcss"
-import { AssetTransformer } from "./asset-builder.js"
+import type { AssetTransformer } from "./asset-builder.js"
 
 export const transformPostCss: AssetTransformer = {
   async transform(inputFile) {
-    if (!inputFile.match(/\.css$/)) return
+    if (!/\.css$/.test(inputFile)) return
 
     const plugins: AcceptedPlugin[] = [tailwindcss, autoprefixer]
 
