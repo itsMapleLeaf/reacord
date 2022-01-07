@@ -63,6 +63,7 @@ export class AssetBuilder {
           res
             .status(200)
             .type(extension.endsWith("tsx") ? "text/javascript" : extension)
+            .header("Cache-Control", "public, max-age=604800, immutable")
             .sendFile(file)
           return
         }
