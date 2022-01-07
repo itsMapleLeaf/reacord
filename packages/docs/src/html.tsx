@@ -31,13 +31,14 @@ export function Html({
           crossOrigin=""
         />
         <link
+          rel="preload"
+          as="style"
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Rubik:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
-          rel="stylesheet"
         />
-        <link href={assets.file(tailwindCssPath)} rel="stylesheet" />
+        <link rel="stylesheet" href={assets.file(tailwindCssPath)} />
         <link
-          href={assets.file(new URL("ui/prism-theme.css", import.meta.url))}
           rel="stylesheet"
+          href={assets.file(new URL("ui/prism-theme.css", import.meta.url))}
         />
 
         <title>{title}</title>
