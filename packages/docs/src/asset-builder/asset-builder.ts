@@ -28,7 +28,10 @@ export class AssetBuilder {
   ) {}
 
   static async create(cacheFolder: string, transformers: AssetTransformer[]) {
-    await rm(cacheFolder, { recursive: true }).catch()
+    if (process.env.NODE_ENV !== "production") {
+      await rm(cacheFolder, { recursive: true }).catch()
+    }
+    await mkdir(cacheFolder, { recursive: true })
     return new AssetBuilder(cacheFolder, transformers)
   }
 
