@@ -1,14 +1,7 @@
 import packageJson from "reacord/package.json"
 import type { ReactNode } from "react"
 import React from "react"
-import { useAssetBuilder } from "./asset-builder/asset-builder-context.js"
-
-const tailwindCssPath = new URL(
-  await import.meta.resolve!("tailwindcss/tailwind.css"),
-).pathname
-
-const alpineJs = new URL(await import.meta.resolve!("alpinejs/dist/cdn.js"))
-  .pathname
+import { LocalFileAsset, ModuleAsset } from "./asset-builder/asset.js"
 
 export function Html({
   title = "Reacord",
@@ -19,7 +12,6 @@ export function Html({
   description?: string
   children: ReactNode
 }) {
-  const assets = useAssetBuilder()
   return (
     <html lang="en" className="bg-slate-900 text-slate-100">
       <head>
@@ -38,15 +30,20 @@ export function Html({
           as="style"
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Rubik:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
         />
-        <link rel="stylesheet" href={assets.local(tailwindCssPath)} />
-        <link
-          rel="stylesheet"
-          href={assets.local(new URL("ui/prism-theme.css", import.meta.url))}
-        />
+
+        <ModuleAsset from="tailwindcss/tailwind.css">
+          {(url) => <link rel="stylesheet" href={url} />}
+        </ModuleAsset>
+
+        <LocalFileAsset from={new URL("ui/prism-theme.css", import.meta.url)}>
+          {(url) => <link rel="stylesheet" href={url} />}
+        </LocalFileAsset>
 
         <title>{title}</title>
 
-        <script defer src={assets.local(alpineJs, "alpine")} />
+        <ModuleAsset from="alpinejs/dist/cdn.js" as="alpine">
+          {(url) => <script defer src={url} />}
+        </ModuleAsset>
       </head>
       <body>{children}</body>
     </html>

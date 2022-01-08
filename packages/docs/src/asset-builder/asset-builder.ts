@@ -1,10 +1,12 @@
 import type { RequestHandler } from "express"
 import express from "express"
 import { createHash } from "node:crypto"
-import { mkdir, rm, writeFile } from "node:fs/promises"
-import { dirname, join, parse } from "node:path"
+import { mkdir, rm } from "node:fs/promises"
+import { join, parse } from "node:path"
+import { Promisable } from "type-fest"
+import { ensureWrite, normalizeAsFilePath } from "../helpers/filesystem.js"
 
-type Asset = {
+export type Asset = {
   inputFile: string
   outputFile: string
   url: string
@@ -20,8 +22,6 @@ export type AssetTransformResult = {
 }
 
 export class AssetBuilder {
-  private library = new Map<string, Asset>()
-
   private constructor(
     private cacheFolder: string,
     private transformers: AssetTransformer[],
@@ -29,19 +29,14 @@ export class AssetBuilder {
 
   static async create(cacheFolder: string, transformers: AssetTransformer[]) {
     if (process.env.NODE_ENV !== "production") {
-      await rm(cacheFolder, { recursive: true }).catch()
+      await rm(cacheFolder, { recursive: true }).catch(() => {})
     }
     await mkdir(cacheFolder, { recursive: true })
     return new AssetBuilder(cacheFolder, transformers)
   }
 
-  async build(inputFile: string | URL, name?: string): Promise<string> {
-    inputFile = normalizeAsFilePath(inputFile)
-
-    const existing = this.library.get(inputFile)
-    if (existing) {
-      return existing.url
-    }
+  async build(input: Promisable<string | URL>, name?: string): Promise<Asset> {
+    const inputFile = normalizeAsFilePath(await input)
 
     const transformResult = await this.transform(inputFile)
 
@@ -55,20 +50,8 @@ export class AssetBuilder {
     const outputFile = join(this.cacheFolder, url)
 
     await ensureWrite(outputFile, transformResult.content)
-    this.library.set(inputFile, { inputFile, outputFile, url })
 
-    return url
-  }
-
-  local(inputFile: string | URL, name?: string): string {
-    inputFile = normalizeAsFilePath(inputFile)
-
-    const asset = this.library.get(inputFile)
-    if (asset) {
-      return asset.url
-    }
-
-    throw this.build(inputFile, name)
+    return { inputFile, outputFile, url }
   }
 
   middleware(): RequestHandler {
@@ -85,13 +68,4 @@ export class AssetBuilder {
     }
     throw new Error(`No transformers found for ${inputFile}`)
   }
-}
-
-async function ensureWrite(file: string, content: string) {
-  await mkdir(dirname(file), { recursive: true })
-  await writeFile(file, content)
-}
-
-function normalizeAsFilePath(file: string | URL) {
-  return new URL(file, "file:").pathname
 }
