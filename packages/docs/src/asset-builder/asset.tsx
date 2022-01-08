@@ -1,15 +1,15 @@
 import React, { ReactNode } from "react"
 import { normalizeAsFilePath } from "../helpers/filesystem.js"
 import { useAssetBuilder } from "./asset-builder-context.js"
-import { Asset, AssetBuilder } from "./asset-builder.js"
+import { AssetBuilder, AssetTransformer } from "./asset-builder.js"
 
 type AssetState =
   | { status: "building"; promise: Promise<unknown> }
-  | { status: "built"; asset: Asset }
+  | { status: "built"; asset: unknown }
 
 const cache = new Map<string, AssetState>()
 
-function useAssetBuild(
+function useAssetBuild<Asset>(
   cacheKey: string,
   build: (builder: AssetBuilder) => Promise<Asset>,
 ) {
@@ -29,33 +29,37 @@ function useAssetBuild(
     throw state.promise
   }
 
-  return state.asset
+  return state.asset as Asset
 }
 
-export function LocalFileAsset({
+export function LocalFileAsset<Asset>({
   from,
-  as: name,
+  using: transformer,
+  as: alias,
   children,
 }: {
   from: string | URL
+  using: AssetTransformer<Asset>
   as?: string
   children: (url: Asset) => ReactNode
 }) {
   const inputFile = normalizeAsFilePath(from)
 
   const asset = useAssetBuild(inputFile, (builder) => {
-    return builder.build(inputFile, name)
+    return builder.build(inputFile, transformer, alias)
   })
 
   return <>{children(asset)}</>
 }
 
-export function ModuleAsset({
+export function ModuleAsset<Asset>({
   from,
+  using: transformer,
   as: name,
   children,
 }: {
   from: string
+  using: AssetTransformer<Asset>
   as?: string
   children: (url: Asset) => ReactNode
 }) {
@@ -63,7 +67,7 @@ export function ModuleAsset({
 
   const asset = useAssetBuild(cacheKey, async (builder) => {
     const inputFile = await import.meta.resolve!(from)
-    return await builder.build(inputFile, name)
+    return await builder.build(inputFile, transformer, name)
   })
 
   return <>{children(asset)}</>
