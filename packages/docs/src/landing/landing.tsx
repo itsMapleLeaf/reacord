@@ -1,12 +1,8 @@
 import packageJson from "reacord/package.json"
 import React from "react"
-import { renderMarkdownFile } from "../helpers/markdown"
+import { LocalFileAsset } from "../asset-builder/asset.js"
 import { MainNavigation } from "../navigation/main-navigation"
 import { maxWidthContainer } from "../ui/components"
-
-const landingExample = await renderMarkdownFile(
-  new URL("landing-example.md", import.meta.url).pathname,
-)
 
 export function Landing() {
   return (
@@ -17,10 +13,14 @@ export function Landing() {
       <div className="px-4 pb-8 flex flex-1">
         <main className="px-4 py-6 rounded-lg shadow bg-slate-800 space-y-5 m-auto w-full max-w-xl">
           <h1 className="text-6xl font-light">reacord</h1>
-          <section
-            className="mx-auto text-sm sm:text-base"
-            dangerouslySetInnerHTML={{ __html: landingExample.html }}
-          />
+          <LocalFileAsset from={new URL("landing-example.md", import.meta.url)}>
+            {(asset) => (
+              <section
+                className="mx-auto text-sm sm:text-base"
+                dangerouslySetInnerHTML={{ __html: asset.content }}
+              />
+            )}
+          </LocalFileAsset>
           <p className="text-2xl font-light">{packageJson.description}</p>
           <a
             href="/guides/getting-started"

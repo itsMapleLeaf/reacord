@@ -11,9 +11,10 @@ import ssrPrepass from "react-ssr-prepass"
 import { AssetBuilderProvider } from "./asset-builder/asset-builder-context.js"
 import { AssetBuilder } from "./asset-builder/asset-builder.js"
 import { transformEsbuild } from "./asset-builder/transform-esbuild.js"
+import { transformMarkdown } from "./asset-builder/transform-markdown.js"
 import { transformPostCss } from "./asset-builder/transform-postcss.js"
 import { fromProjectRoot } from "./constants"
-import GuidePage from "./guides/guide-page"
+import { GuidePage } from "./guides/guide-page"
 import { renderMarkdownFile } from "./helpers/markdown"
 import { Html } from "./html.js"
 import { Landing } from "./landing/landing"
@@ -24,6 +25,7 @@ const port = process.env.PORT || 3000
 const assets = await AssetBuilder.create(fromProjectRoot(".asset-cache"), [
   transformEsbuild,
   transformPostCss,
+  transformMarkdown,
 ])
 
 async function render(res: Response, element: React.ReactElement) {
@@ -43,14 +45,14 @@ const router = Router()
   .use(assets.middleware())
 
   .get("/guides/*", async (req: Request<{ 0: string }>, res) => {
-    const { html, data } = await renderMarkdownFile(
+    const { data } = await renderMarkdownFile(
       new URL(`guides/${req.params[0]}.md`, import.meta.url).pathname,
     )
     await render(
       res,
       <AssetBuilderProvider value={assets}>
         <Html title={`${data.title} | Reacord`} description={data.description}>
-          <GuidePage html={html} />
+          <GuidePage url={req.params[0]} />
         </Html>
       </AssetBuilderProvider>,
     )
