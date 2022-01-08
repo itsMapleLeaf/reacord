@@ -29,7 +29,7 @@ function useAssetBuild(
     throw state.promise
   }
 
-  return state.asset.url
+  return state.asset
 }
 
 export function LocalFileAsset({
@@ -39,15 +39,15 @@ export function LocalFileAsset({
 }: {
   from: string | URL
   as?: string
-  children: (url: string) => ReactNode
+  children: (url: Asset) => ReactNode
 }) {
   const inputFile = normalizeAsFilePath(from)
 
-  const url = useAssetBuild(inputFile, (builder) => {
+  const asset = useAssetBuild(inputFile, (builder) => {
     return builder.build(inputFile, name)
   })
 
-  return <>{children(url)}</>
+  return <>{children(asset)}</>
 }
 
 export function ModuleAsset({
@@ -57,14 +57,14 @@ export function ModuleAsset({
 }: {
   from: string
   as?: string
-  children: (url: string) => ReactNode
+  children: (url: Asset) => ReactNode
 }) {
   const cacheKey = `node:${from}`
 
-  const url = useAssetBuild(cacheKey, async (builder) => {
+  const asset = useAssetBuild(cacheKey, async (builder) => {
     const inputFile = await import.meta.resolve!(from)
     return await builder.build(inputFile, name)
   })
 
-  return <>{children(url)}</>
+  return <>{children(asset)}</>
 }

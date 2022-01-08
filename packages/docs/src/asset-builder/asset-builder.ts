@@ -10,6 +10,7 @@ export type Asset = {
   inputFile: string
   outputFile: string
   url: string
+  content: string
 }
 
 export type AssetTransformer = {
@@ -37,21 +38,16 @@ export class AssetBuilder {
 
   async build(input: Promisable<string | URL>, name?: string): Promise<Asset> {
     const inputFile = normalizeAsFilePath(await input)
+    const { content } = await this.transform(inputFile)
 
-    const transformResult = await this.transform(inputFile)
-
-    const hash = createHash("sha256")
-      .update(transformResult.content)
-      .digest("hex")
-      .slice(0, 8)
-
+    const hash = createHash("sha256").update(content).digest("hex").slice(0, 8)
     const parsedInputFile = parse(inputFile)
     const url = `/${name || parsedInputFile.name}.${hash}${parsedInputFile.ext}`
+
     const outputFile = join(this.cacheFolder, url)
+    await ensureWrite(outputFile, content)
 
-    await ensureWrite(outputFile, transformResult.content)
-
-    return { inputFile, outputFile, url }
+    return { inputFile, outputFile, url, content }
   }
 
   middleware(): RequestHandler {

@@ -32,17 +32,17 @@ export function Html({
         />
 
         <ModuleAsset from="tailwindcss/tailwind.css">
-          {(url) => <link rel="stylesheet" href={url} />}
+          {(asset) => <link rel="stylesheet" href={asset.url} />}
         </ModuleAsset>
 
         <LocalFileAsset from={new URL("ui/prism-theme.css", import.meta.url)}>
-          {(url) => <link rel="stylesheet" href={url} />}
+          {(asset) => <link rel="stylesheet" href={asset.url} />}
         </LocalFileAsset>
 
         <title>{title}</title>
 
         <ModuleAsset from="alpinejs/dist/cdn.js" as="alpine">
-          {(url) => <script defer src={url} />}
+          {(asset) => <script defer src={asset.url} />}
         </ModuleAsset>
       </head>
       <body>{children}</body>
