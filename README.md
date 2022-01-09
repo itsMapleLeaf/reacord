@@ -21,3 +21,4 @@ function Counter() {
   )
 }
 ```
+![Counter demo](./reacord-counter-demo.gif)
