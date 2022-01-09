@@ -6,7 +6,7 @@ import { join, parse } from "node:path"
 import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import ssrPrepass from "react-ssr-prepass"
-import { Promisable } from "type-fest"
+import type { Promisable } from "type-fest"
 import { ensureWrite, normalizeAsFilePath } from "../helpers/filesystem.js"
 import { AssetBuilderProvider } from "./asset-builder-context.js"
 
