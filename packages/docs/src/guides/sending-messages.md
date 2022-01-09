@@ -87,15 +87,15 @@ const reacord = new ReacordDiscordJs(client)
 
 client.on("ready", () => {
   client.application?.commands.create({
-    name: "pong",
+    name: "ping",
     description: "pong!",
   })
 })
 
 client.on("interactionCreate", (interaction) => {
-  if (interaction.isCommand() && interaction.commandName === "pong") {
+  if (interaction.isCommand() && interaction.commandName === "ping") {
     // Use the reply() function instead of send
-    reacord.reply(interaction, <>pong</>)
+    reacord.reply(interaction, <>pong!</>)
   }
 })
 
@@ -131,10 +131,10 @@ function handleCommands(client, commands) {
 ```jsx
 handleCommands(client, [
   {
-    name: "pong",
+    name: "ping",
     description: "pong!",
     run: (interaction) => {
-      reacord.reply(interaction, <>pong</>)
+      reacord.reply(interaction, <>pong!</>)
     },
   },
   {
