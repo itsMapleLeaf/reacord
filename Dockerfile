@@ -11,4 +11,5 @@ RUN pnpm run build -C packages/docs
 RUN pnpm install -C packages/docs --prod --unsafe-perm --frozen-lockfile
 RUN pnpm store prune
 
-CMD [ "pnpm", "start", "-C", "packages/docs" ]
+ENV NODE_ENV=production
+CMD [ "pnpm", "-C", "packages/docs", "serve" ]
