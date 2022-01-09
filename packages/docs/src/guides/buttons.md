@@ -23,22 +23,23 @@ function Counter() {
 }
 ```
 
-The `onClick` callback receives an `event` object. It includes some information, such as the user who clicked the button, and a function for creating new replies in response.
+The `onClick` callback receives an `event` object. It includes some information, such as the user who clicked the button, and functions for creating new replies in response. These functions return message instances.
 
 ```jsx
 import { Button } from "reacord"
 
 function TheButton() {
-  return (
-    <Button
-      label="click me i dare you"
-      onClick={(event) => {
-        const name = event.guild.member.displayName || event.user.username
-        event.reply(`${name} clicked the button. wow`)
-        event.ephemeralReply("good job, you clicked it")
-      }}
-    />
-  )
+  function handleClick(event) {
+    const name = event.guild.member.displayName || event.user.username
+
+    const publicReply = event.reply(`${name} clicked the button. wow`)
+    setTimeout(() => publicReply.destroy(), 3000)
+
+    const privateReply = event.ephemeralReply("good job, you clicked it")
+    privateReply.deactivate() // we don't need to listen to updates on this
+  }
+
+  return <Button label="click me i dare you" onClick={handleClick} />
 }
 ```
 
