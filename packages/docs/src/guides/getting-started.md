@@ -14,13 +14,13 @@ This guide assumes some familiarity with JavaScript, [React](https://reactjs.org
 
 ```bash
 # npm
-npm install reacord discord.js
+npm install reacord react discord.js
 
 # yarn
-yarn add reacord discord.js
+yarn add reacord react discord.js
 
 # pnpm
-pnpm add reacord discord.js
+pnpm add reacord react discord.js
 ```
 
 ## Setup
