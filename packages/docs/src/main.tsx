@@ -6,7 +6,6 @@ import httpTerminator from "http-terminator"
 import pino from "pino"
 import pinoHttp from "pino-http"
 import * as React from "react"
-import { serveApiDocs } from "./api/serve-api-docs"
 import { AssetBuilder } from "./asset-builder/asset-builder.js"
 import { fromProjectRoot } from "./constants"
 import { GuidePage } from "./guides/guide-page"
@@ -25,7 +24,7 @@ const router = PromiseRouter()
   .use(pinoHttp({ logger }))
   .use(compression())
   .use(builder.middleware())
-  .use("/api", serveApiDocs())
+  .use("/api", express.static("api"))
 
   .get("/guides/*", async (req: Request<{ 0: string }>, res) => {
     res

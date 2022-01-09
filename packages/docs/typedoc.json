@@ -1,6 +1,6 @@
 {
   "entryPoints": ["../reacord/library/main.ts"],
-  "out": ["public/docs/api"],
+  "out": ["api"],
   "tsconfig": "../reacord/tsconfig.json",
   "excludeInternal": true,
   "excludePrivate": true,
@@ -8,5 +8,15 @@
   "categorizeByGroup": false,
   "preserveWatchOutput": true,
   "githubPages": false,
-  "readme": "none"
+  "readme": "none",
+  "categoryOrder": [
+    "Core",
+    "Embed",
+    "Button",
+    "Link",
+    "Select",
+    "Action Row",
+    "Component Event",
+    "*"
+  ]
 }
