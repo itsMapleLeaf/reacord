@@ -35,6 +35,9 @@ import { Reacord } from "./reacord"
 
 const nextTickPromise = promisify(nextTick)
 
+/**
+ * A Record adapter for automated tests. WIP
+ */
 export class ReacordTester extends Reacord {
   private messageContainer = new Container<TestMessage>()
 

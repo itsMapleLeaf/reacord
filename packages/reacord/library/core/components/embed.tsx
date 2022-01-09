@@ -8,6 +8,9 @@ import { TextNode } from "../../internal/text-node"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
+/**
+ * @category Embed
+ */
 export type EmbedProps = {
   title?: string
   description?: string
@@ -23,6 +26,9 @@ export type EmbedProps = {
   children?: React.ReactNode
 }
 
+/**
+ * @category Embed
+ */
 export function Embed(props: EmbedProps) {
   return (
     <ReacordElement props={props} createNode={() => new EmbedNode(props)}>

@@ -6,7 +6,7 @@ import { Node } from "../../internal/node.js"
 
 /**
  * Props for an action row
- * @category Components
+ * @category Action Row
  */
 export type ActionRowProps = {
   children?: ReactNode
@@ -26,7 +26,7 @@ export type ActionRowProps = {
  * <Button onClick={handleSecond}>Second</Button>
  * ```
  *
- * @category Components
+ * @category Action Row
  * @see https://discord.com/developers/docs/interactions/message-components#action-rows
  */
 export function ActionRow(props: ActionRowProps) {

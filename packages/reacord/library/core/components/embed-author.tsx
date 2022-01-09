@@ -3,6 +3,9 @@ import { ReacordElement } from "../../internal/element.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
+/**
+ * @category Embed
+ */
 export type EmbedAuthorProps = {
   name?: string
   children?: string
@@ -10,6 +13,9 @@ export type EmbedAuthorProps = {
   iconUrl?: string
 }
 
+/**
+ * @category Embed
+ */
 export function EmbedAuthor(props: EmbedAuthorProps) {
   return (
     <ReacordElement

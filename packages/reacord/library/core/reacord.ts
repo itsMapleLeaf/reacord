@@ -4,6 +4,9 @@ import { reconciler } from "../internal/reconciler.js"
 import type { Renderer } from "../internal/renderers/renderer"
 import type { ReacordInstance } from "./instance"
 
+/**
+ * @category Core
+ */
 export type ReacordConfig = {
   /**
    * The max number of active instances.
@@ -12,10 +15,10 @@ export type ReacordConfig = {
   maxInstances?: number
 }
 
-export type ComponentInteractionListener = (
-  interaction: ComponentInteraction,
-) => void
-
+/**
+ * The main Reacord class that other Reacord adapters should extend.
+ * Only use this directly if you're making [a custom adapter](/guides/custom-adapters).
+ */
 export abstract class Reacord {
   private renderers: Renderer[] = []
 

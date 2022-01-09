@@ -9,6 +9,9 @@ import { Node } from "../../internal/node.js"
 import type { ComponentEvent } from "../component-event"
 import { OptionNode } from "./option-node"
 
+/**
+ * @category Select
+ */
 export type SelectProps = {
   children?: ReactNode
   value?: string
@@ -23,10 +26,16 @@ export type SelectProps = {
   onChangeMultiple?: (values: string[], event: SelectChangeEvent) => void
 }
 
+/**
+ * @category Select
+ */
 export type SelectChangeEvent = ComponentEvent & {
   values: string[]
 }
 
+/**
+ * @category Select
+ */
 export function Select(props: SelectProps) {
   return (
     <ReacordElement props={props} createNode={() => new SelectNode(props)}>

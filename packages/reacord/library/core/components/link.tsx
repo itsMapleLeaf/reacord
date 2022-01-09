@@ -4,6 +4,9 @@ import type { MessageOptions } from "../../internal/message"
 import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 
+/**
+ * @category Link
+ */
 export type LinkProps = {
   label?: string
   children?: string
@@ -12,6 +15,9 @@ export type LinkProps = {
   url: string
 }
 
+/**
+ * @category Link
+ */
 export function Link(props: LinkProps) {
   return <ReacordElement props={props} createNode={() => new LinkNode(props)} />
 }

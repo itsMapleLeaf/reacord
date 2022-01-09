@@ -3,6 +3,9 @@ import { ReacordElement } from "../../internal/element.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
+/**
+ * @category Embed
+ */
 export type EmbedFooterProps = {
   text?: string
   children?: string
@@ -10,6 +13,9 @@ export type EmbedFooterProps = {
   timestamp?: string | number | Date
 }
 
+/**
+ * @category Embed
+ */
 export function EmbedFooter(props: EmbedFooterProps) {
   return (
     <ReacordElement

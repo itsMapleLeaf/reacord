@@ -1,6 +1,9 @@
 import type { ReactNode } from "react"
 import type { ReacordInstance } from "./instance"
 
+/**
+ * @category Component Event
+ */
 export type ComponentEvent = {
   message: MessageInfo
   channel: ChannelInfo
@@ -10,6 +13,9 @@ export type ComponentEvent = {
   ephemeralReply(content?: ReactNode): ReacordInstance
 }
 
+/**
+ * @category Component Event
+ */
 export type ChannelInfo = {
   id: string
   name?: string
@@ -21,6 +27,9 @@ export type ChannelInfo = {
   rateLimitPerUser?: number
 }
 
+/**
+ * @category Component Event
+ */
 export type MessageInfo = {
   id: string
   channelId: string
@@ -35,12 +44,18 @@ export type MessageInfo = {
   mentions: string[]
 }
 
+/**
+ * @category Component Event
+ */
 export type GuildInfo = {
   id: string
   name: string
   member: GuildMemberInfo
 }
 
+/**
+ * @category Component Event
+ */
 export type GuildMemberInfo = {
   id: string
   nick?: string
@@ -55,6 +70,9 @@ export type GuildMemberInfo = {
   communicationDisabledUntil?: string
 }
 
+/**
+ * @category Component Event
+ */
 export type UserInfo = {
   id: string
   username: string

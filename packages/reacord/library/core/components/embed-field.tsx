@@ -3,6 +3,9 @@ import { ReacordElement } from "../../internal/element.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
+/**
+ * @category Embed
+ */
 export type EmbedFieldProps = {
   name: string
   value?: string
@@ -10,6 +13,9 @@ export type EmbedFieldProps = {
   children?: string
 }
 
+/**
+ * @category Embed
+ */
 export function EmbedField(props: EmbedFieldProps) {
   return (
     <ReacordElement

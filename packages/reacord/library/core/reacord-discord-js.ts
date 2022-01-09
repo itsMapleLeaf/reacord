@@ -21,6 +21,10 @@ import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
+/**
+ * The Reacord adapter for Discord.js.
+ * @category Core
+ */
 export class ReacordDiscordJs extends Reacord {
   constructor(private client: Discord.Client, config: ReacordConfig = {}) {
     super(config)
@@ -34,6 +38,12 @@ export class ReacordDiscordJs extends Reacord {
     })
   }
 
+  /**
+   * Sends a message to a channel.
+   * @param channelId The ID of the channel to create a message in.
+   * @param initialContent The initial content of the message.
+   * @returns A Record instance.
+   */
   override send(
     channelId: string,
     initialContent?: React.ReactNode,

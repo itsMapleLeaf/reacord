@@ -7,6 +7,9 @@ import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 import type { ComponentEvent } from "../component-event"
 
+/**
+ * @category Button
+ */
 export type ButtonProps = {
   label?: string
   style?: "primary" | "secondary" | "success" | "danger"
@@ -14,9 +17,14 @@ export type ButtonProps = {
   emoji?: string
   onClick: (event: ButtonClickEvent) => void
 }
-
+/**
+ * @category Button
+ */
 export type ButtonClickEvent = ComponentEvent
 
+/**
+ * @category Button
+ */
 export function Button(props: ButtonProps) {
   return (
     <ReacordElement props={props} createNode={() => new ButtonNode(props)} />

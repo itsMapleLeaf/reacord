@@ -3,10 +3,16 @@ import { ReacordElement } from "../../internal/element.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
+/**
+ * @category Embed
+ */
 export type EmbedThumbnailProps = {
   url: string
 }
 
+/**
+ * @category Embed
+ */
 export function EmbedThumbnail(props: EmbedThumbnailProps) {
   return (
     <ReacordElement
