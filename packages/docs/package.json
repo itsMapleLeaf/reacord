@@ -9,7 +9,7 @@
     "dev-server": "nodemon --inspect --enable-source-maps --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
     "dev-docs": "typedoc --watch",
     "build": "typedoc",
-    "start": "cross-env NODE_ENV=production pnpm serve",
+    "start": "NODE_ENV=production pnpm serve",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
