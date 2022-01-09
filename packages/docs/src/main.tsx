@@ -24,7 +24,7 @@ const router = PromiseRouter()
   .use(pinoHttp({ logger }))
   .use(compression())
   .use(builder.middleware())
-  .use("/api", express.static("api"))
+  .use("/api", express.static("dist/api"))
 
   .get("/guides/*", async (req: Request<{ 0: string }>, res) => {
     res
