@@ -47,6 +47,12 @@ export function Html({
         >
           {(asset) => <link rel="stylesheet" href={asset.url} />}
         </LocalFileAsset>
+        <LocalFileAsset
+          from={new URL("ui/markdown.css", import.meta.url)}
+          using={stylesheetTransformer}
+        >
+          {(asset) => <link rel="stylesheet" href={asset.url} />}
+        </LocalFileAsset>
 
         <title>{title}</title>
 
