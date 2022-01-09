@@ -21,4 +21,4 @@ function Counter() {
   )
 }
 ```
-![Counter demo](./reacord-counter-demo.gif)
+![Counter demo](./reacord-counter-demo-optimized.gif)
