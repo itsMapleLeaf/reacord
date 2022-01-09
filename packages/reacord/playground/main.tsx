@@ -58,7 +58,15 @@ createCommandHandler(client, [
     name: "select",
     description: "shows a select",
     run: (interaction) => {
-      reacord.reply(interaction, <FruitSelect />)
+      const instance = reacord.reply(
+        interaction,
+        <FruitSelect
+          onConfirm={(value) => {
+            instance.render(`you chose ${value}`)
+            instance.deactivate()
+          }}
+        />,
+      )
     },
   },
   {

@@ -1,17 +1,15 @@
 import React, { useState } from "react"
 import { Button, Option, Select } from "../library/main"
 
-export function FruitSelect() {
+export function FruitSelect({
+  onConfirm,
+}: {
+  onConfirm: (choice: string) => void
+}) {
   const [value, setValue] = useState<string>()
-  const [finalChoice, setFinalChoice] = useState<string>()
-
-  if (finalChoice) {
-    return <>you chose {finalChoice}</>
-  }
 
   return (
     <>
-      {"_ _"}
       <Select
         placeholder="choose a fruit"
         value={value}
@@ -24,7 +22,9 @@ export function FruitSelect() {
       <Button
         label="confirm"
         disabled={value == undefined}
-        onClick={() => setFinalChoice(value)}
+        onClick={() => {
+          if (value) onConfirm(value)
+        }}
       />
     </>
   )
