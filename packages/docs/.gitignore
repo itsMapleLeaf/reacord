@@ -1,3 +1,7 @@
-.asset-cache
 node_modules
-/api
+
+/.cache
+/build
+/public/build
+.env
+/public/api

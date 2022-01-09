@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .prose aside {
+    @apply opacity-75 italic border-l-4 pl-3 border-white/50;
+  }
+}

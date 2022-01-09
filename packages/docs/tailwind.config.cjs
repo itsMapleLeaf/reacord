@@ -1,6 +1,6 @@
 // @ts-nocheck
 module.exports = {
-  content: ["./src/**/*.{ts,tsx,md}"],
+  content: ["./app/**/*.{ts,tsx,md}"],
   theme: {
     fontFamily: {
       sans: ["Rubik", "sans-serif"],

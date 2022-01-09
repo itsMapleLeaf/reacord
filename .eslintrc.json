@@ -5,7 +5,8 @@
     "**/.cache/**",
     "**/build/**",
     "**/dist/**",
-    "**/coverage/**"
+    "**/coverage/**",
+    "**/public/**"
   ],
   "parserOptions": {
     "project": "./tsconfig.base.json"
