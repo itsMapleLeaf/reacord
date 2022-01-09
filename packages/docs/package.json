@@ -16,7 +16,7 @@
     "@heroicons/react": "^1.0.5",
     "@tailwindcss/typography": "^0.5.0",
     "alpinejs": "^3.7.1",
-    "autoprefixer": "^10.4.1",
+    "autoprefixer": "^10.4.2",
     "clsx": "^1.1.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
@@ -25,11 +25,11 @@
     "esno": "^0.13.0",
     "express": "^4.17.2",
     "express-promise-router": "^4.1.1",
-    "fast-glob": "^3.2.7",
+    "fast-glob": "^3.2.10",
     "gray-matter": "^4.0.3",
     "http-terminator": "^3.0.4",
-    "markdown-it": "^12.3.0",
-    "markdown-it-prism": "^2.2.1",
+    "markdown-it": "^12.3.2",
+    "markdown-it-prism": "^2.2.2",
     "pino": "^7.6.2",
     "pino-colada": "^2.2.2",
     "pino-http": "^6.5.0",
@@ -38,7 +38,7 @@
     "react": "^18.0.0-rc.0",
     "react-dom": "^18.0.0-rc.0",
     "react-ssr-prepass": "^1.5.0",
-    "tailwindcss": "^3.0.8"
+    "tailwindcss": "^3.0.12"
   },
   "devDependencies": {
     "@types/browser-sync": "^2.26.3",
@@ -49,17 +49,13 @@
     "@types/node": "*",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.9",
-    "@types/tailwindcss": "^3.0.0",
+    "@types/tailwindcss": "^3.0.2",
     "@types/wait-on": "^5.3.1",
     "browser-sync": "^2.27.7",
-    "execa": "^6.0.0",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
-    "rxjs": "^7.5.1",
-    "tsup": "^5.11.10",
-    "type-fest": "^2.8.0",
+    "type-fest": "^2.9.0",
     "typedoc": "^0.22.10",
-    "typescript": "^4.5.4",
-    "wait-on": "^6.0.0"
+    "typescript": "^4.5.4"
   }
 }
