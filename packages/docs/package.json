@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "prepare": "node ./scripts/fix-heroicons.js",
-    "serve": "esmo --experimental-import-meta-resolve --experimental-json-modules --no-warnings --enable-source-maps src/main.tsx | pino-colada",
+    "serve": "esmo --experimental-import-meta-resolve --experimental-json-modules --no-warnings src/main.tsx | pino-colada",
     "dev": "npm-run-all --parallel --print-label --race dev-*",
-    "dev-server": "nodemon --inspect --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
+    "dev-server": "nodemon --inspect --enable-source-maps --exec \"pnpm serve\" --watch src --ext ts,tsx,md,css",
     "dev-docs": "typedoc --watch",
     "build": "typedoc",
     "start": "cross-env NODE_ENV=production pnpm serve",
