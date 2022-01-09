@@ -10,7 +10,7 @@ export function Html({
   description = packageJson.description,
   children,
 }: {
-  title: string
+  title?: string
   description?: string
   children: ReactNode
 }) {
