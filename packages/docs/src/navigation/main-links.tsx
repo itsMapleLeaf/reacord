@@ -19,7 +19,7 @@ export const mainLinks: AppLinkProps[] = [
   },
   {
     type: "internal",
-    to: "/guides/api",
+    to: "/api",
     label: (
       <>
         <CodeIcon className={inlineIconClass} /> API Reference
