@@ -54,7 +54,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <script defer src="//unpkg.com/alpinejs@3.7.1" />
+        <script defer src="https://unpkg.com/alpinejs@3.7.1/dist/cdn.min.js" />
       </head>
       <body>
         <GuideLinksProvider value={data.guideLinks}>
