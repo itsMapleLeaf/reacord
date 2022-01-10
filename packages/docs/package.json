@@ -8,7 +8,7 @@
     "test-dev": "pnpm dev & wait-on http-get://localhost:3000 && cypress open",
     "build": "typedoc && remix build",
     "start": "remix-serve build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc --project cypress/tsconfig.json --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
