@@ -40,21 +40,24 @@
     - instances
       - [x] sending channel messages
       - [x] cleaning up instances
-      - [ ] sending command replies
-    - [ ] embeds
-    - [ ] buttons and links
-    - [ ] select menus
+      - [x] sending command replies
+    - [x] embeds
+    - [x] buttons and links
+    - [x] select menus
+    - [ ] adapters
   - api reference
     - [x] rendering and making it available
 
 # docs polish
 
-- [ ] remove client-side react hydration
-- [ ] use a small script for the popover menu toggle
-- [ ] adding doc comments to source
+- [x] remove client-side react hydration
+- [x] ~~use a small script for the popover menu toggle~~ went with alpine
+- [ ] improve accessibility on mobile menu
+- [x] adding doc comments to source
 - [ ] docs: use literate-ts to typecheck code blocks
 - [ ] each page should have a link at the bottom to the previous and next pages
 - [ ] anchor links on markdown headings
+- [ ] custom UI for api reference
 
 # internal
 
