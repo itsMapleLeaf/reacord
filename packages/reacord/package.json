@@ -68,5 +68,13 @@
   "resolutions": {
     "esbuild": "latest"
   },
-  "prettier": "@itsmapleleaf/configs/prettier"
+  "release-it": {
+    "git": {
+      "commitMessage": "release v${version}"
+    },
+    "github": {
+      "release": true,
+      "web": true
+    }
+  }
 }
