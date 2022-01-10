@@ -14,5 +14,13 @@
   "rules": {
     "import/no-unused-modules": "off",
     "unicorn/prevent-abbreviations": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["packages/docs/cypress/**"],
+      "parserOptions": {
+        "project": "./packages/docs/cypress/tsconfig.json"
+      }
+    }
+  ]
 }
