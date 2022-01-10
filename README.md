@@ -1,7 +1,23 @@
 # reacord
+Create interactive Discord messages using React!
 
-Create interactive Discord messages using React! [Visit the docs to get started.](https://reacord.fly.dev/guides/getting-started)
+## Installation
+```console
+# npm
+npm install reacord react discord.js
 
+# yarn
+yarn add reacord react discord.js
+
+# pnpm
+pnpm add reacord react discord.js
+
+```
+
+## Get Started
+[Visit the docs to get started.](https://reacord.fly.dev/guides/getting-started)
+
+## Example
 <!-- prettier-ignore -->
 ```tsx
 import * as React from "react"
