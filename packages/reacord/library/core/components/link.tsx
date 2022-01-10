@@ -3,16 +3,16 @@ import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
 import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
+import type { ButtonSharedProps } from "./button-shared-props"
 
 /**
  * @category Link
  */
-export type LinkProps = {
-  label?: string
-  children?: string
-  emoji?: string
-  disabled?: boolean
+export type LinkProps = ButtonSharedProps & {
+  /** The URL the link should lead to */
   url: string
+  /** The link text */
+  children?: string
 }
 
 /**

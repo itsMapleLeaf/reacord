@@ -10,6 +10,7 @@ import type { EmbedOptions } from "./embed-options"
 
 /**
  * @category Embed
+ * @see https://discord.com/developers/docs/resources/channel#embed-object
  */
 export type EmbedProps = {
   title?: string
@@ -28,6 +29,7 @@ export type EmbedProps = {
 
 /**
  * @category Embed
+ * @see https://discord.com/developers/docs/resources/channel#embed-object
  */
 export function Embed(props: EmbedProps) {
   return (

@@ -1,6 +1,7 @@
 export * from "./core/component-event"
 export * from "./core/components/action-row"
 export * from "./core/components/button"
+export * from "./core/components/button-shared-props"
 export * from "./core/components/embed"
 export * from "./core/components/embed-author"
 export * from "./core/components/embed-field"

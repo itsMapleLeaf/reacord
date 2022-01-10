@@ -23,6 +23,7 @@ export function Counter(props: { onDeactivate: () => void }) {
       )}
       <Button
         style="primary"
+        emoji="<:plus_one:778531744860602388>"
         label="clicc"
         onClick={() => setCount(count + 1)}
       />

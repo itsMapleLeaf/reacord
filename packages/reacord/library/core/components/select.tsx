@@ -14,15 +14,54 @@ import { OptionNode } from "./option-node"
  */
 export type SelectProps = {
   children?: ReactNode
+  /** Sets the currently selected value */
   value?: string
+
+  /** Sets the currently selected values, for use with `multiple` */
   values?: string[]
+
+  /** The text shown when no value is selected */
   placeholder?: string
+
+  /** Set to true to allow multiple selected values */
   multiple?: boolean
+
+  /**
+   * With `multiple`, the minimum number of values that can be selected.
+   * When `multiple` is false or not defined, this is always 1.
+   *
+   * This only limits the number of values that can be received by the user.
+   * This does not limit the number of values that can be displayed by you.
+   */
   minValues?: number
+
+  /**
+   * With `multiple`, the maximum number of values that can be selected.
+   * When `multiple` is false or not defined, this is always 1.
+   *
+   * This only limits the number of values that can be received by the user.
+   * This does not limit the number of values that can be displayed by you.
+   */
   maxValues?: number
+
+  /** When true, the select will be slightly faded, and cannot be interacted with. */
   disabled?: boolean
+
+  /**
+   * Called when the user inputs a selection.
+   * Receives the entire select change event,
+   * which can be used to create new replies, etc.
+   */
   onChange?: (event: SelectChangeEvent) => void
+
+  /**
+   * Convenience shorthand for `onChange`, which receives the first selected value.
+   */
   onChangeValue?: (value: string, event: SelectChangeEvent) => void
+
+  /**
+   * Convenience shorthand for `onChange`, which receives all selected values.
+   */
   onChangeMultiple?: (values: string[], event: SelectChangeEvent) => void
 }
 
@@ -34,6 +73,7 @@ export type SelectChangeEvent = ComponentEvent & {
 }
 
 /**
+ * See [the select menu guide](/guides/select-menu) for a usage example.
  * @category Select
  */
 export function Select(props: SelectProps) {
@@ -73,6 +113,10 @@ class SelectNode extends Node<SelectProps> {
       type: "select",
       customId: this.customId,
       options,
+      // I'm not counting on people using value and values at the same time,
+      // but maybe we should resolve this differently anyhow? e.g. one should override the other
+      // or just warn if there are both
+      // or... try some other alternative design entirely
       values: [...(values || []), ...(value ? [value] : [])],
       minValues: multiple ? minValues : undefined,
       maxValues: multiple ? Math.max(minValues, maxValues) : undefined,

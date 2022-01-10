@@ -6,17 +6,24 @@ import type { MessageOptions } from "../../internal/message"
 import { getNextActionRow } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 import type { ComponentEvent } from "../component-event"
+import type { ButtonSharedProps } from "./button-shared-props"
 
 /**
  * @category Button
  */
-export type ButtonProps = {
-  label?: string
+export type ButtonProps = ButtonSharedProps & {
+  /**
+   * The style determines the color of the button and signals intent.
+   * @see https://discord.com/developers/docs/interactions/message-components#button-object-button-styles
+   */
   style?: "primary" | "secondary" | "success" | "danger"
-  disabled?: boolean
-  emoji?: string
+
+  /**
+   * Happens when a user clicks the button.
+   */
   onClick: (event: ButtonClickEvent) => void
 }
+
 /**
  * @category Button
  */

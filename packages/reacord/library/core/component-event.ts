@@ -5,11 +5,41 @@ import type { ReacordInstance } from "./instance"
  * @category Component Event
  */
 export type ComponentEvent = {
+  /**
+   * The message associated with this event.
+   * For example: with a button click,
+   * this is the message that the button is on.
+   * @see https://discord.com/developers/docs/resources/channel#message-object
+   */
   message: MessageInfo
+
+  /**
+   * The channel that this event occurred in.
+   * @see https://discord.com/developers/docs/resources/channel#channel-object
+   */
   channel: ChannelInfo
+
+  /**
+   * The user that triggered this event.
+   * @see https://discord.com/developers/docs/resources/user#user-object
+   */
   user: UserInfo
+
+  /**
+   * The guild that this event occurred in.
+   * @see https://discord.com/developers/docs/resources/guild#guild-object
+   */
   guild?: GuildInfo
+
+  /**
+   * Create a new reply to this event.
+   */
   reply(content?: ReactNode): ReacordInstance
+
+  /**
+   * Create an ephemeral reply to this event,
+   * shown only to the user who triggered it.
+   */
   ephemeralReply(content?: ReactNode): ReacordInstance
 }
 
