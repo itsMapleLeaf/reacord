@@ -61,4 +61,4 @@ reacord.send(
 )
 ```
 
-See the [API Reference](/api) for the full list of embed components.
+See the [API Reference](/api/index.html#EmbedAuthorProps) for the full list of embed components.

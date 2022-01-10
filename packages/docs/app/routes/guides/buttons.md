@@ -44,4 +44,4 @@ function TheButton() {
 }
 ```
 
-See the [API reference](/api) for more information.
+See the [API reference](/api/index.html#ButtonProps) for more information.

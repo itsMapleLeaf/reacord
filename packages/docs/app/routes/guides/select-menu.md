@@ -68,4 +68,4 @@ export function FruitSelect({ onConfirm }) {
 }
 ```
 
-The Select component accepts a variety of props beyond what's shown here. See the [API reference](/api) for more information.
+The Select component accepts a variety of props beyond what's shown here. See the [API reference](/api/index.html#SelectChangeEvent) for more information.

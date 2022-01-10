@@ -22,4 +22,4 @@ function AwesomeLinks() {
 }
 ```
 
-See the [API reference](/api) for more information.
+See the [API reference](/api/index.html#Link) for more information.
