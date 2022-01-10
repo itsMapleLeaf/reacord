@@ -2,6 +2,7 @@ import type {
   CamelCasedPropertiesDeep,
   SnakeCasedPropertiesDeep,
 } from "type-fest"
+import { expect, test } from "vitest"
 import { camelCaseDeep, snakeCaseDeep } from "./convert-object-property-case"
 
 test("camelCaseDeep", () => {
@@ -12,12 +13,14 @@ test("camelCaseDeep", () => {
     someOtherProp: "someOtherValue",
   }
 
-  expect(camelCaseDeep(input)).toEqual<CamelCasedPropertiesDeep<typeof input>>({
+  const expected: CamelCasedPropertiesDeep<typeof input> = {
     someProp: {
       someDeepProp: "some_deep_value",
     },
     someOtherProp: "someOtherValue",
-  })
+  }
+
+  expect(camelCaseDeep(input)).toEqual(expected)
 })
 
 test("snakeCaseDeep", () => {
@@ -28,10 +31,12 @@ test("snakeCaseDeep", () => {
     some_other_prop: "someOtherValue",
   }
 
-  expect(snakeCaseDeep(input)).toEqual<SnakeCasedPropertiesDeep<typeof input>>({
+  const expected: SnakeCasedPropertiesDeep<typeof input> = {
     some_prop: {
       some_deep_prop: "someDeepValue",
     },
     some_other_prop: "someOtherValue",
-  })
+  }
+
+  expect(snakeCaseDeep(input)).toEqual(expected)
 })

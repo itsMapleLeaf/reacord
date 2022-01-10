@@ -20,9 +20,8 @@
   "scripts": {
     "build": "tsup-node library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build -- --watch",
-    "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js --colors",
-    "test-watch": "pnpm test -- --watch",
-    "coverage": "pnpm test -- --coverage",
+    "test": "vitest",
+    "coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx",
     "release": "release-it"
@@ -45,8 +44,6 @@
     }
   },
   "devDependencies": {
-    "@jest/globals": "^27.4.6",
-    "@types/jest": "^27.4.0",
     "@types/lodash-es": "^4.17.5",
     "c8": "^7.11.0",
     "discord.js": "^13.5.1",
@@ -54,7 +51,6 @@
     "esbuild": "latest",
     "esbuild-jest": "^0.5.0",
     "esmo": "^0.13.0",
-    "jest": "^27.4.7",
     "lodash-es": "^4.17.21",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
@@ -63,7 +59,9 @@
     "release-it": "^14.12.1",
     "tsup": "^5.11.11",
     "type-fest": "^2.9.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "vite": "^2.7.10",
+    "vitest": "^0.0.139"
   },
   "resolutions": {
     "esbuild": "latest"
