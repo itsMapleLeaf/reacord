@@ -16,11 +16,12 @@ export function MainNavigation() {
           <AppLink {...link} key={link.to} className={linkClass} />
         ))}
       </div>
-      <div className="md:hidden" id="main-navigation-popover">
+      <div className="md:hidden">
         <PopoverMenu>
           {mainLinks.map((link) => (
             <AppLink
               {...link}
+              role="menuitem"
               key={link.to}
               className={PopoverMenu.itemClass}
             />
@@ -29,6 +30,7 @@ export function MainNavigation() {
           {guideLinks.map(({ link }) => (
             <AppLink
               {...link}
+              role="menuitem"
               key={link.to}
               className={PopoverMenu.itemClass}
             />

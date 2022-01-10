@@ -10,6 +10,7 @@ export function PopoverMenu({ children }: { children: React.ReactNode }) {
         <MenuAlt4Icon className="w-6" />
       </button>
       <div
+        role="menu"
         className={`
           w-48 max-h-[calc(100vh-4rem)]
           absolute right-0 top-[calc(100%+8px)]
