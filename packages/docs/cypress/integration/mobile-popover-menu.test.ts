@@ -1,3 +1,5 @@
+export {}
+
 describe("main popover menu", () => {
   it("should toggle on button click", () => {
     cy.viewport(480, 720)
