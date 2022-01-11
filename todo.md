@@ -75,6 +75,7 @@
 - [ ] timestamp component
 - [ ] `useMessage`
 - [ ] `useReactions`
+- [ ] `useInstance` - returns the associated instance, probably replaces `useMessage`
 - [ ] max instance count per guild
 - [ ] max instance count per channel
 - [ ] uncontrolled select
