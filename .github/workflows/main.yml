@@ -13,6 +13,7 @@ env:
 jobs:
   run-commands:
     strategy:
+      fail-fast: false
       matrix:
         command:
           - name: test
@@ -20,7 +21,6 @@ jobs:
           # - lint
           # - typecheck
           # - build
-      fail-fast: false
     name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:
