@@ -4,7 +4,7 @@
   "scripts": {
     "prepare": "remix setup node",
     "dev": "concurrently 'typedoc --watch' 'remix dev'",
-    "test": "pnpm build && pnpm start & wait-on http-get://localhost:3000 && cypress run",
+    "test": "pnpm build && pnpm start & wait-on http-get://localhost:3000 && cypress run && exit 0",
     "test-dev": "pnpm dev & wait-on http-get://localhost:3000 && cypress open",
     "build": "typedoc && remix build",
     "start": "remix-serve build",
