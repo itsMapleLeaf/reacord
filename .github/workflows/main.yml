@@ -17,7 +17,8 @@ jobs:
       matrix:
         command:
           - name: test
-            run: pnpm test --parallel --color
+            run: pnpm test -C packages/reacord
+            # run: pnpm test --parallel --color
           # - lint
           # - typecheck
           # - build
