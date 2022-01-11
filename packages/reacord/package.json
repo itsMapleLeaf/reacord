@@ -20,7 +20,8 @@
   "scripts": {
     "build": "tsup-node library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build -- --watch",
-    "test": "vitest --coverage",
+    "test": "vitest --coverage --no-watch",
+    "test-dev": "vitest",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx",
     "release": "release-it"
