@@ -23,7 +23,7 @@
     "test": "vitest --coverage --no-watch",
     "test-dev": "vitest",
     "typecheck": "tsc --noEmit",
-    "playground": "nodemon --exec esmo --ext ts,tsx ./playground/main.tsx",
+    "playground": "nodemon --exec esmo --ext ts,tsx --inspect=5858 --enable-source-maps ./playground/main.tsx",
     "release": "release-it"
   },
   "dependencies": {
