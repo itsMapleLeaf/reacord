@@ -6,5 +6,5 @@ export async function rejectAfter(
   error: unknown = `rejected after ${timeMs}ms`,
 ): Promise<never> {
   await setTimeout(timeMs)
-  return Promise.reject(toError(error))
+  throw toError(error)
 }
