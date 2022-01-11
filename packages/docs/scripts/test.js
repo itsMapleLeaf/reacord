@@ -7,5 +7,3 @@ const app = execa("pnpm", ["start"], { stdio: "inherit" })
 await waitOn({ resources: ["http-get://localhost:3000"] })
 await cypress.run()
 app.kill()
-// eslint-disable-next-line unicorn/no-process-exit
-process.exit(0)
