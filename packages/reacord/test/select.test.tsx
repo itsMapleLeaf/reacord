@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { expect, fn, test } from "vitest"
-import { Button, Option, ReacordTester, Select } from "../library/main"
+import { Button, Option, Select } from "../library/main"
+import { ReacordTester } from "./test-adapter"
 
 test("single select", async () => {
   const tester = new ReacordTester()

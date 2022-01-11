@@ -1,12 +1,7 @@
 import * as React from "react"
 import { test } from "vitest"
-import {
-  Button,
-  Embed,
-  EmbedField,
-  EmbedTitle,
-  ReacordTester,
-} from "../library/main"
+import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
+import { ReacordTester } from "./test-adapter"
 
 test("rendering behavior", async () => {
   const tester = new ReacordTester()

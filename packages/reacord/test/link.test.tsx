@@ -1,7 +1,7 @@
 import React from "react"
 import { test } from "vitest"
-import { ReacordTester } from "../library/core/reacord-tester"
 import { Link } from "../library/main"
+import { ReacordTester } from "./test-adapter"
 
 const tester = new ReacordTester()
 

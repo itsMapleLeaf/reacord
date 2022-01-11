@@ -5,34 +5,34 @@ import { nextTick } from "node:process"
 import { promisify } from "node:util"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
-import { logPretty } from "../../helpers/log-pretty"
-import { omit } from "../../helpers/omit"
-import { raise } from "../../helpers/raise"
-import type { Channel } from "../internal/channel"
-import { Container } from "../internal/container"
-import type {
-  ButtonInteraction,
-  CommandInteraction,
-  SelectInteraction,
-} from "../internal/interaction"
-import type {
-  Message,
-  MessageButtonOptions,
-  MessageOptions,
-  MessageSelectOptions,
-} from "../internal/message"
-import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
-import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
+import { logPretty } from "../helpers/log-pretty"
+import { omit } from "../helpers/omit"
+import { raise } from "../helpers/raise"
 import type {
   ChannelInfo,
   GuildInfo,
   MessageInfo,
   UserInfo,
-} from "./component-event"
-import type { ButtonClickEvent } from "./components/button"
-import type { SelectChangeEvent } from "./components/select"
-import type { ReacordInstance } from "./instance"
-import { Reacord } from "./reacord"
+} from "../library/core/component-event"
+import type { ButtonClickEvent } from "../library/core/components/button"
+import type { SelectChangeEvent } from "../library/core/components/select"
+import type { ReacordInstance } from "../library/core/instance"
+import { Reacord } from "../library/core/reacord"
+import type { Channel } from "../library/internal/channel"
+import { Container } from "../library/internal/container"
+import type {
+  ButtonInteraction,
+  CommandInteraction,
+  SelectInteraction,
+} from "../library/internal/interaction"
+import type {
+  Message,
+  MessageButtonOptions,
+  MessageOptions,
+  MessageSelectOptions,
+} from "../library/internal/message"
+import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
+import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
 
 const nextTickPromise = promisify(nextTick)
 
