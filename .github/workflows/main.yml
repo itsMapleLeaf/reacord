@@ -16,7 +16,7 @@ jobs:
       matrix:
         scripts:
           - name: test
-            script: coverage
+            script: test
           - name: lint
             script: lint
           - name: typecheck
