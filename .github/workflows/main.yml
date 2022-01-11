@@ -16,12 +16,18 @@ jobs:
       fail-fast: false
       matrix:
         command:
-          - name: test
+          # if these run in the same process, it dies,
+          # so we test them separate
+          - name: test reacord
             run: pnpm test -C packages/reacord
-            # run: pnpm test --parallel --color
-          # - lint
-          # - typecheck
-          # - build
+          - name: test docs
+            run: pnpm test -C packages/docs
+          - name: build
+            run: pnpm build --recursive
+          - name: lint
+            run: pnpm lint
+          - name: typecheck
+            run: pnpm typecheck --parallel
     name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:
