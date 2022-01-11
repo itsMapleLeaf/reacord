@@ -1,7 +1,7 @@
 import { Client } from "discord.js"
 import "dotenv/config"
 import React from "react"
-import { Button, ReacordDiscordJs } from "../library/main"
+import { Button, ReacordDiscordJs, useInstance } from "../library/main"
 import { createCommandHandler } from "./command-handler"
 import { Counter } from "./counter"
 import { FruitSelect } from "./fruit-select"
@@ -91,6 +91,17 @@ createCommandHandler(client, [
           />
         </>,
       )
+    },
+  },
+  {
+    name: "delete-this",
+    description: "delete this",
+    run: (interaction) => {
+      function DeleteThis() {
+        const instance = useInstance()
+        return <Button label="delete this" onClick={() => instance.destroy()} />
+      }
+      reacord.reply(interaction, <DeleteThis />)
     },
   },
 ])

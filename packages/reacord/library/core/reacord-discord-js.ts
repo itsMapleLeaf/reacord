@@ -154,14 +154,16 @@ export class ReacordDiscordJs extends Reacord {
     // todo please dear god clean this up
     const channel: ChannelInfo = interaction.channel
       ? {
-          ...pick(pruneNullishValues(interaction.channel), [
-            "topic",
-            "nsfw",
-            "lastMessageId",
-            "ownerId",
-            "parentId",
-            "rateLimitPerUser",
-          ]),
+          ...pruneNullishValues(
+            pick(interaction.channel, [
+              "topic",
+              "nsfw",
+              "lastMessageId",
+              "ownerId",
+              "parentId",
+              "rateLimitPerUser",
+            ]),
+          ),
           id: interaction.channelId,
         }
       : raise("Non-channel interactions are not supported")
@@ -190,15 +192,17 @@ export class ReacordDiscordJs extends Reacord {
     const member: GuildMemberInfo | undefined =
       interaction.member instanceof Discord.GuildMember
         ? {
-            ...pick(pruneNullishValues(interaction.member), [
-              "id",
-              "nick",
-              "displayName",
-              "avatarUrl",
-              "displayAvatarUrl",
-              "color",
-              "pending",
-            ]),
+            ...pruneNullishValues(
+              pick(interaction.member, [
+                "id",
+                "nick",
+                "displayName",
+                "avatarUrl",
+                "displayAvatarUrl",
+                "color",
+                "pending",
+              ]),
+            ),
             displayName: interaction.member.displayName,
             roles: [...interaction.member.roles.cache.map((role) => role.id)],
             joinedAt: interaction.member.joinedAt?.toISOString(),
@@ -210,18 +214,15 @@ export class ReacordDiscordJs extends Reacord {
 
     const guild: GuildInfo | undefined = interaction.guild
       ? {
-          ...pick(pruneNullishValues(interaction.guild), ["id", "name"]),
+          ...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
           member: member ?? raise("unexpected: member is undefined"),
         }
       : undefined
 
     const user: UserInfo = {
-      ...pick(pruneNullishValues(interaction.user), [
-        "id",
-        "username",
-        "discriminator",
-        "tag",
-      ]),
+      ...pruneNullishValues(
+        pick(interaction.user, ["id", "username", "discriminator", "tag"]),
+      ),
       avatarUrl: interaction.user.avatarURL()!,
       accentColor: interaction.user.accentColor ?? undefined,
     }

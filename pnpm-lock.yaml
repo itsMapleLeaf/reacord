@@ -44,12 +44,12 @@ importers:
       '@types/react-reconciler': ^0.26.4
       c8: ^7.11.0
       discord.js: ^13.5.1
-      dotenv: ^10.0.0
+      dotenv: ^11.0.0
       esbuild: latest
       esbuild-jest: ^0.5.0
       esmo: ^0.13.0
       lodash-es: ^4.17.21
-      nanoid: ^3.1.30
+      nanoid: ^3.1.31
       nodemon: ^2.0.15
       prettier: ^2.5.1
       pretty-ms: ^7.0.1
@@ -61,19 +61,19 @@ importers:
       type-fest: ^2.9.0
       typescript: ^4.5.4
       vite: ^2.7.10
-      vitest: ^0.0.140
+      vitest: ^0.0.141
     dependencies:
       '@types/node': 17.0.8
       '@types/react': 17.0.38
       '@types/react-reconciler': 0.26.4
-      nanoid: 3.1.30
+      nanoid: 3.1.31
       react-reconciler: 0.26.2_react@17.0.2
       rxjs: 7.5.2
     devDependencies:
       '@types/lodash-es': 4.17.5
       c8: 7.11.0
       discord.js: 13.5.1
-      dotenv: 10.0.0
+      dotenv: 11.0.0
       esbuild: 0.14.11
       esbuild-jest: 0.5.0_esbuild@0.14.11
       esmo: 0.13.0_typescript@4.5.4
@@ -87,7 +87,7 @@ importers:
       type-fest: 2.9.0
       typescript: 4.5.4
       vite: 2.7.10
-      vitest: 0.0.140_c8@7.11.0
+      vitest: 0.0.141_c8@7.11.0
 
   packages/website:
     specifiers:
@@ -114,10 +114,10 @@ importers:
       reacord: workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
-      rehype-prism-plus: ^1.3.0
+      rehype-prism-plus: ^1.3.1
       remix: ^1.1.1
       remix-tailwind: ^0.2.1
-      tailwindcss: ^3.0.12
+      tailwindcss: ^3.0.13
       typedoc: ^0.22.10
       typescript: ^4.5.4
       wait-on: ^6.0.0
@@ -125,7 +125,7 @@ importers:
       '@heroicons/react': 1.0.5_react@17.0.2
       '@remix-run/react': 1.1.1_react-dom@17.0.2+react@17.0.2
       '@remix-run/serve': 1.1.1_react-dom@17.0.2+react@17.0.2
-      '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.12
+      '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.13
       autoprefixer: 10.4.2_postcss@8.4.5
       clsx: 1.1.1
       fast-glob: 3.2.10
@@ -135,8 +135,8 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       remix: 1.1.1
-      remix-tailwind: 0.2.1_7b354341833d038270b90ce5c50910b6
-      tailwindcss: 3.0.12_ef48b3b8837f8a23677bffe8f9cd866d
+      remix-tailwind: 0.2.1_8cbcda2c835593b4e5c6cfe0d6a6e9a3
+      tailwindcss: 3.0.13_ef48b3b8837f8a23677bffe8f9cd866d
     devDependencies:
       '@remix-run/dev': 1.1.1
       '@remix-run/node': 1.1.1_react-dom@17.0.2+react@17.0.2
@@ -149,7 +149,7 @@ importers:
       concurrently: 7.0.0
       cypress: 9.2.1
       execa: 6.0.0
-      rehype-prism-plus: 1.3.0
+      rehype-prism-plus: 1.3.1
       typedoc: 0.22.10_typescript@4.5.4
       typescript: 4.5.4
       wait-on: 6.0.0
@@ -968,7 +968,7 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@tailwindcss/typography/0.5.0_tailwindcss@3.0.12:
+  /@tailwindcss/typography/0.5.0_tailwindcss@3.0.13:
     resolution: {integrity: sha512-1p/3C6C+JJziS/ghtG8ACYalbA2SyLJY27Pm33cVTlAoY6VQ7zfm2H64cPxUMBkVIlWXTtWHhZcZJPobMRmQAA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || insiders'
@@ -977,7 +977,7 @@ packages:
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
-      tailwindcss: 3.0.12_ef48b3b8837f8a23677bffe8f9cd866d
+      tailwindcss: 3.0.13_ef48b3b8837f8a23677bffe8f9cd866d
     dev: false
 
   /@testing-library/cypress/8.0.2_cypress@9.2.1:
@@ -2010,7 +2010,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001298
-      electron-to-chromium: 1.4.40
+      electron-to-chromium: 1.4.41
       escalade: 3.1.1
       node-releases: 2.0.1
       picocolors: 1.0.0
@@ -2957,9 +2957,9 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /dotenv/10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
+  /dotenv/11.0.0:
+    resolution: {integrity: sha512-Fp/b504Y5W+e+FpCxTFMUZ7ZEQkQYF0rx+KZtmwixJxGQbLHrhCwo3FjZgNC8vIfrSi29PABNbMoCGD9YoiXbQ==}
+    engines: {node: '>=12'}
     dev: true
 
   /duplexer3/0.1.4:
@@ -2977,8 +2977,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: false
 
-  /electron-to-chromium/1.4.40:
-    resolution: {integrity: sha512-j+eVIyQGt2EU5xPWUblhpp5P5z5xyAdRgzogBgfe2F5JGV17gr9pfzWBua6DlPL00LavbOjxubWkWkbVQe9Wlw==}
+  /electron-to-chromium/1.4.41:
+    resolution: {integrity: sha512-VQEXEJc+8rJIva85H8EPtB5Ux9g8TzkNGBanqphM9ZWMZ34elueKJ+5g+BPhz3Lk8gkujfQRcIZ+fpA0btUIuw==}
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -4359,7 +4359,7 @@ packages:
       '@types/unist': 2.0.6
       hastscript: 7.0.2
       property-information: 6.1.1
-      vfile: 5.2.1
+      vfile: 5.3.0
       vfile-location: 4.0.1
       web-namespaces: 2.0.1
     dev: true
@@ -6018,8 +6018,8 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
-  /nanoid/3.1.30:
-    resolution: {integrity: sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==}
+  /nanoid/3.1.31:
+    resolution: {integrity: sha512-ZivnJm0o9bb13p2Ot5CpgC2rQdzB9Uxm/mFZweqm5eMViqOJe3PV6LU2E30SiLgheesmcPrjquqraoolONSA0A==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -6503,7 +6503,7 @@ packages:
     dependencies:
       is-ssh: 1.3.3
       protocols: 1.4.8
-      qs: 6.10.2
+      qs: 6.10.3
       query-string: 6.14.1
     dev: true
 
@@ -6681,7 +6681,7 @@ packages:
     resolution: {integrity: sha512-jBDboWM8qpaqwkMwItqTQTiFikhs/67OYVvblFFTM7MrZjt6yMKd6r2kgXizEbTTljacm4NldIlZnhbjr84QYg==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
-      nanoid: 3.1.30
+      nanoid: 3.1.31
       picocolors: 1.0.0
       source-map-js: 1.0.1
 
@@ -6802,8 +6802,8 @@ packages:
       escape-goat: 2.1.1
     dev: true
 
-  /qs/6.10.2:
-    resolution: {integrity: sha512-mSIdjzqznWgfd4pMii7sHtaYF8rx8861hBO80SraY5GT0XQibWZWJSid0avzHGkDIZLImux2S5mXO0Hfct2QCw==}
+  /qs/6.10.3:
+    resolution: {integrity: sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
@@ -7046,8 +7046,8 @@ packages:
       unified: 10.1.1
     dev: true
 
-  /rehype-prism-plus/1.3.0:
-    resolution: {integrity: sha512-qipMym4Acp2xwMY50zPW8l8f2RAAjFd/DSg75rTRfvTWZ9xIy2ZEnIiDmqoPLH4BQ/VybrQcFxG0lwZau9l+Qw==}
+  /rehype-prism-plus/1.3.1:
+    resolution: {integrity: sha512-wMxGPCuU96Bi3zbC9lc7nx4vxFJ5i5i2CrM+ZOZUe8zEPmFqUNF7RJIwwcZ3vfVpghMcHi35A8cSF2tKyrsYxw==}
     dependencies:
       hast-util-to-string: 2.0.0
       parse-numeric-range: 1.3.0
@@ -7133,7 +7133,7 @@ packages:
       unified: 10.1.1
     dev: true
 
-  /remix-tailwind/0.2.1_7b354341833d038270b90ce5c50910b6:
+  /remix-tailwind/0.2.1_8cbcda2c835593b4e5c6cfe0d6a6e9a3:
     resolution: {integrity: sha512-MqUQzOYiDGXpfJtWC5gbQW3mqM2ly4+Uljo0fvGG4NYZLCzh0OTKGxqwUj7R3lt7iN29Ff4TIo1a/N2adqfUnA==}
     peerDependencies:
       postcss: '>=8'
@@ -7142,7 +7142,7 @@ packages:
       '@remix-run/node': 1.1.1_react-dom@17.0.2+react@17.0.2
       '@types/tailwindcss': 2.2.4
       postcss: 8.4.5
-      tailwindcss: 3.0.12_ef48b3b8837f8a23677bffe8f9cd866d
+      tailwindcss: 3.0.13_ef48b3b8837f8a23677bffe8f9cd866d
     transitivePeerDependencies:
       - react
       - react-dom
@@ -7532,6 +7532,7 @@ packages:
 
   /source-map-resolve/0.5.3:
     resolution: {integrity: sha512-Htz+RnsXWk5+P2slx5Jh3Q66vhQj1Cllm0zvnaY98+NFx+Dv2CF/f5O/t8x+KaNdrdIAsruNzoh/KpialbqAnw==}
+    deprecated: See https://github.com/lydell/source-map-resolve#deprecated
     dependencies:
       atob: 2.1.2
       decode-uri-component: 0.2.0
@@ -7541,6 +7542,7 @@ packages:
 
   /source-map-url/0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
+    deprecated: See https://github.com/lydell/source-map-url#deprecated
 
   /source-map/0.5.7:
     resolution: {integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=}
@@ -7784,8 +7786,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  /tailwindcss/3.0.12_ef48b3b8837f8a23677bffe8f9cd866d:
-    resolution: {integrity: sha512-VqhF86z2c34sJyS5ZS8Q2nYuN0KzqZw1GGsuQQO9kJ3mY1oG7Fsag0vICkxUVXk6P+1sUkTkjMjKWCjEF0hNHw==}
+  /tailwindcss/3.0.13_ef48b3b8837f8a23677bffe8f9cd866d:
+    resolution: {integrity: sha512-raRPGFwQSGXn/3h0ttHND9jyPYfqk/ur2NXtlQuK25+ZnrCjlH1s1j4/oPswHGMoZzGNykUVycZ/LcROanUE0A==}
     engines: {node: '>=12.13.0'}
     hasBin: true
     peerDependencies:
@@ -8142,7 +8144,7 @@ packages:
       is-buffer: 2.0.5
       is-plain-obj: 4.0.0
       trough: 2.0.2
-      vfile: 5.2.1
+      vfile: 5.3.0
     dev: true
 
   /union-value/1.0.1:
@@ -8397,7 +8399,7 @@ packages:
     resolution: {integrity: sha512-JDxPlTbZrZCQXogGheBHjbRWjESSPEak770XwWPfw5mTc1v1nWGLB/apzZxsx8a0SJVfF8HK8ql8RD308vXRUw==}
     dependencies:
       '@types/unist': 2.0.6
-      vfile: 5.2.1
+      vfile: 5.3.0
     dev: true
 
   /vfile-message/3.1.0:
@@ -8407,8 +8409,8 @@ packages:
       unist-util-stringify-position: 3.0.0
     dev: true
 
-  /vfile/5.2.1:
-    resolution: {integrity: sha512-vXW5XKbELM6mLj88kmkJ+gjFGZ/2gTmpdqPDjs3y+qbvI5i7md7rba/+pbYEawa7t22W7ynywPV6lUUAS1WiYg==}
+  /vfile/5.3.0:
+    resolution: {integrity: sha512-Tj44nY/48OQvarrE4FAjUfrv7GZOYzPbl5OD65HxVKwLJKMPU7zmfV8cCgCnzKWnSfYG2f3pxu+ALqs7j22xQQ==}
     dependencies:
       '@types/unist': 2.0.6
       is-buffer: 2.0.5
@@ -8440,8 +8442,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.0.140_c8@7.11.0:
-    resolution: {integrity: sha512-tBv9rMKUH7AA7Vg9X5FMNZ7zyjGLNtNCBcKc2NNjPHKO1+cPttjF+jVvGIOP0Bo0l6pkRZWvsd3nywvktqVvvQ==}
+  /vitest/0.0.141_c8@7.11.0:
+    resolution: {integrity: sha512-CQwNWGbifAs5OrG1MXyiveeFT3KYpU/UZiZzNUR5ZHMUWKam9OeoDX0U3sFuyaERp/0b2vhoL0oaMccY2PJPSQ==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
@@ -8667,7 +8669,7 @@ packages:
       unist-util-position-from-estree: 1.1.1
       unist-util-stringify-position: 3.0.0
       unist-util-visit: 4.1.0
-      vfile: 5.2.1
+      vfile: 5.3.0
     optionalDependencies:
       deasync: 0.1.24
     transitivePeerDependencies:
