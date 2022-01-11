@@ -37,6 +37,8 @@ import { InteractionReplyRenderer } from "../library/internal/renderers/interact
 
 const nextTickPromise = promisify(nextTick)
 
+export type MessageSample = ReturnType<ReacordTester["sampleMessages"]>[0]
+
 /**
  * A Record adapter for automated tests. WIP
  */
@@ -51,33 +53,32 @@ export class ReacordTester extends Reacord {
     return [...this.messageContainer]
   }
 
-  override send(): ReacordInstance {
+  override send(initialContent?: ReactNode): ReacordInstance {
     return this.createInstance(
       new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
+      initialContent,
     )
   }
 
-  override reply(): ReacordInstance {
+  override reply(initialContent?: ReactNode): ReacordInstance {
     return this.createInstance(
       new InteractionReplyRenderer(
         new TestCommandInteraction(this.messageContainer),
       ),
+      initialContent,
     )
   }
 
-  override ephemeralReply(): ReacordInstance {
-    return this.reply()
+  override ephemeralReply(initialContent?: ReactNode): ReacordInstance {
+    return this.reply(initialContent)
   }
 
-  async assertMessages(expected: ReturnType<this["sampleMessages"]>) {
+  async assertMessages(expected: MessageSample[]) {
     await nextTickPromise()
     expect(this.sampleMessages()).toEqual(expected)
   }
 
-  async assertRender(
-    content: ReactNode,
-    expected: ReturnType<this["sampleMessages"]>,
-  ) {
+  async assertRender(content: ReactNode, expected: MessageSample[]) {
     const instance = this.reply()
     instance.render(content)
     await this.assertMessages(expected)
@@ -274,11 +275,11 @@ class TestComponentEvent {
   guild: GuildInfo = {} as any // todo
 
   reply(content?: ReactNode): ReacordInstance {
-    return this.tester.reply()
+    return this.tester.reply(content)
   }
 
   ephemeralReply(content?: ReactNode): ReacordInstance {
-    return this.tester.ephemeralReply()
+    return this.tester.ephemeralReply(content)
   }
 }
 
