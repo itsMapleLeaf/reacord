@@ -14,17 +14,9 @@ jobs:
   run-scripts:
     strategy:
       matrix:
-        scripts:
-          - name: test
-            script: test
-          - name: lint
-            script: lint
-          - name: typecheck
-            script: typecheck
-          - name: build
-            script: build
+        script: [test, lint, typecheck, build]
       fail-fast: false
-    name: ${{ matrix.scripts.name }}
+    name: ${{ matrix.script }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,4 +26,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run --recursive --parallel ${{ matrix.scripts.script }}
+      - run: pnpm run --recursive --parallel ${{ matrix.script }}
