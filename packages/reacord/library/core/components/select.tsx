@@ -4,7 +4,11 @@ import React from "react"
 import { isInstanceOf } from "../../../helpers/is-instance-of"
 import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
-import type { ActionRow, MessageOptions } from "../../internal/message"
+import type {
+  ActionRow,
+  ActionRowItem,
+  MessageOptions,
+} from "../../internal/message"
 import { Node } from "../../internal/node.js"
 import type { ComponentEvent } from "../component-event"
 import { OptionNode } from "./option-node"
@@ -108,19 +112,25 @@ class SelectNode extends Node<SelectProps> {
       ...props
     } = this.props
 
-    actionRow.push({
+    const item: ActionRowItem = {
       ...props,
       type: "select",
       customId: this.customId,
       options,
-      // I'm not counting on people using value and values at the same time,
-      // but maybe we should resolve this differently anyhow? e.g. one should override the other
-      // or just warn if there are both
-      // or... try some other alternative design entirely
-      values: [...(values || []), ...(value ? [value] : [])],
-      minValues: multiple ? minValues : undefined,
-      maxValues: multiple ? Math.max(minValues, maxValues) : undefined,
-    })
+      values: [],
+    }
+
+    if (multiple) {
+      item.minValues = minValues
+      item.maxValues = maxValues
+      if (values) item.values = values
+    }
+
+    if (!multiple && value != undefined) {
+      item.values = [value]
+    }
+
+    actionRow.push(item)
   }
 
   override handleComponentInteraction(

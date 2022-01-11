@@ -1,10 +1,11 @@
-import { jest } from "@jest/globals"
 import React, { useState } from "react"
-import { Button, Option, ReacordTester, Select } from "../library/main"
+import { expect, fn, test } from "vitest"
+import { Button, Option, Select } from "../library/main"
+import { ReacordTester } from "./test-adapter"
 
 test("single select", async () => {
   const tester = new ReacordTester()
-  const onSelect = jest.fn()
+  const onSelect = fn()
 
   function TestSelect() {
     const [value, setValue] = useState<string>()
@@ -74,7 +75,7 @@ test("single select", async () => {
 
 test("multiple select", async () => {
   const tester = new ReacordTester()
-  const onSelect = jest.fn()
+  const onSelect = fn()
 
   function TestSelect() {
     const [values, setValues] = useState<string[]>([])
@@ -125,13 +126,13 @@ test("multiple select", async () => {
   expect(onSelect).toHaveBeenCalledTimes(0)
 
   tester.findSelectByPlaceholder("select").select("1", "3")
-  await assertSelect(expect.arrayContaining(["1", "3"]))
+  await assertSelect(expect.arrayContaining(["1", "3"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["1", "3"]) }),
   )
 
   tester.findSelectByPlaceholder("select").select("2")
-  await assertSelect(expect.arrayContaining(["2"]))
+  await assertSelect(expect.arrayContaining(["2"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["2"]) }),
   )

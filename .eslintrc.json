@@ -17,9 +17,9 @@
   },
   "overrides": [
     {
-      "files": ["packages/docs/cypress/**"],
+      "files": ["packages/website/cypress/**"],
       "parserOptions": {
-        "project": "./packages/docs/cypress/tsconfig.json"
+        "project": "./packages/website/cypress/tsconfig.json"
       }
     }
   ]

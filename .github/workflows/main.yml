@@ -11,20 +11,24 @@ env:
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
 
 jobs:
-  run-scripts:
+  run-commands:
     strategy:
-      matrix:
-        scripts:
-          - name: test
-            script: coverage
-          - name: lint
-            script: lint
-          - name: typecheck
-            script: typecheck
-          - name: build
-            script: build
       fail-fast: false
-    name: ${{ matrix.scripts.name }}
+      matrix:
+        command:
+          # if these run in the same process, it dies,
+          # so we test them separate
+          - name: test reacord
+            run: pnpm test -C packages/reacord
+          - name: test website
+            run: pnpm test -C packages/website
+          - name: build
+            run: pnpm build --recursive
+          - name: lint
+            run: pnpm lint
+          - name: typecheck
+            run: pnpm typecheck --parallel
+    name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,4 +38,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run --recursive ${{ matrix.scripts.script }}
+      - run: ${{ matrix.command.run }}

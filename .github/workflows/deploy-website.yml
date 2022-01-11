@@ -1,11 +1,10 @@
-name: deploy docs
+name: deploy website
 on:
   push:
     branches: [main]
     paths:
-      - "packages/docs/**"
+      - "packages/website/**"
       - "reacord/library/**/*.{ts,tsx}"
-
 jobs:
   deploy:
     runs-on: ubuntu-latest

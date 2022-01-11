@@ -1,5 +1,5 @@
 import React from "react"
-import { ReacordTester } from "../library/core/reacord-tester"
+import { test } from "vitest"
 import {
   Embed,
   EmbedAuthor,
@@ -9,6 +9,7 @@ import {
   EmbedThumbnail,
   EmbedTitle,
 } from "../library/main"
+import { ReacordTester } from "./test-adapter"
 
 const testing = new ReacordTester()
 
