@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "reacord-docs-new",
+  "name": "website",
   "scripts": {
     "prepare": "remix setup node",
     "dev": "concurrently 'typedoc --watch' 'remix dev'",

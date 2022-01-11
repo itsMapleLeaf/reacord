@@ -20,8 +20,8 @@ jobs:
           # so we test them separate
           - name: test reacord
             run: pnpm test -C packages/reacord
-          - name: test docs
-            run: pnpm test -C packages/docs
+          - name: test website
+            run: pnpm test -C packages/website
           - name: build
             run: pnpm build --recursive
           - name: lint
