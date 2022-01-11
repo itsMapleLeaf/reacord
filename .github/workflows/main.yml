@@ -16,7 +16,7 @@ jobs:
       matrix:
         scripts:
           - name: test
-            script: test --parallel
+            script: test
           - name: lint
             script: lint
           - name: typecheck
