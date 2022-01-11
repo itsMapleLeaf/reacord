@@ -11,16 +11,17 @@ env:
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
 
 jobs:
-  run-scripts:
+  run-commands:
     strategy:
       matrix:
-        script:
-          - -C packages/docs test
+        command:
+          - name: test
+            run: pnpm test --parallel --color
           # - lint
           # - typecheck
           # - build
       fail-fast: false
-    name: ${{ matrix.script }}
+    name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,4 +31,4 @@ jobs:
           node-version: "16"
       - run: npm i -g pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run ${{ matrix.script }}
+      - run: ${{ matrix.command.run }}
