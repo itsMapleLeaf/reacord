@@ -1,8 +1,10 @@
 import type { ReactNode } from "react"
+import React from "react"
 import type { ComponentInteraction } from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
 import type { Renderer } from "../internal/renderers/renderer"
 import type { ReacordInstance } from "./instance"
+import { InstanceProvider } from "./instance-context"
 
 /**
  * @category Core
@@ -47,13 +49,12 @@ export abstract class Reacord {
 
     const container = reconciler.createContainer(renderer, 0, false, {})
 
-    if (initialContent !== undefined) {
-      reconciler.updateContainer(initialContent, container)
-    }
-
-    return {
+    const instance: ReacordInstance = {
       render: (content: ReactNode) => {
-        reconciler.updateContainer(content, container)
+        reconciler.updateContainer(
+          <InstanceProvider value={instance}>{content}</InstanceProvider>,
+          container,
+        )
       },
       deactivate: () => {
         this.deactivate(renderer)
@@ -63,6 +64,12 @@ export abstract class Reacord {
         renderer.destroy()
       },
     }
+
+    if (initialContent !== undefined) {
+      instance.render(initialContent)
+    }
+
+    return instance
   }
 
   private deactivate(renderer: Renderer) {
