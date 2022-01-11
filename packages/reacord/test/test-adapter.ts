@@ -7,6 +7,7 @@ import type { ReactNode } from "react"
 import { expect } from "vitest"
 import { logPretty } from "../helpers/log-pretty"
 import { omit } from "../helpers/omit"
+import { pruneNullishValues } from "../helpers/prune-nullish-values"
 import { raise } from "../helpers/raise"
 import type {
   ChannelInfo,
@@ -88,14 +89,21 @@ export class ReacordTester extends Reacord {
   }
 
   sampleMessages() {
-    return this.messages.map((message) => ({
-      ...message.options,
-      actionRows: message.options.actionRows.map((row) =>
-        row.map((component) =>
-          omit(component, ["customId", "onClick", "onSelect", "onSelectValue"]),
+    return pruneNullishValues(
+      this.messages.map((message) => ({
+        ...message.options,
+        actionRows: message.options.actionRows.map((row) =>
+          row.map((component) =>
+            omit(component, [
+              "customId",
+              "onClick",
+              "onSelect",
+              "onSelectValue",
+            ]),
+          ),
         ),
-      ),
-    }))
+      })),
+    )
   }
 
   findButtonByLabel(label: string) {
