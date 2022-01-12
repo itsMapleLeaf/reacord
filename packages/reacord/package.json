@@ -5,7 +5,9 @@
   "version": "0.3.1",
   "types": "./dist/main.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -24,7 +26,7 @@
     "test-dev": "vitest",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon --exec esmo --ext ts,tsx --inspect=5858 --enable-source-maps ./playground/main.tsx",
-    "release": "pnpm build && cp ../../README.md . && release-it"
+    "release": "bash scripts/release.sh"
   },
   "dependencies": {
     "@types/node": "*",
