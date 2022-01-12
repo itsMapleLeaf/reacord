@@ -7,3 +7,4 @@ node_modules
 /public/api
 cypress/videos
 cypress/screenshots
+*.out.css

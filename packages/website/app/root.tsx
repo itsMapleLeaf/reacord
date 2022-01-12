@@ -12,6 +12,7 @@ import { GuideLinksProvider } from "~/modules/navigation/guide-links-context"
 import type { GuideLink } from "~/modules/navigation/load-guide-links.server"
 import { loadGuideLinks } from "~/modules/navigation/load-guide-links.server"
 import prismThemeCss from "~/modules/ui/prism-theme.css"
+import tailwindCss from "~/modules/ui/tailwind.out.css"
 
 export const meta: MetaFunction = () => ({
   title: "Reacord",
@@ -30,7 +31,7 @@ export const links: LinksFunction = () => [
     as: "style",
     href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Rubik:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap",
   },
-  { rel: "stylesheet", href: "/tailwind.css" },
+  { rel: "stylesheet", href: tailwindCss },
   { rel: "stylesheet", href: prismThemeCss },
 ]
 
