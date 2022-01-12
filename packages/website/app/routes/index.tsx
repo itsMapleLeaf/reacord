@@ -1,11 +1,12 @@
 import packageJson from "reacord/package.json"
+import { AppFooter } from "~/modules/app/app-footer"
 import LandingExample from "~/modules/landing/landing-example.mdx"
 import { MainNavigation } from "~/modules/navigation/main-navigation"
 import { maxWidthContainer } from "~/modules/ui/components"
 
 export default function Landing() {
   return (
-    <div className="flex flex-col min-w-0 min-h-screen text-center">
+    <div className="flex flex-col min-w-0 min-h-screen text-center pb-4">
       <header className={maxWidthContainer}>
         <MainNavigation />
       </header>
@@ -24,6 +25,7 @@ export default function Landing() {
           </a>
         </main>
       </div>
+      <AppFooter />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react"
 import { Link } from "remix"
+import { ExternalLink } from "~/modules/dom/external-link"
 
 export type AppLinkProps = ComponentPropsWithoutRef<"a"> & {
   type: "internal" | "external" | "router"
@@ -17,9 +18,9 @@ export function AppLink({ type, to, children, ...props }: AppLinkProps) {
 
   if (type === "external") {
     return (
-      <a href={to} target="_blank" rel="noopener noreferrer" {...props}>
+      <ExternalLink href={to} {...props}>
         {children}
-      </a>
+      </ExternalLink>
     )
   }
 
