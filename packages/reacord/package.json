@@ -24,7 +24,7 @@
     "test-dev": "vitest",
     "typecheck": "tsc --noEmit",
     "playground": "nodemon --exec esmo --ext ts,tsx --inspect=5858 --enable-source-maps ./playground/main.tsx",
-    "release": "pnpm build && release-it"
+    "release": "pnpm build && cp ../../README.md . && release-it"
   },
   "dependencies": {
     "@types/node": "*",
