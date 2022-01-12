@@ -1,7 +1,9 @@
-# reacord
-Create interactive Discord messages using React!
+<center>
+  <img src="./assets/Banner.png" alt="Reacord: Create interactive Discord messages using React">
+</center>
 
 ## Installation
+
 ```console
 # npm
 npm install reacord react discord.js
@@ -15,9 +17,11 @@ pnpm add reacord react discord.js
 ```
 
 ## Get Started
+
 [Visit the docs to get started.](https://reacord.fly.dev/guides/getting-started)
 
 ## Example
+
 <!-- prettier-ignore -->
 ```tsx
 import * as React from "react"
