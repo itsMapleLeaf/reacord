@@ -2,7 +2,7 @@
   "name": "reacord",
   "type": "module",
   "description": "Create interactive Discord messages using React.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "types": "./dist/main.d.ts",
   "files": [
     "dist"
