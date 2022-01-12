@@ -1,6 +1,6 @@
 {
   "entryPoints": ["../reacord/library/main.ts"],
-  "out": ["public/api"],
+  "out": ["public/api-dist"],
   "tsconfig": "../reacord/tsconfig.json",
   "excludeInternal": true,
   "excludePrivate": true,

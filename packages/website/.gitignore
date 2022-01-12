@@ -4,7 +4,7 @@ node_modules
 /build
 /public/build
 .env
-/public/api
+/public/api-dist
 cypress/videos
 cypress/screenshots
 *.out.css
