@@ -4,6 +4,9 @@
   "description": "Create interactive Discord messages using React.",
   "version": "0.3.3",
   "types": "./dist/main.d.ts",
+  "homepage": "https://reacord.fly.dev",
+  "repository": "https://github.com/itsMapleLeaf/reacord.git",
+  "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
   "files": [
     "dist",
     "README.md",
