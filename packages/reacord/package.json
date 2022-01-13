@@ -7,6 +7,18 @@
   "homepage": "https://reacord.fly.dev",
   "repository": "https://github.com/itsMapleLeaf/reacord.git",
   "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
+  "license": "MIT",
+  "keywords": [
+    "discord",
+    "discord-js",
+    "react",
+    "react-js",
+    "react-renderer",
+    "interaction",
+    "message",
+    "embed",
+    "reacord"
+  ],
   "files": [
     "dist",
     "README.md",
