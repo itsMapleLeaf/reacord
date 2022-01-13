@@ -22,3 +22,17 @@ export const docsProseClass = clsx`
   prose-pre:font-monospace prose-pre:overflow-x-auto
   max-w-none
 `
+
+export const buttonClass = ({
+  variant,
+}: {
+  variant: "solid" | "semiblack"
+}) => {
+  return clsx(
+    clsx`inline-block mt-4 px-4 py-2.5 text-xl transition rounded-lg`,
+    clsx`hover:translate-y-[-2px] hover:shadow`,
+    clsx`active:translate-y-[0px] active:transition-none`, // using translate-y-[0px] instead of just -0 so it takes priority
+    variant === "solid" && clsx`bg-emerald-700 hover:bg-emerald-800`,
+    variant === "semiblack" && clsx`bg-black/25 hover:bg-black/40`,
+  )
+}

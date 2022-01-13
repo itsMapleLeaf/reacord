@@ -1,24 +1,11 @@
-import clsx from "clsx"
 import dotsBackgroundUrl from "~/assets/dots-background.svg"
 import { AppFooter } from "~/modules/app/app-footer"
 import { AppLogo } from "~/modules/app/app-logo"
 import LandingCode from "~/modules/landing/landing-code.mdx"
 import { MainNavigation } from "~/modules/navigation/main-navigation"
-import { maxWidthContainer } from "~/modules/ui/components"
+import { buttonClass, maxWidthContainer } from "~/modules/ui/components"
 import { LandingAnimation } from "../modules/landing/landing-animation"
 import { ControlledModal } from "../modules/ui/modal"
-
-const buttonClass = ({ variant }: { variant: "solid" | "semiblack" }) => {
-  const variantClass = {
-    solid: clsx`bg-emerald-700 hover:bg-emerald-800`,
-    semiblack: clsx`bg-black/25 hover:bg-black/40`,
-  }[variant]
-
-  return clsx(
-    "inline-block mt-4 px-4 py-2.5 text-xl transition rounded-lg hover:translate-y-[-2px] hover:shadow",
-    variantClass,
-  )
-}
 
 export default function Landing() {
   return (
