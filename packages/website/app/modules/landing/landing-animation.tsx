@@ -35,11 +35,9 @@ export function LandingAnimation() {
     let running = true
 
     void (async () => {
-      await delay(1000)
-
       while (running) {
         setState(defaultState)
-        await delay(1000)
+        await delay(700)
 
         for (const letter of "/counter") {
           setState((state) => ({
