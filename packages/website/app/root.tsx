@@ -20,6 +20,7 @@ import tailwindCss from "~/modules/ui/tailwind.out.css"
 export const meta: MetaFunction = () => ({
   "title": "Reacord",
   "description": packageJson.description,
+  "theme-color": "#21754b",
 
   "og:url": "https://reacord.fly.dev/",
   "og:type": "website",
