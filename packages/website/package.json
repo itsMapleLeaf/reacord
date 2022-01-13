@@ -22,6 +22,7 @@
     "reacord": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-focus-on": "^3.5.4",
     "remix": "^1.1.1"
   },
   "devDependencies": {
