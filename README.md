@@ -2,7 +2,7 @@
   <img src="./packages/website/app/assets/banner.png" alt="Reacord: Create interactive Discord messages using React">
 </center>
 
-## Installation
+## Installation ∙ ![npm](https://img.shields.io/npm/v/reacord?color=blue&style=flat-square)
 
 ```console
 # npm
