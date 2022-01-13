@@ -1,5 +1,6 @@
 import clsx from "clsx"
 import { Outlet } from "remix"
+import { ActiveLink } from "~/modules/navigation/active-link"
 import { AppLink } from "~/modules/navigation/app-link"
 import { useGuideLinksContext } from "~/modules/navigation/guide-links-context"
 import { MainNavigation } from "~/modules/navigation/main-navigation"
@@ -24,7 +25,11 @@ export default function GuidePage() {
           <ul className="mt-3 flex flex-col gap-2 items-start">
             {guideLinks.map(({ link }) => (
               <li key={link.to}>
-                <AppLink {...link} className={linkClass} />
+                <ActiveLink to={link.to}>
+                  {({ active }) => (
+                    <AppLink {...link} className={linkClass({ active })} />
+                  )}
+                </ActiveLink>
               </li>
             ))}
           </ul>

@@ -12,7 +12,7 @@ export function MainNavigation() {
       </a>
       <div className="hidden md:flex gap-4">
         {mainLinks.map((link) => (
-          <AppLink {...link} key={link.to} className={linkClass} />
+          <AppLink {...link} key={link.to} className={linkClass()} />
         ))}
       </div>
       <div className="md:hidden">

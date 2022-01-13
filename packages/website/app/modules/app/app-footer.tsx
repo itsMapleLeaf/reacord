@@ -11,13 +11,13 @@ export function AppFooter() {
       </address>
       <p>
         Coded with <HeartIcon className="inline w-4 align-sub" /> using{" "}
-        <ExternalLink className={linkClass} href="https://remix.run">
+        <ExternalLink className={linkClass()} href="https://remix.run">
           Remix
         </ExternalLink>
       </p>
       <p>
         Uses{" "}
-        <ExternalLink className={linkClass} href="https://umami.is/">
+        <ExternalLink className={linkClass()} href="https://umami.is/">
           umami
         </ExternalLink>{" "}
         for simple, non-identifying analytics.

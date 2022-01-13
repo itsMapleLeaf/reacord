@@ -1,6 +1,7 @@
 import { Menu, Transition } from "@headlessui/react"
 import { MenuAlt4Icon } from "@heroicons/react/outline"
 import clsx from "clsx"
+import { ActiveLink } from "~/modules/navigation/active-link"
 import { useGuideLinksContext } from "~/modules/navigation/guide-links-context"
 import { Popper } from "~/modules/ui/popper"
 import { AppLink } from "./app-link"
@@ -39,8 +40,17 @@ export function MainNavigationMenu() {
               </Menu.Item>
               {guideLinks.map(({ link }) => (
                 <Menu.Item key={link.to}>
-                  {({ active }) => (
-                    <AppLink {...link} className={menuItemClass({ active })} />
+                  {(menuItem) => (
+                    <ActiveLink to={link.to}>
+                      {(activeLink) => (
+                        <AppLink
+                          {...link}
+                          className={menuItemClass({
+                            active: activeLink.active || menuItem.active,
+                          })}
+                        />
+                      )}
+                    </ActiveLink>
                   )}
                 </Menu.Item>
               ))}

@@ -4,12 +4,16 @@ export const maxWidthContainer = clsx`mx-auto w-full max-w-screen-lg px-4`
 
 export const inlineIconClass = clsx`inline w-5 align-sub`
 
-export const linkClass = clsx`
-  font-medium inline-block relative
-  opacity-60 hover:opacity-100 transition-opacity
-  after:absolute after:block after:w-full after:h-px after:bg-white/50 after:translate-y-[3px] after:opacity-0 after:transition
-  hover:after:translate-y-[-1px] hover:after:opacity-100
-`
+export const linkClass = ({ active = false } = {}) =>
+  clsx(
+    clsx`font-medium inline-block relative`,
+    clsx`opacity-60 hover:opacity-100 transition-opacity`,
+    clsx`after:absolute after:block after:w-full after:h-px after:bg-white/50 after:translate-y-[3px] after:opacity-0 after:transition`,
+    clsx`hover:after:translate-y-[-1px] hover:after:opacity-100`,
+    active
+      ? clsx`text-emerald-500 after:bg-emerald-500`
+      : clsx`after:bg-white/50`,
+  )
 
 export const docsProseClass = clsx`
   prose prose-invert
