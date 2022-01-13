@@ -9,16 +9,30 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "remix"
+import bannerUrl from "~/assets/banner.png"
+import faviconUrl from "~/assets/favicon.png"
 import { GuideLinksProvider } from "~/modules/navigation/guide-links-context"
 import type { GuideLink } from "~/modules/navigation/load-guide-links.server"
 import { loadGuideLinks } from "~/modules/navigation/load-guide-links.server"
 import prismThemeCss from "~/modules/ui/prism-theme.css"
 import tailwindCss from "~/modules/ui/tailwind.out.css"
-import faviconUrl from "./assets/favicon.png"
 
 export const meta: MetaFunction = () => ({
-  title: "Reacord",
-  description: packageJson.description,
+  "title": "Reacord",
+  "description": packageJson.description,
+
+  "og:url": "https://reacord.fly.dev/",
+  "og:type": "website",
+  "og:title": "Reacord",
+  "og:description": "Create interactive Discord messages using React",
+  "og:image": bannerUrl,
+
+  "twitter:card": "summary_large_image",
+  "twitter:domain": "reacord.fly.dev",
+  "twitter:url": "https://reacord.fly.dev/",
+  "twitter:title": "Reacord",
+  "twitter:description": "Create interactive Discord messages using React",
+  "twitter:image": bannerUrl,
 })
 
 export const links: LinksFunction = () => [

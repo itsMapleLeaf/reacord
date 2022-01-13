@@ -1,5 +1,5 @@
 <center>
-  <img src="./assets/Banner.png" alt="Reacord: Create interactive Discord messages using React">
+  <img src="./packages/website/app/assets/banner.png" alt="Reacord: Create interactive Discord messages using React">
 </center>
 
 ## Installation
