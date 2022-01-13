@@ -73,11 +73,9 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <script defer src="https://unpkg.com/alpinejs@3.7.1/dist/cdn.min.js" />
         {process.env.NODE_ENV === "production" && (
           <script
             async
-            defer
             data-website-id="49c69ade-5593-4853-9686-c9ca9d519a18"
             src="https://maple-umami.fly.dev/umami.js"
           />

@@ -91,7 +91,9 @@ importers:
 
   packages/website:
     specifiers:
+      '@headlessui/react': ^1.4.2
       '@heroicons/react': ^1.0.5
+      '@reach/rect': ^0.16.0
       '@remix-run/dev': ^1.1.1
       '@remix-run/node': ^1.1.1
       '@remix-run/react': ^1.1.1
@@ -122,7 +124,9 @@ importers:
       typescript: ^4.5.4
       wait-on: ^6.0.0
     dependencies:
+      '@headlessui/react': 1.4.2_react-dom@17.0.2+react@17.0.2
       '@heroicons/react': 1.0.5_react@17.0.2
+      '@reach/rect': 0.16.0_react-dom@17.0.2+react@17.0.2
       '@remix-run/react': 1.1.1_react-dom@17.0.2+react@17.0.2
       '@remix-run/serve': 1.1.1_react-dom@17.0.2+react@17.0.2
       '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.13
@@ -588,6 +592,17 @@ packages:
       '@hapi/hoek': 9.2.1
     dev: true
 
+  /@headlessui/react/1.4.2_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-N8tv7kLhg9qGKBkVdtg572BvKvWhmiudmeEpOCyNwzOsZHCXBtl8AazGikIfUS+vBoub20Fse3BjawXDVPPdug==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+      react-dom: ^16 || ^17 || ^18
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
+
   /@heroicons/react/1.0.5_react@17.0.2:
     resolution: {integrity: sha512-UDMyLM2KavIu2vlWfMspapw9yii7aoLwzI2Hudx4fyoPwfKfxU8r3cL8dEBXOjcLG0/oOONZzbT14M1HoNtEcg==}
     peerDependencies:
@@ -825,6 +840,37 @@ packages:
     dependencies:
       '@octokit/openapi-types': 11.2.0
     dev: true
+
+  /@reach/observe-rect/1.2.0:
+    resolution: {integrity: sha512-Ba7HmkFgfQxZqqaeIWWkNK0rEhpxVQHIoVyW1YDSkGsGIXzcaW4deC8B0pZrNSSyLTdIk7y+5olKt5+g0GmFIQ==}
+    dev: false
+
+  /@reach/rect/0.16.0_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-/qO9jQDzpOCdrSxVPR6l674mRHNTqfEjkaxZHluwJ/2qGUtYsA0GSZiF/+wX/yOWeBif1ycxJDa6HusAMJZC5Q==}
+    peerDependencies:
+      react: ^16.8.0 || 17.x
+      react-dom: ^16.8.0 || 17.x
+    dependencies:
+      '@reach/observe-rect': 1.2.0
+      '@reach/utils': 0.16.0_react-dom@17.0.2+react@17.0.2
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      tiny-warning: 1.0.3
+      tslib: 2.3.1
+    dev: false
+
+  /@reach/utils/0.16.0_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-PCggBet3qaQmwFNcmQ/GqHSefadAFyNCUekq9RrWoaU9hh/S4iaFgf2MBMdM47eQj5i/Bk0Mm07cP/XPFlkN+Q==}
+    peerDependencies:
+      react: ^16.8.0 || 17.x
+      react-dom: ^16.8.0 || 17.x
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      tiny-warning: 1.0.3
+      tslib: 2.3.1
+    dev: false
 
   /@remix-run/dev/1.1.1:
     resolution: {integrity: sha512-dkzMVgMzaQUppf2za3kD+izsEK1hLsLQSVtDD3wN7pBMEbWXaEkWb2X2lj3c9yRDArPB7y5+09rm4SUnE4mL6A==}
@@ -8015,6 +8061,10 @@ packages:
 
   /through/2.3.8:
     resolution: {integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=}
+
+  /tiny-warning/1.0.3:
+    resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
+    dev: false
 
   /tinypool/0.1.1:
     resolution: {integrity: sha512-sW2fQZ2BRb/GX5v55NkHiTrbMLx0eX0xNpP+VGhOe2f7Oo04+LeClDyM19zCE/WCy7jJ8kzIJ0Ojrxj3UhN9Sg==}

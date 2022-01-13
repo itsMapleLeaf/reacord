@@ -12,7 +12,7 @@ import {
 export default function GuidePage() {
   const guideLinks = useGuideLinksContext()
   return (
-    <>
+    <div className="isolate">
       <header className="bg-slate-700/30 shadow sticky top-0 backdrop-blur-sm transition z-10 flex">
         <div className={maxWidthContainer}>
           <MainNavigation />
@@ -33,6 +33,6 @@ export default function GuidePage() {
           <Outlet />
         </section>
       </main>
-    </>
+    </div>
   )
 }
