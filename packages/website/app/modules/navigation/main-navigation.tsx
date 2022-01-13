@@ -1,3 +1,4 @@
+import { AppLogo } from "~/modules/app/app-logo"
 import { useGuideLinksContext } from "~/modules/navigation/guide-links-context"
 import { linkClass } from "../ui/components"
 import { PopoverMenu } from "../ui/popover-menu"
@@ -9,7 +10,7 @@ export function MainNavigation() {
   return (
     <nav className="flex justify-between items-center h-16">
       <a href="/">
-        <h1 className="text-3xl font-light">reacord</h1>
+        <AppLogo className="w-32" />
       </a>
       <div className="hidden md:flex gap-4">
         {mainLinks.map((link) => (
