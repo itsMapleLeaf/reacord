@@ -5,6 +5,7 @@ import {
   LiveReload,
   Meta,
   Outlet,
+  Scripts,
   ScrollRestoration,
   useLoaderData,
 } from "remix"
@@ -72,6 +73,7 @@ export default function App() {
           <Outlet />
         </GuideLinksProvider>
         <ScrollRestoration />
+        <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
