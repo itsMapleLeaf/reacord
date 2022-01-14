@@ -21,9 +21,9 @@ export type ActionRowProps = {
  * ```tsx
  * // put buttons on two separate rows
  * <ActionRow>
- *   <Button onClick={handleFirst}>First</Button>
+ *   <Button label="First" onClick={handleFirst} />
  * </ActionRow>
- * <Button onClick={handleSecond}>Second</Button>
+ * <Button label="Second" onClick={handleSecond} />
  * ```
  *
  * @category Action Row
