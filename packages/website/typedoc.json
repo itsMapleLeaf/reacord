@@ -1,7 +1,8 @@
 {
+  "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["../reacord/library/main.ts"],
-  "out": ["public/api"],
   "tsconfig": "../reacord/tsconfig.json",
+  "json": "./app/assets/api.json",
   "excludeInternal": true,
   "excludePrivate": true,
   "excludeProtected": true,

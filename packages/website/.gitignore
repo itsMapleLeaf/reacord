@@ -4,7 +4,10 @@ node_modules
 /build
 /public/build
 .env
-/public/api
 cypress/videos
 cypress/screenshots
 *.out.css
+
+# typedoc output
+/public/api
+/app/assets/api.json
