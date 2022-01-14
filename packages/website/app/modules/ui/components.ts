@@ -20,10 +20,12 @@ export const docsProseClass = clsx`
   prose-h1:font-light prose-h1:mb-4 prose-h1:text-3xl lg:prose-h1:text-4xl
   prose-h2:font-light
   prose-h3:font-light
-  prose-p:my-4
+  prose-p:my-3
   prose-a:font-medium prose-a:text-emerald-400 hover:prose-a:no-underline
   prose-strong:font-medium prose-strong:text-emerald-400
   prose-pre:font-monospace prose-pre:overflow-x-auto
+  prose-code:before:hidden prose-code:after:hidden prose-code:text-slate-400
+  prose-li:mb-5
   max-w-none
 `
 
