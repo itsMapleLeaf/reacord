@@ -1,8 +1,8 @@
 import type { JSONOutput } from "typedoc"
+import apiData from "~/assets/api.json"
 
 export type ApiData = JSONOutput.ContainerReflection
 
-export async function loadApiData(): Promise<ApiData> {
-  const data = await import("~/assets/api.json")
-  return data as ApiData
+export function getApiData(): ApiData {
+  return apiData as ApiData
 }

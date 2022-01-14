@@ -2,16 +2,12 @@ import clsx from "clsx"
 import { Fragment } from "react"
 import type { LoaderFunction } from "remix"
 import { Outlet, useLoaderData } from "remix"
-import { loadApiData } from "~/modules/api/api-data.server"
+import { getApiData } from "~/modules/api/api-data.server"
 import { ActiveLink } from "~/modules/navigation/active-link"
 import type { AppLinkProps } from "~/modules/navigation/app-link"
 import { AppLink } from "~/modules/navigation/app-link"
 import { MainNavigation } from "~/modules/navigation/main-navigation"
-import {
-  docsProseClass,
-  linkClass,
-  maxWidthContainer,
-} from "~/modules/ui/components"
+import { linkClass, maxWidthContainer } from "~/modules/ui/components"
 
 type LoaderData = {
   categorySections: Array<{
@@ -22,7 +18,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async () => {
-  const apiData = await loadApiData()
+  const apiData = getApiData()
 
   const childrenById = Object.fromEntries(
     apiData.children.map((child) => [child.id, { name: child.name }]),
@@ -73,7 +69,7 @@ export default function ApiReferencePage() {
           ))}
         </nav>
 
-        <main className={clsx(docsProseClass, "pb-8 flex-1 min-w-0")}>
+        <main className="pb-8 flex-1 min-w-0">
           <Outlet />
         </main>
       </div>
