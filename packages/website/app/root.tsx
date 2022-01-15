@@ -77,7 +77,7 @@ export default function App() {
           <script
             async
             data-website-id="49c69ade-5593-4853-9686-c9ca9d519a18"
-            src="https://maple-umami.fly.dev/umami.js"
+            src="https://umami-production-265f.up.railway.app/umami.js"
           />
         )}
       </head>
