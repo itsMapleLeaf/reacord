@@ -9,6 +9,7 @@ export function MainNavigation() {
     <nav className="flex justify-between items-center h-16">
       <a href="/">
         <AppLogo className="w-32" />
+        <span className="sr-only">Home</span>
       </a>
       <div className="hidden md:flex gap-4">
         {mainLinks.map((link) => (
