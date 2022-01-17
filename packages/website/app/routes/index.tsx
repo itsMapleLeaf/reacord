@@ -5,7 +5,7 @@ import LandingCode from "~/modules/landing/landing-code.mdx"
 import { MainNavigation } from "~/modules/navigation/main-navigation"
 import { buttonClass, maxWidthContainer } from "~/modules/ui/components"
 import { LandingAnimation } from "../modules/landing/landing-animation"
-import { ControlledModal } from "../modules/ui/modal"
+import { UncontrolledModal } from "../modules/ui/modal"
 
 export default function Landing() {
   return (
@@ -37,7 +37,7 @@ export default function Landing() {
               Get Started
             </a>
 
-            <ControlledModal
+            <UncontrolledModal
               button={(button) => (
                 <button
                   {...button}
@@ -50,7 +50,7 @@ export default function Landing() {
               <div className="text-sm sm:text-base">
                 <LandingCode />
               </div>
-            </ControlledModal>
+            </UncontrolledModal>
           </div>
         </div>
 

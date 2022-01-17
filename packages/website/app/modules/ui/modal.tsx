@@ -61,7 +61,7 @@ export function Modal({
   )
 }
 
-export function ControlledModal({
+export function UncontrolledModal({
   children,
   button,
 }: {
