@@ -49,7 +49,6 @@ export type MessageSelectOptionOptions = {
 export type Message = {
   edit(options: MessageOptions): Promise<void>
   delete(): Promise<void>
-  disableComponents(): Promise<void>
 }
 
 export function getNextActionRow(options: MessageOptions): ActionRow {

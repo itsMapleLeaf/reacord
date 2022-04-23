@@ -170,16 +170,6 @@ class TestMessage implements Message {
     this.options = options
   }
 
-  async disableComponents(): Promise<void> {
-    for (const row of this.options.actionRows) {
-      for (const action of row) {
-        if (action.type === "button") {
-          action.disabled = true
-        }
-      }
-    }
-  }
-
   async delete(): Promise<void> {
     this.container.remove(this)
   }

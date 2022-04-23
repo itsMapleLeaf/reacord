@@ -298,17 +298,6 @@ function createReacordMessage(message: Discord.Message): Message {
     edit: async (options) => {
       await message.edit(getDiscordMessageOptions(options))
     },
-    disableComponents: async () => {
-      for (const actionRow of message.components) {
-        for (const component of actionRow.components) {
-          component.setDisabled(true)
-        }
-      }
-
-      await message.edit({
-        components: message.components,
-      })
-    },
     delete: async () => {
       await message.delete()
     },
@@ -318,10 +307,6 @@ function createReacordMessage(message: Discord.Message): Message {
 function createEphemeralReacordMessage(): Message {
   return {
     edit: () => {
-      console.warn("Ephemeral messages can't be edited")
-      return Promise.resolve()
-    },
-    disableComponents: () => {
       console.warn("Ephemeral messages can't be edited")
       return Promise.resolve()
     },
