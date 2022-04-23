@@ -22,15 +22,15 @@ export const meta: MetaFunction = () => ({
   "description": packageJson.description,
   "theme-color": "#21754b",
 
-  "og:url": "https://reacord.fly.dev/",
+  "og:url": "https://reacord.mapleleaf.dev/",
   "og:type": "website",
   "og:title": "Reacord",
   "og:description": "Create interactive Discord messages using React",
   "og:image": bannerUrl,
 
   "twitter:card": "summary_large_image",
-  "twitter:domain": "reacord.fly.dev",
-  "twitter:url": "https://reacord.fly.dev/",
+  "twitter:domain": "reacord.mapleleaf.dev",
+  "twitter:url": "https://reacord.mapleleaf.dev/",
   "twitter:title": "Reacord",
   "twitter:description": "Create interactive Discord messages using React",
   "twitter:image": bannerUrl,

@@ -18,7 +18,7 @@ pnpm add reacord react discord.js
 
 ## Get Started
 
-[Visit the docs to get started.](https://reacord.fly.dev/guides/getting-started)
+[Visit the docs to get started.](https://reacord.mapleleaf.dev/guides/getting-started)
 
 ## Example
 

@@ -40,7 +40,7 @@ export class ReacordDiscordJs extends Reacord {
 
   /**
    * Sends a message to a channel.
-   * @see https://reacord.fly.dev/guides/sending-messages
+   * @see https://reacord.mapleleaf.dev/guides/sending-messages
    */
   override send(
     channelId: string,
@@ -54,7 +54,7 @@ export class ReacordDiscordJs extends Reacord {
 
   /**
    * Sends a message as a reply to a command interaction.
-   * @see https://reacord.fly.dev/guides/sending-messages
+   * @see https://reacord.mapleleaf.dev/guides/sending-messages
    */
   override reply(
     interaction: Discord.CommandInteraction,
@@ -68,7 +68,7 @@ export class ReacordDiscordJs extends Reacord {
 
   /**
    * Sends an ephemeral message as a reply to a command interaction.
-   * @see https://reacord.fly.dev/guides/sending-messages
+   * @see https://reacord.mapleleaf.dev/guides/sending-messages
    */
   override ephemeralReply(
     interaction: Discord.CommandInteraction,

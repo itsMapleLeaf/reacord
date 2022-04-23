@@ -10,7 +10,7 @@ export const InstanceProvider = Context.Provider
  * Get the associated instance for the current component.
  *
  * @category Core
- * @see https://reacord.fly.dev/guides/use-instance
+ * @see https://reacord.mapleleaf.dev/guides/use-instance
  */
 export function useInstance(): ReacordInstance {
   return (
