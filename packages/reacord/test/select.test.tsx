@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import { expect, fn, test } from "vitest"
+import { expect, test, vi } from "vitest"
 import { Button, Option, Select } from "../library/main"
 import { ReacordTester } from "./test-adapter"
 
 test("single select", async () => {
   const tester = new ReacordTester()
-  const onSelect = fn()
+  const onSelect = vi.fn()
 
   function TestSelect() {
     const [value, setValue] = useState<string>()
@@ -75,7 +75,7 @@ test("single select", async () => {
 
 test("multiple select", async () => {
   const tester = new ReacordTester()
-  const onSelect = fn()
+  const onSelect = vi.fn()
 
   function TestSelect() {
     const [values, setValues] = useState<string[]>([])
