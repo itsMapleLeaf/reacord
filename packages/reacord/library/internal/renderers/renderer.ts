@@ -83,7 +83,17 @@ export abstract class Renderer {
 
     if (payload.action === "deactivate") {
       this.updateSubscription.unsubscribe()
-      await this.message?.disableComponents()
+
+      await this.message?.edit({
+        ...payload.options,
+        actionRows: payload.options.actionRows.map((row) =>
+          row.map((component) => ({
+            ...component,
+            disabled: true,
+          })),
+        ),
+      })
+
       return
     }
 
