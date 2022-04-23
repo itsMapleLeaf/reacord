@@ -14,6 +14,7 @@
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
     "@reach/rect": "^0.17.0",
+    "@remix-run/node": "^1.4.1",
     "@remix-run/react": "^1.4.1",
     "@remix-run/serve": "^1.4.1",
     "@tailwindcss/typography": "^0.5.2",
@@ -25,8 +26,7 @@
     "react-dom": "^18.0.0",
     "react-focus-on": "^3.5.4",
     "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0",
-    "remix": "^1.4.1"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.4.1",

@@ -4,3 +4,4 @@ coverage
 pnpm-lock.yaml
 build
 .cache
+packages/website/public/api

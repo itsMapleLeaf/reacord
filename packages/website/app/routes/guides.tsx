@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Outlet } from "remix"
+import { Outlet } from "@remix-run/react"
 import { ActiveLink } from "~/modules/navigation/active-link"
 import { AppLink } from "~/modules/navigation/app-link"
 import { useGuideLinksContext } from "~/modules/navigation/guide-links-context"

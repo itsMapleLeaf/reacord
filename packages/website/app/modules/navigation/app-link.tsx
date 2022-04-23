@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react"
-import { Link } from "remix"
+import { Link } from "@remix-run/react"
 import { ExternalLink } from "~/modules/dom/external-link"
 
 export type AppLinkProps = ComponentPropsWithoutRef<"a"> & {

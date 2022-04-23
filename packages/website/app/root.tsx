@@ -1,5 +1,9 @@
 import packageJson from "reacord/package.json"
-import type { LinksFunction, LoaderFunction, MetaFunction } from "remix"
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -8,7 +12,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "remix"
+} from "@remix-run/react"
 import bannerUrl from "~/assets/banner.png"
 import faviconUrl from "~/assets/favicon.png"
 import { GuideLinksProvider } from "~/modules/navigation/guide-links-context"
