@@ -55,7 +55,7 @@ describe("useInstance", () => {
     await tester.assertMessages([messageOutput("parent")])
     expect(instanceFromHook).toBe(instance)
 
-    tester.findButtonByLabel("create parent").click()
+    await tester.findButtonByLabel("create parent").click()
     await tester.assertMessages([
       messageOutput("parent"),
       messageOutput("child"),
@@ -63,10 +63,10 @@ describe("useInstance", () => {
 
     // this test ensures that the only the child instance is destroyed,
     // and not the parent instance
-    tester.findButtonByLabel("destroy child").click()
+    await tester.findButtonByLabel("destroy child").click()
     await tester.assertMessages([messageOutput("parent")])
 
-    tester.findButtonByLabel("destroy parent").click()
+    await tester.findButtonByLabel("destroy parent").click()
     await tester.assertMessages([])
   })
 })

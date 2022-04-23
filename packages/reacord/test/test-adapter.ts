@@ -1,14 +1,14 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable require-await */
 import { nanoid } from "nanoid"
-import { nextTick } from "node:process"
-import { promisify } from "node:util"
+import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
 import { logPretty } from "../helpers/log-pretty"
 import { omit } from "../helpers/omit"
 import { pruneNullishValues } from "../helpers/prune-nullish-values"
 import { raise } from "../helpers/raise"
+import { waitFor } from "../helpers/wait-for"
 import type {
   ChannelInfo,
   GuildInfo,
@@ -26,16 +26,9 @@ import type {
   CommandInteraction,
   SelectInteraction,
 } from "../library/internal/interaction"
-import type {
-  Message,
-  MessageButtonOptions,
-  MessageOptions,
-  MessageSelectOptions,
-} from "../library/internal/message"
+import type { Message, MessageOptions } from "../library/internal/message"
 import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
-
-const nextTickPromise = promisify(nextTick)
 
 export type MessageSample = ReturnType<ReacordTester["sampleMessages"]>[0]
 
@@ -73,9 +66,10 @@ export class ReacordTester extends Reacord {
     return this.reply(initialContent)
   }
 
-  async assertMessages(expected: MessageSample[]) {
-    await nextTickPromise()
-    expect(this.sampleMessages()).toEqual(expected)
+  assertMessages(expected: MessageSample[]) {
+    return waitFor(() => {
+      expect(this.sampleMessages()).toEqual(expected)
+    })
   }
 
   async assertRender(content: ReactNode, expected: MessageSample[]) {
@@ -108,57 +102,58 @@ export class ReacordTester extends Reacord {
   }
 
   findButtonByLabel(label: string) {
-    for (const message of this.messageContainer) {
-      for (const component of message.options.actionRows.flat()) {
-        if (component.type === "button" && component.label === label) {
-          return this.createButtonActions(component, message)
-        }
-      }
+    return {
+      click: () => {
+        return waitFor(() => {
+          for (const [component, message] of this.eachComponent()) {
+            if (component.type === "button" && component.label === label) {
+              this.handleComponentInteraction(
+                new TestButtonInteraction(component.customId, message, this),
+              )
+              return
+            }
+          }
+          raise(`Couldn't find button with label "${label}"`)
+        })
+      },
     }
-    raise(`Couldn't find button with label "${label}"`)
   }
 
   findSelectByPlaceholder(placeholder: string) {
-    for (const message of this.messageContainer) {
-      for (const component of message.options.actionRows.flat()) {
-        if (
-          component.type === "select" &&
-          component.placeholder === placeholder
-        ) {
-          return this.createSelectActions(component, message)
-        }
-      }
+    return {
+      select: (...values: string[]) => {
+        return waitFor(() => {
+          for (const [component, message] of this.eachComponent()) {
+            if (
+              component.type === "select" &&
+              component.placeholder === placeholder
+            ) {
+              this.handleComponentInteraction(
+                new TestSelectInteraction(
+                  component.customId,
+                  message,
+                  values,
+                  this,
+                ),
+              )
+              return
+            }
+          }
+          raise(`Couldn't find select with placeholder "${placeholder}"`)
+        })
+      },
     }
-    raise(`Couldn't find select with placeholder "${placeholder}"`)
   }
 
   createMessage(options: MessageOptions) {
     return new TestMessage(options, this.messageContainer)
   }
 
-  private createButtonActions(
-    button: MessageButtonOptions,
-    message: TestMessage,
-  ) {
-    return {
-      click: () => {
-        this.handleComponentInteraction(
-          new TestButtonInteraction(button.customId, message, this),
-        )
-      },
-    }
-  }
-
-  private createSelectActions(
-    component: MessageSelectOptions,
-    message: TestMessage,
-  ) {
-    return {
-      select: (...values: string[]) => {
-        this.handleComponentInteraction(
-          new TestSelectInteraction(component.customId, message, values, this),
-        )
-      },
+  private *eachComponent() {
+    for (const message of this.messageContainer) {
+      for (const component of message.options.actionRows.flat()) {
+        yield [component, message] as const
+      }
     }
   }
 }
@@ -197,16 +192,14 @@ class TestCommandInteraction implements CommandInteraction {
 
   constructor(private messageContainer: Container<TestMessage>) {}
 
-  reply(messageOptions: MessageOptions): Promise<Message> {
-    return Promise.resolve(
-      new TestMessage(messageOptions, this.messageContainer),
-    )
+  async reply(messageOptions: MessageOptions): Promise<Message> {
+    await setTimeout()
+    return new TestMessage(messageOptions, this.messageContainer)
   }
 
-  followUp(messageOptions: MessageOptions): Promise<Message> {
-    return Promise.resolve(
-      new TestMessage(messageOptions, this.messageContainer),
-    )
+  async followUp(messageOptions: MessageOptions): Promise<Message> {
+    await setTimeout()
+    return new TestMessage(messageOptions, this.messageContainer)
   }
 }
 
