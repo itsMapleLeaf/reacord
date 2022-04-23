@@ -52,6 +52,8 @@ const config: HostConfig<
   },
   createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
+  // @ts-expect-error
+  detachDeletedInstance: (instance) => {},
 
   clearContainer: (renderer) => {
     renderer.nodes.clear()
