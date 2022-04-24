@@ -18,10 +18,25 @@ export function pruneNullishValues<T>(input: T): PruneNullishValues<T> {
   return result
 }
 
-type PruneNullishValues<Input> = Input extends ReadonlyArray<infer Value>
-  ? ReadonlyArray<NonNullable<Value>>
-  : Input extends object
-  ? {
-      [Key in keyof Input]: NonNullable<Input[Key]>
-    }
+export type PruneNullishValues<Input> = Input extends object
+  ? OptionalKeys<
+      { [Key in keyof Input]: NonNullable<PruneNullishValues<Input[Key]>> },
+      KeysWithNullishValues<Input>
+    >
   : Input
+
+type OptionalKeys<Input, Keys extends keyof Input> = Omit<Input, Keys> & {
+  [Key in Keys]?: Input[Key]
+}
+
+type KeysWithNullishValues<Input> = NonNullable<
+  Values<{
+    [Key in keyof Input]: null extends Input[Key]
+      ? Key
+      : undefined extends Input[Key]
+      ? Key
+      : never
+  }>
+>
+
+type Values<Input> = Input[keyof Input]
