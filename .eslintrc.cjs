@@ -1,6 +1,8 @@
-/** @type {import('eslint').ESLint.Options} */
+require("@rushstack/eslint-patch/modern-module-resolution")
+
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
-  extends: ["./node_modules/@itsmapleleaf/configs/eslint"],
+  extends: [require.resolve("@itsmapleleaf/configs/eslint")],
   ignorePatterns: [
     "**/node_modules/**",
     "**/.cache/**",
@@ -11,10 +13,6 @@ module.exports = {
   ],
   parserOptions: {
     project: require.resolve("./tsconfig.base.json"),
-  },
-  rules: {
-    "import/no-unused-modules": "off",
-    "unicorn/prevent-abbreviations": "off",
   },
   overrides: [
     {

@@ -1,6 +1,5 @@
 import { inspect } from "node:util"
 
-// eslint-disable-next-line import/no-unused-modules
 export function withLoggedMethodCalls<T extends object>(value: T) {
   return new Proxy(value as Record<string | symbol, unknown>, {
     get(target, property) {

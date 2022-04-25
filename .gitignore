@@ -4,3 +4,6 @@ node_modules
 coverage
 .env
 *.code-workspace
+
+build
+.cache

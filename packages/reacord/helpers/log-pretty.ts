@@ -1,6 +1,5 @@
 import { inspect } from "node:util"
 
-// eslint-disable-next-line import/no-unused-modules
 export function logPretty(value: unknown) {
   console.info(
     inspect(value, {

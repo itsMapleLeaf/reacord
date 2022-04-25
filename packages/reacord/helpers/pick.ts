@@ -1,6 +1,5 @@
 import type { LoosePick, UnknownRecord } from "./types"
 
-// eslint-disable-next-line import/no-unused-modules
 export function pick<T, K extends keyof T | PropertyKey>(
   object: T,
   keys: K[],
