@@ -1,6 +1,9 @@
 import { Client } from "discord.js"
 import "dotenv/config"
+import { readFile } from "fs/promises"
+import { join } from "path"
 import React from "react"
+import { fileURLToPath } from "url"
 import { Button, ReacordDiscordJs, useInstance } from "../library/main"
 import { createCommandHandler } from "./command-handler"
 import { Counter } from "./counter"
@@ -102,6 +105,19 @@ createCommandHandler(client, [
         return <Button label="delete this" onClick={() => instance.destroy()} />
       }
       reacord.reply(interaction, <DeleteThis />)
+    },
+  },
+  {
+    name: "anime",
+    description: "shows an anime image",
+    run: async (interaction) => {
+      const reply = reacord.reply(interaction)
+      const image = await readFile(
+        join(fileURLToPath(import.meta.url), "../anime.jpg"),
+      )
+
+      reply.attach({ name: "anime.jpg", data: image })
+      // reply.render("anime")
     },
   },
 ])

@@ -301,12 +301,25 @@ function createReacordMessage(message: Discord.Message): Message {
     delete: async () => {
       await message.delete()
     },
+    updateFiles: async (files) => {
+      await message.edit({
+        files: files.map(({ name, description, data }) => ({
+          name,
+          description,
+          attachment: data,
+        })),
+      })
+    },
   }
 }
 
 function createEphemeralReacordMessage(): Message {
   return {
     edit: () => {
+      console.warn("Ephemeral messages can't be edited")
+      return Promise.resolve()
+    },
+    updateFiles: () => {
       console.warn("Ephemeral messages can't be edited")
       return Promise.resolve()
     },
@@ -358,7 +371,10 @@ function getDiscordMessageOptions(
     })),
   }
 
-  if (!options.content && !options.embeds?.length) {
+  const hasContent =
+    options.content || options.embeds?.length || options.files?.length
+
+  if (!hasContent) {
     options.content = "_ _"
   }
 

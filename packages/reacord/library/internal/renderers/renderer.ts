@@ -1,5 +1,6 @@
 import { Subject } from "rxjs"
 import { concatMap } from "rxjs/operators"
+import { ReacordFile } from "../../core/file"
 import { Container } from "../container.js"
 import type { ComponentInteraction } from "../interaction"
 import type { Message, MessageOptions } from "../message"
@@ -7,8 +8,13 @@ import type { Node } from "../node.js"
 
 type UpdatePayload =
   | { action: "update" | "deactivate"; options: MessageOptions }
+  | { action: "files"; files: readonly ReacordFile[] }
   | { action: "deferUpdate"; interaction: ComponentInteraction }
   | { action: "destroy" }
+
+type NewMessagePayload =
+  | { source: "content"; messageOptions?: MessageOptions }
+  | { source: "files"; files?: readonly ReacordFile[] }
 
 export abstract class Renderer {
   readonly nodes = new Container<Node<unknown>>()
@@ -16,6 +22,7 @@ export abstract class Renderer {
   private message?: Message
   private active = true
   private updates = new Subject<UpdatePayload>()
+  private files: readonly ReacordFile[] = []
 
   private updateSubscription = this.updates
     .pipe(concatMap((payload) => this.updateMessage(payload)))
@@ -46,6 +53,11 @@ export abstract class Renderer {
     this.updates.next({ action: "destroy" })
   }
 
+  attach(file: ReacordFile) {
+    const newFiles = (this.files = [...this.files, file])
+    this.updates.next({ action: "files", files: newFiles })
+  }
+
   handleComponentInteraction(interaction: ComponentInteraction) {
     this.componentInteraction = interaction
 
@@ -60,7 +72,7 @@ export abstract class Renderer {
     }
   }
 
-  protected abstract createMessage(options: MessageOptions): Promise<Message>
+  protected abstract createMessage(options: NewMessagePayload): Promise<Message>
 
   private getMessageOptions(): MessageOptions {
     const options: MessageOptions = {
@@ -99,6 +111,15 @@ export abstract class Renderer {
 
     if (payload.action === "deferUpdate") {
       await payload.interaction.deferUpdate()
+      return
+    }
+
+    if (payload.action === "files") {
+      if (this.message) {
+        await this.message?.updateFiles(payload.files)
+      } else {
+        this.message = await this.createMessageFromFiles(payload.files)
+      }
       return
     }
 

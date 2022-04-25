@@ -2,6 +2,7 @@ import type { Except } from "type-fest"
 import { last } from "../../helpers/last"
 import type { EmbedOptions } from "../core/components/embed-options"
 import type { SelectProps } from "../core/components/select"
+import { ReacordFile } from "../main"
 
 export type MessageOptions = {
   content: string
@@ -49,6 +50,7 @@ export type MessageSelectOptionOptions = {
 export type Message = {
   edit(options: MessageOptions): Promise<void>
   delete(): Promise<void>
+  updateFiles(files: readonly ReacordFile[]): Promise<void>
 }
 
 export function getNextActionRow(options: MessageOptions): ActionRow {

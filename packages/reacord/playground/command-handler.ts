@@ -8,16 +8,14 @@ type Command = {
 
 export function createCommandHandler(client: Client, commands: Command[]) {
   client.on("ready", async () => {
-    for (const command of commands) {
-      for (const guild of client.guilds.cache.values()) {
-        await client.application?.commands.create(
-          {
-            name: command.name,
-            description: command.description,
-          },
-          guild.id,
-        )
-      }
+    for (const guild of client.guilds.cache.values()) {
+      client.application!.commands.set(
+        commands.map(({ name, description }) => ({
+          name,
+          description,
+        })),
+        guild.id,
+      )
     }
   })
 

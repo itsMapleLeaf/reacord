@@ -63,6 +63,9 @@ export abstract class Reacord {
         this.renderers = this.renderers.filter((it) => it !== renderer)
         renderer.destroy()
       },
+      attach: (file) => {
+        renderer.attach(file)
+      },
     }
 
     if (initialContent !== undefined) {

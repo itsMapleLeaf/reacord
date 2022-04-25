@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { ReacordFile } from "./file"
 
 /**
  * Represents an interactive message, which can later be replaced or deleted.
@@ -16,4 +17,7 @@ export type ReacordInstance = {
    * This prevents it from listening to user interactions.
    */
   deactivate: () => void
+
+  /** Attach a file to the message for this instance */
+  attach: (file: ReacordFile) => void
 }
