@@ -1,4 +1,3 @@
-import packageJson from "reacord/package.json"
 import type {
   LinksFunction,
   LoaderFunction,
@@ -13,6 +12,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react"
+import packageJson from "reacord/package.json"
 import bannerUrl from "~/assets/banner.png"
 import faviconUrl from "~/assets/favicon.png"
 import { GuideLinksProvider } from "~/modules/navigation/guide-links-context"
@@ -77,6 +77,7 @@ export default function App() {
   return (
     <html lang="en" className="bg-slate-900 text-slate-100">
       <head>
+        {/* eslint-disable-next-line unicorn/text-encoding-identifier-case */}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />

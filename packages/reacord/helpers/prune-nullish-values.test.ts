@@ -1,5 +1,6 @@
 import { expect, test } from "vitest"
-import { PruneNullishValues, pruneNullishValues } from "./prune-nullish-values"
+import type { PruneNullishValues } from "./prune-nullish-values"
+import { pruneNullishValues } from "./prune-nullish-values"
 
 test("pruneNullishValues", () => {
   type InputType = {
@@ -14,6 +15,7 @@ test("pruneNullishValues", () => {
 
   const input: InputType = {
     a: "a",
+    // eslint-disable-next-line unicorn/no-null
     b: null,
     c: undefined,
     d: {
