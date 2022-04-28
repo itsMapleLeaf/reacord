@@ -3,7 +3,8 @@
   "scripts": {
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "pnpm release -C packages/reacord"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.3",
