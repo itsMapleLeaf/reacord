@@ -21,7 +21,6 @@
     "clsx": "^1.1.1",
     "fast-glob": "^3.2.11",
     "gray-matter": "^4.0.3",
-    "node": "^16",
     "reacord": "workspace:*",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
