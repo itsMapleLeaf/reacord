@@ -85,9 +85,10 @@ export default function App() {
         {process.env.NODE_ENV === "production" && (
           <script
             async
-            data-website-id="49c69ade-5593-4853-9686-c9ca9d519a18"
-            src="https://umami-production-265f.up.railway.app/umami.js"
-          />
+            defer
+            data-website-id="e3ce3a50-720e-4489-be37-cc091c1b7029"
+            src="https://umami-production-72bc.up.railway.app/umami.js"
+          ></script>
         )}
       </head>
       <body>
