@@ -35,7 +35,7 @@
     }
   },
   "scripts": {
-    "build": "tsup-node library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
+    "build": "tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build -- --watch",
     "test": "vitest --coverage --no-watch",
     "test-dev": "vitest",
