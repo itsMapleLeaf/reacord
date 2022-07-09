@@ -19,15 +19,15 @@ jobs:
           # if these run in the same process, it dies,
           # so we test them separate
           - name: test reacord
-            run: pnpm test -C packages/reacord
+            run: pnpm -C packages/reacord test
           - name: test website
-            run: pnpm test -C packages/website
+            run: pnpm -C packages/website test
           - name: build
-            run: pnpm build --recursive
+            run: pnpm --recursive run build
           - name: lint
-            run: pnpm lint
+            run: pnpm run lint
           - name: typecheck
-            run: pnpm typecheck --parallel
+            run: pnpm --recursive run typecheck
     name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:
@@ -36,6 +36,6 @@ jobs:
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "16"
-      - run: npm i -g pnpm
+      - run: npm i -g pnpm@7.5.0
       - run: pnpm install --frozen-lockfile
       - run: ${{ matrix.command.run }}
