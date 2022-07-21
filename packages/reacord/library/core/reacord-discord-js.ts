@@ -342,12 +342,12 @@ function getDiscordMessageOptions(
     content: reacordOptions.content || null,
     embeds: reacordOptions.embeds,
     components: reacordOptions.actionRows.map((row) => ({
-      type: "ACTION_ROW",
+      type: Discord.ComponentType.ActionRow,
       components: row.map(
         (component): Discord.MessageActionRowComponentOptions => {
           if (component.type === "button") {
             return {
-              type: "BUTTON",
+              type: Discord.ComponentType.Button,
               customId: component.customId,
               label: component.label ?? "",
               style: convertButtonStyleToEnum(component.style),
@@ -359,7 +359,7 @@ function getDiscordMessageOptions(
           if (component.type === "select") {
             return {
               ...component,
-              type: "SELECT_MENU",
+              type: Discord.ComponentType.SelectMenu,
               options: component.options.map((option) => ({
                 ...option,
                 default: component.values?.includes(option.value),
