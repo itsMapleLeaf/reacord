@@ -334,17 +334,15 @@ function convertButtonStyleToEnum(style: MessageButtonOptions["style"]) {
 
 // TODO: this could be a part of the core library,
 // and also handle some edge cases, e.g. empty messages
-function getDiscordMessageOptions(
-  reacordOptions: MessageOptions,
-): Discord.MessageOptions {
-  const options: Discord.MessageOptions = {
+function getDiscordMessageOptions(reacordOptions: MessageOptions) {
+  const options = {
     // eslint-disable-next-line unicorn/no-null
     content: reacordOptions.content || null,
     embeds: reacordOptions.embeds,
     components: reacordOptions.actionRows.map((row) => ({
       type: Discord.ComponentType.ActionRow,
       components: row.map(
-        (component): Discord.MessageActionRowComponentOptions => {
+        (component): Discord.MessageActionRowComponentData => {
           if (component.type === "button") {
             return {
               type: Discord.ComponentType.Button,
