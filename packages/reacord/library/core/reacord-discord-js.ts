@@ -5,7 +5,6 @@ import type { Except } from "type-fest"
 import { pick } from "../../helpers/pick"
 import { pruneNullishValues } from "../../helpers/prune-nullish-values"
 import { raise } from "../../helpers/raise"
-import { toUpper } from "../../helpers/to-upper"
 import type { ComponentInteraction } from "../internal/interaction"
 import type {
   Message,
