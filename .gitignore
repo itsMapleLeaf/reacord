@@ -4,6 +4,7 @@ node_modules
 coverage
 .env
 *.code-workspace
+.pnpm-debug.log
 
 build
 .cache
