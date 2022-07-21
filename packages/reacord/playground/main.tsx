@@ -1,4 +1,4 @@
-import { Client } from "discord.js"
+import { Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import React from "react"
 import { Button, ReacordDiscordJs, useInstance } from "../library/main"
@@ -7,7 +7,7 @@ import { Counter } from "./counter"
 import { FruitSelect } from "./fruit-select"
 
 const client = new Client({
-  intents: ["GUILDS"],
+  intents: IntentsBitField.Flags.Guilds,
 })
 
 const reacord = new ReacordDiscordJs(client)
