@@ -22,7 +22,7 @@ export function createCommandHandler(client: Client, commands: Command[]) {
   })
 
   client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) return
+    if (!interaction.isChatInputCommand()) return
 
     const command = commands.find(
       (command) => command.name === interaction.commandName,
