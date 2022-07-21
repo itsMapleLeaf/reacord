@@ -34,7 +34,7 @@ export class ReacordDiscordJs extends Reacord {
     super(config)
 
     client.on("interactionCreate", (interaction) => {
-      if (interaction.isMessageComponent()) {
+      if (interaction.isButton() || interaction.isSelectMenu()) {
         this.handleComponentInteraction(
           this.createReacordComponentInteraction(interaction),
         )
@@ -92,7 +92,7 @@ export class ReacordDiscordJs extends Reacord {
           (await this.client.channels.fetch(channelId)) ??
           raise(`Channel ${channelId} not found`)
 
-        if (!channel.isText()) {
+        if (!channel.isTextBased()) {
           raise(`Channel ${channelId} is not a text channel`)
         }
 
