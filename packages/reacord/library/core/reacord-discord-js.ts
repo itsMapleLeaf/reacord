@@ -7,7 +7,11 @@ import { pruneNullishValues } from "../../helpers/prune-nullish-values"
 import { raise } from "../../helpers/raise"
 import { toUpper } from "../../helpers/to-upper"
 import type { ComponentInteraction } from "../internal/interaction"
-import type { Message, MessageOptions } from "../internal/message"
+import type {
+  Message,
+  MessageButtonOptions,
+  MessageOptions,
+} from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
 import type {
@@ -317,6 +321,17 @@ function createEphemeralReacordMessage(): Message {
   }
 }
 
+function convertButtonStyleToEnum(style: MessageButtonOptions["style"]) {
+  const styleMap = {
+    primary: Discord.ButtonStyle.Primary,
+    secondary: Discord.ButtonStyle.Secondary,
+    success: Discord.ButtonStyle.Success,
+    danger: Discord.ButtonStyle.Danger,
+  } as const
+
+  return styleMap[style ?? "secondary"]
+}
+
 // TODO: this could be a part of the core library,
 // and also handle some edge cases, e.g. empty messages
 function getDiscordMessageOptions(
@@ -335,7 +350,7 @@ function getDiscordMessageOptions(
               type: "BUTTON",
               customId: component.customId,
               label: component.label ?? "",
-              style: toUpper(component.style ?? "secondary"),
+              style: convertButtonStyleToEnum(component.style),
               disabled: component.disabled,
               emoji: component.emoji,
             }
