@@ -7,7 +7,7 @@
     "format": "prettier --write .",
     "build": "pnpm -r run build",
     "start": "pnpm -C packages/website run start",
-    "release": "pnpm run build && changeset release"
+    "release": "pnpm run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.0",
