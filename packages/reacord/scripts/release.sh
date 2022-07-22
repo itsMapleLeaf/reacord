@@ -1,4 +1,4 @@
-pnpm build
+pnpm run build
 cp ../../README.md .
 cp ../../LICENSE .
-pnpx release-it
+pnpm release-it
