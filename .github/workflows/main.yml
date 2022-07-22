@@ -11,8 +11,8 @@ env:
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
 
 concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  group: workflow-${{ github.run_id }}
 
 jobs:
   run-commands:
