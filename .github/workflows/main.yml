@@ -10,6 +10,10 @@ env:
   TEST_CHANNEL_ID: ${{ secrets.TEST_CHANNEL_ID }}
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
 
+concurrency:
+  cancel-in-progress: true
+  group: workflow-${{ github.run_id }}
+
 jobs:
   run-commands:
     strategy:
