@@ -5,9 +5,9 @@
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
     "format": "prettier --write .",
-    "release": "pnpm -C packages/reacord run release",
-    "build": "pnpm -C packages/website run build",
-    "start": "pnpm -C packages/website run start"
+    "build": "pnpm -r run build",
+    "start": "pnpm -C packages/website run start",
+    "release": "pnpm run build && changeset release"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.0",
