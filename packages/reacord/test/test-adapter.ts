@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable require-await */
-import { nanoid } from "nanoid"
+import { randomUUID } from "node:crypto"
 import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
@@ -194,7 +194,7 @@ class TestCommandInteraction implements CommandInteraction {
 }
 
 class TestInteraction {
-  readonly id = nanoid()
+  readonly id = randomUUID()
   readonly channelId = "test-channel-id"
 
   constructor(

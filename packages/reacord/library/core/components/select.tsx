@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid"
+import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
 import { isInstanceOf } from "../../../helpers/is-instance-of"
@@ -89,7 +89,7 @@ export function Select(props: SelectProps) {
 }
 
 class SelectNode extends Node<SelectProps> {
-  readonly customId = nanoid()
+  readonly customId = randomUUID()
 
   override modifyMessageOptions(message: MessageOptions): void {
     const actionRow: ActionRow = []

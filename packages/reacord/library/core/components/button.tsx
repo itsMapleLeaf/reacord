@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid"
+import { randomUUID } from "node:crypto"
 import React from "react"
 import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
@@ -43,7 +43,7 @@ export function Button(props: ButtonProps) {
 }
 
 class ButtonNode extends Node<ButtonProps> {
-  private customId = nanoid()
+  private customId = randomUUID()
 
   // this has text children, but buttons themselves shouldn't yield text
   // eslint-disable-next-line class-methods-use-this

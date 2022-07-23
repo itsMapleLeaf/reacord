@@ -35,7 +35,6 @@ importers:
       discord.js: ^14.0.3
       dotenv: ^16.0.1
       lodash-es: ^4.17.21
-      nanoid: ^4.0.0
       nodemon: ^2.0.19
       prettier: ^2.7.1
       pretty-ms: ^8.0.0
@@ -53,7 +52,6 @@ importers:
       '@types/node': 18.0.6
       '@types/react': 18.0.15
       '@types/react-reconciler': 0.28.0
-      nanoid: 4.0.0
       react-reconciler: 0.29.0_react@18.2.0
       rxjs: 7.5.6
     devDependencies:
@@ -88,7 +86,7 @@ importers:
       '@types/node': '*'
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
-      '@types/tailwindcss': ^3.1.0
+      '@types/tailwindcss': ^3.0.11
       '@types/wait-on': ^5.3.1
       autoprefixer: ^10.4.7
       clsx: ^1.2.1
@@ -98,7 +96,7 @@ importers:
       fast-glob: ^3.2.11
       gray-matter: ^4.0.3
       postcss: ^8.4.14
-      reacord: workspace:0.5.0
+      reacord: workspace:*
       react: ^18.2.0
       react-dom: ^18.2.0
       react-focus-on: ^3.6.0
@@ -7765,12 +7763,6 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-
-  /nanoid/4.0.0:
-    resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
-    engines: {node: ^14 || ^16 || >=18}
-    hasBin: true
-    dev: false
 
   /nanomatch/1.2.13:
     resolution: {integrity: sha512-fpoe2T0RbHwBTBUOftAfBPaDEi06ufaUai0mE6Yn1kacc3SnTErfb/h+X94VXzI64rKFHYImXSvdwGGCmwOqCA==}
