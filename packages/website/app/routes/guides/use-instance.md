@@ -1,4 +1,5 @@
 ---
+order: 5
 meta:
   title: useInstance
   description: Using useInstance to get the current instance within a component

@@ -7,11 +7,15 @@ meta:
 
 # Getting Started
 
-This guide assumes some familiarity with JavaScript, [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
+These guides assume some familiarity with JavaScript, [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
 
-**Note:** Ensure your project has support for running code with JSX. I recommend using [esno](https://npm.im/esno).
+## Setup from template
 
-## Install
+[Use this starter template](https://github.com/itsMapleLeaf/reacord-starter) to get off the ground quickly.
+
+## Adding to an existing project
+
+Install Reacord and dependencies:
 
 ```bash
 # npm
@@ -24,12 +28,10 @@ yarn add reacord react discord.js
 pnpm add reacord react discord.js
 ```
 
-## Setup
-
 Create a Discord.js client and a Reacord instance:
 
 ```js
-// main.js
+// main.jsx
 import { Client } from "discord.js"
 import { ReacordDiscordJs } from "reacord"
 
@@ -41,4 +43,11 @@ client.on("ready", () => {
 })
 
 await client.login(process.env.BOT_TOKEN)
+```
+
+To use JSX in your code, run it with [tsx](https://npm.im/tsx):
+
+```bash
+npm install tsx
+tsx main.tsx
 ```
