@@ -2,18 +2,11 @@ import type { TextChannel } from "discord.js"
 import { ChannelType, Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
-import * as React from "react"
-import { useState } from "react"
-import {
-  Button,
-  Option,
-  ReacordDiscordJs,
-  Select,
-  useInstance,
-} from "../library/main"
+import React, { useEffect, useState } from "react"
+import { createReacordDiscordJs } from "../library.new/discord-js"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
-const reacord = new ReacordDiscordJs(client)
+const reacord = createReacordDiscordJs(client)
 
 await client.login(process.env.TEST_BOT_TOKEN)
 
@@ -44,91 +37,18 @@ const createTest = async (
 }
 
 await createTest("basic", (channel) => {
-  reacord.send(channel.id, "Hello, world!")
-})
+  function Timer() {
+    const [count, setCount] = useState(0)
 
-await createTest("counter", (channel) => {
-  const Counter = () => {
-    const [count, setCount] = React.useState(0)
-    return (
-      <>
-        count: {count}
-        <Button
-          style="primary"
-          emoji="➕"
-          onClick={() => setCount(count + 1)}
-        />
-        <Button
-          style="primary"
-          emoji="➖"
-          onClick={() => setCount(count - 1)}
-        />
-        <Button label="reset" onClick={() => setCount(0)} />
-      </>
-    )
-  }
-  reacord.send(channel.id, <Counter />)
-})
+    useEffect(() => {
+      const id = setInterval(() => {
+        setCount((count) => count + 3)
+      }, 3000)
+      return () => clearInterval(id)
+    }, [])
 
-await createTest("select", (channel) => {
-  function FruitSelect({ onConfirm }: { onConfirm: (choice: string) => void }) {
-    const [value, setValue] = useState<string>()
-
-    return (
-      <>
-        <Select
-          placeholder="choose a fruit"
-          value={value}
-          onChangeValue={setValue}
-        >
-          <Option value="🍎" emoji="🍎" label="apple" description="it red" />
-          <Option value="🍌" emoji="🍌" label="banana" description="bnanbna" />
-          <Option value="🍒" emoji="🍒" label="cherry" description="heh" />
-        </Select>
-        <Button
-          label="confirm"
-          disabled={value == undefined}
-          onClick={() => {
-            if (value) onConfirm(value)
-          }}
-        />
-      </>
-    )
+    return <>this component has been running for {count} seconds</>
   }
 
-  const instance = reacord.send(
-    channel.id,
-    <FruitSelect
-      onConfirm={(value) => {
-        instance.render(`you chose ${value}`)
-        instance.deactivate()
-      }}
-    />,
-  )
-})
-
-await createTest("ephemeral button", (channel) => {
-  reacord.send(
-    channel.id,
-    <>
-      <Button
-        label="public clic"
-        onClick={(event) =>
-          event.reply(`${event.guild?.member.displayName} clic`)
-        }
-      />
-      <Button
-        label="clic"
-        onClick={(event) => event.ephemeralReply("you clic")}
-      />
-    </>,
-  )
-})
-
-await createTest("delete this", (channel) => {
-  function DeleteThis() {
-    const instance = useInstance()
-    return <Button label="delete this" onClick={() => instance.destroy()} />
-  }
-  reacord.send(channel.id, <DeleteThis />)
+  reacord.send(channel.id, <Timer />)
 })
