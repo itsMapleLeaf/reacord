@@ -52,3 +52,9 @@ await createTest("basic", (channel) => {
 
   reacord.send(channel.id, <Timer />)
 })
+
+await createTest("immediate renders", async (channel) => {
+  const instance = reacord.send(channel.id)
+  instance.render("hi world")
+  instance.render("hi moon")
+})

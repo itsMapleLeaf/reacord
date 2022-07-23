@@ -4,208 +4,88 @@ import type {
   Message,
   MessageEditOptions,
   MessageOptions,
+  TextBasedChannel,
 } from "discord.js"
 import type { ReactNode } from "react"
-import ReactReconciler from "react-reconciler"
-import { DefaultEventPriority } from "react-reconciler/constants"
+import type { ReacordOptions } from "./reacord"
+import { createReacordInstanceManager } from "./reacord"
 
-export function createReacordDiscordJs(client: Client) {
+export function createReacordDiscordJs(
+  client: Client,
+  options: ReacordOptions = {},
+) {
+  const manager = createReacordInstanceManager(options)
   return {
     send(channelId: string, initialContent?: ReactNode) {
-      let message: Message | undefined
-
-      const tree: MessageTree = {
-        children: [],
-        render: async () => {
-          const messageOptions: MessageOptions & MessageEditOptions = {
-            content: tree.children.map((child) => child.text).join(""),
-          }
-
-          try {
-            if (message) {
-              await message.edit(messageOptions)
-              return
-            }
-
-            let channel = client.channels.cache.get(channelId)
-            if (!channel) {
-              channel = (await client.channels.fetch(channelId)) ?? undefined
-            }
-            if (!channel) {
-              throw new Error(`Channel ${channelId} not found`)
-            }
-            if (!channel.isTextBased()) {
-              throw new Error(`Channel ${channelId} is not a text channel`)
-            }
-            message = await channel.send(messageOptions)
-          } catch (error) {
-            console.error(
-              "Reacord encountered an error while rendering.",
-              error,
-            )
-          }
-        },
-      }
-
-      const container = reconciler.createContainer(
-        tree,
-        0,
-        // eslint-disable-next-line unicorn/no-null
-        null,
-        false,
-        // eslint-disable-next-line unicorn/no-null
-        null,
-        "reacord",
-        () => {},
-        // eslint-disable-next-line unicorn/no-null
-        null,
-      )
-
-      const instance = {
-        render(content: ReactNode) {
-          reconciler.updateContainer(content, container)
-        },
-      }
-
-      if (initialContent !== undefined) {
-        instance.render(initialContent)
-      }
-
-      return instance
+      const messageUpdater = createMessageUpdater()
+      return manager.createInstance(initialContent, async (tree) => {
+        const messageOptions: MessageOptions & MessageEditOptions = {
+          content: tree.children.map((child) => child.text).join(""),
+        }
+        const channel = await getTextChannel(client, channelId)
+        await messageUpdater.update(messageOptions, channel)
+      })
     },
+
     reply(interaction: Interaction, initialContent?: ReactNode) {},
+
     ephemeralReply(interaction: Interaction, initialContent?: ReactNode) {},
   }
 }
 
-type MessageTree = {
-  children: TextNode[]
-  render: () => void
+function createMessageUpdater() {
+  type UpdatePayload = {
+    options: MessageOptions & MessageEditOptions
+    channel: TextBasedChannel
+  }
+
+  let message: Message | undefined
+
+  const queue: UpdatePayload[] = []
+  let queuePromise: Promise<void> | undefined
+
+  async function update(
+    options: MessageOptions & MessageEditOptions,
+    channel: TextBasedChannel,
+  ) {
+    queue.push({ options, channel })
+
+    if (queuePromise) {
+      return queuePromise
+    }
+
+    queuePromise = runQueue()
+    try {
+      await queuePromise
+    } finally {
+      queuePromise = undefined
+    }
+  }
+
+  async function runQueue() {
+    let payload: UpdatePayload | undefined
+    while ((payload = queue.shift())) {
+      if (message) {
+        await message.edit(payload.options)
+      } else {
+        message = await payload.channel.send(payload.options)
+      }
+    }
+  }
+
+  return { update }
 }
 
-type TextNode = {
-  type: "text"
-  text: string
+async function getTextChannel(client: Client<boolean>, channelId: string) {
+  let channel = client.channels.cache.get(channelId)
+  if (!channel) {
+    channel = (await client.channels.fetch(channelId)) ?? undefined
+  }
+  if (!channel) {
+    throw new Error(`Channel ${channelId} not found`)
+  }
+  if (!channel.isTextBased()) {
+    throw new Error(`Channel ${channelId} is not a text channel`)
+  }
+  return channel
 }
-
-const reconciler = ReactReconciler<
-  string, // Type
-  Record<string, unknown>, // Props
-  MessageTree, // Container
-  never, // Instance
-  TextNode, // TextInstance
-  never, // SuspenseInstance
-  never, // HydratableInstance
-  never, // PublicInstance
-  {}, // HostContext
-  true, // UpdatePayload
-  never, // ChildSet
-  NodeJS.Timeout, // TimeoutHandle
-  -1 // NoTimeout
->({
-  isPrimaryRenderer: true,
-  supportsMutation: true,
-  supportsHydration: false,
-  supportsPersistence: false,
-  scheduleTimeout: setTimeout,
-  cancelTimeout: clearTimeout,
-  noTimeout: -1,
-
-  createInstance() {
-    throw new Error("Not implemented")
-  },
-
-  createTextInstance(text) {
-    return { type: "text", text }
-  },
-
-  appendInitialChild(parent, child) {},
-
-  appendChild(parentInstance, child) {},
-
-  appendChildToContainer(container, child) {
-    container.children.push(child)
-  },
-
-  insertBefore(parentInstance, child, beforeChild) {},
-
-  insertInContainerBefore(container, child, beforeChild) {
-    const index = container.children.indexOf(beforeChild)
-    if (index !== -1) container.children.splice(index, 0, child)
-  },
-
-  removeChild(parentInstance, child) {},
-
-  removeChildFromContainer(container, child) {
-    container.children = container.children.filter((c) => c !== child)
-  },
-
-  clearContainer(container) {
-    container.children = []
-  },
-
-  commitTextUpdate(textInstance, oldText, newText) {
-    textInstance.text = newText
-  },
-
-  commitUpdate(
-    instance,
-    updatePayload,
-    type,
-    prevProps,
-    nextProps,
-    internalHandle,
-  ) {},
-
-  prepareForCommit() {
-    // eslint-disable-next-line unicorn/no-null
-    return null
-  },
-
-  resetAfterCommit(container) {
-    container.render()
-  },
-
-  finalizeInitialChildren() {
-    return false
-  },
-
-  prepareUpdate() {
-    return true
-  },
-
-  shouldSetTextContent() {
-    return false
-  },
-
-  getRootHostContext() {
-    return {}
-  },
-
-  getChildHostContext() {
-    return {}
-  },
-
-  getPublicInstance() {
-    throw new Error("Refs are not supported")
-  },
-
-  preparePortalMount() {},
-
-  getCurrentEventPriority() {
-    return DefaultEventPriority
-  },
-
-  getInstanceFromNode() {
-    return undefined
-  },
-
-  beforeActiveInstanceBlur() {},
-  afterActiveInstanceBlur() {},
-  prepareScopeUpdate() {},
-  getInstanceFromScope() {
-    // eslint-disable-next-line unicorn/no-null
-    return null
-  },
-  detachDeletedInstance() {},
-})
