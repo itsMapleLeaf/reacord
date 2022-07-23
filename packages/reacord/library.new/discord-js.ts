@@ -7,6 +7,7 @@ import type {
   TextBasedChannel,
 } from "discord.js"
 import type { ReactNode } from "react"
+import { createAsyncQueue } from "./async-queue"
 import type { ReacordOptions } from "./reacord"
 import { createReacordInstanceManager } from "./reacord"
 
@@ -34,43 +35,20 @@ export function createReacordDiscordJs(
 }
 
 function createMessageUpdater() {
-  type UpdatePayload = {
-    options: MessageOptions & MessageEditOptions
-    channel: TextBasedChannel
-  }
-
   let message: Message | undefined
-
-  const queue: UpdatePayload[] = []
-  let queuePromise: Promise<void> | undefined
+  const queue = createAsyncQueue()
 
   async function update(
     options: MessageOptions & MessageEditOptions,
     channel: TextBasedChannel,
   ) {
-    queue.push({ options, channel })
-
-    if (queuePromise) {
-      return queuePromise
-    }
-
-    queuePromise = runQueue()
-    try {
-      await queuePromise
-    } finally {
-      queuePromise = undefined
-    }
-  }
-
-  async function runQueue() {
-    let payload: UpdatePayload | undefined
-    while ((payload = queue.shift())) {
+    return queue.add(async () => {
       if (message) {
-        await message.edit(payload.options)
+        await message.edit(options)
       } else {
-        message = await payload.channel.send(payload.options)
+        message = await channel.send(options)
       }
-    }
+    })
   }
 
   return { update }
