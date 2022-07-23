@@ -18,18 +18,26 @@ export type LinkProps = ButtonSharedProps & {
 /**
  * @category Link
  */
-export function Link(props: LinkProps) {
-  return <ReacordElement props={props} createNode={() => new LinkNode(props)} />
+export function Link({ label, children, ...props }: LinkProps) {
+  return (
+    <ReacordElement props={props} createNode={() => new LinkNode(props)}>
+      <ReacordElement props={{}} createNode={() => new LinkTextNode({})}>
+        {label || children}
+      </ReacordElement>
+    </ReacordElement>
+  )
 }
 
-class LinkNode extends Node<LinkProps> {
+class LinkNode extends Node<Omit<LinkProps, "label" | "children">> {
   override modifyMessageOptions(options: MessageOptions): void {
     getNextActionRow(options).push({
       type: "link",
       disabled: this.props.disabled,
       emoji: this.props.emoji,
-      label: this.props.label || this.props.children,
+      label: this.children.findType(LinkTextNode)?.text,
       url: this.props.url,
     })
   }
 }
+
+class LinkTextNode extends Node<{}> {}

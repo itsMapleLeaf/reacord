@@ -1,10 +1,12 @@
+import type { ReactNode } from "react"
+
 /**
  * Common props between button-like components
  * @category Button
  */
 export type ButtonSharedProps = {
   /** The text on the button. Rich formatting (markdown) is not supported here. */
-  label?: string
+  label?: ReactNode
 
   /** When true, the button will be slightly faded, and cannot be clicked. */
   disabled?: boolean
