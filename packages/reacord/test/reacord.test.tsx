@@ -35,7 +35,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("show embed").click()
+  await tester.findButtonByLabel("show embed").click()
   await tester.assertMessages([
     {
       content: "count: 0",
@@ -62,7 +62,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("clicc").click()
+  await tester.findButtonByLabel("clicc").click()
   await tester.assertMessages([
     {
       content: "count: 1",
@@ -94,7 +94,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("clicc").click()
+  await tester.findButtonByLabel("clicc").click()
   await tester.assertMessages([
     {
       content: "count: 2",
@@ -126,7 +126,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("hide embed").click()
+  await tester.findButtonByLabel("hide embed").click()
   await tester.assertMessages([
     {
       content: "count: 2",
@@ -153,7 +153,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("clicc").click()
+  await tester.findButtonByLabel("clicc").click()
   await tester.assertMessages([
     {
       content: "count: 3",
@@ -180,7 +180,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("deactivate").click()
+  await tester.findButtonByLabel("deactivate").click()
   await tester.assertMessages([
     {
       content: "count: 3",
@@ -210,7 +210,7 @@ test("rendering behavior", async () => {
     },
   ])
 
-  tester.findButtonByLabel("clicc").click()
+  await tester.findButtonByLabel("clicc").click()
   await tester.assertMessages([
     {
       content: "count: 3",

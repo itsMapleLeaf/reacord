@@ -59,16 +59,16 @@ test("single select", async () => {
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  tester.findSelectByPlaceholder("choose one").select("2")
+  await tester.findSelectByPlaceholder("choose one").select("2")
   await assertSelect(["2"])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: ["2"] }),
   )
 
-  tester.findButtonByLabel("disable").click()
+  await tester.findButtonByLabel("disable").click()
   await assertSelect(["2"], true)
 
-  tester.findSelectByPlaceholder("choose one").select("1")
+  await tester.findSelectByPlaceholder("choose one").select("1")
   await assertSelect(["2"], true)
   expect(onSelect).toHaveBeenCalledTimes(1)
 })
@@ -125,19 +125,19 @@ test("multiple select", async () => {
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  tester.findSelectByPlaceholder("select").select("1", "3")
+  await tester.findSelectByPlaceholder("select").select("1", "3")
   await assertSelect(expect.arrayContaining(["1", "3"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["1", "3"]) }),
   )
 
-  tester.findSelectByPlaceholder("select").select("2")
+  await tester.findSelectByPlaceholder("select").select("2")
   await assertSelect(expect.arrayContaining(["2"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["2"]) }),
   )
 
-  tester.findSelectByPlaceholder("select").select()
+  await tester.findSelectByPlaceholder("select").select()
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ values: [] }))
 })
@@ -145,7 +145,7 @@ test("multiple select", async () => {
 test("optional onSelect + unknown value", async () => {
   const tester = new ReacordTester()
   tester.reply().render(<Select placeholder="select" />)
-  tester.findSelectByPlaceholder("select").select("something")
+  await tester.findSelectByPlaceholder("select").select("something")
   await tester.assertMessages([
     {
       content: "",
