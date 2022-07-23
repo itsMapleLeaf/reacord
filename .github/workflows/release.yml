@@ -6,39 +6,32 @@ on:
     branches:
       - main
 
-env:
-  CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  version:
-    timeout-minutes: 15
+  release:
+    name: release
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code repository
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: setup node.js
+      - name: setup node
         uses: actions/setup-node@v2
         with:
           node-version: 16
 
       - name: install pnpm
-        run: npm install pnpm -g
+        run: npm install -g pnpm
 
-      - name: setup .npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      - name: install deps
+        run: pnpm install --frozen-lockfile
 
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-
-      - name: install dependencies
-        run: pnpm install
-
-      - name: create and publish versions
+      - name: changesets release
+        id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm release
+          publish: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
