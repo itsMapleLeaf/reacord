@@ -105,6 +105,7 @@ importers:
       typedoc: ^0.23.8
       typescript: ^4.7.4
       wait-on: ^6.0.1
+      zod: ^3.17.10
     dependencies:
       '@headlessui/react': 1.6.6_biqbaboplfbrettd7655fr4n2y
       '@heroicons/react': 1.0.6_react@18.2.0
@@ -122,6 +123,7 @@ importers:
       react-focus-on: 3.6.0_3hx2ussxxho4jajbwrd6gq34qe
       react-router: 6.3.0_react@18.2.0
       react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+      zod: 3.17.10
     devDependencies:
       '@remix-run/dev': 1.6.5_xontd7q62j6h4ge55exoz26nhu
       '@testing-library/cypress': 8.0.3_cypress@10.3.1
@@ -11237,6 +11239,10 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.17.10:
+    resolution: {integrity: sha512-IHXnQYQuOOOL/XgHhgl8YjNxBHi3xX0mVcHmqsvJgcxKkEczPshoWdxqyFwsARpf41E0v9U95WUROqsHHxt0UQ==}
+    dev: false
 
   /zwitch/2.0.2:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}

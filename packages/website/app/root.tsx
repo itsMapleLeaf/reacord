@@ -1,8 +1,4 @@
-import type {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/node"
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -16,7 +12,6 @@ import packageJson from "reacord/package.json"
 import bannerUrl from "~/assets/banner.png"
 import faviconUrl from "~/assets/favicon.png"
 import { GuideLinksProvider } from "~/modules/navigation/guide-links-context"
-import type { GuideLink } from "~/modules/navigation/load-guide-links.server"
 import { loadGuideLinks } from "~/modules/navigation/load-guide-links.server"
 import prismThemeCss from "~/modules/ui/prism-theme.css"
 import tailwindCss from "~/modules/ui/tailwind.out.css"
@@ -61,19 +56,14 @@ export const links: LinksFunction = () => [
   },
 ]
 
-type LoaderData = {
-  guideLinks: GuideLink[]
-}
-
-export const loader: LoaderFunction = async () => {
-  const data: LoaderData = {
+export async function loader() {
+  return {
     guideLinks: await loadGuideLinks(),
   }
-  return data
 }
 
 export default function App() {
-  const data: LoaderData = useLoaderData()
+  const data = useLoaderData<typeof loader>()
   return (
     <html lang="en" className="bg-slate-900 text-slate-100">
       <head>
