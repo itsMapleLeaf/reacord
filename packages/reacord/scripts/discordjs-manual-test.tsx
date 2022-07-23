@@ -81,9 +81,9 @@ await createTest("select", (channel) => {
           value={value}
           onChangeValue={setValue}
         >
-          <Option value="🍎" />
-          <Option value="🍌" />
-          <Option value="🍒" />
+          <Option value="🍎" emoji="🍎" label="apple" description="it red" />
+          <Option value="🍌" emoji="🍌" label="banana" description="bnanbna" />
+          <Option value="🍒" emoji="🍒" label="cherry" description="heh" />
         </Select>
         <Button
           label="confirm"

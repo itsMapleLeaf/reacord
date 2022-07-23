@@ -13,4 +13,8 @@ export abstract class Node<Props> {
   handleComponentInteraction(interaction: ComponentInteraction): boolean {
     return false
   }
+
+  get text(): string {
+    return [...this.children].map((child) => child.text).join("")
+  }
 }

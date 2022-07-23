@@ -34,12 +34,22 @@ export type ButtonClickEvent = ComponentEvent
  */
 export function Button(props: ButtonProps) {
   return (
-    <ReacordElement props={props} createNode={() => new ButtonNode(props)} />
+    <ReacordElement props={props} createNode={() => new ButtonNode(props)}>
+      <ReacordElement props={{}} createNode={() => new ButtonLabelNode({})}>
+        {props.label}
+      </ReacordElement>
+    </ReacordElement>
   )
 }
 
 class ButtonNode extends Node<ButtonProps> {
   private customId = nanoid()
+
+  // this has text children, but buttons themselves shouldn't yield text
+  // eslint-disable-next-line class-methods-use-this
+  override get text() {
+    return ""
+  }
 
   override modifyMessageOptions(options: MessageOptions): void {
     getNextActionRow(options).push({
@@ -48,7 +58,7 @@ class ButtonNode extends Node<ButtonProps> {
       style: this.props.style ?? "secondary",
       disabled: this.props.disabled,
       emoji: this.props.emoji,
-      label: this.props.label,
+      label: this.children.findType(ButtonLabelNode)?.text,
     })
   }
 
@@ -63,3 +73,5 @@ class ButtonNode extends Node<ButtonProps> {
     return false
   }
 }
+
+class ButtonLabelNode extends Node<{}> {}

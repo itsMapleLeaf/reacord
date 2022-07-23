@@ -21,6 +21,16 @@ export class Container<T> {
     this.items = []
   }
 
+  find(predicate: (item: T) => boolean): T | undefined {
+    return this.items.find(predicate)
+  }
+
+  findType<U extends T>(type: new (...args: any[]) => U): U | undefined {
+    for (const item of this.items) {
+      if (item instanceof type) return item
+    }
+  }
+
   [Symbol.iterator]() {
     return this.items[Symbol.iterator]()
   }

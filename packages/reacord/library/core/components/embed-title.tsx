@@ -1,5 +1,7 @@
+import type { ReactNode } from "react"
 import React from "react"
 import { ReacordElement } from "../../internal/element.js"
+import { Node } from "../../internal/node.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 
@@ -7,25 +9,28 @@ import type { EmbedOptions } from "./embed-options"
  * @category Embed
  */
 export type EmbedTitleProps = {
-  children: string
+  children: ReactNode
   url?: string
 }
 
 /**
  * @category Embed
  */
-export function EmbedTitle(props: EmbedTitleProps) {
+export function EmbedTitle({ children, ...props }: EmbedTitleProps) {
   return (
-    <ReacordElement
-      props={props}
-      createNode={() => new EmbedTitleNode(props)}
-    />
+    <ReacordElement props={props} createNode={() => new EmbedTitleNode(props)}>
+      <ReacordElement props={{}} createNode={() => new TitleTextNode({})}>
+        {children}
+      </ReacordElement>
+    </ReacordElement>
   )
 }
 
-class EmbedTitleNode extends EmbedChildNode<EmbedTitleProps> {
+class EmbedTitleNode extends EmbedChildNode<Omit<EmbedTitleProps, "children">> {
   override modifyEmbedOptions(options: EmbedOptions): void {
-    options.title = this.props.children
+    options.title = this.children.findType(TitleTextNode)?.text ?? ""
     options.url = this.props.url
   }
 }
+
+class TitleTextNode extends Node<{}> {}
