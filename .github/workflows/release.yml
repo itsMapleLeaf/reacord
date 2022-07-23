@@ -1,39 +1,44 @@
-# https://github.com/changesets/action#with-publishing
-name: Release
+# https://pnpm.io/using-changesets
+name: release
 
 on:
   push:
     branches:
       - main
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
 
 jobs:
-  release:
-    name: Release
+  version:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: checkout code repository
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: setup node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 16
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: install pnpm
+        run: npm install pnpm -g
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+      - name: setup .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: create and publish versions
         uses: changesets/action@v1
         with:
-          publish: pnpm run release
+          publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
