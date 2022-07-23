@@ -27,7 +27,8 @@
   "exports": {
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.cjs"
+      "require": "./dist/main.cjs",
+      "types": "./dist/main.d.ts"
     },
     "./package.json": {
       "import": "./package.json",
