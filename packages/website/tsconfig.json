@@ -6,5 +6,6 @@
     "paths": {
       "~/*": ["./app/*"]
     }
-  }
+  },
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
 }
