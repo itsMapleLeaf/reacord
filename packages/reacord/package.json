@@ -47,10 +47,10 @@
   "dependencies": {
     "@types/node": "*",
     "@types/react": "*",
-    "@types/react-reconciler": "^0.26.6",
-    "nanoid": "^3.3.3",
-    "react-reconciler": "^0.27.0",
-    "rxjs": "^7.5.5"
+    "@types/react-reconciler": "^0.28.0",
+    "nanoid": "^4.0.0",
+    "react-reconciler": "^0.29.0",
+    "rxjs": "^7.5.6"
   },
   "peerDependencies": {
     "discord.js": "^14",
@@ -63,21 +63,21 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.6",
-    "c8": "^7.11.2",
+    "c8": "^7.12.0",
     "discord.js": "^14.0.3",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "lodash-es": "^4.17.21",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.6.2",
-    "pretty-ms": "^7.0.1",
-    "react": "^18.0.0",
-    "release-it": "^14.14.2",
-    "tsup": "^5.12.6",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "pretty-ms": "^8.0.0",
+    "react": "^18.2.0",
+    "release-it": "^15.1.3",
+    "tsup": "^6.1.3",
     "tsx": "^3.8.0",
-    "type-fest": "^2.12.2",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.5",
-    "vitest": "^0.10.0"
+    "type-fest": "^2.17.0",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.2",
+    "vitest": "^0.18.1"
   },
   "resolutions": {
     "esbuild": "latest"
