@@ -27,7 +27,8 @@
     "react-dom": "^18.2.0",
     "react-focus-on": "^3.6.0",
     "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "zod": "^3.17.10"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.6.5",
