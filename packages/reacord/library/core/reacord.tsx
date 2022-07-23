@@ -47,7 +47,19 @@ export abstract class Reacord {
 
     this.renderers.push(renderer)
 
-    const container = reconciler.createContainer(renderer, 0, false, {})
+    const container = reconciler.createContainer(
+      renderer,
+      0,
+      // eslint-disable-next-line unicorn/no-null
+      null,
+      false,
+      // eslint-disable-next-line unicorn/no-null
+      null,
+      "reacord",
+      () => {},
+      // eslint-disable-next-line unicorn/no-null
+      null,
+    )
 
     const instance: ReacordInstance = {
       render: (content: ReactNode) => {

@@ -1,5 +1,6 @@
 import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
+import { DefaultEventPriority } from "react-reconciler/constants"
 import { raise } from "../../helpers/raise.js"
 import { Node } from "./node.js"
 import type { Renderer } from "./renderers/renderer"
@@ -20,8 +21,6 @@ const config: HostConfig<
   number, // TimeoutHandle,
   number // NoTimeout,
 > = {
-  // config
-  now: Date.now,
   supportsMutation: true,
   supportsPersistence: false,
   supportsHydration: false,
@@ -52,8 +51,13 @@ const config: HostConfig<
   },
   createTextInstance: (text) => new TextNode(text),
   shouldSetTextContent: () => false,
-  // @ts-expect-error
   detachDeletedInstance: (instance) => {},
+  beforeActiveInstanceBlur: () => {},
+  afterActiveInstanceBlur: () => {},
+  // eslint-disable-next-line unicorn/no-null
+  getInstanceFromNode: (node: any) => null,
+  // eslint-disable-next-line unicorn/no-null
+  getInstanceFromScope: (scopeInstance: any) => null,
 
   clearContainer: (renderer) => {
     renderer.nodes.clear()
@@ -94,11 +98,14 @@ const config: HostConfig<
   resetAfterCommit: (renderer) => {
     renderer.render()
   },
+  prepareScopeUpdate: (scopeInstance: any, instance: any) => {},
 
   preparePortalMount: () => raise("Portals are not supported"),
   getPublicInstance: () => raise("Refs are currently not supported"),
 
   finalizeInitialChildren: () => false,
+
+  getCurrentEventPriority: () => DefaultEventPriority,
 }
 
 export const reconciler = ReactReconciler(config)
