@@ -1,1 +1,2 @@
-workspaces: [packages/*]
+packages:
+  - packages/*
