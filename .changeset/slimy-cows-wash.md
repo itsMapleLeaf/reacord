@@ -1,5 +1,5 @@
 ---
-"reacord-monorepo": minor
+"reacord": minor
 ---
 
 allow JSX in more places
