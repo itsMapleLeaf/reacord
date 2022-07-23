@@ -89,5 +89,8 @@
       "release": true,
       "web": true
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
