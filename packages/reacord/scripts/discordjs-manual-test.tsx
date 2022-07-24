@@ -5,10 +5,10 @@ import { kebabCase } from "lodash-es"
 import React, { useEffect, useState } from "react"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
-import { createReacordDiscordJs } from "../library.new/discord-js"
+import { ReacordDiscordJs } from "../library.new/main"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
-const reacord = createReacordDiscordJs(client)
+const reacord = new ReacordDiscordJs(client)
 
 await client.login(process.env.TEST_BOT_TOKEN)
 

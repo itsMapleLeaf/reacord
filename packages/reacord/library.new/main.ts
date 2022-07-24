@@ -1,2 +1,5 @@
-export { ReacordDiscordJs } from "./discord-js"
-export { type ReacordInstance, type ReacordOptions } from "./reacord"
+export { ReacordDiscordJs } from "./reacord-discord-js"
+export {
+  type ReacordInstance,
+  type ReacordOptions,
+} from "./reacord-instance-pool"
