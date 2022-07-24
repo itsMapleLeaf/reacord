@@ -8,8 +8,8 @@ import type {
 } from "discord.js"
 import type { ReactNode } from "react"
 import { AsyncQueue } from "./async-queue"
-import type { ReacordOptions } from "./reacord"
-import { ReacordInstancePool } from "./reacord"
+import type { ReacordOptions } from "./reacord-instance-pool"
+import { ReacordInstancePool } from "./reacord-instance-pool"
 
 export class ReacordDiscordJs {
   private instances
