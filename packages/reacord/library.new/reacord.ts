@@ -24,13 +24,31 @@ export type ReacordInstance = {
   deactivate: () => void
 }
 
+type ReacordInstanceOptions = {
+  initialContent: ReactNode
+  update: (tree: MessageTree) => unknown
+  deactivate: () => unknown
+  destroy: () => unknown
+}
+
 export function createReacordInstanceManager({
   maxInstances = 50,
 }: ReacordOptions) {
   const instances: ReacordInstance[] = []
 
-  function createInstance(...args: Parameters<typeof createReacordInstance>) {
-    const instance = createReacordInstance(...args)
+  function createInstance(options: ReacordInstanceOptions) {
+    const instance = createReacordInstance({
+      ...options,
+      deactivate() {
+        instances.splice(instances.indexOf(instance), 1)
+        return options.deactivate()
+      },
+      destroy() {
+        instances.splice(instances.indexOf(instance), 1)
+        return options.destroy()
+      },
+    })
+
     instances.push(instance)
 
     if (instances.length > maxInstances) {
@@ -44,14 +62,13 @@ export function createReacordInstanceManager({
 }
 
 function createReacordInstance(
-  initialContent: ReactNode,
-  render: (tree: MessageTree) => unknown,
+  options: ReacordInstanceOptions,
 ): ReacordInstance {
   const tree: MessageTree = {
     children: [],
     render: async () => {
       try {
-        await render(tree)
+        await options.update(tree)
       } catch (error) {
         console.error(
           "Reacord encountered an error while updating the message.",
@@ -79,12 +96,30 @@ function createReacordInstance(
     render(content: ReactNode) {
       reconciler.updateContainer(content, container)
     },
-    destroy() {},
-    deactivate() {},
+    async deactivate() {
+      try {
+        await options.deactivate()
+      } catch (error) {
+        console.error(
+          "Reacord encountered an error while deactivating an instance.",
+          error,
+        )
+      }
+    },
+    async destroy() {
+      try {
+        await options.destroy()
+      } catch (error) {
+        console.error(
+          "Reacord encountered an error while destroying an instance.",
+          error,
+        )
+      }
+    },
   }
 
-  if (initialContent !== undefined) {
-    instance.render(initialContent)
+  if (options.initialContent !== undefined) {
+    instance.render(options.initialContent)
   }
 
   return instance

@@ -3,6 +3,8 @@ import { ChannelType, Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
 import React, { useEffect, useState } from "react"
+import { raise } from "../helpers/raise"
+import { waitFor } from "../helpers/wait-for"
 import { createReacordDiscordJs } from "../library.new/discord-js"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
@@ -26,6 +28,7 @@ for (const [, channel] of category.children.cache) {
 let prefix = 0
 const createTest = async (
   name: string,
+  description: string,
   block: (channel: TextChannel) => void | Promise<unknown>,
 ) => {
   prefix += 1
@@ -33,10 +36,11 @@ const createTest = async (
     type: ChannelType.GuildText,
     name: `${String(prefix).padStart(3, "0")}-${kebabCase(name)}`,
   })
+  await channel.edit({ topic: description })
   await block(channel)
 }
 
-await createTest("basic", (channel) => {
+await createTest("basic", "should update over time", (channel) => {
   function Timer() {
     const [count, setCount] = useState(0)
 
@@ -53,8 +57,40 @@ await createTest("basic", (channel) => {
   reacord.send(channel.id, <Timer />)
 })
 
-await createTest("immediate renders", async (channel) => {
-  const instance = reacord.send(channel.id)
-  instance.render("hi world")
-  instance.render("hi moon")
-})
+await createTest(
+  "immediate renders",
+  `should process renders in sequence; this should show "hi moon"`,
+  async (channel) => {
+    const instance = reacord.send(channel.id)
+    instance.render("hi world")
+    instance.render("hi moon")
+  },
+)
+
+await createTest(
+  "destroy",
+  "should remove the message; this channel should be empty",
+  async (channel) => {
+    const instance = reacord.send(channel.id)
+    instance.render("hi world")
+    instance.render("hi moon")
+    await waitFor(async () => {
+      const messages = await channel.messages.fetch({ limit: 1 })
+      if (messages.first()?.content !== "hi moon") {
+        raise("not ready")
+      }
+    })
+    instance.destroy()
+  },
+)
+
+await createTest(
+  "immediate destroy",
+  "should never show if called immediately; this channel should be empty",
+  async (channel) => {
+    const instance = reacord.send(channel.id)
+    instance.render("hi world")
+    instance.render("hi moon")
+    instance.destroy()
+  },
+)

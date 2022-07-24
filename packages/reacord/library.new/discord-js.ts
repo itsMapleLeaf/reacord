@@ -18,13 +18,18 @@ export function createReacordDiscordJs(
   const manager = createReacordInstanceManager(options)
   return {
     send(channelId: string, initialContent?: ReactNode) {
-      const messageUpdater = createMessageUpdater()
-      return manager.createInstance(initialContent, async (tree) => {
-        const messageOptions: MessageOptions & MessageEditOptions = {
-          content: tree.children.map((child) => child.text).join(""),
-        }
-        const channel = await getTextChannel(client, channelId)
-        await messageUpdater.update(messageOptions, channel)
+      const handler = createMessageHandler()
+      return manager.createInstance({
+        initialContent,
+        update: async (tree) => {
+          const messageOptions: MessageOptions & MessageEditOptions = {
+            content: tree.children.map((child) => child.text).join(""),
+          }
+          const channel = await getTextChannel(client, channelId)
+          await handler.update(messageOptions, channel)
+        },
+        destroy: () => handler.destroy(),
+        deactivate: () => handler.deactivate(),
       })
     },
 
@@ -34,8 +39,9 @@ export function createReacordDiscordJs(
   }
 }
 
-function createMessageUpdater() {
+function createMessageHandler() {
   let message: Message | undefined
+  let active = true
   const queue = createAsyncQueue()
 
   async function update(
@@ -43,6 +49,7 @@ function createMessageUpdater() {
     channel: TextBasedChannel,
   ) {
     return queue.add(async () => {
+      if (!active) return
       if (message) {
         await message.edit(options)
       } else {
@@ -51,10 +58,27 @@ function createMessageUpdater() {
     })
   }
 
-  return { update }
+  async function destroy() {
+    return queue.add(async () => {
+      active = false
+      await message?.delete()
+    })
+  }
+
+  async function deactivate() {
+    return queue.add(async () => {
+      active = false
+      // TODO: disable message components
+    })
+  }
+
+  return { update, destroy, deactivate }
 }
 
-async function getTextChannel(client: Client<boolean>, channelId: string) {
+async function getTextChannel(
+  client: Client<boolean>,
+  channelId: string,
+): Promise<TextBasedChannel> {
   let channel = client.channels.cache.get(channelId)
   if (!channel) {
     channel = (await client.channels.fetch(channelId)) ?? undefined
