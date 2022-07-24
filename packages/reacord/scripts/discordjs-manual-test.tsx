@@ -2,6 +2,7 @@ import type { TextChannel } from "discord.js"
 import { ChannelType, Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
+import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
@@ -42,16 +43,24 @@ const createTest = async (
 
 await createTest("basic", "should update over time", (channel) => {
   function Timer() {
-    const [count, setCount] = useState(0)
+    const [startDate] = useState(() => new Date())
+    const [currentDate, setCurrentDate] = useState(startDate)
 
     useEffect(() => {
       const id = setInterval(() => {
-        setCount((count) => count + 3)
+        setCurrentDate(new Date())
       }, 3000)
       return () => clearInterval(id)
     }, [])
 
-    return <>this component has been running for {count} seconds</>
+    return (
+      <>
+        this component has been running for{" "}
+        {prettyMilliseconds(currentDate.valueOf() - startDate.valueOf(), {
+          verbose: true,
+        })}
+      </>
+    )
   }
 
   reacord.send(channel.id, <Timer />)
