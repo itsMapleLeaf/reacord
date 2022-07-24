@@ -1,11 +1,13 @@
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { MessageTree, TextNode } from "./message-tree"
+import type { Container } from "./container"
+import type { Node } from "./node"
+import { TextNode } from "./node"
 
 export const reconciler = ReactReconciler<
   string, // Type
   Record<string, unknown>, // Props
-  MessageTree, // Container
+  { nodes: Container<Node>; render: () => void }, // Container
   never, // Instance
   TextNode, // TextInstance
   never, // SuspenseInstance
@@ -30,7 +32,7 @@ export const reconciler = ReactReconciler<
   },
 
   createTextInstance(text) {
-    return { type: "text", text }
+    return new TextNode(text)
   },
 
   appendInitialChild(parent, child) {},
@@ -38,28 +40,27 @@ export const reconciler = ReactReconciler<
   appendChild(parentInstance, child) {},
 
   appendChildToContainer(container, child) {
-    container.children.push(child)
+    container.nodes.add(child)
   },
 
   insertBefore(parentInstance, child, beforeChild) {},
 
   insertInContainerBefore(container, child, beforeChild) {
-    const index = container.children.indexOf(beforeChild)
-    if (index !== -1) container.children.splice(index, 0, child)
+    container.nodes.insertBefore(child, beforeChild)
   },
 
   removeChild(parentInstance, child) {},
 
   removeChildFromContainer(container, child) {
-    container.children = container.children.filter((c) => c !== child)
+    container.nodes.remove(child)
   },
 
   clearContainer(container) {
-    container.children = []
+    container.nodes.clear()
   },
 
   commitTextUpdate(textInstance, oldText, newText) {
-    textInstance.text = newText
+    textInstance.setText(newText)
   },
 
   commitUpdate(

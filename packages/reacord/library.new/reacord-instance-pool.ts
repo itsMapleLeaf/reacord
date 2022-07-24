@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
-import type { MessageTree } from "./message-tree"
+import { Container } from "./container"
+import type { Node } from "./node"
 import { reconciler } from "./reconciler"
 
 export type ReacordOptions = {
@@ -26,7 +27,11 @@ export type ReacordInstance = {
 
 export type ReacordInstanceOptions = {
   initialContent: ReactNode
-  update: (tree: MessageTree) => Promise<void>
+  renderer: ReacordMessageRenderer
+}
+
+export type ReacordMessageRenderer = {
+  update: (nodes: readonly Node[]) => Promise<void>
   deactivate: () => Promise<void>
   destroy: () => Promise<void>
 }
@@ -39,20 +44,19 @@ export class ReacordInstancePool {
     this.options = { maxInstances }
   }
 
-  create(options: ReacordInstanceOptions) {
-    const tree: MessageTree = {
-      children: [],
-      render: async () => {
-        try {
-          await options.update(tree)
-        } catch (error) {
-          console.error("Failed to update message.", error)
-        }
-      },
+  create({ initialContent, renderer }: ReacordInstanceOptions) {
+    const nodes = new Container<Node>()
+
+    const render = async () => {
+      try {
+        await renderer.update(nodes.getItems())
+      } catch (error) {
+        console.error("Failed to update message.", error)
+      }
     }
 
     const container = reconciler.createContainer(
-      tree,
+      { nodes, render },
       0,
       // eslint-disable-next-line unicorn/no-null
       null,
@@ -72,7 +76,7 @@ export class ReacordInstancePool {
       deactivate: async () => {
         this.instances.delete(instance)
         try {
-          await options.deactivate()
+          await renderer.deactivate()
         } catch (error) {
           console.error("Failed to deactivate message.", error)
         }
@@ -80,15 +84,15 @@ export class ReacordInstancePool {
       destroy: async () => {
         this.instances.delete(instance)
         try {
-          await options.destroy()
+          await renderer.destroy()
         } catch (error) {
           console.error("Failed to destroy message.", error)
         }
       },
     }
 
-    if (options.initialContent !== undefined) {
-      instance.render(options.initialContent)
+    if (initialContent !== undefined) {
+      instance.render(initialContent)
     }
 
     if (this.instances.size > this.options.maxInstances) {

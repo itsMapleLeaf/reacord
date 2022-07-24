@@ -8,7 +8,11 @@ import type {
 } from "discord.js"
 import type { ReactNode } from "react"
 import { AsyncQueue } from "./async-queue"
-import type { ReacordOptions } from "./reacord-instance-pool"
+import type { Node } from "./node"
+import type {
+  ReacordMessageRenderer,
+  ReacordOptions,
+} from "./reacord-instance-pool"
 import { ReacordInstancePool } from "./reacord-instance-pool"
 
 export class ReacordDiscordJs {
@@ -19,36 +23,8 @@ export class ReacordDiscordJs {
   }
 
   send(channelId: string, initialContent?: ReactNode) {
-    const renderer = new MessageRenderer()
-
-    return this.instances.create({
-      initialContent,
-      update: async (tree) => {
-        try {
-          const messageOptions: MessageOptions & MessageEditOptions = {
-            content: tree.children.map((child) => child.text).join(""),
-          }
-          const channel = await getTextChannel(this.client, channelId)
-          await renderer.update(messageOptions, channel)
-        } catch (error) {
-          console.error("Error updating message:", error)
-        }
-      },
-      destroy: async () => {
-        try {
-          await renderer.destroy()
-        } catch (error) {
-          console.error("Error destroying message:", error)
-        }
-      },
-      deactivate: async () => {
-        try {
-          await renderer.deactivate()
-        } catch (error) {
-          console.error("Error deactivating message:", error)
-        }
-      },
-    })
+    const renderer = new ChannelMessageRenderer(this.client, channelId)
+    return this.instances.create({ initialContent, renderer })
   }
 
   reply(interaction: Interaction, initialContent?: ReactNode) {}
@@ -56,22 +32,34 @@ export class ReacordDiscordJs {
   ephemeralReply(interaction: Interaction, initialContent?: ReactNode) {}
 }
 
-class MessageRenderer {
+class ChannelMessageRenderer implements ReacordMessageRenderer {
   private message: Message | undefined
+  private channel: TextBasedChannel | undefined
   private active = true
   private readonly queue = new AsyncQueue()
 
-  update(
-    options: MessageOptions & MessageEditOptions,
-    channel: TextBasedChannel,
-  ) {
+  constructor(
+    private readonly client: Client,
+    private readonly channelId: string,
+  ) {}
+
+  update(nodes: readonly Node[]) {
+    const options: MessageOptions & MessageEditOptions = {
+      content: nodes.map((node) => node.getText?.() || "").join(""),
+    }
+
     return this.queue.add(async () => {
-      if (!this.active) return
+      if (!this.active) {
+        return
+      }
+
       if (this.message) {
         await this.message.edit(options)
-      } else {
-        this.message = await channel.send(options)
+        return
       }
+
+      const channel = await this.getChannel()
+      this.message = await channel.send(options)
     })
   }
 
@@ -88,21 +76,22 @@ class MessageRenderer {
       // TODO: disable message components
     })
   }
-}
 
-async function getTextChannel(
-  client: Client<boolean>,
-  channelId: string,
-): Promise<TextBasedChannel> {
-  const channel =
-    client.channels.cache.get(channelId) ??
-    (await client.channels.fetch(channelId))
+  private async getChannel() {
+    if (this.channel) {
+      return this.channel
+    }
 
-  if (!channel) {
-    throw new Error(`Channel ${channelId} not found`)
+    const channel =
+      this.client.channels.cache.get(this.channelId) ??
+      (await this.client.channels.fetch(this.channelId))
+
+    if (!channel) {
+      throw new Error(`Channel ${this.channelId} not found`)
+    }
+    if (!channel.isTextBased()) {
+      throw new Error(`Channel ${this.channelId} is not a text channel`)
+    }
+    return (this.channel = channel)
   }
-  if (!channel.isTextBased()) {
-    throw new Error(`Channel ${channelId} is not a text channel`)
-  }
-  return channel
 }
