@@ -3,18 +3,18 @@ import { DefaultEventPriority } from "react-reconciler/constants"
 import type { MessageTree, TextNode } from "./message-tree"
 
 export const reconciler = ReactReconciler<
-  string,
-  Record<string, unknown>,
-  MessageTree,
-  never,
-  TextNode,
-  never,
-  never,
-  never,
-  {},
-  true,
-  never,
-  NodeJS.Timeout,
+  string, // Type
+  Record<string, unknown>, // Props
+  MessageTree, // Container
+  never, // Instance
+  TextNode, // TextInstance
+  never, // SuspenseInstance
+  never, // HydratableInstance
+  never, // PublicInstance
+  {}, // HostContext
+  true, // UpdatePayload
+  never, // ChildSet
+  NodeJS.Timeout, // TimeoutHandle
   -1 // NoTimeout
 >({
   isPrimaryRenderer: true,
