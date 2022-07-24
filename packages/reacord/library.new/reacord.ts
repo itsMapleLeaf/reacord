@@ -24,103 +24,77 @@ export type ReacordInstance = {
   deactivate: () => void
 }
 
-type ReacordInstanceOptions = {
+export type ReacordInstanceOptions = {
   initialContent: ReactNode
-  update: (tree: MessageTree) => unknown
-  deactivate: () => unknown
-  destroy: () => unknown
+  update: (tree: MessageTree) => Promise<void>
+  deactivate: () => Promise<void>
+  destroy: () => Promise<void>
 }
 
-export function createReacordInstanceManager({
-  maxInstances = 50,
-}: ReacordOptions) {
-  const instances: ReacordInstance[] = []
+export class ReacordInstancePool {
+  private readonly options: Required<ReacordOptions>
+  private readonly instances = new Set<ReacordInstance>()
 
-  function createInstance(options: ReacordInstanceOptions) {
-    const instance = createReacordInstance({
-      ...options,
-      deactivate() {
-        instances.splice(instances.indexOf(instance), 1)
-        return options.deactivate()
+  constructor({ maxInstances = 50 }: ReacordOptions) {
+    this.options = { maxInstances }
+  }
+
+  create(options: ReacordInstanceOptions) {
+    const tree: MessageTree = {
+      children: [],
+      render: async () => {
+        try {
+          await options.update(tree)
+        } catch (error) {
+          console.error("Failed to update message.", error)
+        }
       },
-      destroy() {
-        instances.splice(instances.indexOf(instance), 1)
-        return options.destroy()
+    }
+
+    const container = reconciler.createContainer(
+      tree,
+      0,
+      // eslint-disable-next-line unicorn/no-null
+      null,
+      false,
+      // eslint-disable-next-line unicorn/no-null
+      null,
+      "reacord",
+      () => {},
+      // eslint-disable-next-line unicorn/no-null
+      null,
+    )
+
+    const instance: ReacordInstance = {
+      render: (content: ReactNode) => {
+        reconciler.updateContainer(content, container)
       },
-    })
+      deactivate: async () => {
+        this.instances.delete(instance)
+        try {
+          await options.deactivate()
+        } catch (error) {
+          console.error("Failed to deactivate message.", error)
+        }
+      },
+      destroy: async () => {
+        this.instances.delete(instance)
+        try {
+          await options.destroy()
+        } catch (error) {
+          console.error("Failed to destroy message.", error)
+        }
+      },
+    }
 
-    instances.push(instance)
+    if (options.initialContent !== undefined) {
+      instance.render(options.initialContent)
+    }
 
-    if (instances.length > maxInstances) {
-      instances.shift()?.deactivate()
+    if (this.instances.size > this.options.maxInstances) {
+      ;[...this.instances][0]?.deactivate()
     }
 
     return instance
   }
-
-  return { createInstance }
-}
-
-function createReacordInstance(
-  options: ReacordInstanceOptions,
-): ReacordInstance {
-  const tree: MessageTree = {
-    children: [],
-    render: async () => {
-      try {
-        await options.update(tree)
-      } catch (error) {
-        console.error(
-          "Reacord encountered an error while updating the message.",
-          error,
-        )
-      }
-    },
-  }
-
-  const container = reconciler.createContainer(
-    tree,
-    0,
-    // eslint-disable-next-line unicorn/no-null
-    null,
-    false,
-    // eslint-disable-next-line unicorn/no-null
-    null,
-    "reacord",
-    () => {},
-    // eslint-disable-next-line unicorn/no-null
-    null,
-  )
-
-  const instance: ReacordInstance = {
-    render(content: ReactNode) {
-      reconciler.updateContainer(content, container)
-    },
-    async deactivate() {
-      try {
-        await options.deactivate()
-      } catch (error) {
-        console.error(
-          "Reacord encountered an error while deactivating an instance.",
-          error,
-        )
-      }
-    },
-    async destroy() {
-      try {
-        await options.destroy()
-      } catch (error) {
-        console.error(
-          "Reacord encountered an error while destroying an instance.",
-          error,
-        )
-      }
-    },
-  }
-
-  if (options.initialContent !== undefined) {
-    instance.render(options.initialContent)
-  }
-
-  return instance
 }

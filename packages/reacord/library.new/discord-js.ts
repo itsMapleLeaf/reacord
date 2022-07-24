@@ -7,82 +7,97 @@ import type {
   TextBasedChannel,
 } from "discord.js"
 import type { ReactNode } from "react"
-import { createAsyncQueue } from "./async-queue"
+import { AsyncQueue } from "./async-queue"
 import type { ReacordOptions } from "./reacord"
-import { createReacordInstanceManager } from "./reacord"
+import { ReacordInstancePool } from "./reacord"
 
-export function createReacordDiscordJs(
-  client: Client,
-  options: ReacordOptions = {},
-) {
-  const manager = createReacordInstanceManager(options)
-  return {
-    send(channelId: string, initialContent?: ReactNode) {
-      const handler = createMessageHandler()
-      return manager.createInstance({
-        initialContent,
-        update: async (tree) => {
+export class ReacordDiscordJs {
+  private instances
+
+  constructor(private readonly client: Client, options: ReacordOptions = {}) {
+    this.instances = new ReacordInstancePool(options)
+  }
+
+  send(channelId: string, initialContent?: ReactNode) {
+    const renderer = new MessageRenderer()
+
+    return this.instances.create({
+      initialContent,
+      update: async (tree) => {
+        try {
           const messageOptions: MessageOptions & MessageEditOptions = {
             content: tree.children.map((child) => child.text).join(""),
           }
-          const channel = await getTextChannel(client, channelId)
-          await handler.update(messageOptions, channel)
-        },
-        destroy: () => handler.destroy(),
-        deactivate: () => handler.deactivate(),
-      })
-    },
-
-    reply(interaction: Interaction, initialContent?: ReactNode) {},
-
-    ephemeralReply(interaction: Interaction, initialContent?: ReactNode) {},
+          const channel = await getTextChannel(this.client, channelId)
+          await renderer.update(messageOptions, channel)
+        } catch (error) {
+          console.error("Error updating message:", error)
+        }
+      },
+      destroy: async () => {
+        try {
+          await renderer.destroy()
+        } catch (error) {
+          console.error("Error destroying message:", error)
+        }
+      },
+      deactivate: async () => {
+        try {
+          await renderer.deactivate()
+        } catch (error) {
+          console.error("Error deactivating message:", error)
+        }
+      },
+    })
   }
+
+  reply(interaction: Interaction, initialContent?: ReactNode) {}
+
+  ephemeralReply(interaction: Interaction, initialContent?: ReactNode) {}
 }
 
-function createMessageHandler() {
-  let message: Message | undefined
-  let active = true
-  const queue = createAsyncQueue()
+class MessageRenderer {
+  private message: Message | undefined
+  private active = true
+  private readonly queue = new AsyncQueue()
 
-  async function update(
+  update(
     options: MessageOptions & MessageEditOptions,
     channel: TextBasedChannel,
   ) {
-    return queue.add(async () => {
-      if (!active) return
-      if (message) {
-        await message.edit(options)
+    return this.queue.add(async () => {
+      if (!this.active) return
+      if (this.message) {
+        await this.message.edit(options)
       } else {
-        message = await channel.send(options)
+        this.message = await channel.send(options)
       }
     })
   }
 
-  async function destroy() {
-    return queue.add(async () => {
-      active = false
-      await message?.delete()
+  destroy() {
+    return this.queue.add(async () => {
+      this.active = false
+      await this.message?.delete()
     })
   }
 
-  async function deactivate() {
-    return queue.add(async () => {
-      active = false
+  deactivate() {
+    return this.queue.add(async () => {
+      this.active = false
       // TODO: disable message components
     })
   }
-
-  return { update, destroy, deactivate }
 }
 
 async function getTextChannel(
   client: Client<boolean>,
   channelId: string,
 ): Promise<TextBasedChannel> {
-  let channel = client.channels.cache.get(channelId)
-  if (!channel) {
-    channel = (await client.channels.fetch(channelId)) ?? undefined
-  }
+  const channel =
+    client.channels.cache.get(channelId) ??
+    (await client.channels.fetch(channelId))
+
   if (!channel) {
     throw new Error(`Channel ${channelId} not found`)
   }

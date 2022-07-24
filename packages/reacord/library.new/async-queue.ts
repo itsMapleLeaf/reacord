@@ -1,27 +1,25 @@
 export type AsyncCallback = () => unknown
 
-export function createAsyncQueue() {
-  const callbacks: AsyncCallback[] = []
-  let promise: Promise<void> | undefined
+export class AsyncQueue {
+  private callbacks: AsyncCallback[] = []
+  private promise: Promise<void> | undefined
 
-  async function add(callback: AsyncCallback) {
-    callbacks.push(callback)
-    if (promise) return promise
+  async add(callback: AsyncCallback) {
+    this.callbacks.push(callback)
+    if (this.promise) return this.promise
 
-    promise = runQueue()
+    this.promise = this.runQueue()
     try {
-      await promise
+      await this.promise
     } finally {
-      promise = undefined
+      this.promise = undefined
     }
   }
 
-  async function runQueue() {
+  private async runQueue() {
     let callback: AsyncCallback | undefined
-    while ((callback = callbacks.shift())) {
+    while ((callback = this.callbacks.shift())) {
       await callback()
     }
   }
-
-  return { add }
 }
