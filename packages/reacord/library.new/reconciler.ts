@@ -1,14 +1,13 @@
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { Container } from "./container"
-import type { Node } from "./node"
-import { TextNode } from "./node"
+import type { Node, NodeContainer } from "./node"
+import { NodeDefinition, TextNode } from "./node"
 
 export const reconciler = ReactReconciler<
   string, // Type
-  Record<string, unknown>, // Props
-  { nodes: Container<Node>; render: () => void }, // Container
-  never, // Instance
+  { definition?: unknown }, // Props
+  { nodes: NodeContainer; render: () => void }, // Container
+  Node<unknown>, // Instance
   TextNode, // TextInstance
   never, // SuspenseInstance
   never, // HydratableInstance
@@ -27,29 +26,37 @@ export const reconciler = ReactReconciler<
   cancelTimeout: clearTimeout,
   noTimeout: -1,
 
-  createInstance() {
-    throw new Error("Not implemented")
+  createInstance(type, props) {
+    return NodeDefinition.parse(props.definition).create()
   },
 
   createTextInstance(text) {
     return new TextNode(text)
   },
 
-  appendInitialChild(parent, child) {},
+  appendInitialChild(parent, child) {
+    parent.children?.add(child)
+  },
 
-  appendChild(parentInstance, child) {},
+  appendChild(parent, child) {
+    parent.children?.add(child)
+  },
 
   appendChildToContainer(container, child) {
     container.nodes.add(child)
   },
 
-  insertBefore(parentInstance, child, beforeChild) {},
+  insertBefore(parent, child, beforeChild) {
+    parent.children?.insertBefore(child, beforeChild)
+  },
 
   insertInContainerBefore(container, child, beforeChild) {
     container.nodes.insertBefore(child, beforeChild)
   },
 
-  removeChild(parentInstance, child) {},
+  removeChild(parent, child) {
+    parent.children?.remove(child)
+  },
 
   removeChildFromContainer(container, child) {
     container.nodes.remove(child)
@@ -59,18 +66,13 @@ export const reconciler = ReactReconciler<
     container.nodes.clear()
   },
 
-  commitTextUpdate(textInstance, oldText, newText) {
-    textInstance.setText(newText)
+  commitTextUpdate(node, oldText, newText) {
+    node.props.text = newText
   },
 
-  commitUpdate(
-    instance,
-    updatePayload,
-    type,
-    prevProps,
-    nextProps,
-    internalHandle,
-  ) {},
+  commitUpdate(node, updatePayload, type, prevProps, nextProps) {
+    node.props = NodeDefinition.parse(nextProps.definition).props
+  },
 
   prepareForCommit() {
     // eslint-disable-next-line unicorn/no-null

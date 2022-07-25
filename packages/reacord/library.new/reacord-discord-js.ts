@@ -6,9 +6,13 @@ import type {
   MessageOptions,
   TextBasedChannel,
 } from "discord.js"
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js"
 import type { ReactNode } from "react"
 import { AsyncQueue } from "./async-queue"
+import type { ButtonProps } from "./button"
+import { ButtonNode } from "./button"
 import type { Node } from "./node"
+import { TextNode } from "./node"
 import type {
   ReacordMessageRenderer,
   ReacordOptions,
@@ -43,9 +47,37 @@ class ChannelMessageRenderer implements ReacordMessageRenderer {
     private readonly channelId: string,
   ) {}
 
-  update(nodes: readonly Node[]) {
+  update(nodes: ReadonlyArray<Node<unknown>>) {
+    const rows: Array<ActionRowBuilder<ButtonBuilder>> = []
+
+    for (const node of nodes) {
+      if (node instanceof ButtonNode) {
+        let currentRow = rows[rows.length - 1]
+        if (!currentRow || currentRow.components.length === 5) {
+          currentRow = new ActionRowBuilder()
+          rows.push(currentRow)
+        }
+
+        currentRow.addComponents(
+          new ButtonBuilder({
+            label: node.label,
+            customId: node.customId,
+            emoji: node.props.emoji,
+            disabled: node.props.disabled,
+            style: node.props.style
+              ? getButtonStyle(node.props.style)
+              : ButtonStyle.Secondary,
+          }),
+        )
+      }
+    }
+
     const options: MessageOptions & MessageEditOptions = {
-      content: nodes.map((node) => node.getText?.() || "").join(""),
+      content: nodes
+        .map((node) => (node instanceof TextNode ? node.props.text : ""))
+        .join(""),
+
+      components: rows.length > 0 ? rows : undefined,
     }
 
     return this.queue.add(async () => {
@@ -94,4 +126,14 @@ class ChannelMessageRenderer implements ReacordMessageRenderer {
     }
     return (this.channel = channel)
   }
+}
+
+function getButtonStyle(style: NonNullable<ButtonProps["style"]>) {
+  const styleMap = {
+    primary: ButtonStyle.Primary,
+    secondary: ButtonStyle.Secondary,
+    danger: ButtonStyle.Danger,
+    success: ButtonStyle.Success,
+  } as const
+  return styleMap[style]
 }

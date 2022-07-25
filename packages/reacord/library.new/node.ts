@@ -1,20 +1,32 @@
-export type Node = {
-  readonly type: string
-  readonly props?: Record<string, unknown>
-  children?: Node[]
-  getText?: () => string
+import type { Container } from "./container"
+
+export type NodeContainer = Container<Node<unknown>>
+
+export type Node<Props> = {
+  props?: Props
+  children?: NodeContainer
 }
 
-export class TextNode implements Node {
-  readonly type = "text"
+export class TextNode implements Node<{ text: string }> {
+  props: { text: string }
+  constructor(text: string) {
+    this.props = { text }
+  }
+}
 
-  constructor(private text: string) {}
-
-  getText() {
-    return this.text
+export class NodeDefinition<Props> {
+  static parse(value: unknown): NodeDefinition<unknown> {
+    if (value instanceof NodeDefinition) {
+      return value
+    }
+    const received = value as Object | null | undefined
+    throw new TypeError(
+      `Expected ${NodeDefinition.name}, received instance of ${received?.constructor.name}`,
+    )
   }
 
-  setText(text: string) {
-    this.text = text
-  }
+  constructor(
+    public readonly create: () => Node<Props>,
+    public readonly props: Props,
+  ) {}
 }

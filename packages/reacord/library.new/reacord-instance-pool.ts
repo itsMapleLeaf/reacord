@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { Container } from "./container"
-import type { Node } from "./node"
+import type { Node, NodeContainer } from "./node"
 import { reconciler } from "./reconciler"
 
 export type ReacordOptions = {
@@ -31,7 +31,7 @@ export type ReacordInstanceOptions = {
 }
 
 export type ReacordMessageRenderer = {
-  update: (nodes: readonly Node[]) => Promise<void>
+  update: (nodes: ReadonlyArray<Node<unknown>>) => Promise<void>
   deactivate: () => Promise<void>
   destroy: () => Promise<void>
 }
@@ -45,7 +45,7 @@ export class ReacordInstancePool {
   }
 
   create({ initialContent, renderer }: ReacordInstanceOptions) {
-    const nodes = new Container<Node>()
+    const nodes: NodeContainer = new Container()
 
     const render = async () => {
       try {

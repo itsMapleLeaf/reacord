@@ -6,7 +6,7 @@ import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
-import { ReacordDiscordJs } from "../library.new/main"
+import { Button, ReacordDiscordJs } from "../library.new/main"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
 const reacord = new ReacordDiscordJs(client)
@@ -40,6 +40,17 @@ const createTest = async (
   await channel.edit({ topic: description })
   await block(channel)
 }
+
+await createTest("components", "test 'dem buttons", async (channel) => {
+  reacord.send(
+    channel.id,
+    <>
+      {Array.from({ length: 6 }, (_, i) => (
+        <Button key={i} label={String(i + 1)} onClick={() => {}} />
+      ))}
+    </>,
+  )
+})
 
 await createTest("basic", "should update over time", (channel) => {
   function Timer() {
