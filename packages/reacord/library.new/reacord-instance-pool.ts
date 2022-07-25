@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 import { Container } from "./container"
-import type { Node, NodeContainer } from "./node"
+import type { MessagePayload } from "./make-message-payload"
+import { makeMessagePayload } from "./make-message-payload"
+import type { Node } from "./node"
 import { reconciler } from "./reconciler"
 
 export type ReacordOptions = {
@@ -31,7 +33,7 @@ export type ReacordInstanceOptions = {
 }
 
 export type ReacordMessageRenderer = {
-  update: (nodes: ReadonlyArray<Node<unknown>>) => Promise<void>
+  update: (payload: MessagePayload) => Promise<void>
   deactivate: () => Promise<void>
   destroy: () => Promise<void>
 }
@@ -45,11 +47,11 @@ export class ReacordInstancePool {
   }
 
   create({ initialContent, renderer }: ReacordInstanceOptions) {
-    const nodes: NodeContainer = new Container()
+    const nodes = new Container<Node>()
 
     const render = async () => {
       try {
-        await renderer.update(nodes.getItems())
+        await renderer.update(makeMessagePayload(nodes.getItems()))
       } catch (error) {
         console.error("Failed to update message.", error)
       }

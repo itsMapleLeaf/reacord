@@ -1,18 +1,9 @@
-import type {
-  Client,
-  Interaction,
-  Message,
-  MessageEditOptions,
-  MessageOptions,
-  TextBasedChannel,
-} from "discord.js"
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js"
+import type { Client, Interaction, Message, TextBasedChannel } from "discord.js"
+import { ButtonStyle } from "discord.js"
 import type { ReactNode } from "react"
 import { AsyncQueue } from "./async-queue"
 import type { ButtonProps } from "./button"
-import { ButtonNode } from "./button"
-import type { Node } from "./node"
-import { TextNode } from "./node"
+import type { MessagePayload as MessagePayloadType } from "./make-message-payload"
 import type {
   ReacordMessageRenderer,
   ReacordOptions,
@@ -47,51 +38,19 @@ class ChannelMessageRenderer implements ReacordMessageRenderer {
     private readonly channelId: string,
   ) {}
 
-  update(nodes: ReadonlyArray<Node<unknown>>) {
-    const rows: Array<ActionRowBuilder<ButtonBuilder>> = []
-
-    for (const node of nodes) {
-      if (node instanceof ButtonNode) {
-        let currentRow = rows[rows.length - 1]
-        if (!currentRow || currentRow.components.length === 5) {
-          currentRow = new ActionRowBuilder()
-          rows.push(currentRow)
-        }
-
-        currentRow.addComponents(
-          new ButtonBuilder({
-            label: node.label,
-            customId: node.customId,
-            emoji: node.props.emoji,
-            disabled: node.props.disabled,
-            style: node.props.style
-              ? getButtonStyle(node.props.style)
-              : ButtonStyle.Secondary,
-          }),
-        )
-      }
-    }
-
-    const options: MessageOptions & MessageEditOptions = {
-      content: nodes
-        .map((node) => (node instanceof TextNode ? node.props.text : ""))
-        .join(""),
-
-      components: rows.length > 0 ? rows : undefined,
-    }
-
+  update({ content, embeds, components }: MessagePayloadType) {
     return this.queue.add(async () => {
       if (!this.active) {
         return
       }
 
       if (this.message) {
-        await this.message.edit(options)
+        await this.message.edit({ content, embeds, components })
         return
       }
 
       const channel = await this.getChannel()
-      this.message = await channel.send(options)
+      this.message = await channel.send({ content, embeds, components })
     })
   }
 

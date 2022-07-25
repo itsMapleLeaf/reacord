@@ -1,20 +1,18 @@
 import type { ReactNode } from "react"
 import React from "react"
 import type { Node } from "./node"
-import { NodeDefinition } from "./node"
+import { NodeRef } from "./node"
 
-export function ReacordElement<Props>({
+export function ReacordElement({
+  node,
   children,
-  createNode,
-  nodeProps,
 }: {
-  createNode: () => Node<Props>
-  nodeProps: Props
+  node: Node
   children?: ReactNode
 }) {
   return React.createElement(
     "reacord-element",
-    { definition: new NodeDefinition(createNode, nodeProps) },
+    { node: new NodeRef(node) },
     children,
   )
 }

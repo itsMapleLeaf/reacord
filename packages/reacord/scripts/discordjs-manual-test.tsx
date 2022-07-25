@@ -41,16 +41,26 @@ const createTest = async (
   await block(channel)
 }
 
-await createTest("components", "test 'dem buttons", async (channel) => {
-  reacord.send(
-    channel.id,
-    <>
-      {Array.from({ length: 6 }, (_, i) => (
-        <Button key={i} label={String(i + 1)} onClick={() => {}} />
-      ))}
-    </>,
-  )
-})
+await createTest(
+  "buttons",
+  "should show button text, emojis, and make automatic action rows",
+  async (channel) => {
+    const fruitEmojis = ["🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🍍"]
+    reacord.send(
+      channel.id,
+      <>
+        {Array.from({ length: 7 }, (_, i) => (
+          <Button
+            key={i}
+            label={String(i + 1)}
+            emoji={fruitEmojis[i % 6]}
+            onClick={() => {}}
+          />
+        ))}
+      </>,
+    )
+  },
+)
 
 await createTest("basic", "should update over time", (channel) => {
   function Timer() {

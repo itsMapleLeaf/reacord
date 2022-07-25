@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto"
-import React from "react"
+import React, { useState } from "react"
+import type { Except } from "type-fest"
 import type { ButtonSharedProps } from "./button-shared-props"
 import type { ComponentEvent } from "./component-event"
-import { Container } from "./container"
-import type { Node, NodeContainer } from "./node"
-import { TextNode } from "./node"
+import type { NodeBase } from "./node"
+import { makeNode } from "./node"
 import { ReacordElement } from "./reacord-element"
 
 /**
@@ -28,24 +28,16 @@ export type ButtonProps = ButtonSharedProps & {
  */
 export type ButtonClickEvent = ComponentEvent
 
+export type ButtonNode = NodeBase<
+  "button",
+  Except<ButtonProps, "label"> & { customId: string }
+>
+
 export function Button({ label, ...props }: ButtonProps) {
+  const [customId] = useState(() => randomUUID())
   return (
-    <ReacordElement createNode={() => new ButtonNode(props)} nodeProps={props}>
+    <ReacordElement node={makeNode("button", { ...props, customId })}>
       {label}
     </ReacordElement>
   )
-}
-
-export class ButtonNode implements Node<ButtonProps> {
-  readonly children: NodeContainer = new Container()
-  readonly customId = randomUUID()
-
-  constructor(readonly props: ButtonProps) {}
-
-  get label(): string {
-    return this.children
-      .getItems()
-      .map((child) => (child instanceof TextNode ? child.props.text : ""))
-      .join("")
-  }
 }

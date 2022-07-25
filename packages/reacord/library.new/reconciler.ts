@@ -1,13 +1,14 @@
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { Node, NodeContainer } from "./node"
-import { NodeDefinition, TextNode } from "./node"
+import type { Container } from "./container"
+import type { Node, TextNode } from "./node"
+import { makeNode, NodeRef } from "./node"
 
 export const reconciler = ReactReconciler<
   string, // Type
-  { definition?: unknown }, // Props
-  { nodes: NodeContainer; render: () => void }, // Container
-  Node<unknown>, // Instance
+  { node?: unknown }, // Props
+  { nodes: Container<Node>; render: () => void }, // Container
+  Node, // Instance
   TextNode, // TextInstance
   never, // SuspenseInstance
   never, // HydratableInstance
@@ -27,11 +28,11 @@ export const reconciler = ReactReconciler<
   noTimeout: -1,
 
   createInstance(type, props) {
-    return NodeDefinition.parse(props.definition).create()
+    return NodeRef.unwrap(props.node)
   },
 
   createTextInstance(text) {
-    return new TextNode(text)
+    return makeNode("text", { text })
   },
 
   appendInitialChild(parent, child) {
@@ -71,7 +72,7 @@ export const reconciler = ReactReconciler<
   },
 
   commitUpdate(node, updatePayload, type, prevProps, nextProps) {
-    node.props = NodeDefinition.parse(nextProps.definition).props
+    node.props = NodeRef.unwrap(nextProps.node).props
   },
 
   prepareForCommit() {
