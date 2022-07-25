@@ -1,7 +1,7 @@
-export { Button, type ButtonProps } from "./button"
-export { type ButtonSharedProps } from "./button-shared-props"
-export { ReacordDiscordJs } from "./reacord-discord-js"
+export { Button, type ButtonProps } from "./core/button"
+export { type ButtonSharedProps } from "./core/button-shared-props"
 export {
   type ReacordInstance,
   type ReacordOptions,
-} from "./reacord-instance-pool"
+} from "./core/reacord-instance-pool"
+export { ReacordDiscordJs } from "./djs/reacord-discord-js"

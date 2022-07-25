@@ -1,5 +1,5 @@
 import type { ButtonNode } from "./button"
-import { Container } from "./container"
+import { Container } from "../../helpers/container"
 
 export type NodeBase<Type extends string, Props> = {
   type: Type

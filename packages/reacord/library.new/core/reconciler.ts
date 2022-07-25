@@ -1,6 +1,6 @@
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { Container } from "./container"
+import type { Container } from "../../helpers/container"
 import type { Node, TextNode } from "./node"
 import { makeNode, NodeRef } from "./node"
 

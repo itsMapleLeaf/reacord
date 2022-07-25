@@ -1,33 +1,9 @@
-import type { Client, Interaction, Message, TextBasedChannel } from "discord.js"
-import { ButtonStyle } from "discord.js"
-import type { ReactNode } from "react"
-import { AsyncQueue } from "./async-queue"
-import type { ButtonProps } from "./button"
-import type { MessagePayload as MessagePayloadType } from "./make-message-payload"
-import type {
-  ReacordMessageRenderer,
-  ReacordOptions,
-} from "./reacord-instance-pool"
-import { ReacordInstancePool } from "./reacord-instance-pool"
+import type { Client, Message, TextBasedChannel } from "discord.js"
+import { AsyncQueue } from "../../helpers/async-queue"
+import type { MessagePayload as MessagePayloadType } from "../core/make-message-payload"
+import type { ReacordMessageRenderer } from "../core/reacord-instance-pool"
 
-export class ReacordDiscordJs {
-  private instances
-
-  constructor(private readonly client: Client, options: ReacordOptions = {}) {
-    this.instances = new ReacordInstancePool(options)
-  }
-
-  send(channelId: string, initialContent?: ReactNode) {
-    const renderer = new ChannelMessageRenderer(this.client, channelId)
-    return this.instances.create({ initialContent, renderer })
-  }
-
-  reply(interaction: Interaction, initialContent?: ReactNode) {}
-
-  ephemeralReply(interaction: Interaction, initialContent?: ReactNode) {}
-}
-
-class ChannelMessageRenderer implements ReacordMessageRenderer {
+export class ChannelMessageRenderer implements ReacordMessageRenderer {
   private message: Message | undefined
   private channel: TextBasedChannel | undefined
   private active = true
@@ -85,14 +61,4 @@ class ChannelMessageRenderer implements ReacordMessageRenderer {
     }
     return (this.channel = channel)
   }
-}
-
-function getButtonStyle(style: NonNullable<ButtonProps["style"]>) {
-  const styleMap = {
-    primary: ButtonStyle.Primary,
-    secondary: ButtonStyle.Secondary,
-    danger: ButtonStyle.Danger,
-    success: ButtonStyle.Success,
-  } as const
-  return styleMap[style]
 }

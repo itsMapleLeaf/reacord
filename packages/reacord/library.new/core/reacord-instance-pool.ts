@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { Container } from "./container"
+import { Container } from "../../helpers/container"
 import type { MessagePayload } from "./make-message-payload"
 import { makeMessagePayload } from "./make-message-payload"
 import type { Node } from "./node"
