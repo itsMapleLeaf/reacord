@@ -5,21 +5,21 @@ import type {
 } from "discord-api-types/v10"
 import { ButtonStyle, ComponentType } from "discord-api-types/v10"
 import type { ButtonProps } from "./button"
+import { ButtonNode } from "./button"
 import type { Node } from "./node"
+import { TextNode } from "./text-node"
 
-export type MessagePayload = RESTPostAPIChannelMessageJSONBody
+export type MessageUpdatePayload = RESTPostAPIChannelMessageJSONBody
 
-export function makeMessagePayload(tree: readonly Node[]) {
-  const payload: MessagePayload = {}
+export function makeMessageUpdatePayload(root: Node) {
+  const payload: MessageUpdatePayload = {}
 
-  const content = tree
-    .map((item) => (item.type === "text" ? item.props.text : ""))
-    .join("")
+  const content = extractText(root, 1)
   if (content) {
     payload.content = content
   }
 
-  const actionRows = makeActionRows(tree)
+  const actionRows = makeActionRows(root)
   if (actionRows.length > 0) {
     payload.components = actionRows
   }
@@ -27,11 +27,11 @@ export function makeMessagePayload(tree: readonly Node[]) {
   return payload
 }
 
-function makeActionRows(tree: readonly Node[]) {
+function makeActionRows(root: Node) {
   const actionRows: Array<APIActionRowComponent<APIButtonComponent>> = []
 
-  for (const node of tree) {
-    if (node.type === "button") {
+  for (const node of root.children) {
+    if (node instanceof ButtonNode) {
       let currentRow = actionRows[actionRows.length - 1]
       if (!currentRow || currentRow.components.length === 5) {
         currentRow = {
@@ -43,8 +43,8 @@ function makeActionRows(tree: readonly Node[]) {
 
       currentRow.components.push({
         type: ComponentType.Button,
-        custom_id: node.props.customId,
-        label: extractText(node.children.getItems()),
+        custom_id: node.customId,
+        label: extractText(node, Number.POSITIVE_INFINITY),
         emoji: { name: node.props.emoji },
         style: translateButtonStyle(node.props.style ?? "secondary"),
         disabled: node.props.disabled,
@@ -55,14 +55,10 @@ function makeActionRows(tree: readonly Node[]) {
   return actionRows
 }
 
-function extractText(tree: readonly Node[]): string {
-  return tree
-    .map((item) => {
-      return item.type === "text"
-        ? item.props.text
-        : extractText(item.children.getItems())
-    })
-    .join("")
+function extractText(node: Node, depth: number): string {
+  if (node instanceof TextNode) return node.props.text
+  if (depth <= 0) return ""
+  return node.children.map((child) => extractText(child, depth - 1)).join("")
 }
 
 function translateButtonStyle(style: NonNullable<ButtonProps["style"]>) {

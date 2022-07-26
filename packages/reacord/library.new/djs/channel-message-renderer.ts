@@ -1,6 +1,7 @@
 import type { Client, Message, TextBasedChannel } from "discord.js"
 import { AsyncQueue } from "../../helpers/async-queue"
-import type { MessagePayload as MessagePayloadType } from "../core/make-message-payload"
+import { makeMessageUpdatePayload } from "../core/make-message-payload"
+import type { Node } from "../core/node"
 import type { ReacordMessageRenderer } from "../core/reacord-instance-pool"
 
 export class ChannelMessageRenderer implements ReacordMessageRenderer {
@@ -14,8 +15,10 @@ export class ChannelMessageRenderer implements ReacordMessageRenderer {
     private readonly channelId: string,
   ) {}
 
-  update({ content, embeds, components }: MessagePayloadType) {
+  update(root: Node) {
     return this.queue.add(async () => {
+      const { content, embeds, components } = makeMessageUpdatePayload(root)
+
       if (!this.active) {
         return
       }

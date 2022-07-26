@@ -1,13 +1,31 @@
+/* eslint-disable unicorn/prefer-modern-dom-apis */
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { Container } from "../../helpers/container"
-import type { Node, TextNode } from "./node"
-import { makeNode, NodeRef } from "./node"
+import type { Node } from "./node"
+import type { ReacordHostElementProps } from "./reacord-element"
+import { ReacordElementConfig } from "./reacord-element"
+import { TextNode } from "./text-node"
+
+// technically elements of any shape can go through the reconciler,
+// so I'm typing this as unknown to ensure we validate the props
+// before using them
+type ReconcilerProps = {
+  [_ in keyof ReacordHostElementProps]?: unknown
+}
+
+type ReconcilerContainer = {
+  root: Node
+
+  // We need to pass in a render callback, so the reconciler can tell us
+  // when it's done modifying elements, after which we'll update
+  // the message in Discord
+  render: (root: Node) => void
+}
 
 export const reconciler = ReactReconciler<
   string, // Type
-  { node?: unknown }, // Props
-  { nodes: Container<Node>; render: () => void }, // Container
+  ReconcilerProps, // Props
+  ReconcilerContainer, // Container
   Node, // Instance
   TextNode, // TextInstance
   never, // SuspenseInstance
@@ -28,43 +46,43 @@ export const reconciler = ReactReconciler<
   noTimeout: -1,
 
   createInstance(type, props) {
-    return NodeRef.unwrap(props.node)
+    return ReacordElementConfig.parse(props.config).create()
   },
 
   createTextInstance(text) {
-    return makeNode("text", { text })
+    return new TextNode({ text })
   },
 
   appendInitialChild(parent, child) {
-    parent.children?.add(child)
+    parent.add(child)
   },
 
   appendChild(parent, child) {
-    parent.children?.add(child)
+    parent.add(child)
   },
 
   appendChildToContainer(container, child) {
-    container.nodes.add(child)
+    container.root.add(child)
   },
 
   insertBefore(parent, child, beforeChild) {
-    parent.children?.insertBefore(child, beforeChild)
+    parent.insertBefore(child, beforeChild)
   },
 
   insertInContainerBefore(container, child, beforeChild) {
-    container.nodes.insertBefore(child, beforeChild)
+    container.root.insertBefore(child, beforeChild)
   },
 
   removeChild(parent, child) {
-    parent.children?.remove(child)
+    parent.remove(child)
   },
 
   removeChildFromContainer(container, child) {
-    container.nodes.remove(child)
+    container.root.remove(child)
   },
 
   clearContainer(container) {
-    container.nodes.clear()
+    container.root.clear()
   },
 
   commitTextUpdate(node, oldText, newText) {
@@ -72,7 +90,7 @@ export const reconciler = ReactReconciler<
   },
 
   commitUpdate(node, updatePayload, type, prevProps, nextProps) {
-    node.props = NodeRef.unwrap(nextProps.node).props
+    node.props = ReacordElementConfig.parse(nextProps.config).props
   },
 
   prepareForCommit() {
@@ -81,7 +99,7 @@ export const reconciler = ReactReconciler<
   },
 
   resetAfterCommit(container) {
-    container.render()
+    container.render(container.root.clone())
   },
 
   finalizeInitialChildren() {

@@ -1,37 +1,33 @@
-import type { ButtonNode } from "./button"
-import { Container } from "../../helpers/container"
+export class Node<Props = unknown> {
+  private readonly _children: Node[] = []
 
-export type NodeBase<Type extends string, Props> = {
-  type: Type
-  props: Props
-  children: Container<Node>
-}
+  constructor(public props: Props) {}
 
-export type Node = TextNode | ButtonNode | ActionRowNode
+  get children(): readonly Node[] {
+    return this._children
+  }
 
-export type TextNode = NodeBase<"text", { text: string }>
+  clear() {
+    this._children.splice(0)
+  }
 
-export type ActionRowNode = NodeBase<"actionRow", {}>
+  add(...nodes: Node[]) {
+    this._children.push(...nodes)
+  }
 
-export const makeNode = <Type extends Node["type"]>(
-  type: Type,
-  props: Extract<Node, { type: Type }>["props"],
-) =>
-  ({ type, props, children: new Container() } as Extract<Node, { type: Type }>)
+  remove(node: Node) {
+    const index = this._children.indexOf(node)
+    if (index !== -1) this._children.splice(index, 1)
+  }
 
-/** A wrapper for ensuring we're actually working with a real node
- * inside the React reconciler
- */
-export class NodeRef {
-  constructor(public readonly node: Node) {}
+  insertBefore(node: Node, beforeNode: Node) {
+    const index = this._children.indexOf(beforeNode)
+    if (index !== -1) this._children.splice(index, 0, node)
+  }
 
-  static unwrap(maybeNodeRef: unknown): Node {
-    if (maybeNodeRef instanceof NodeRef) {
-      return maybeNodeRef.node
-    }
-    const received = maybeNodeRef as Object | null | undefined
-    throw new TypeError(
-      `Expected ${NodeRef.name}, received instance of "${received?.constructor.name}"`,
-    )
+  clone(): this {
+    const cloned: this = new (this.constructor as any)(this.props)
+    cloned.add(...this.children.map((child) => child.clone()))
+    return cloned
   }
 }

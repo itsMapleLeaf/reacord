@@ -46,13 +46,16 @@ await createTest(
   "should show button text, emojis, and make automatic action rows",
   async (channel) => {
     const fruitEmojis = ["🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🍍"]
+
+    const FruitLabel = (props: { index: number }) => <>{props.index + 1}</>
+
     reacord.send(
       channel.id,
       <>
         {Array.from({ length: 7 }, (_, i) => (
           <Button
             key={i}
-            label={String(i + 1)}
+            label={<FruitLabel index={i} />}
             emoji={fruitEmojis[i % 6]}
             onClick={() => {}}
           />

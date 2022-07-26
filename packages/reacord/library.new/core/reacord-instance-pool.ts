@@ -1,8 +1,5 @@
 import type { ReactNode } from "react"
-import { Container } from "../../helpers/container"
-import type { MessagePayload } from "./make-message-payload"
-import { makeMessagePayload } from "./make-message-payload"
-import type { Node } from "./node"
+import { Node } from "./node"
 import { reconciler } from "./reconciler"
 
 export type ReacordOptions = {
@@ -33,7 +30,7 @@ export type ReacordInstanceOptions = {
 }
 
 export type ReacordMessageRenderer = {
-  update: (payload: MessagePayload) => Promise<void>
+  update: (tree: Node) => Promise<void>
   deactivate: () => Promise<void>
   destroy: () => Promise<void>
 }
@@ -47,18 +44,18 @@ export class ReacordInstancePool {
   }
 
   create({ initialContent, renderer }: ReacordInstanceOptions) {
-    const nodes = new Container<Node>()
+    const root = new Node({})
 
-    const render = async () => {
+    const render = async (tree: Node) => {
       try {
-        await renderer.update(makeMessagePayload(nodes.getItems()))
+        await renderer.update(tree)
       } catch (error) {
         console.error("Failed to update message.", error)
       }
     }
 
     const container = reconciler.createContainer(
-      { nodes, render },
+      { root, render },
       0,
       // eslint-disable-next-line unicorn/no-null
       null,
