@@ -8,6 +8,11 @@ export type ButtonSharedProps = {
   /** The text on the button. Rich formatting (markdown) is not supported here. */
   label?: ReactNode
 
+  /** The text on the button. Rich formatting (markdown) is not supported here.
+   * If both `label` and `children` are passed, `children` will be ignored.
+   */
+  children?: ReactNode
+
   /** When true, the button will be slightly faded, and cannot be clicked. */
   disabled?: boolean
 

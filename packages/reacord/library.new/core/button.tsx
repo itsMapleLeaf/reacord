@@ -1,6 +1,5 @@
 import { randomUUID } from "node:crypto"
 import React from "react"
-import type { Except } from "type-fest"
 import type { ButtonSharedProps } from "./button-shared-props"
 import type { ComponentEvent } from "./component-event"
 import { Node } from "./node"
@@ -27,18 +26,18 @@ export type ButtonProps = ButtonSharedProps & {
  */
 export type ButtonClickEvent = ComponentEvent
 
-export function Button({ label, ...props }: ButtonProps) {
+export function Button({ label, children, ...props }: ButtonProps) {
   return (
     <ReacordElement
       name="button"
       createNode={() => new ButtonNode(props)}
       nodeProps={props}
     >
-      {label}
+      {label ?? children}
     </ReacordElement>
   )
 }
 
-export class ButtonNode extends Node<Except<ButtonProps, "label">> {
+export class ButtonNode extends Node<ButtonProps> {
   readonly customId = randomUUID()
 }
