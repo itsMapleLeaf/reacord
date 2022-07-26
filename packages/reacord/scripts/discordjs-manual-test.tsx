@@ -1,11 +1,12 @@
 import type { TextChannel } from "discord.js"
 import { ChannelType, Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
-import { kebabCase } from "lodash-es"
+import { chunk, kebabCase } from "lodash-es"
 import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
+import type { ButtonProps } from "../library.new/main"
 import { Button, ReacordDiscordJs } from "../library.new/main"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
@@ -45,23 +46,49 @@ await createTest(
   "buttons",
   "should show button text, emojis, and make automatic action rows",
   async (channel) => {
-    const fruitEmojis = ["🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🍍"]
+    const propCombinations = generatePropCombinations<ButtonProps>({
+      style: ["primary", "secondary", "success", "danger"],
+      emoji: ["🍓", undefined],
+      disabled: [true, false, undefined],
+      label: ["label prop", undefined],
+      children: ["children prop", undefined],
+      onClick: [() => {}],
+    }).filter((combination) => combination.label || combination.emoji)
 
-    const FruitLabel = (props: { index: number }) => <>{props.index + 1}</>
-
-    reacord.send(
-      channel.id,
-      <>
-        {Array.from({ length: 7 }, (_, i) => (
+    for (const combinations of chunk(propCombinations, 8)) {
+      reacord.send(
+        channel.id,
+        combinations.map((combination, index) => (
           <Button
-            key={i}
-            label={<FruitLabel index={i} />}
-            emoji={fruitEmojis[i % 6]}
-            onClick={() => {}}
+            key={index}
+            {...combination}
+            label={
+              combination.label &&
+              [
+                combination.label,
+                combination.style || "secondary (default)",
+                combination.emoji && "emoji",
+                combination.disabled && "disabled",
+              ]
+                .filter(Boolean)
+                .join(" + ")
+            }
+            // eslint-disable-next-line react/no-children-prop
+            children={
+              combination.children &&
+              [
+                combination.children,
+                combination.style || "secondary (default)",
+                combination.emoji && "emoji",
+                combination.disabled && "disabled",
+              ]
+                .filter(Boolean)
+                .join(" + ")
+            }
           />
-        ))}
-      </>,
-    )
+        )),
+      )
+    }
   },
 )
 
@@ -127,3 +154,25 @@ await createTest(
     instance.destroy()
   },
 )
+
+function generatePropCombinations<P>(values: {
+  [K in keyof P]: ReadonlyArray<P[K]>
+}) {
+  return generatePropCombinationsRecursive(values) as P[]
+}
+
+function generatePropCombinationsRecursive(
+  value: Record<string, readonly unknown[]>,
+): Array<Record<string, unknown>> {
+  const [key] = Object.keys(value)
+  if (!key) return [{}]
+
+  const { [key]: values = [], ...otherValues } = value
+  const result: Array<Record<string, unknown>> = []
+  for (const value of values) {
+    for (const otherValue of generatePropCombinationsRecursive(otherValues)) {
+      result.push({ [key]: value, ...otherValue })
+    }
+  }
+  return result
+}
