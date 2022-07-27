@@ -55,49 +55,29 @@ await createTest(
   "buttons",
   "should show button text, emojis, and make automatic action rows",
   async (channel) => {
-    const propCombinations = generatePropCombinations<ButtonProps>({
-      style: ["primary", "secondary", "success", "danger"],
-      emoji: ["🍓", undefined],
-      disabled: [true, false, undefined],
-      label: ["label prop", undefined],
-      children: ["children prop", undefined],
-      onClick: [() => {}],
-    }).filter((combination) => combination.label || combination.emoji)
-
-    for (const combinations of chunk(propCombinations, 8)) {
-      reacord.send(
-        channel.id,
-        combinations.map((combination, index) => (
-          <Button
-            key={index}
-            {...combination}
-            label={
-              combination.label &&
-              [
-                combination.label,
-                combination.style || "secondary (default)",
-                combination.emoji && "emoji",
-                combination.disabled && "disabled",
-              ]
-                .filter(Boolean)
-                .join(" + ")
-            }
-            // eslint-disable-next-line react/no-children-prop
-            children={
-              combination.children &&
-              [
-                combination.children,
-                combination.style || "secondary (default)",
-                combination.emoji && "emoji",
-                combination.disabled && "disabled",
-              ]
-                .filter(Boolean)
-                .join(" + ")
-            }
-          />
-        )),
-      )
-    }
+    reacord.send(
+      channel.id,
+      <>
+        <Button label="strawberry" onClick={() => {}} />
+        <Button emoji="🍓" onClick={() => {}} />
+        <Button label="strawberry" emoji="🍓" onClick={() => {}} />
+      </>,
+    )
+    reacord.send(
+      channel.id,
+      <>
+        <Button label="primary" style="primary" onClick={() => {}} />
+        <Button label="secondary" style="secondary" onClick={() => {}} />
+        <Button label="success" style="success" onClick={() => {}} />
+        <Button label="danger" style="danger" onClick={() => {}} />
+      </>,
+    )
+    reacord.send(
+      channel.id,
+      <>
+        <Button label="disabled" disabled onClick={() => {}} />
+      </>,
+    )
   },
 )
 
