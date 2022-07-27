@@ -4,6 +4,7 @@ import "dotenv/config"
 import { chunk, kebabCase } from "lodash-es"
 import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
+import { generatePropCombinations } from "../helpers/generate-prop-combinations"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
 import type { ButtonProps } from "../library.new/main"
@@ -154,25 +155,3 @@ await createTest(
     instance.destroy()
   },
 )
-
-function generatePropCombinations<P>(values: {
-  [K in keyof P]: ReadonlyArray<P[K]>
-}) {
-  return generatePropCombinationsRecursive(values) as P[]
-}
-
-function generatePropCombinationsRecursive(
-  value: Record<string, readonly unknown[]>,
-): Array<Record<string, unknown>> {
-  const [key] = Object.keys(value)
-  if (!key) return [{}]
-
-  const { [key]: values = [], ...otherValues } = value
-  const result: Array<Record<string, unknown>> = []
-  for (const value of values) {
-    for (const otherValue of generatePropCombinationsRecursive(otherValues)) {
-      result.push({ [key]: value, ...otherValue })
-    }
-  }
-  return result
-}
