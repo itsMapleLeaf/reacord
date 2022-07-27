@@ -1,13 +1,10 @@
-import type { TextChannel } from "discord.js"
-import { ChannelType, Client, IntentsBitField } from "discord.js"
+import { ChannelType, Client, IntentsBitField, TextChannel } from "discord.js"
 import "dotenv/config"
-import { chunk, kebabCase } from "lodash-es"
+import { kebabCase } from "lodash-es"
 import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
-import { generatePropCombinations } from "../helpers/generate-prop-combinations"
 import { raise } from "../helpers/raise"
 import { waitFor } from "../helpers/wait-for"
-import type { ButtonProps } from "../library.new/main"
 import { Button, ReacordDiscordJs } from "../library.new/main"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
