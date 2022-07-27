@@ -24,23 +24,31 @@ if (category?.type !== ChannelType.GuildCategory) {
   )
 }
 
-for (const [, channel] of category.children.cache) {
-  await channel.delete()
-}
-
-let prefix = 0
+let index = 0
 const createTest = async (
   name: string,
   description: string,
   block: (channel: TextChannel) => void | Promise<unknown>,
 ) => {
-  prefix += 1
-  const channel = await category.children.create({
-    type: ChannelType.GuildText,
-    name: `${String(prefix).padStart(3, "0")}-${kebabCase(name)}`,
-  })
-  await channel.edit({ topic: description })
+  const channelName = `${String(index).padStart(3, "0")}-${kebabCase(name)}`
+
+  let channel = category.children.cache.find((ch) => ch.name === channelName)
+  if (channel instanceof TextChannel) {
+    for (const [, msg] of await channel.messages.fetch()) {
+      await msg.delete()
+    }
+  } else {
+    await channel?.delete()
+    channel = await category.children.create({
+      type: ChannelType.GuildText,
+      name: channelName,
+      topic: description,
+      position: index,
+    })
+  }
+
   await block(channel)
+  index += 1
 }
 
 await createTest(
