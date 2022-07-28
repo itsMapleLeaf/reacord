@@ -4,6 +4,8 @@
   "scripts": {
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint -- --fix",
+    "test": "vitest --coverage --no-watch",
+    "test-dev": "vitest",
     "format": "prettier --write .",
     "build": "pnpm -r run build",
     "start": "pnpm -C packages/website run start",
@@ -17,7 +19,9 @@
     "eslint": "^8.20.0",
     "node": "^16.16.0",
     "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "c8": "^7.12.0",
+    "vitest": "^0.18.1"
   },
   "resolutions": {
     "esbuild": "latest"

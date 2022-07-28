@@ -1,10 +1,10 @@
+import { raise } from "@reacord/helpers/raise.js"
+import { waitFor } from "@reacord/helpers/wait-for.js"
 import { ChannelType, Client, IntentsBitField, TextChannel } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
 import prettyMilliseconds from "pretty-ms"
 import React, { useEffect, useState } from "react"
-import { raise } from "../helpers/raise"
-import { waitFor } from "../helpers/wait-for"
 import { Button, ReacordDiscordJs } from "../library.new/main"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })

@@ -1,8 +1,8 @@
+import { AsyncQueue } from "@reacord/helpers/async-queue"
 import type { Client, Message, TextBasedChannel } from "discord.js"
-import { AsyncQueue } from "../../helpers/async-queue"
-import { makeMessageUpdatePayload } from "../core/make-message-payload"
-import type { Node } from "../core/node"
-import type { ReacordMessageRenderer } from "../core/reacord-instance-pool"
+import { makeMessageUpdatePayload } from "../core/make-message-payload.js"
+import type { Node } from "../core/node.js"
+import type { ReacordMessageRenderer } from "../core/reacord-instance-pool.js"
 
 export class ChannelMessageRenderer implements ReacordMessageRenderer {
   private message: Message | undefined

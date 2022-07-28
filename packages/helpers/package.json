@@ -1,0 +1,10 @@
+{
+  "name": "@reacord/helpers",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@types/lodash-es": "^4.17.6",
+    "lodash-es": "^4.17.21",
+    "type-fest": "^2.17.0"
+  }
+}

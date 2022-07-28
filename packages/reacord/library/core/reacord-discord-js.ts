@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
+import { pick } from "@reacord/helpers/pick"
+import { pruneNullishValues } from "@reacord/helpers/prune-nullish-values"
+import { raise } from "@reacord/helpers/raise"
 import * as Discord from "discord.js"
 import type { ReactNode } from "react"
 import type { Except } from "type-fest"
-import { pick } from "../../helpers/pick"
-import { pruneNullishValues } from "../../helpers/prune-nullish-values"
-import { raise } from "../../helpers/raise"
 import type { ComponentInteraction } from "../internal/interaction"
 import type {
   Message,

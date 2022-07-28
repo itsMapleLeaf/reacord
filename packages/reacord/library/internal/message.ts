@@ -1,5 +1,5 @@
+import { last } from "@reacord/helpers/last"
 import type { Except } from "type-fest"
-import { last } from "../../helpers/last"
 import type { EmbedOptions } from "../core/components/embed-options"
 import type { SelectProps } from "../core/components/select"
 

@@ -1,14 +1,14 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable require-await */
+import { logPretty } from "@reacord/helpers/log-pretty"
+import { omit } from "@reacord/helpers/omit"
+import { pruneNullishValues } from "@reacord/helpers/prune-nullish-values"
+import { raise } from "@reacord/helpers/raise"
+import { waitFor } from "@reacord/helpers/wait-for"
 import { randomUUID } from "node:crypto"
 import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
-import { logPretty } from "../helpers/log-pretty"
-import { omit } from "../helpers/omit"
-import { pruneNullishValues } from "../helpers/prune-nullish-values"
-import { raise } from "../helpers/raise"
-import { waitFor } from "../helpers/wait-for"
 import type {
   ChannelInfo,
   GuildInfo,

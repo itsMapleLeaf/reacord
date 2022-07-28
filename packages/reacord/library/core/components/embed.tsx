@@ -1,6 +1,6 @@
+import { snakeCaseDeep } from "@reacord/helpers/convert-object-property-case.js"
+import { omit } from "@reacord/helpers/omit.js"
 import React from "react"
-import { snakeCaseDeep } from "../../../helpers/convert-object-property-case"
-import { omit } from "../../../helpers/omit"
 import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"

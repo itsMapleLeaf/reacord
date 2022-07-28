@@ -1,7 +1,7 @@
+import { isInstanceOf } from "@reacord/helpers/is-instance-of.js"
 import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
-import { isInstanceOf } from "../../../helpers/is-instance-of"
 import { ReacordElement } from "../../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
 import type {
