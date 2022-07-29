@@ -5,6 +5,16 @@ import { raise } from "@reacord/helpers/raise"
 import * as Discord from "discord.js"
 import type { ReactNode } from "react"
 import type { Except } from "type-fest"
+import type {
+  ChannelInfo,
+  GuildInfo,
+  GuildMemberInfo,
+  MessageInfo,
+  UserInfo,
+} from "../core/component-event"
+import type { ReacordInstance } from "../core/instance"
+import type { ReacordConfig } from "../core/reacord"
+import { Reacord } from "../core/reacord"
 import type { ComponentInteraction } from "../internal/interaction"
 import type {
   Message,
@@ -13,16 +23,6 @@ import type {
 } from "../internal/message"
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
-import type {
-  ChannelInfo,
-  GuildInfo,
-  GuildMemberInfo,
-  MessageInfo,
-  UserInfo,
-} from "./component-event"
-import type { ReacordInstance } from "./instance"
-import type { ReacordConfig } from "./reacord"
-import { Reacord } from "./reacord"
 
 /**
  * The Reacord adapter for Discord.js.
