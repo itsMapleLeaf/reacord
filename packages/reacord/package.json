@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library.new/main.ts --target node16 --format cjs,esm --dts --sourcemap",
+    "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build --watch",
     "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx",
     "typecheck": "tsc --noEmit",
