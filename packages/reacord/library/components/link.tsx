@@ -1,8 +1,8 @@
 import React from "react"
-import { ReacordElement } from "../../internal/element.js"
+import { ReacordElement } from "../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
-import { getNextActionRow } from "../../internal/message"
-import { Node } from "../../internal/node.js"
+import { getNextActionRow } from "../internal/message"
+import { Node } from "../internal/node.js"
 import type { ButtonSharedProps } from "./button-shared-props"
 
 /**

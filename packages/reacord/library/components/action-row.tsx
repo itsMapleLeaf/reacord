@@ -1,8 +1,8 @@
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../../internal/element.js"
+import { ReacordElement } from "../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
-import { Node } from "../../internal/node.js"
+import { Node } from "../internal/node.js"
 
 /**
  * Props for an action row

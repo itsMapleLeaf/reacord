@@ -1,33 +1,29 @@
 export class Node<Props = unknown> {
-  private readonly _children: Node[] = []
+  readonly children: Node[] = []
 
   constructor(public props: Props) {}
 
-  get children(): readonly Node[] {
-    return this._children
-  }
-
   clear() {
-    this._children.splice(0)
+    this.children.splice(0)
   }
 
   add(...nodes: Node[]) {
-    this._children.push(...nodes)
+    this.children.push(...nodes)
   }
 
   remove(node: Node) {
-    const index = this._children.indexOf(node)
-    if (index !== -1) this._children.splice(index, 1)
+    const index = this.children.indexOf(node)
+    if (index !== -1) this.children.splice(index, 1)
   }
 
   insertBefore(node: Node, beforeNode: Node) {
-    const index = this._children.indexOf(beforeNode)
-    if (index !== -1) this._children.splice(index, 0, node)
+    const index = this.children.indexOf(beforeNode)
+    if (index !== -1) this.children.splice(index, 0, node)
   }
 
   replace(oldNode: Node, newNode: Node) {
-    const index = this._children.indexOf(oldNode)
-    if (index !== -1) this._children[index] = newNode
+    const index = this.children.indexOf(oldNode)
+    if (index !== -1) this.children[index] = newNode
   }
 
   clone(): this {

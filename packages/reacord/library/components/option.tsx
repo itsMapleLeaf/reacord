@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../../internal/element"
+import { ReacordElement } from "../internal/element"
 import {
   OptionDescriptionNode,
   OptionLabelNode,

@@ -4,12 +4,12 @@ import type {
   APIMessageComponentSelectMenuInteraction,
 } from "discord.js"
 import { ComponentType } from "discord.js"
+import { ButtonNode } from "./components/button.js"
+import type { SelectChangeEvent } from "./components/select.js"
+import { SelectNode } from "./components/select.js"
 import type { ComponentEvent } from "./core/component-event.js"
-import { ButtonNode } from "./core/components/button.js"
-import type { SelectChangeEvent } from "./core/components/select.js"
-import { SelectNode } from "./core/components/select.js"
-import { Node } from "./internal/node.js"
 import { reconciler } from "./internal/reconciler.js"
+import { Node } from "./node.js"
 import type { ReacordClient } from "./reacord-client.js"
 import type { Renderer } from "./renderer.js"
 

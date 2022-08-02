@@ -1,10 +1,10 @@
 import { snakeCaseDeep } from "@reacord/helpers/convert-object-property-case.js"
 import { omit } from "@reacord/helpers/omit.js"
 import React from "react"
-import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
-import { Node } from "../../internal/node.js"
-import { TextNode } from "../../internal/text-node"
+import { ReacordElement } from "../internal/element.js"
+import { Node } from "../node.js"
+import { TextNode } from "../text-node"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 

@@ -3,14 +3,14 @@ import type { APIMessageComponentSelectMenuInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../../internal/element.js"
+import { ReacordElement } from "../internal/element.js"
 import type { ComponentInteraction } from "../../internal/interaction"
 import type {
   ActionRow,
   ActionRowItem,
   MessageOptions,
 } from "../../internal/message"
-import { Node } from "../../internal/node.js"
+import { Node } from "../internal/node.js"
 import type { ComponentEvent } from "../component-event"
 import { OptionNode } from "./option-node"
 

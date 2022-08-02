@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../../internal/element.js"
-import { Node } from "../../internal/node.js"
+import { ReacordElement } from "../internal/element.js"
+import { Node } from "../internal/node.js"
 import { EmbedChildNode } from "./embed-child.js"
 import type { EmbedOptions } from "./embed-options"
 

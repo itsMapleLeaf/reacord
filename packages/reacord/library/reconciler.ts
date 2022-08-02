@@ -2,8 +2,8 @@
 import { raise } from "@reacord/helpers/raise.js"
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import type { ReacordInstancePrivate } from "../reacord-instance.js"
 import { Node } from "./node.js"
+import type { ReacordInstancePrivate } from "./reacord-instance.js"
 import { TextNode } from "./text-node.js"
 
 export const reconciler = ReactReconciler<
