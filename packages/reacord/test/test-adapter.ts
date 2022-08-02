@@ -5,16 +5,14 @@ import { omit } from "@reacord/helpers/omit"
 import { pruneNullishValues } from "@reacord/helpers/prune-nullish-values"
 import { raise } from "@reacord/helpers/raise"
 import { waitFor } from "@reacord/helpers/wait-for"
+import type {
+  APIMessageComponentButtonInteraction,
+  APIMessageComponentSelectMenuInteraction,
+} from "discord.js"
 import { randomUUID } from "node:crypto"
 import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
-import type {
-  ChannelInfo,
-  GuildInfo,
-  MessageInfo,
-  UserInfo,
-} from "../library/core/component-event"
 import type { ButtonClickEvent } from "../library/core/components/button"
 import type { SelectChangeEvent } from "../library/core/components/select"
 import type { ReacordInstance } from "../library/core/instance"
@@ -252,11 +250,6 @@ class TestSelectInteraction
 class TestComponentEvent {
   constructor(private tester: ReacordTester) {}
 
-  message: MessageInfo = {} as any // todo
-  channel: ChannelInfo = {} as any // todo
-  user: UserInfo = {} as any // todo
-  guild: GuildInfo = {} as any // todo
-
   reply(content?: ReactNode): ReacordInstance {
     return this.tester.reply(content)
   }
@@ -268,12 +261,17 @@ class TestComponentEvent {
 
 class TestButtonClickEvent
   extends TestComponentEvent
-  implements ButtonClickEvent {}
+  implements ButtonClickEvent
+{
+  interaction: APIMessageComponentButtonInteraction = {} as any // todo
+}
 
 class TestSelectChangeEvent
   extends TestComponentEvent
   implements SelectChangeEvent
 {
+  interaction: APIMessageComponentSelectMenuInteraction = {} as any // todo
+
   constructor(readonly values: string[], tester: ReacordTester) {
     super(tester)
   }

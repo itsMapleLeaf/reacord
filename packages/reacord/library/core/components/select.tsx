@@ -1,4 +1,5 @@
 import { isInstanceOf } from "@reacord/helpers/is-instance-of.js"
+import type { APIMessageComponentSelectMenuInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
@@ -73,7 +74,16 @@ export type SelectProps = {
  * @category Select
  */
 export type SelectChangeEvent = ComponentEvent & {
+  /** The set of values that were selected by the user.
+   * If `multiple`, this can have more than one value.
+   */
   values: string[]
+
+  /**
+   * Event details, e.g. the user who clicked, guild member, guild id, etc.
+   * @see https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
+   */
+  interaction: APIMessageComponentSelectMenuInteraction
 }
 
 /**
@@ -88,7 +98,7 @@ export function Select(props: SelectProps) {
   )
 }
 
-class SelectNode extends Node<SelectProps> {
+export class SelectNode extends Node<SelectProps> {
   readonly customId = randomUUID()
 
   override modifyMessageOptions(message: MessageOptions): void {

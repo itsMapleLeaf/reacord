@@ -1,3 +1,4 @@
+import type { APIMessageComponentButtonInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import React from "react"
 import { ReacordElement } from "../../internal/element.js"
@@ -27,7 +28,13 @@ export type ButtonProps = ButtonSharedProps & {
 /**
  * @category Button
  */
-export type ButtonClickEvent = ComponentEvent
+export type ButtonClickEvent = ComponentEvent & {
+  /**
+   * Event details, e.g. the user who clicked, guild member, guild id, etc.
+   * @see https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
+   */
+  interaction: APIMessageComponentButtonInteraction
+}
 
 /**
  * @category Button
@@ -42,8 +49,8 @@ export function Button(props: ButtonProps) {
   )
 }
 
-class ButtonNode extends Node<ButtonProps> {
-  private customId = randomUUID()
+export class ButtonNode extends Node<ButtonProps> {
+  readonly customId = randomUUID()
 
   // this has text children, but buttons themselves shouldn't yield text
   // eslint-disable-next-line class-methods-use-this

@@ -1,16 +1,16 @@
+/* eslint-disable unicorn/prefer-modern-dom-apis */
 import { raise } from "@reacord/helpers/raise.js"
-import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
+import type { ReacordInstancePrivate } from "../reacord-instance.js"
 import { Node } from "./node.js"
-import type { Renderer } from "./renderers/renderer"
 import { TextNode } from "./text-node.js"
 
-const config: HostConfig<
+export const reconciler = ReactReconciler<
   string, // Type,
   Record<string, unknown>, // Props,
-  Renderer, // Container,
-  Node<unknown>, // Instance,
+  ReacordInstancePrivate, // Container,
+  Node, // Instance,
   TextNode, // TextInstance,
   never, // SuspenseInstance,
   never, // HydratableInstance,
@@ -20,7 +20,7 @@ const config: HostConfig<
   never, // ChildSet,
   number, // TimeoutHandle,
   number // NoTimeout,
-> = {
+>({
   supportsMutation: true,
   supportsPersistence: false,
   supportsHydration: false,
@@ -49,7 +49,7 @@ const config: HostConfig<
 
     return node
   },
-  createTextInstance: (text) => new TextNode(text),
+  createTextInstance: (text) => new TextNode({ text }),
   shouldSetTextContent: () => false,
   detachDeletedInstance: (instance) => {},
   beforeActiveInstanceBlur: () => {},
@@ -59,30 +59,30 @@ const config: HostConfig<
   // eslint-disable-next-line unicorn/no-null
   getInstanceFromScope: (scopeInstance: any) => null,
 
-  clearContainer: (renderer) => {
-    renderer.nodes.clear()
+  clearContainer: (instance) => {
+    instance.tree.clear()
   },
-  appendChildToContainer: (renderer, child) => {
-    renderer.nodes.add(child)
+  appendChildToContainer: (instance, child) => {
+    instance.tree.add(child)
   },
-  removeChildFromContainer: (renderer, child) => {
-    renderer.nodes.remove(child)
+  removeChildFromContainer: (instance, child) => {
+    instance.tree.remove(child)
   },
-  insertInContainerBefore: (renderer, child, before) => {
-    renderer.nodes.addBefore(child, before)
+  insertInContainerBefore: (instance, child, before) => {
+    instance.tree.insertBefore(child, before)
   },
 
   appendInitialChild: (parent, child) => {
-    parent.children.add(child)
+    parent.add(child)
   },
   appendChild: (parent, child) => {
-    parent.children.add(child)
+    parent.add(child)
   },
   removeChild: (parent, child) => {
-    parent.children.remove(child)
+    parent.remove(child)
   },
   insertBefore: (parent, child, before) => {
-    parent.children.addBefore(child, before)
+    parent.insertBefore(child, before)
   },
 
   prepareUpdate: () => true,
@@ -90,13 +90,13 @@ const config: HostConfig<
     node.props = newProps.props
   },
   commitTextUpdate: (node, oldText, newText) => {
-    node.props = newText
+    node.props.text = newText
   },
 
   // eslint-disable-next-line unicorn/no-null
   prepareForCommit: () => null,
   resetAfterCommit: (renderer) => {
-    renderer.render()
+    void renderer.update(renderer.tree)
   },
   prepareScopeUpdate: (scopeInstance: any, instance: any) => {},
 
@@ -106,6 +106,4 @@ const config: HostConfig<
   finalizeInitialChildren: () => false,
 
   getCurrentEventPriority: () => DefaultEventPriority,
-}
-
-export const reconciler = ReactReconciler(config)
+})

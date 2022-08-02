@@ -59,9 +59,10 @@ const tests: TestCase[] = [
         <>
           <Button
             label="public clic"
-            onClick={(event) =>
-              event.reply(`${event.guild?.member.displayName} clic`)
-            }
+            onClick={(event) => {
+              console.info(event.interaction)
+              event.reply(`${event.interaction.member?.nick} clic`)
+            }}
           />
           <Button
             label="clic"

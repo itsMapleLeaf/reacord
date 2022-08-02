@@ -1,17 +1,12 @@
 /* eslint-disable class-methods-use-this */
-import { pick } from "@reacord/helpers/pick"
-import { pruneNullishValues } from "@reacord/helpers/prune-nullish-values"
 import { raise } from "@reacord/helpers/raise"
+import type {
+  APIMessageComponentButtonInteraction,
+  APIMessageComponentSelectMenuInteraction,
+} from "discord.js"
 import * as Discord from "discord.js"
 import type { ReactNode } from "react"
-import type { Except } from "type-fest"
-import type {
-  ChannelInfo,
-  GuildInfo,
-  GuildMemberInfo,
-  MessageInfo,
-  UserInfo,
-} from "../core/component-event"
+
 import type { ReacordInstance } from "../core/instance"
 import type { ReacordConfig } from "../core/reacord"
 import { Reacord } from "../core/reacord"
@@ -39,6 +34,18 @@ export class ReacordDiscordJs extends Reacord {
         )
       }
     })
+
+    client.ws.on(
+      Discord.GatewayDispatchEvents.InteractionCreate,
+      (data: Discord.APIInteraction) => {
+        if (data.type === Discord.InteractionType.MessageComponent) {
+          data
+          // this.handleComponentInteraction(
+          //   this.createReacordComponentInteraction(data),
+          // )
+        }
+      },
+    )
   }
 
   /**
@@ -154,83 +161,7 @@ export class ReacordDiscordJs extends Reacord {
   private createReacordComponentInteraction(
     interaction: Discord.MessageComponentInteraction,
   ): ComponentInteraction {
-    // todo please dear god clean this up
-    const channel: ChannelInfo = interaction.channel
-      ? {
-          ...pruneNullishValues(
-            pick(interaction.channel, [
-              "topic",
-              "nsfw",
-              "lastMessageId",
-              "ownerId",
-              "parentId",
-              "rateLimitPerUser",
-            ]),
-          ),
-          id: interaction.channelId,
-        }
-      : raise("Non-channel interactions are not supported")
-
-    const message: MessageInfo =
-      interaction.message instanceof Discord.Message
-        ? {
-            ...pick(interaction.message, [
-              "id",
-              "channelId",
-              "authorId",
-              "content",
-              "tts",
-              "mentionEveryone",
-            ]),
-            timestamp: new Date(
-              interaction.message.createdTimestamp,
-            ).toISOString(),
-            editedTimestamp: interaction.message.editedTimestamp
-              ? new Date(interaction.message.editedTimestamp).toISOString()
-              : undefined,
-            mentions: interaction.message.mentions.users.map((u) => u.id),
-          }
-        : raise("Message not found")
-
-    const member: GuildMemberInfo | undefined =
-      interaction.member instanceof Discord.GuildMember
-        ? {
-            ...pruneNullishValues(
-              pick(interaction.member, [
-                "id",
-                "nick",
-                "displayName",
-                "avatarUrl",
-                "displayAvatarUrl",
-                "color",
-                "pending",
-              ]),
-            ),
-            displayName: interaction.member.displayName,
-            roles: [...interaction.member.roles.cache.map((role) => role.id)],
-            joinedAt: interaction.member.joinedAt?.toISOString(),
-            premiumSince: interaction.member.premiumSince?.toISOString(),
-            communicationDisabledUntil:
-              interaction.member.communicationDisabledUntil?.toISOString(),
-          }
-        : undefined
-
-    const guild: GuildInfo | undefined = interaction.guild
-      ? {
-          ...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
-          member: member ?? raise("unexpected: member is undefined"),
-        }
-      : undefined
-
-    const user: UserInfo = {
-      ...pruneNullishValues(
-        pick(interaction.user, ["id", "username", "discriminator", "tag"]),
-      ),
-      avatarUrl: interaction.user.avatarURL()!,
-      accentColor: interaction.user.accentColor ?? undefined,
-    }
-
-    const baseProps: Except<ComponentInteraction, "type"> = {
+    const baseProps = {
       id: interaction.id,
       customId: interaction.customId,
       update: async (options: MessageOptions) => {
@@ -240,14 +171,14 @@ export class ReacordDiscordJs extends Reacord {
         if (interaction.replied || interaction.deferred) return
         await interaction.deferUpdate()
       },
-      reply: async (options) => {
+      reply: async (options: MessageOptions) => {
         const message = await interaction.reply({
           ...getDiscordMessageOptions(options),
           fetchReply: true,
         })
         return createReacordMessage(message as Discord.Message)
       },
-      followUp: async (options) => {
+      followUp: async (options: MessageOptions) => {
         const message = await interaction.followUp({
           ...getDiscordMessageOptions(options),
           fetchReply: true,
@@ -255,11 +186,6 @@ export class ReacordDiscordJs extends Reacord {
         return createReacordMessage(message as Discord.Message)
       },
       event: {
-        channel,
-        message,
-        user,
-        guild,
-
         reply: (content?: ReactNode) =>
           this.createInstance(
             this.createInteractionReplyRenderer(interaction),
@@ -278,6 +204,11 @@ export class ReacordDiscordJs extends Reacord {
       return {
         ...baseProps,
         type: "button",
+        event: {
+          ...baseProps.event,
+          interaction:
+            interaction.toJSON() as APIMessageComponentButtonInteraction,
+        },
       }
     }
 
@@ -288,6 +219,8 @@ export class ReacordDiscordJs extends Reacord {
         event: {
           ...baseProps.event,
           values: interaction.values,
+          interaction:
+            interaction.toJSON() as APIMessageComponentSelectMenuInteraction,
         },
       }
     }
