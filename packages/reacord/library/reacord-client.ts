@@ -38,10 +38,11 @@ export type ReacordConfig = {
  * ```js
  * client.on("interactionCreate", (interaction) => {
  *   if (interaction.isChatInputCommand() && interaction.commandName === "hi") {
- *     interaction.reply("hi lol")
+ *     reacord.reply(interacition, "hi lol")
  *   }
  * })
  * ```
+ * @category Core
  */
 export type InteractionInfo = {
   id: string
