@@ -1,35 +1,74 @@
 import { AsyncQueue } from "@reacord/helpers/async-queue"
-import type { Node } from "./internal/node.js"
+import type { Client, Message } from "discord.js"
+import { TextChannel } from "discord.js"
+import { makeMessageUpdatePayload } from "./make-message-update-payload.js"
+import type { Node } from "./node.js"
 import type { InteractionInfo } from "./reacord-client.js"
 
 export type Renderer = {
-  update(tree: Node<unknown>): Promise<void>
+  update(tree: Node): Promise<void>
   deactivate(): Promise<void>
   destroy(): Promise<void>
 }
 
 export class ChannelMessageRenderer implements Renderer {
   private readonly queue = new AsyncQueue()
+  private channel: TextChannel | undefined
+  private message: Message | undefined
+  private active = true
 
-  constructor(private readonly channelId: string) {}
+  constructor(
+    private readonly channelId: string,
+    private readonly client: Client,
+  ) {}
 
-  update(tree: Node<unknown>): Promise<void> {
-    throw new Error("Method not implemented.")
+  private async getChannel(): Promise<TextChannel> {
+    if (this.channel) return this.channel
+
+    const channel =
+      this.client.channels.cache.get(this.channelId) ??
+      (await this.client.channels.fetch(this.channelId))
+
+    if (!(channel instanceof TextChannel)) {
+      throw new TypeError(`Channel ${this.channelId} is not a text channel`)
+    }
+
+    this.channel = channel
+    return channel
   }
 
-  deactivate(): Promise<void> {
-    throw new Error("Method not implemented.")
+  update(tree: Node) {
+    const payload = makeMessageUpdatePayload(tree)
+    return this.queue.add(async () => {
+      if (!this.active) return
+      if (this.message) {
+        await this.message.edit(payload)
+      } else {
+        const channel = await this.getChannel()
+        this.message = await channel.send(payload)
+      }
+    })
   }
 
-  destroy(): Promise<void> {
-    throw new Error("Method not implemented.")
+  async deactivate() {
+    return this.queue.add(async () => {
+      this.active = false
+      // TODO: disable message components
+    })
+  }
+
+  async destroy() {
+    return this.queue.add(async () => {
+      this.active = false
+      await this.message?.delete()
+    })
   }
 }
 
 export class InteractionReplyRenderer implements Renderer {
   constructor(private readonly interaction: InteractionInfo) {}
 
-  update(tree: Node<unknown>): Promise<void> {
+  update(tree: Node): Promise<void> {
     throw new Error("Method not implemented.")
   }
 
@@ -45,7 +84,7 @@ export class InteractionReplyRenderer implements Renderer {
 export class EphemeralInteractionReplyRenderer implements Renderer {
   constructor(private readonly interaction: InteractionInfo) {}
 
-  update(tree: Node<unknown>): Promise<void> {
+  update(tree: Node): Promise<void> {
     throw new Error("Method not implemented.")
   }
 

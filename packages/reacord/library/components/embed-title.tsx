@@ -1,9 +1,8 @@
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../internal/element.js"
-import { Node } from "../internal/node.js"
-import { EmbedChildNode } from "./embed-child.js"
-import type { EmbedOptions } from "./embed-options"
+import type { Except } from "type-fest"
+import { Node } from "../node"
+import { ReacordElement } from "../reacord-element.js"
 
 /**
  * @category Embed
@@ -19,18 +18,9 @@ export type EmbedTitleProps = {
 export function EmbedTitle({ children, ...props }: EmbedTitleProps) {
   return (
     <ReacordElement props={props} createNode={() => new EmbedTitleNode(props)}>
-      <ReacordElement props={{}} createNode={() => new TitleTextNode({})}>
-        {children}
-      </ReacordElement>
+      {children}
     </ReacordElement>
   )
 }
 
-class EmbedTitleNode extends EmbedChildNode<Omit<EmbedTitleProps, "children">> {
-  override modifyEmbedOptions(options: EmbedOptions): void {
-    options.title = this.children.findType(TitleTextNode)?.text ?? ""
-    options.url = this.props.url
-  }
-}
-
-class TitleTextNode extends Node<{}> {}
+export class EmbedTitleNode extends Node<Except<EmbedTitleProps, "children">> {}

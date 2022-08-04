@@ -1,8 +1,7 @@
 import React from "react"
-import { ReacordElement } from "../internal/element.js"
-import type { MessageOptions } from "../../internal/message"
-import { getNextActionRow } from "../internal/message"
-import { Node } from "../internal/node.js"
+import type { Except } from "type-fest"
+import { Node } from "../node.js"
+import { ReacordElement } from "../reacord-element.js"
 import type { ButtonSharedProps } from "./button-shared-props"
 
 /**
@@ -21,23 +20,9 @@ export type LinkProps = ButtonSharedProps & {
 export function Link({ label, children, ...props }: LinkProps) {
   return (
     <ReacordElement props={props} createNode={() => new LinkNode(props)}>
-      <ReacordElement props={{}} createNode={() => new LinkTextNode({})}>
-        {label || children}
-      </ReacordElement>
+      {label || children}
     </ReacordElement>
   )
 }
 
-class LinkNode extends Node<Omit<LinkProps, "label" | "children">> {
-  override modifyMessageOptions(options: MessageOptions): void {
-    getNextActionRow(options).push({
-      type: "link",
-      disabled: this.props.disabled,
-      emoji: this.props.emoji,
-      label: this.children.findType(LinkTextNode)?.text,
-      url: this.props.url,
-    })
-  }
-}
-
-class LinkTextNode extends Node<{}> {}
+export class LinkNode extends Node<Except<LinkProps, "label" | "children">> {}

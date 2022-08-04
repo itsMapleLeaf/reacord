@@ -3,16 +3,17 @@ import "dotenv/config"
 import { kebabCase } from "lodash-es"
 import * as React from "react"
 import { useState } from "react"
-import {
-  Button,
-  Option,
-  ReacordDiscordJs,
-  Select,
-  useInstance,
-} from "../library/main"
+import { Button } from "../library/components/button"
+import { Option } from "../library/components/option"
+import { Select } from "../library/components/select"
+import { useInstance } from "../library/core/instance-context"
+import { ReacordClient } from "../library/reacord-client"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
-const reacord = new ReacordDiscordJs(client)
+
+const reacord = new ReacordClient({
+  token: process.env.TEST_BOT_TOKEN!,
+})
 
 type TestCase = {
   name: string
@@ -180,6 +181,7 @@ await Promise.all([
     tests.map(async (test, index) => {
       const channelName = getTestCaseChannelName(test, index)
       const channel = await getTestCaseChannel(channelName, index)
+      console.info("running test:", test.name)
       await test.run(channel)
     }),
   ),

@@ -38,7 +38,7 @@
   "scripts": {
     "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build --watch",
-    "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx",
+    "test-manual": "tsx watch ./scripts/discordjs-manual-test.tsx",
     "typecheck": "tsc --noEmit",
     "release": "bash scripts/release.sh"
   },
@@ -62,17 +62,17 @@
   "devDependencies": {
     "@reacord/helpers": "workspace:*",
     "@types/lodash-es": "^4.17.6",
-    "discord.js": "^14.0.3",
+    "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
     "lodash-es": "^4.17.21",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
     "pretty-ms": "^8.0.0",
     "react": "^18.2.0",
-    "release-it": "^15.1.3",
-    "tsup": "^6.1.3",
+    "release-it": "^15.2.0",
+    "tsup": "^6.2.1",
     "tsx": "^3.8.0",
-    "type-fest": "^2.17.0",
+    "type-fest": "^2.18.0",
     "typescript": "^4.7.4"
   },
   "resolutions": {

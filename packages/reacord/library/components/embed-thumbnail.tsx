@@ -1,7 +1,6 @@
 import React from "react"
-import { ReacordElement } from "../internal/element.js"
-import { EmbedChildNode } from "./embed-child.js"
-import type { EmbedOptions } from "./embed-options"
+import { Node } from "../node"
+import { ReacordElement } from "../reacord-element.js"
 
 /**
  * @category Embed
@@ -22,8 +21,4 @@ export function EmbedThumbnail(props: EmbedThumbnailProps) {
   )
 }
 
-class EmbedThumbnailNode extends EmbedChildNode<EmbedThumbnailProps> {
-  override modifyEmbedOptions(options: EmbedOptions): void {
-    options.thumbnail = { url: this.props.url }
-  }
-}
+export class EmbedThumbnailNode extends Node<EmbedThumbnailProps> {}

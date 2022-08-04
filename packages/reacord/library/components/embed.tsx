@@ -1,12 +1,6 @@
-import { snakeCaseDeep } from "@reacord/helpers/convert-object-property-case.js"
-import { omit } from "@reacord/helpers/omit.js"
 import React from "react"
-import type { MessageOptions } from "../../internal/message"
-import { ReacordElement } from "../internal/element.js"
 import { Node } from "../node.js"
-import { TextNode } from "../text-node"
-import { EmbedChildNode } from "./embed-child.js"
-import type { EmbedOptions } from "./embed-options"
+import { ReacordElement } from "../reacord-element.js"
 
 /**
  * @category Embed
@@ -39,24 +33,22 @@ export function Embed(props: EmbedProps) {
   )
 }
 
-class EmbedNode extends Node<EmbedProps> {
-  override modifyMessageOptions(options: MessageOptions): void {
-    const embed: EmbedOptions = {
-      ...snakeCaseDeep(omit(this.props, ["children", "timestamp"])),
-      timestamp: this.props.timestamp
-        ? new Date(this.props.timestamp).toISOString()
-        : undefined,
-    }
-
-    for (const child of this.children) {
-      if (child instanceof EmbedChildNode) {
-        child.modifyEmbedOptions(embed)
-      }
-      if (child instanceof TextNode) {
-        embed.description = (embed.description || "") + child.props
-      }
-    }
-
-    options.embeds.push(embed)
-  }
+export class EmbedNode extends Node<EmbedProps> {
+  // override modifyMessageOptions(options: MessageOptions): void {
+  //   const embed: EmbedOptions = {
+  //     ...snakeCaseDeep(omit(this.props, ["children", "timestamp"])),
+  //     timestamp: this.props.timestamp
+  //       ? new Date(this.props.timestamp).toISOString()
+  //       : undefined,
+  //   }
+  //   for (const child of this.children) {
+  //     if (child instanceof EmbedChildNode) {
+  //       child.modifyEmbedOptions(embed)
+  //     }
+  //     if (child instanceof TextNode) {
+  //       embed.description = (embed.description || "") + child.props
+  //     }
+  //   }
+  //   options.embeds.push(embed)
+  // }
 }

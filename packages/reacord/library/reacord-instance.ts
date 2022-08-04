@@ -4,14 +4,14 @@ import type {
   APIMessageComponentSelectMenuInteraction,
 } from "discord.js"
 import { ComponentType } from "discord.js"
-import { ButtonNode } from "./components/button.js"
-import type { SelectChangeEvent } from "./components/select.js"
-import { SelectNode } from "./components/select.js"
-import type { ComponentEvent } from "./core/component-event.js"
-import { reconciler } from "./internal/reconciler.js"
-import { Node } from "./node.js"
-import type { ReacordClient } from "./reacord-client.js"
-import type { Renderer } from "./renderer.js"
+import { ButtonNode } from "./components/button"
+import type { SelectChangeEvent } from "./components/select"
+import { SelectNode } from "./components/select"
+import type { ComponentEvent } from "./core/component-event"
+import { Node } from "./node"
+import type { ReacordClient } from "./reacord-client"
+import { reconciler } from "./reconciler"
+import type { Renderer } from "./renderer"
 
 /**
  * Represents an interactive message, which can later be replaced or deleted.

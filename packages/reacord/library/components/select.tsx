@@ -1,18 +1,10 @@
-import { isInstanceOf } from "@reacord/helpers/is-instance-of.js"
 import type { APIMessageComponentSelectMenuInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../internal/element.js"
-import type { ComponentInteraction } from "../../internal/interaction"
-import type {
-  ActionRow,
-  ActionRowItem,
-  MessageOptions,
-} from "../../internal/message"
-import { Node } from "../internal/node.js"
-import type { ComponentEvent } from "../component-event"
-import { OptionNode } from "./option-node"
+import type { ComponentEvent } from "../core/component-event.js"
+import { Node } from "../node.js"
+import { ReacordElement } from "../reacord-element.js"
 
 /**
  * @category Select
@@ -100,64 +92,4 @@ export function Select(props: SelectProps) {
 
 export class SelectNode extends Node<SelectProps> {
   readonly customId = randomUUID()
-
-  override modifyMessageOptions(message: MessageOptions): void {
-    const actionRow: ActionRow = []
-    message.actionRows.push(actionRow)
-
-    const options = [...this.children]
-      .filter(isInstanceOf(OptionNode))
-      .map((node) => node.options)
-
-    const {
-      multiple,
-      value,
-      values,
-      minValues = 0,
-      maxValues = 25,
-      children,
-      onChange,
-      onChangeValue,
-      onChangeMultiple,
-      ...props
-    } = this.props
-
-    const item: ActionRowItem = {
-      ...props,
-      type: "select",
-      customId: this.customId,
-      options,
-      values: [],
-    }
-
-    if (multiple) {
-      item.minValues = minValues
-      item.maxValues = maxValues
-      if (values) item.values = values
-    }
-
-    if (!multiple && value != undefined) {
-      item.values = [value]
-    }
-
-    actionRow.push(item)
-  }
-
-  override handleComponentInteraction(
-    interaction: ComponentInteraction,
-  ): boolean {
-    const isSelectInteraction =
-      interaction.type === "select" &&
-      interaction.customId === this.customId &&
-      !this.props.disabled
-
-    if (!isSelectInteraction) return false
-
-    this.props.onChange?.(interaction.event)
-    this.props.onChangeMultiple?.(interaction.event.values, interaction.event)
-    if (interaction.event.values[0]) {
-      this.props.onChangeValue?.(interaction.event.values[0], interaction.event)
-    }
-    return true
-  }
 }

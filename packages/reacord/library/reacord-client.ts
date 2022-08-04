@@ -6,7 +6,7 @@ import {
   InteractionType,
 } from "discord.js"
 import * as React from "react"
-import { InstanceProvider } from "./core/instance-context.js"
+import { InstanceProvider } from "./core/instance-context"
 import type { ReacordInstance } from "./reacord-instance.js"
 import { ReacordInstancePrivate } from "./reacord-instance.js"
 import type { Renderer } from "./renderer.js"
@@ -79,7 +79,7 @@ export class ReacordClient {
 
   send(channelId: string, initialContent?: React.ReactNode): ReacordInstance {
     return this.createInstance(
-      new ChannelMessageRenderer(channelId),
+      new ChannelMessageRenderer(channelId, this.client),
       initialContent,
     )
   }
@@ -127,7 +127,11 @@ export class ReacordClient {
     const publicInstance: ReacordInstance = {
       render: (content: React.ReactNode) => {
         instance.render(
-          <InstanceProvider value={publicInstance}>{content}</InstanceProvider>,
+          React.createElement(
+            InstanceProvider,
+            { value: publicInstance },
+            content,
+          ),
         )
       },
       deactivate: () => {

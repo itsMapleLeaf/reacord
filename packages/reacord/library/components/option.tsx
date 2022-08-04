@@ -1,11 +1,7 @@
 import type { ReactNode } from "react"
 import React from "react"
-import { ReacordElement } from "../internal/element"
-import {
-  OptionDescriptionNode,
-  OptionLabelNode,
-  OptionNode,
-} from "./option-node"
+import { Node } from "../node"
+import { ReacordElement } from "../reacord-element"
 
 /**
  * @category Select
@@ -60,3 +56,9 @@ export function Option({
     </ReacordElement>
   )
 }
+
+export class OptionNode extends Node<
+  Omit<OptionProps, "children" | "label" | "description">
+> {}
+export class OptionLabelNode extends Node<{}> {}
+export class OptionDescriptionNode extends Node<{}> {}
