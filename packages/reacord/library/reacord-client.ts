@@ -6,9 +6,9 @@ import {
   InteractionType,
 } from "discord.js"
 import * as React from "react"
-import { InstanceProvider } from "./core/instance-context"
 import type { ReacordInstance } from "./reacord-instance.js"
 import { ReacordInstancePrivate } from "./reacord-instance.js"
+import { InstanceProvider } from "./react/instance-context"
 import type { Renderer } from "./renderer.js"
 import {
   ChannelMessageRenderer,

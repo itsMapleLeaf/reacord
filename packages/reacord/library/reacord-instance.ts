@@ -4,13 +4,13 @@ import type {
   APIMessageComponentSelectMenuInteraction,
 } from "discord.js"
 import { ComponentType } from "discord.js"
-import { ButtonNode } from "./components/button"
-import type { SelectChangeEvent } from "./components/select"
-import { SelectNode } from "./components/select"
-import type { ComponentEvent } from "./core/component-event"
 import { Node } from "./node"
 import type { ReacordClient } from "./reacord-client"
-import { reconciler } from "./reconciler"
+import { ButtonNode } from "./react/button"
+import type { ComponentEvent } from "./react/component-event"
+import { reconciler } from "./react/reconciler"
+import type { SelectChangeEvent } from "./react/select"
+import { SelectNode } from "./react/select"
 import type { Renderer } from "./renderer"
 
 /**

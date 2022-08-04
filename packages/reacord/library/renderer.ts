@@ -1,4 +1,4 @@
-import { AsyncQueue } from "@reacord/helpers/async-queue"
+import { AsyncQueue } from "@reacord/helpers/async-queue.js"
 import type { Client, Message } from "discord.js"
 import { TextChannel } from "discord.js"
 import { makeMessageUpdatePayload } from "./make-message-update-payload.js"

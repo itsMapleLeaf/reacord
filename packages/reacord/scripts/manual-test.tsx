@@ -3,11 +3,11 @@ import "dotenv/config"
 import { kebabCase } from "lodash-es"
 import * as React from "react"
 import { useState } from "react"
-import { Button } from "../library/components/button"
-import { Option } from "../library/components/option"
-import { Select } from "../library/components/select"
-import { useInstance } from "../library/core/instance-context"
 import { ReacordClient } from "../library/reacord-client"
+import { Button } from "../library/react/button"
+import { useInstance } from "../library/react/instance-context"
+import { Option } from "../library/react/option"
+import { Select } from "../library/react/select"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
 

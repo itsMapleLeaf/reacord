@@ -6,28 +6,28 @@ import type {
   APISelectMenuOption,
 } from "discord-api-types/v10"
 import { ButtonStyle, ComponentType } from "discord-api-types/v10"
-import { ActionRowNode } from "./components/action-row"
-import type { ButtonProps } from "./components/button"
-import { ButtonNode } from "./components/button"
-import { EmbedNode } from "./components/embed"
-import { EmbedAuthorNode } from "./components/embed-author"
+import type { Node } from "./node"
+import { ActionRowNode } from "./react/action-row"
+import type { ButtonProps } from "./react/button"
+import { ButtonNode } from "./react/button"
+import { EmbedNode } from "./react/embed"
+import { EmbedAuthorNode } from "./react/embed-author"
 import {
   EmbedFieldNameNode,
   EmbedFieldNode,
   EmbedFieldValueNode,
-} from "./components/embed-field"
-import { EmbedFooterNode } from "./components/embed-footer"
-import { EmbedImageNode } from "./components/embed-image"
-import { EmbedThumbnailNode } from "./components/embed-thumbnail"
-import { EmbedTitleNode } from "./components/embed-title"
-import { LinkNode } from "./components/link"
+} from "./react/embed-field"
+import { EmbedFooterNode } from "./react/embed-footer"
+import { EmbedImageNode } from "./react/embed-image"
+import { EmbedThumbnailNode } from "./react/embed-thumbnail"
+import { EmbedTitleNode } from "./react/embed-title"
+import { LinkNode } from "./react/link"
 import {
   OptionDescriptionNode,
   OptionLabelNode,
   OptionNode,
-} from "./components/option"
-import { SelectNode } from "./components/select"
-import type { Node } from "./node"
+} from "./react/option"
+import { SelectNode } from "./react/select"
 
 export type MessageUpdatePayload = {
   content: string
