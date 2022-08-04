@@ -353,6 +353,17 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
             }
           }
 
+          if (component.type === "link") {
+            return {
+              type: Discord.ComponentType.Button,
+              url: component.url,
+              label: component.label ?? "",
+              style: Discord.ButtonStyle.Link,
+              disabled: component.disabled,
+              emoji: component.emoji,
+            }
+          }
+
           if (component.type === "select") {
             return {
               ...component,
@@ -364,7 +375,7 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
             }
           }
 
-          raise(`Unsupported component type: ${component.type}`)
+          raise(`Unsupported component type: ${(component as any).type}`)
         },
       ),
     })),

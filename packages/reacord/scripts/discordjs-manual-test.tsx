@@ -6,6 +6,7 @@ import * as React from "react"
 import { useState } from "react"
 import {
   Button,
+  Link,
   Option,
   ReacordDiscordJs,
   Select,
@@ -131,4 +132,8 @@ await createTest("delete this", (channel) => {
     return <Button label="delete this" onClick={() => instance.destroy()} />
   }
   reacord.send(channel.id, <DeleteThis />)
+})
+
+await createTest("link", (channel) => {
+  reacord.send(channel.id, <Link label="hi" url="https://mapleleaf.dev" />)
 })
