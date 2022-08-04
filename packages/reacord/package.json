@@ -62,6 +62,7 @@
   "devDependencies": {
     "@reacord/helpers": "workspace:*",
     "@types/lodash-es": "^4.17.6",
+    "@types/prettier": "^2.6.4",
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
     "lodash-es": "^4.17.21",
@@ -70,6 +71,7 @@
     "pretty-ms": "^8.0.0",
     "react": "^18.2.0",
     "release-it": "^15.2.0",
+    "ts-morph": "^15.1.0",
     "tsup": "^6.2.1",
     "tsx": "^3.8.0",
     "type-fest": "^2.18.0",
