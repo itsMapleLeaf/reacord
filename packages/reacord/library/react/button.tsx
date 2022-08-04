@@ -39,43 +39,11 @@ export type ButtonClickEvent = ComponentEvent & {
 export function Button(props: ButtonProps) {
   return (
     <ReacordElement props={props} createNode={() => new ButtonNode(props)}>
-      <ReacordElement props={{}} createNode={() => new ButtonLabelNode({})}>
-        {props.label}
-      </ReacordElement>
+      {props.label}
     </ReacordElement>
   )
 }
 
 export class ButtonNode extends Node<ButtonProps> {
   readonly customId = randomUUID()
-
-  // this has text children, but buttons themselves shouldn't yield text
-  // eslint-disable-next-line class-methods-use-this
-  // override get text() {
-  //   return ""
-  // }
-
-  // override modifyMessageOptions(options: MessageOptions): void {
-  //   getNextActionRow(options).push({
-  //     type: "button",
-  //     customId: this.customId,
-  //     style: this.props.style ?? "secondary",
-  //     disabled: this.props.disabled,
-  //     emoji: this.props.emoji,
-  //     label: this.children.findType(ButtonLabelNode)?.text,
-  //   })
-  // }
-
-  // override handleComponentInteraction(interaction: ComponentInteraction) {
-  //   if (
-  //     interaction.type === "button" &&
-  //     interaction.customId === this.customId
-  //   ) {
-  //     this.props.onClick(interaction.event)
-  //     return true
-  //   }
-  //   return false
-  // }
 }
-
-class ButtonLabelNode extends Node<{}> {}

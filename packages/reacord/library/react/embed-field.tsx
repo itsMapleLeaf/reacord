@@ -29,16 +29,6 @@ export function EmbedField(props: EmbedFieldProps) {
   )
 }
 
-export class EmbedFieldNode extends Node<EmbedFieldProps> {
-  // override modifyEmbedOptions(options: EmbedOptions): void {
-  //   options.fields ??= []
-  //   options.fields.push({
-  //     name: this.children.findType(FieldNameNode)?.text ?? "",
-  //     value: this.children.findType(FieldValueNode)?.text ?? "",
-  //     inline: this.props.inline,
-  //   })
-  // }
-}
-
+export class EmbedFieldNode extends Node<EmbedFieldProps> {}
 export class EmbedFieldNameNode extends Node<{}> {}
 export class EmbedFieldValueNode extends Node<{}> {}

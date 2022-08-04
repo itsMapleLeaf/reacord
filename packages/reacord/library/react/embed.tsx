@@ -33,22 +33,4 @@ export function Embed(props: EmbedProps) {
   )
 }
 
-export class EmbedNode extends Node<EmbedProps> {
-  // override modifyMessageOptions(options: MessageOptions): void {
-  //   const embed: EmbedOptions = {
-  //     ...snakeCaseDeep(omit(this.props, ["children", "timestamp"])),
-  //     timestamp: this.props.timestamp
-  //       ? new Date(this.props.timestamp).toISOString()
-  //       : undefined,
-  //   }
-  //   for (const child of this.children) {
-  //     if (child instanceof EmbedChildNode) {
-  //       child.modifyEmbedOptions(embed)
-  //     }
-  //     if (child instanceof TextNode) {
-  //       embed.description = (embed.description || "") + child.props
-  //     }
-  //   }
-  //   options.embeds.push(embed)
-  // }
-}
+export class EmbedNode extends Node<EmbedProps> {}
