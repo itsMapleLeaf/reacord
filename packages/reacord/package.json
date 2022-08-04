@@ -38,7 +38,7 @@
   "scripts": {
     "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
     "build-watch": "pnpm build --watch",
-    "test-manual": "tsx watch ./scripts/discordjs-manual-test.tsx",
+    "test-manual": "tsx watch ./scripts/manual-test.tsx",
     "typecheck": "tsc --noEmit",
     "release": "bash scripts/release.sh"
   },
