@@ -1,4 +1,8 @@
-export { type ReacordConfig, ReacordClient } from "./reacord-client.js"
+export {
+  type ReacordConfig,
+  type InteractionInfo,
+  ReacordClient,
+} from "./reacord-client.js"
 export { type ReacordInstance } from "./reacord-instance.js"
 export { ActionRow, type ActionRowProps } from "./react/action-row.js"
 export { type ButtonSharedProps } from "./react/button-shared-props.js"
