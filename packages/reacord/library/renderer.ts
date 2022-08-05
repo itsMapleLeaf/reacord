@@ -50,17 +50,25 @@ export class ChannelMessageRenderer implements Renderer {
     })
   }
 
-  async deactivate() {
+  deactivate() {
     return this.queue.add(async () => {
-      this.active = false
+      if (!this.active) return
+
       // TODO: disable message components
+
+      // set active to false *after* running deactivation,
+      // so that other queued operations run first,
+      // and we can show the correct deactivated state
+      this.active = false
     })
   }
 
-  async destroy() {
+  destroy() {
+    this.active = false
     return this.queue.add(async () => {
-      this.active = false
-      await this.message?.delete()
+      const message = this.message
+      this.message = undefined
+      await message?.delete()
     })
   }
 }
