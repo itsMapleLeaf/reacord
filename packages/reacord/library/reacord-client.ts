@@ -1,11 +1,11 @@
-import type { APIInteraction } from "discord.js"
+import type { APIInteraction, Client } from "discord.js"
 import {
-  Client,
   GatewayDispatchEvents,
   GatewayIntentBits,
   InteractionType,
 } from "discord.js"
 import * as React from "react"
+import { createDiscordClient } from "./create-discord-client"
 import type { ReacordInstance } from "./reacord-instance.js"
 import { ReacordInstancePrivate } from "./reacord-instance.js"
 import { InstanceProvider } from "./react/instance-context"
@@ -54,9 +54,9 @@ export type InteractionInfo = {
  */
 export class ReacordClient {
   private readonly config: Required<ReacordConfig>
-  private readonly client: Client
+  private readonly discordClientPromise: Promise<Client<true>>
   private instances: ReacordInstancePrivate[] = []
-  private destroyed = false
+  destroyed = false
 
   constructor(config: ReacordConfig) {
     this.config = {
@@ -64,31 +64,34 @@ export class ReacordClient {
       maxInstances: config.maxInstances ?? 50,
     }
 
-    this.client = new Client({ intents: [GatewayIntentBits.Guilds] })
-    this.client.login(this.config.token).catch(console.error)
+    this.discordClientPromise = createDiscordClient(this.config.token, {
+      intents: [GatewayIntentBits.Guilds],
+    })
 
-    this.client.ws.on(
-      GatewayDispatchEvents.InteractionCreate,
-      (interaction: APIInteraction) => {
-        if (interaction.type !== InteractionType.MessageComponent) return
-        for (const instance of this.instances) {
-          instance.handleInteraction(interaction, this)
-        }
-      },
-    )
+    this.discordClientPromise
+      .then((client) => {
+        client.ws.on(
+          GatewayDispatchEvents.InteractionCreate,
+          (interaction: APIInteraction) => {
+            if (interaction.type !== InteractionType.MessageComponent) return
+            for (const instance of this.instances) {
+              instance.handleInteraction(interaction, this)
+            }
+          },
+        )
+        return client
+      })
+      .catch(console.error)
   }
 
-  send(channelId: string, initialContent?: React.ReactNode): ReacordInstance {
+  send(channelId: string, initialContent?: React.ReactNode) {
     return this.createInstance(
-      new ChannelMessageRenderer(channelId, this.client),
+      new ChannelMessageRenderer(channelId, this.discordClientPromise),
       initialContent,
     )
   }
 
-  reply(
-    interaction: InteractionInfo,
-    initialContent?: React.ReactNode,
-  ): ReacordInstance {
+  reply(interaction: InteractionInfo, initialContent?: React.ReactNode) {
     return this.createInstance(
       new InteractionReplyRenderer(interaction),
       initialContent,
@@ -98,7 +101,7 @@ export class ReacordClient {
   ephemeralReply(
     interaction: InteractionInfo,
     initialContent?: React.ReactNode,
-  ): ReacordInstance {
+  ) {
     return this.createInstance(
       new EphemeralInteractionReplyRenderer(interaction),
       initialContent,
@@ -106,14 +109,11 @@ export class ReacordClient {
   }
 
   destroy() {
-    this.client.destroy()
+    void this.discordClientPromise.then((client) => client.destroy())
     this.destroyed = true
   }
 
-  private createInstance(
-    renderer: Renderer,
-    initialContent?: React.ReactNode,
-  ): ReacordInstance {
+  private createInstance(renderer: Renderer, initialContent?: React.ReactNode) {
     if (this.destroyed) throw new Error("ReacordClient is destroyed")
 
     const instance = new ReacordInstancePrivate(renderer)

@@ -19,15 +19,17 @@ export class ChannelMessageRenderer implements Renderer {
 
   constructor(
     private readonly channelId: string,
-    private readonly client: Client,
+    private readonly client: Promise<Client<true>>,
   ) {}
 
   private async getChannel(): Promise<TextChannel> {
     if (this.channel) return this.channel
 
+    const client = await this.client
+
     const channel =
-      this.client.channels.cache.get(this.channelId) ??
-      (await this.client.channels.fetch(this.channelId))
+      client.channels.cache.get(this.channelId) ??
+      (await client.channels.fetch(this.channelId))
 
     if (!(channel instanceof TextChannel)) {
       throw new TypeError(`Channel ${this.channelId} is not a text channel`)

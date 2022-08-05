@@ -4,6 +4,7 @@ import type {
   APIMessageComponentSelectMenuInteraction,
 } from "discord.js"
 import { ComponentType } from "discord.js"
+import type * as React from "react"
 import { Node } from "./node"
 import type { ReacordClient } from "./reacord-client"
 import { ButtonNode } from "./react/button"
