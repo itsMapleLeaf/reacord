@@ -30,7 +30,7 @@ import {
 import { SelectNode } from "./react/select"
 
 export type MessageUpdatePayload = {
-  content: string
+  content: string | null
   embeds: APIEmbed[]
   components: Array<
     APIActionRowComponent<APIButtonComponent | APISelectMenuComponent>
@@ -39,7 +39,8 @@ export type MessageUpdatePayload = {
 
 export function makeMessageUpdatePayload(root: Node): MessageUpdatePayload {
   return {
-    content: root.extractText(),
+    // eslint-disable-next-line unicorn/no-null
+    content: root.extractText() || null,
     embeds: makeEmbeds(root),
     components: makeActionRows(root),
   }
@@ -167,7 +168,7 @@ function makeActionRows(root: Node) {
         type: ComponentType.Button,
         custom_id: node.customId,
         label: node.extractText(Number.POSITIVE_INFINITY),
-        emoji: { name: node.props.emoji },
+        emoji: node.props.emoji ? { name: node.props.emoji } : undefined,
         style: translateButtonStyle(node.props.style ?? "secondary"),
         disabled: node.props.disabled,
       })
@@ -201,7 +202,9 @@ function makeActionRows(root: Node) {
       const options = [...node.children]
         .flatMap((child) => (child instanceof OptionNode ? child : []))
         .map<APISelectMenuOption>((child) => ({
-          label: child.findInstanceOf(OptionLabelNode)?.extractText() ?? "",
+          label:
+            child.findInstanceOf(OptionLabelNode)?.extractText() ||
+            child.props.value,
           description: child
             .findInstanceOf(OptionDescriptionNode)
             ?.extractText(),
