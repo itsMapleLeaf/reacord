@@ -135,6 +135,11 @@ function applyEmbedChildren(embed: APIEmbed, children: Node[]) {
     if (child instanceof EmbedNode) {
       applyEmbedChildren(embed, child.children)
     }
+
+    if (child instanceof TextNode) {
+      embed.description ??= ""
+      embed.description += child.props.text
+    }
   }
 }
 
