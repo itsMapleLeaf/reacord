@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^1.6.7",
-    "@remix-run/node": "^1.4.1",
     "@testing-library/cypress": "^8.0.3",
     "@types/node": "*",
     "@types/react": "^18.0.15",
