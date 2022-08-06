@@ -1,5 +1,5 @@
 import React from "react"
-import { test } from "vitest"
+import { beforeAll, expect, test } from "vitest"
 import {
   Embed,
   EmbedAuthor,
@@ -9,14 +9,18 @@ import {
   EmbedThumbnail,
   EmbedTitle,
 } from "../library/main"
-import { ReacordTester } from "./test-adapter"
+import { ReacordTester } from "./tester"
 
-const testing = new ReacordTester()
+let tester: ReacordTester
+beforeAll(async () => {
+  tester = await ReacordTester.create()
+})
 
 test("kitchen sink", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  const { message } = await tester.render(
+    "kitchen sink",
     <>
       <Embed color={0xfe_ee_ef}>
         <EmbedAuthor name="author" iconUrl="https://example.com/author.png" />
@@ -33,85 +37,83 @@ test("kitchen sink", async () => {
         />
       </Embed>
     </>,
-    [
-      {
-        actionRows: [],
-        content: "",
-        embeds: [
-          {
-            description: "description text",
-            author: {
-              icon_url: "https://example.com/author.png",
-              name: "author",
-            },
-            color: 0xfe_ee_ef,
-            fields: [
-              {
-                inline: true,
-                name: "field name",
-                value: "field value",
-              },
-              {
-                name: "block field",
-                value: "block field value",
-              },
-            ],
-            footer: {
-              icon_url: "https://example.com/footer.png",
-              text: "footer text",
-            },
-            image: {
-              url: "https://example.com/image.png",
-            },
-            thumbnail: {
-              url: "https://example.com/thumbnail.png",
-            },
-            timestamp: now.toISOString(),
-            title: "title text",
-          },
-        ],
-      },
-    ],
   )
+
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({
+      description: "description text",
+      author: expect.objectContaining({
+        icon_url: "https://example.com/author.png",
+        name: "author",
+      }),
+      color: 0xfe_ee_ef,
+      fields: [
+        {
+          inline: true,
+          name: "field name",
+          value: "field value",
+        },
+        {
+          inline: false,
+          name: "block field",
+          value: "block field value",
+        },
+      ],
+      footer: expect.objectContaining({
+        icon_url: "https://example.com/footer.png",
+        text: "footer text",
+      }),
+      image: expect.objectContaining({
+        url: "https://example.com/image.png",
+      }),
+      thumbnail: expect.objectContaining({
+        url: "https://example.com/thumbnail.png",
+      }),
+      title: "title text",
+    }),
+  ])
+
+  // the timestamp format from Discord is not the same one that JS makes
+  expect(new Date(message.embeds[0]!.timestamp!)).toEqual(now)
 })
 
 test("author variants", async () => {
-  await testing.assertRender(
+  const { message } = await tester.render(
+    "author variants",
     <>
       <Embed>
         <EmbedAuthor iconUrl="https://example.com/author.png">
-          author name
+          author name 1
         </EmbedAuthor>
       </Embed>
       <Embed>
-        <EmbedAuthor iconUrl="https://example.com/author.png" />
+        <EmbedAuthor
+          name="author name 2"
+          iconUrl="https://example.com/author.png"
+        />
       </Embed>
     </>,
-    [
-      {
-        content: "",
-        actionRows: [],
-        embeds: [
-          {
-            author: {
-              icon_url: "https://example.com/author.png",
-              name: "author name",
-            },
-          },
-          {
-            author: {
-              icon_url: "https://example.com/author.png",
-              name: "",
-            },
-          },
-        ],
-      },
-    ],
   )
-})
+
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({
+      author: expect.objectContaining({
+        name: "author name 1",
+        icon_url: "https://example.com/author.png",
+      }),
+    }),
+    expect.objectContaining({
+      author: expect.objectContaining({
+        name: "author name 2",
+        icon_url: "https://example.com/author.png",
+      }),
+    }),
+  ])
+}, 20_000)
 
 test("field variants", async () => {
-  await testing.assertRender(
+  const { message } = await tester.render(
+    "field variants",
     <>
       <Embed>
         <EmbedField name="field name" value="field value" />
@@ -122,43 +124,41 @@ test("field variants", async () => {
         <EmbedField name="field name" />
       </Embed>
     </>,
-    [
-      {
-        content: "",
-        actionRows: [],
-        embeds: [
-          {
-            fields: [
-              {
-                name: "field name",
-                value: "field value",
-              },
-              {
-                inline: true,
-                name: "field name",
-                value: "field value",
-              },
-              {
-                inline: true,
-                name: "field name",
-                value: "field value",
-              },
-              {
-                name: "field name",
-                value: "",
-              },
-            ],
-          },
-        ],
-      },
-    ],
   )
+
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({
+      fields: [
+        {
+          name: "field name",
+          value: "field value",
+          inline: false,
+        },
+        {
+          name: "field name",
+          value: "field value",
+          inline: true,
+        },
+        {
+          name: "field name",
+          value: "field value",
+          inline: true,
+        },
+        {
+          name: "field name",
+          value: "_ _",
+          inline: false,
+        },
+      ],
+    }),
+  ])
 })
 
 test("footer variants", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  const { message } = await tester.render(
+    "footer variants",
     <>
       <Embed>
         <EmbedFooter text="footer text" />
@@ -176,45 +176,37 @@ test("footer variants", async () => {
         <EmbedFooter iconUrl="https://example.com/footer.png" timestamp={now} />
       </Embed>
     </>,
-    [
-      {
-        content: "",
-        actionRows: [],
-        embeds: [
-          {
-            footer: {
-              text: "footer text",
-            },
-          },
-          {
-            footer: {
-              icon_url: "https://example.com/footer.png",
-              text: "footer text",
-            },
-          },
-          {
-            footer: {
-              text: "footer text",
-            },
-            timestamp: now.toISOString(),
-          },
-          {
-            footer: {
-              icon_url: "https://example.com/footer.png",
-              text: "",
-            },
-            timestamp: now.toISOString(),
-          },
-        ],
-      },
-    ],
   )
+
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({
+      footer: {
+        text: "footer text",
+      },
+    }),
+    expect.objectContaining({
+      footer: expect.objectContaining({
+        icon_url: "https://example.com/footer.png",
+        text: "footer text",
+      }),
+    }),
+    expect.objectContaining({
+      timestamp: expect.stringContaining(""),
+    }),
+    expect.objectContaining({
+      timestamp: expect.stringContaining(""),
+    }),
+  ])
+
+  expect(new Date(message.embeds[2]!.timestamp!)).toEqual(now)
+  expect(new Date(message.embeds[3]!.timestamp!)).toEqual(now)
 })
 
-test("embed props", async () => {
+test.only("embed props", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  const { message } = await tester.render(
+    "embed props",
     <Embed
       title="title text"
       description="description text"
@@ -241,35 +233,33 @@ test("embed props", async () => {
         { name: "block field", value: "block field value" },
       ]}
     />,
-    [
-      {
-        content: "",
-        actionRows: [],
-        embeds: [
-          {
-            title: "title text",
-            description: "description text",
-            url: "https://example.com/",
-            color: 0xfe_ee_ef,
-            timestamp: now.toISOString(),
-            author: {
-              name: "author name",
-              url: "https://example.com/author",
-              icon_url: "https://example.com/author.png",
-            },
-            thumbnail: { url: "https://example.com/thumbnail.png" },
-            image: { url: "https://example.com/image.png" },
-            footer: {
-              text: "footer text",
-              icon_url: "https://example.com/footer.png",
-            },
-            fields: [
-              { name: "field name", value: "field value", inline: true },
-              { name: "block field", value: "block field value" },
-            ],
-          },
-        ],
-      },
-    ],
   )
+
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({
+      title: "title text",
+      description: "description text",
+      url: "https://example.com/",
+      color: 0xfe_ee_ef,
+      author: expect.objectContaining({
+        name: "author name",
+        url: "https://example.com/author",
+        icon_url: "https://example.com/author.png",
+      }),
+      thumbnail: expect.objectContaining({
+        url: "https://example.com/thumbnail.png",
+      }),
+      image: expect.objectContaining({ url: "https://example.com/image.png" }),
+      footer: expect.objectContaining({
+        text: "footer text",
+        icon_url: "https://example.com/footer.png",
+      }),
+      fields: [
+        { name: "field name", value: "field value", inline: true },
+        { name: "block field", value: "block field value", inline: false },
+      ],
+    }),
+  ])
+
+  expect(new Date(message.embeds[0]!.timestamp!)).toEqual(now)
 })

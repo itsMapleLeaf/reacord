@@ -74,6 +74,7 @@
     "@reacord/helpers": "workspace:*",
     "@types/lodash-es": "^4.17.6",
     "@types/prettier": "^2.6.4",
+    "date-fns": "^2.29.1",
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
     "lodash-es": "^4.17.21",
