@@ -7,6 +7,7 @@ import type {
 } from "discord-api-types/v10"
 import { ButtonStyle, ComponentType } from "discord-api-types/v10"
 import type { Node } from "./node"
+import { TextNode } from "./node"
 import { ActionRowNode } from "./react/action-row"
 import type { ButtonProps } from "./react/button"
 import { ButtonNode } from "./react/button"
@@ -154,7 +155,7 @@ function makeActionRows(root: Node) {
     APIActionRowComponent<APIButtonComponent | APISelectMenuComponent>
   > = []
 
-  for (const node of root.children) {
+  function getNextActionRow() {
     let currentRow = actionRows[actionRows.length - 1]
     if (
       !currentRow ||
@@ -167,9 +168,12 @@ function makeActionRows(root: Node) {
       }
       actionRows.push(currentRow)
     }
+    return currentRow
+  }
 
+  for (const node of root.children) {
     if (node instanceof ButtonNode) {
-      currentRow.components.push({
+      getNextActionRow().components.push({
         type: ComponentType.Button,
         custom_id: node.customId,
         label: node.extractText(Number.POSITIVE_INFINITY),
@@ -180,7 +184,7 @@ function makeActionRows(root: Node) {
     }
 
     if (node instanceof LinkNode) {
-      currentRow.components.push({
+      getNextActionRow().components.push({
         type: ComponentType.Button,
         label: node.extractText(Number.POSITIVE_INFINITY),
         url: node.props.url,
