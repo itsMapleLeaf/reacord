@@ -37,11 +37,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.8.0
       - uses: actions/setup-node@v2
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "16"
           cache: "pnpm"
-      - run: npm i -g pnpm@7.5.0
       - run: pnpm install --frozen-lockfile
       - run: ${{ matrix.command.run }}
