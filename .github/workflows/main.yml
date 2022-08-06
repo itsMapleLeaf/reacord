@@ -41,6 +41,7 @@ jobs:
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "16"
+          cache: "pnpm"
       - run: npm i -g pnpm@7.5.0
       - run: pnpm install --frozen-lockfile
       - run: ${{ matrix.command.run }}
