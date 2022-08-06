@@ -11,5 +11,6 @@ export default defineConfig({
     isolate: false,
     hookTimeout: 20_000,
     testTimeout: 20_000,
+    reporters: ["verbose"],
   },
 })
