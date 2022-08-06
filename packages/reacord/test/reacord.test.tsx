@@ -1,6 +1,13 @@
+import { waitFor } from "@reacord/helpers/wait-for.js"
 import * as React from "react"
-import { test } from "vitest"
+import { beforeAll, expect, test } from "vitest"
 import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
+import { ReacordTester } from "./tester"
+
+let tester: ReacordTester
+beforeAll(async () => {
+  tester = await ReacordTester.create()
+})
 
 test.skip("rendering behavior", async () => {
   // const tester = new ReacordTester()
@@ -231,27 +238,32 @@ test.skip("rendering behavior", async () => {
   // ])
 })
 
-test.skip("delete", async () => {
-  // const tester = new ReacordTester()
-  // const reply = tester.reply()
-  // reply.render(
-  //   <>
-  //     some text
-  //     <Embed>some embed</Embed>
-  //     <Button label="some button" onClick={() => {}} />
-  //   </>,
-  // )
-  // await tester.assertMessages([
-  //   {
-  //     content: "some text",
-  //     embeds: [{ description: "some embed" }],
-  //     actionRows: [
-  //       [{ type: "button", style: "secondary", label: "some button" }],
-  //     ],
-  //   },
-  // ])
-  // reply.destroy()
-  // await tester.assertMessages([])
+test("destroy()", async () => {
+  const { message, channel, instance } = await tester.render(
+    "destroy()",
+    <>
+      some text
+      <Embed>some embed</Embed>
+      <Button label="some button" onClick={() => {}} />
+    </>,
+  )
+
+  expect(message.content).toBe("some text")
+  expect(message.embeds.map((e) => e.toJSON())).toEqual([
+    expect.objectContaining({ description: "some embed" }),
+  ])
+  expect(message.components.map((a) => a.toJSON())).toEqual([
+    expect.objectContaining({
+      components: [expect.objectContaining({ label: "some button" })],
+    }),
+  ])
+
+  instance.destroy()
+
+  await waitFor(async () => {
+    const messages = await channel.messages.fetch()
+    expect(messages.size).toBe(0)
+  })
 })
 
 // test multiple instances that can be updated independently,

@@ -80,6 +80,6 @@ export class ReacordTester {
     const result = await channel.awaitMessages({ max: 1 })
     const message = result.first() ?? raise("failed to send message")
 
-    return { message, instance }
+    return { channel, message, instance }
   }
 }
