@@ -23,13 +23,13 @@ export type ReacordInstance = {
   render(content: React.ReactNode): void
 
   /** Remove this message */
-  deactivate(): void
+  destroy(): void
 
   /**
    * Same as destroy, but keeps the message and disables the components on it.
    * This prevents it from listening to user interactions.
    */
-  destroy(): void
+  deactivate(): void
 }
 
 export class ReacordInstancePrivate {
