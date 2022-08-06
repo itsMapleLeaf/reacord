@@ -202,7 +202,7 @@ test("footer variants", async () => {
   expect(new Date(message.embeds[3]!.timestamp!)).toEqual(now)
 })
 
-test.only("embed props", async () => {
+test("embed props", async () => {
   const now = new Date()
 
   const { message } = await tester.render(
