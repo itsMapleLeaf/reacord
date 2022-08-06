@@ -105,7 +105,8 @@ function applyEmbedChildren(embed: APIEmbed, children: Node[]) {
       embed.fields ??= []
       embed.fields.push({
         name: child.findInstanceOf(EmbedFieldNameNode)?.extractText() ?? "",
-        value: child.findInstanceOf(EmbedFieldValueNode)?.extractText() ?? "",
+        value:
+          child.findInstanceOf(EmbedFieldValueNode)?.extractText() || "_ _", // can't send an empty string
         inline: child.props.inline,
       })
     }
