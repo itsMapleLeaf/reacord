@@ -9,6 +9,7 @@ env:
   TEST_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
   TEST_CHANNEL_ID: ${{ secrets.TEST_CHANNEL_ID }}
   TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
+  TEST_CATEGORY_ID: ${{ secrets.TEST_CATEGORY_ID }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,10 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         command:
-          # if these run in the same process, it dies,
+          # if tests run in the same process, it dies,
           # so we test them separate
-          - name: test reacord
-            run: pnpm -C packages/reacord test
+          - name: test
+            run: pnpm test
           - name: test website
             run: pnpm -C packages/website test
           - name: build
