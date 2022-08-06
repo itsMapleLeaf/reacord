@@ -57,7 +57,7 @@
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-reconciler": "*",
-    "discord-api-types": "^0.36.3",
+    "discord-api-types": "^0.37.1",
     "react-reconciler": "^0.29.0",
     "rxjs": "^7.5.6"
   },
@@ -73,7 +73,7 @@
   "devDependencies": {
     "@reacord/helpers": "workspace:*",
     "@types/lodash-es": "^4.17.6",
-    "@types/prettier": "^2.6.4",
+    "@types/prettier": "^2.7.0",
     "date-fns": "^2.29.1",
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
