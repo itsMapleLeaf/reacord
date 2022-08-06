@@ -106,7 +106,6 @@ importers:
       '@types/node': '*'
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
-      '@types/tailwindcss': ^3.1.0
       '@types/wait-on': ^5.3.1
       autoprefixer: ^10.4.8
       clsx: ^1.2.1
@@ -116,7 +115,7 @@ importers:
       fast-glob: ^3.2.11
       gray-matter: ^4.0.3
       postcss: ^8.4.14
-      reacord: workspace:0.5.1
+      reacord: workspace:*
       react: ^18.2.0
       react-dom: ^18.2.0
       react-focus-on: ^3.6.0
@@ -152,7 +151,6 @@ importers:
       '@types/node': 18.6.4
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
-      '@types/tailwindcss': 3.1.0
       '@types/wait-on': 5.3.1
       autoprefixer: 10.4.8_postcss@8.4.14
       concurrently: 7.3.0
@@ -2579,15 +2577,6 @@ packages:
 
   /@types/sizzle/2.3.3:
     resolution: {integrity: sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==}
-    dev: true
-
-  /@types/tailwindcss/3.1.0:
-    resolution: {integrity: sha512-JxPzrm609hzvF4nmOI3StLjbBEP3WWQxDDJESqR1nh94h7gyyy3XSl0hn5RBMJ9mPudlLjtaXs5YEBtLw7CnPA==}
-    deprecated: This is a stub types definition. tailwindcss provides its own type definitions, so you do not need this installed.
-    dependencies:
-      tailwindcss: 3.1.8
-    transitivePeerDependencies:
-      - ts-node
     dev: true
 
   /@types/through/0.0.30:
