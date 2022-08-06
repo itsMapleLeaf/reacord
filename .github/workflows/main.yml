@@ -26,7 +26,8 @@ jobs:
           - name: test
             run: pnpm test
           - name: test website
-            run: pnpm -C packages/website test
+            # the cache doesn't include cypress install, need to do it manually here
+            run: pnpm -C packages/website exec cypress install && pnpm -C packages/website test
           - name: build
             run: pnpm --recursive run build
           - name: lint
