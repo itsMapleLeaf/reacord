@@ -1,6 +1,6 @@
-import { renderToString } from "react-dom/server"
 import type { EntryContext } from "@remix-run/node"
-import { RemixServer } from "@remix-run/react"
+import * as remixRunReact from "@remix-run/react"
+import { renderToString } from "react-dom/server"
 
 export default function handleRequest(
   request: Request,
@@ -9,7 +9,9 @@ export default function handleRequest(
   remixContext: EntryContext,
 ) {
   const markup = renderToString(
-    <RemixServer context={remixContext} url={request.url} />,
+    // for some reason, a named import becomes `undefined` here,
+    // a namespace import makes it work...? 🙃
+    <remixRunReact.RemixServer context={remixContext} url={request.url} />,
   )
 
   responseHeaders.set("Content-Type", "text/html")
