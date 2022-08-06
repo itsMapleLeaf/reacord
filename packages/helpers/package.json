@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/lodash-es": "^4.17.6",
+    "@types/node": "*",
     "lodash-es": "^4.17.21",
     "type-fest": "^2.18.0"
   }

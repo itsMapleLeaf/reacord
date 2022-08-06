@@ -34,12 +34,15 @@ importers:
   packages/helpers:
     specifiers:
       '@types/lodash-es': ^4.17.6
+      '@types/node': '*'
       lodash-es: ^4.17.21
       type-fest: ^2.18.0
     dependencies:
       '@types/lodash-es': 4.17.6
       lodash-es: 4.17.21
       type-fest: 2.18.0
+    devDependencies:
+      '@types/node': 18.6.4
 
   packages/reacord:
     specifiers:
