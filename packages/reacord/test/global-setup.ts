@@ -1,6 +1,6 @@
+import { oraPromise } from "ora"
 import { ReacordTester } from "./tester"
 
 export async function setup() {
-  console.info("Running test setup...")
-  await ReacordTester.removeChannels()
+  await oraPromise(ReacordTester.removeChannels(), "Running test setup...")
 }
