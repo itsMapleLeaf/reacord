@@ -1,5 +1,5 @@
 import React from "react"
-import { beforeAll, expect, test } from "vitest"
+import { expect, test } from "vitest"
 import {
   Embed,
   EmbedAuthor,
@@ -11,15 +11,10 @@ import {
 } from "../src/main"
 import { ReacordTester } from "./tester"
 
-let tester: ReacordTester
-beforeAll(async () => {
-  tester = await ReacordTester.create()
-})
-
 test("kitchen sink", async () => {
   const now = new Date()
 
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "kitchen sink",
     <>
       <Embed color={0xfe_ee_ef}>
@@ -78,7 +73,7 @@ test("kitchen sink", async () => {
 })
 
 test("author variants", async () => {
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "author variants",
     <>
       <Embed>
@@ -112,7 +107,7 @@ test("author variants", async () => {
 }, 20_000)
 
 test("field variants", async () => {
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "field variants",
     <>
       <Embed>
@@ -157,7 +152,7 @@ test("field variants", async () => {
 test("footer variants", async () => {
   const now = new Date()
 
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "footer variants",
     <>
       <Embed>
@@ -205,7 +200,7 @@ test("footer variants", async () => {
 test("embed props", async () => {
   const now = new Date()
 
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "embed props",
     <Embed
       title="title text"

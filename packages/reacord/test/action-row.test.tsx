@@ -1,16 +1,11 @@
 import { ComponentType } from "discord.js"
 import React from "react"
-import { beforeAll, expect, test } from "vitest"
+import { expect, test } from "vitest"
 import { ActionRow, Button, Option, Select } from "../src/main"
 import { ReacordTester } from "./tester"
 
-let tester: ReacordTester
-beforeAll(async () => {
-  tester = await ReacordTester.create()
-})
-
 test("action row", async () => {
-  const { message } = await tester.render(
+  const { message } = await ReacordTester.render(
     "action row",
     <>
       <Button label="outside button" onClick={() => {}} />

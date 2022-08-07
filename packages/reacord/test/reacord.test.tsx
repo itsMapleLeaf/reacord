@@ -1,13 +1,8 @@
 import { waitFor } from "@reacord/helpers/wait-for.js"
 import * as React from "react"
-import { beforeAll, expect, test } from "vitest"
+import { expect, test } from "vitest"
 import { Button, Embed, EmbedField, EmbedTitle } from "../src/main"
 import { ReacordTester } from "./tester"
-
-let tester: ReacordTester
-beforeAll(async () => {
-  tester = await ReacordTester.create()
-})
 
 test.skip("rendering behavior", async () => {
   // const tester = new ReacordTester()
@@ -239,7 +234,7 @@ test.skip("rendering behavior", async () => {
 })
 
 test("destroy()", async () => {
-  const { message, channel, instance } = await tester.render(
+  const { message, channel, instance } = await ReacordTester.render(
     "destroy()",
     <>
       some text

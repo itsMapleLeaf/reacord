@@ -9,8 +9,10 @@ export default defineConfig({
     globalSetup: ["packages/reacord/test/global-setup.ts"],
     threads: false,
     isolate: false,
-    hookTimeout: 20_000,
-    testTimeout: 20_000,
     reporters: ["verbose"],
+
+    // rate limiting means these timeouts need to be long af
+    hookTimeout: 60_000,
+    testTimeout: 60_000,
   },
 })
