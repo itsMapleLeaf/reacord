@@ -1,25 +1,35 @@
-export type AsyncCallback = () => unknown
+export type AsyncCallback<T> = () => T
+
+type QueueItem = {
+  callback: AsyncCallback<unknown>
+  resolve: (value: unknown) => void
+  reject: (error: unknown) => void
+}
 
 export class AsyncQueue {
-  private callbacks: AsyncCallback[] = []
-  private promise: Promise<void> | undefined
+  private items: QueueItem[] = []
+  private running = false
 
-  async add(callback: AsyncCallback) {
-    this.callbacks.push(callback)
-    if (this.promise) return this.promise
-
-    this.promise = this.runQueue()
-    try {
-      await this.promise
-    } finally {
-      this.promise = undefined
-    }
+  add<T>(callback: AsyncCallback<T>): Promise<Awaited<T>> {
+    return new Promise((resolve, reject) => {
+      this.items.push({ callback, resolve: resolve as any, reject })
+      void this.runQueue()
+    })
   }
 
   private async runQueue() {
-    let callback: AsyncCallback | undefined
-    while ((callback = this.callbacks.shift())) {
-      await callback()
+    if (this.running) return
+    this.running = true
+
+    let item
+    while ((item = this.items.shift())) {
+      try {
+        item.resolve(await item.callback())
+      } catch (error) {
+        item.reject(error)
+      }
     }
+
+    this.running = false
   }
 }
