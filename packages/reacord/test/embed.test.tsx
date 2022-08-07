@@ -8,7 +8,7 @@ import {
   EmbedImage,
   EmbedThumbnail,
   EmbedTitle,
-} from "../library/main"
+} from "../src/main"
 import { ReacordTester } from "./tester"
 
 let tester: ReacordTester

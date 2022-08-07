@@ -4,8 +4,8 @@ import { CategoryChannel, ChannelType, GatewayIntentBits } from "discord.js"
 import { kebabCase } from "lodash-es"
 import { randomBytes } from "node:crypto"
 import type { ReactNode } from "react"
-import { createDiscordClient } from "../library/create-discord-client"
-import { ReacordClient } from "../library/reacord-client"
+import { createDiscordClient } from "../src/create-discord-client"
+import { ReacordClient } from "../src/main"
 import { testEnv } from "./test-env"
 
 export class ReacordTester {

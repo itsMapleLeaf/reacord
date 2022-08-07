@@ -1,7 +1,7 @@
 import { ComponentType } from "discord.js"
 import React from "react"
 import { beforeAll, expect, test } from "vitest"
-import { ActionRow, Button, Option, Select } from "../library/main"
+import { ActionRow, Button, Option, Select } from "../src/main"
 import { ReacordTester } from "./tester"
 
 let tester: ReacordTester

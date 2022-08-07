@@ -1,7 +1,7 @@
 import { ButtonStyle, ComponentType } from "discord.js"
 import React from "react"
 import { beforeEach, expect, test } from "vitest"
-import { Link } from "../library/main"
+import { Link } from "../src/main"
 import { ReacordTester } from "./tester"
 
 let tester: ReacordTester

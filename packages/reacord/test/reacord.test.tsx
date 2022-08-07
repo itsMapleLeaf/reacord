@@ -1,7 +1,7 @@
 import { waitFor } from "@reacord/helpers/wait-for.js"
 import * as React from "react"
 import { beforeAll, expect, test } from "vitest"
-import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
+import { Button, Embed, EmbedField, EmbedTitle } from "../src/main"
 import { ReacordTester } from "./tester"
 
 let tester: ReacordTester
