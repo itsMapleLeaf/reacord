@@ -1,6 +1,6 @@
 import { raise } from "@reacord/helpers/raise"
 import * as React from "react"
-import type { ReacordInstance } from "../reacord-instance.js"
+import type { ReacordInstance } from "../reacord-instance"
 
 const Context = React.createContext<ReacordInstance | undefined>(undefined)
 

@@ -43,7 +43,7 @@
   },
   "tsup": {
     "entry": [
-      "library/main.ts"
+      "src/main.ts"
     ],
     "sourcemap": true,
     "target": "node16",

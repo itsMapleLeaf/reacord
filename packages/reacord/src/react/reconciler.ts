@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/prefer-modern-dom-apis */
-import { raise } from "@reacord/helpers/raise.js"
+import { raise } from "@reacord/helpers/raise"
 import ReactReconciler from "react-reconciler"
 import { DefaultEventPriority } from "react-reconciler/constants"
-import { Node, TextNode } from "../node.js"
-import type { ReacordInstancePrivate } from "../reacord-instance.js"
+import { Node, TextNode } from "../node"
+import type { ReacordInstancePrivate } from "../reacord-instance"
 
 export const reconciler = ReactReconciler<
   string, // Type,

@@ -18,14 +18,14 @@ function isDeclarationPublic(declaration: Node) {
 
 const project = new Project()
 
-project.addSourceFilesAtPaths(["library/**/*.{ts,tsx}", "!library/main.ts"])
+project.addSourceFilesAtPaths(["src/**/*.{ts,tsx}", "!src/main.ts"])
 
 const exportLines = project
   .getSourceFiles()
   .map((file) => {
     const importPath = relative(
-      "library",
-      join(file.getDirectoryPath(), file.getBaseNameWithoutExtension() + ".js"),
+      "src",
+      join(file.getDirectoryPath(), file.getBaseNameWithoutExtension()),
     )
     const exports = file.getExportedDeclarations()
 
@@ -48,13 +48,13 @@ const exportLines = project
     return `export { ${exportNames.join(", ")} } from "./${importPath}"`
   })
 
-const resolvedConfig = await prettier.resolveConfig("library/main.ts")
+const resolvedConfig = await prettier.resolveConfig("src/main.ts")
 if (!resolvedConfig) {
   throw new Error("Could not find prettier config")
 }
 
 await writeFile(
-  "library/main.ts",
+  "src/main.ts",
   prettier.format(exportLines.join(";"), {
     ...resolvedConfig,
     parser: "typescript",

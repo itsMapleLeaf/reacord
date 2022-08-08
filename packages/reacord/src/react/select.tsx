@@ -2,9 +2,9 @@ import type { APIMessageComponentSelectMenuInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import type { ReactNode } from "react"
 import React from "react"
-import { Node } from "../node.js"
-import type { ComponentEvent } from "./component-event.js"
-import { ReacordElement } from "./reacord-element.js"
+import { Node } from "../node"
+import type { ComponentEvent } from "./component-event"
+import { ReacordElement } from "./reacord-element"
 
 /**
  * @category Select

@@ -1,6 +1,6 @@
 import React from "react"
-import { Node } from "../node.js"
-import { ReacordElement } from "./reacord-element.js"
+import { Node } from "../node"
+import { ReacordElement } from "./reacord-element"
 
 /**
  * @category Embed

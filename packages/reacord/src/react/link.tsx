@@ -1,8 +1,8 @@
 import React from "react"
 import type { Except } from "type-fest"
-import { Node } from "../node.js"
+import { Node } from "../node"
 import type { ButtonSharedProps } from "./button-shared-props"
-import { ReacordElement } from "./reacord-element.js"
+import { ReacordElement } from "./reacord-element"
 
 /**
  * @category Link

@@ -1,10 +1,10 @@
 import type { APIMessageComponentButtonInteraction } from "discord.js"
 import { randomUUID } from "node:crypto"
 import React from "react"
-import { Node } from "../node.js"
+import { Node } from "../node"
 import type { ButtonSharedProps } from "./button-shared-props"
-import type { ComponentEvent } from "./component-event.js"
-import { ReacordElement } from "./reacord-element.js"
+import type { ComponentEvent } from "./component-event"
+import { ReacordElement } from "./reacord-element"
 
 /**
  * @category Button

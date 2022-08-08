@@ -6,15 +6,10 @@ import {
 } from "discord.js"
 import * as React from "react"
 import { createDiscordClient } from "./create-discord-client"
-import type { ReacordInstance } from "./reacord-instance.js"
-import { ReacordInstancePrivate } from "./reacord-instance.js"
+import type { ReacordInstance } from "./reacord-instance"
+import { ReacordInstancePrivate } from "./reacord-instance"
 import { InstanceProvider } from "./react/instance-context"
-import type { Renderer } from "./renderer.js"
-import {
-  ChannelMessageRenderer,
-  EphemeralInteractionReplyRenderer,
-  InteractionReplyRenderer,
-} from "./renderer.js"
+import { Renderer } from "./renderer"
 
 /**
  * @category Core

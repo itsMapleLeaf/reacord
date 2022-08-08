@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type { ReacordInstance } from "../reacord-instance.js"
+import type { ReacordInstance } from "../reacord-instance"
 
 /**
  * @category Component Event
