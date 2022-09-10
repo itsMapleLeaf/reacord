@@ -28,7 +28,7 @@ function Uptime() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      currentTime(Date.now())
+      setCurrentTime(Date.now())
     }, 3000)
     return () => clearInterval(interval)
   }, [])
