@@ -3,12 +3,14 @@
  * @type {import('@remix-run/dev/config').AppConfig}
  */
 module.exports = {
-  appDirectory: "app",
-  assetsBuildDirectory: "public/build",
-  publicPath: "/build/",
-  serverBuildDirectory: "build",
+  serverBuildTarget: "vercel",
+  server: process.env.NODE_ENV === "development" ? undefined : "./server.js",
   devServerPort: 8002,
-  ignoredRouteFiles: [".*"],
+  ignoredRouteFiles: ["**/.*"],
+  // appDirectory: "app",
+  // assetsBuildDirectory: "public/build",
+  // publicPath: "/build/",
+  // serverBuildDirectory: "build",
   mdx: async () => {
     const rehypePrism = await import("rehype-prism-plus")
     return {
