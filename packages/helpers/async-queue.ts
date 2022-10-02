@@ -10,14 +10,14 @@ export class AsyncQueue {
   private items: QueueItem[] = []
   private running = false
 
-  add<T>(callback: AsyncCallback<T>): Promise<Awaited<T>> {
+  append<T>(callback: AsyncCallback<T>): Promise<Awaited<T>> {
     return new Promise((resolve, reject) => {
       this.items.push({ callback, resolve: resolve as any, reject })
-      void this.runQueue()
+      void this.run()
     })
   }
 
-  private async runQueue() {
+  private async run() {
     if (this.running) return
     this.running = true
 

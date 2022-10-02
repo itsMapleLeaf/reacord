@@ -1,15 +1,22 @@
-import { AsyncQueue } from "@reacord/helpers/async-queue.js"
-import type { Client, Message } from "discord.js"
-import { TextChannel } from "discord.js"
-import type { MessageUpdatePayload } from "./make-message-update-payload.js"
-import { makeMessageUpdatePayload } from "./make-message-update-payload.js"
-import type { Node } from "./node.js"
-import type { InteractionInfo } from "./reacord-client.js"
+import { AsyncQueue } from "@reacord/helpers/async-queue"
+import type {
+  Client,
+  Message,
+  RESTPostAPIInteractionFollowupResult,
+  Snowflake,
+} from "discord.js"
+import { InteractionResponseType, Routes, TextChannel } from "discord.js"
+import type { MessageUpdatePayload } from "./make-message-update-payload"
+import { makeMessageUpdatePayload } from "./make-message-update-payload"
+import type { Node } from "./node"
+import type { InteractionInfo } from "./reacord-client"
 
 export abstract class Renderer {
-  private readonly queue = new AsyncQueue()
   private active = true
-  private destroyPromise?: Promise<void>
+  private componentInteraction?: InteractionInfo
+  private readonly queue = new AsyncQueue()
+
+  constructor(protected readonly clientPromise: Promise<Client<true>>) {}
 
   protected abstract handleUpdate(payload: MessageUpdatePayload): Promise<void>
   protected abstract handleDestroy(): Promise<void>
@@ -17,59 +24,97 @@ export abstract class Renderer {
 
   update(tree: Node) {
     const payload = makeMessageUpdatePayload(tree)
-    return this.queue.add(async () => {
-      if (!this.active) return
-      await this.handleUpdate(payload)
-    })
+
+    this.queue
+      .append(async () => {
+        if (!this.active) return
+
+        if (this.componentInteraction) {
+          await this.updateInteractionMessage(
+            this.componentInteraction,
+            payload,
+          )
+          this.componentInteraction = undefined
+          return
+        }
+
+        await this.handleUpdate(payload)
+      })
+      .catch(console.error)
   }
 
   destroy() {
-    if (this.destroyPromise) return this.destroyPromise
+    if (!this.active) return
     this.active = false
-
-    const promise = this.queue.add(() => this.handleDestroy())
-
-    // if it failed, we'll want to try again
-    promise.catch((error) => {
-      console.error("Failed to destroy message:", error)
-      this.destroyPromise = undefined
-    })
-
-    return (this.destroyPromise = promise)
+    this.queue.append(() => this.handleDestroy()).catch(console.error)
   }
 
   deactivate() {
-    return this.queue.add(async () => {
-      if (!this.active) return
+    this.queue
+      .append(async () => {
+        await this.handleDeactivate()
+        this.active = false
+      })
+      .catch(console.error)
+  }
 
-      await this.handleDeactivate()
+  onComponentInteraction(info: InteractionInfo) {
+    this.componentInteraction = info
 
-      // set active to false *after* running deactivation,
-      // so that other queued operations run first,
-      // and we can show the correct deactivated state
-      this.active = false
+    // a component update might not happen in response to this interaction,
+    // so we'll defer it after a timeout if it's not handled by then
+    setTimeout(() => {
+      this.queue
+        .append(() => {
+          if (!this.componentInteraction) return
+          const info = this.componentInteraction
+          this.componentInteraction = undefined
+          return this.deferMessageUpdate(info)
+        })
+        .catch(console.error)
+    }, 500)
+  }
+
+  private async updateInteractionMessage(
+    { id, token }: InteractionInfo,
+    payload: MessageUpdatePayload,
+  ) {
+    const client = await this.clientPromise
+    await client.rest.post(Routes.interactionCallback(id, token), {
+      body: {
+        type: InteractionResponseType.UpdateMessage,
+        data: payload,
+      },
+    })
+  }
+
+  private async deferMessageUpdate({ id, token }: InteractionInfo) {
+    const client = await this.clientPromise
+    await client.rest.post(Routes.interactionCallback(id, token), {
+      body: { type: InteractionResponseType.DeferredMessageUpdate },
     })
   }
 }
 
 export class ChannelMessageRenderer extends Renderer {
-  private channel: TextChannel | undefined
-  private message: Message | undefined
+  private channel?: TextChannel
+  private message?: Message
 
   constructor(
     private readonly channelId: string,
-    private readonly clientPromise: Promise<Client<true>>,
+    clientPromise: Promise<Client<true>>,
   ) {
-    super()
+    super(clientPromise)
   }
 
   override async handleUpdate(payload: MessageUpdatePayload): Promise<void> {
     if (this.message) {
       await this.message.edit(payload)
-    } else {
-      const channel = await this.getChannel()
-      this.message = await channel.send(payload)
+      return
     }
+
+    const channel = await this.getChannel()
+    this.message = await channel.send(payload)
   }
 
   override async handleDestroy(): Promise<void> {
@@ -101,12 +146,78 @@ export class ChannelMessageRenderer extends Renderer {
 }
 
 export class InteractionReplyRenderer extends Renderer {
-  constructor(private readonly interaction: InteractionInfo) {
-    super()
+  private messageCreated = false
+
+  constructor(
+    private interaction: InteractionInfo,
+    clientPromise: Promise<Client<true>>,
+  ) {
+    super(clientPromise)
   }
 
-  handleUpdate(payload: MessageUpdatePayload): Promise<void> {
+  async handleUpdate(payload: MessageUpdatePayload): Promise<void> {
+    const client = await this.clientPromise
+    if (!this.messageCreated) {
+      await client.rest.post(
+        Routes.interactionCallback(this.interaction.id, this.interaction.token),
+        {
+          body: {
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: payload,
+          },
+        },
+      )
+      this.messageCreated = true
+    } else {
+      await client.rest.patch(
+        Routes.webhookMessage(
+          client.application.id,
+          this.interaction.token,
+          "@original",
+        ),
+        { body: payload },
+      )
+    }
+  }
+
+  handleDestroy(): Promise<void> {
     throw new Error("Method not implemented.")
+  }
+
+  handleDeactivate(): Promise<void> {
+    throw new Error("Method not implemented.")
+  }
+}
+
+export class InteractionFollowUpRenderer extends Renderer {
+  private messageId?: Snowflake
+
+  constructor(
+    readonly interaction: InteractionInfo,
+    clientPromise: Promise<Client<true>>,
+  ) {
+    super(clientPromise)
+  }
+
+  async handleUpdate(payload: MessageUpdatePayload): Promise<void> {
+    const client = await this.clientPromise
+
+    if (!this.messageId) {
+      const response = (await client.rest.post(
+        Routes.webhookMessage(client.application.id, this.interaction.token),
+        { body: payload },
+      )) as RESTPostAPIInteractionFollowupResult
+      this.messageId = response.id
+    } else {
+      await client.rest.patch(
+        Routes.webhookMessage(
+          client.application.id,
+          this.interaction.token,
+          this.messageId,
+        ),
+        { body: payload },
+      )
+    }
   }
 
   handleDestroy(): Promise<void> {
@@ -119,8 +230,11 @@ export class InteractionReplyRenderer extends Renderer {
 }
 
 export class EphemeralInteractionReplyRenderer extends Renderer {
-  constructor(private readonly interaction: InteractionInfo) {
-    super()
+  constructor(
+    private readonly interaction: InteractionInfo,
+    clientPromise: Promise<Client<true>>,
+  ) {
+    super(clientPromise)
   }
 
   handleUpdate(payload: MessageUpdatePayload): Promise<void> {

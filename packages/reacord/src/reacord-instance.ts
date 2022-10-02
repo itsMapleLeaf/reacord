@@ -50,35 +50,23 @@ export class ReacordInstancePrivate {
   readonly tree = new Node({})
   private latestTree?: Node
 
-  constructor(private readonly renderer: Renderer) {}
+  constructor(readonly renderer: Renderer) {}
 
   render(content: React.ReactNode) {
     reconciler.updateContainer(content, this.container)
   }
 
-  async update(tree: Node) {
-    try {
-      await this.renderer.update(tree)
-      this.latestTree = tree
-    } catch (error) {
-      console.error(error)
-    }
+  update(tree: Node) {
+    this.renderer.update(tree)
+    this.latestTree = tree
   }
 
-  async deactivate() {
-    try {
-      await this.renderer.deactivate()
-    } catch (error) {
-      console.error(error)
-    }
+  deactivate() {
+    this.renderer.deactivate()
   }
 
-  async destroy() {
-    try {
-      await this.renderer.destroy()
-    } catch (error) {
-      console.error(error)
-    }
+  destroy() {
+    this.renderer.destroy()
   }
 
   handleInteraction(
@@ -86,6 +74,8 @@ export class ReacordInstancePrivate {
     client: ReacordClient,
   ) {
     if (!this.latestTree) return
+
+    this.renderer.onComponentInteraction(interaction)
 
     const baseEvent: ComponentEvent = {
       reply: (content) => client.reply(interaction, content),
@@ -102,7 +92,7 @@ export class ReacordInstancePrivate {
             ...baseEvent,
             interaction: interaction as APIMessageComponentButtonInteraction,
           })
-          break
+          return
         }
       }
     }
@@ -124,6 +114,7 @@ export class ReacordInstancePrivate {
           if (interaction.data.values[0]) {
             node.props.onChangeValue?.(interaction.data.values[0], event)
           }
+          return
         }
       }
     }

@@ -2,14 +2,21 @@ import type { APIInteraction, Client } from "discord.js"
 import {
   GatewayDispatchEvents,
   GatewayIntentBits,
+  InteractionResponseType,
   InteractionType,
+  Routes,
 } from "discord.js"
 import * as React from "react"
 import { createDiscordClient } from "./create-discord-client"
 import type { ReacordInstance } from "./reacord-instance"
 import { ReacordInstancePrivate } from "./reacord-instance"
 import { InstanceProvider } from "./react/instance-context"
-import { Renderer } from "./renderer"
+import type { Renderer } from "./renderer"
+import {
+  ChannelMessageRenderer,
+  EphemeralInteractionReplyRenderer,
+  InteractionReplyRenderer,
+} from "./renderer"
 
 /**
  * @category Core
@@ -65,10 +72,28 @@ export class ReacordClient {
 
     this.discordClientPromise
       .then((client) => {
+        // we listen to the websocket message instead of the normal "interactionCreate" event,
+        // so that we can pass a library-agnostic APIInteraction object to the user's component callbacks
+        // the DJS MessageComponentInteraction doesn't have the raw data on it (as of writing this)
         client.ws.on(
           GatewayDispatchEvents.InteractionCreate,
-          (interaction: APIInteraction) => {
+          async (interaction: APIInteraction) => {
             if (interaction.type !== InteractionType.MessageComponent) return
+
+            // handling a component interaction may not always result in a re-render,
+            // and in the case that it doesn't, discord will incorrectly show "interaction failed",
+            // so here, we'll just always defer an update just in case
+            //
+            // we _can_ be a little smarter and check to see if an update happened before deferring,
+            // but I can figure that out later
+            //
+            // or we can make the user defer themselves if they don't update,
+            // but that's bad UX probably
+            await client.rest.post(
+              Routes.interactionCallback(interaction.id, interaction.token),
+              { body: { type: InteractionResponseType.DeferredMessageUpdate } },
+            )
+
             for (const instance of this.instances) {
               instance.handleInteraction(interaction, this)
             }
@@ -88,7 +113,7 @@ export class ReacordClient {
 
   reply(interaction: InteractionInfo, initialContent?: React.ReactNode) {
     return this.createInstance(
-      new InteractionReplyRenderer(interaction),
+      new InteractionReplyRenderer(interaction, this.discordClientPromise),
       initialContent,
     )
   }
@@ -98,7 +123,10 @@ export class ReacordClient {
     initialContent?: React.ReactNode,
   ) {
     return this.createInstance(
-      new EphemeralInteractionReplyRenderer(interaction),
+      new EphemeralInteractionReplyRenderer(
+        interaction,
+        this.discordClientPromise,
+      ),
       initialContent,
     )
   }
@@ -132,11 +160,11 @@ export class ReacordClient {
       },
       deactivate: () => {
         this.removeInstance(instance)
-        renderer.deactivate().catch(console.error)
+        renderer.deactivate()
       },
       destroy: () => {
         this.removeInstance(instance)
-        renderer.destroy().catch(console.error)
+        renderer.destroy()
       },
     }
 
