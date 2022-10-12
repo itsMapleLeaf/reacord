@@ -8,3 +8,4 @@ node_modules
 cypress/videos
 cypress/screenshots
 *.out.css
+/api
