@@ -1,7 +1,7 @@
 import { raise } from "@reacord/helpers/raise.js"
 import type { HostConfig } from "react-reconciler"
 import ReactReconciler from "react-reconciler"
-import { DefaultEventPriority } from "react-reconciler/constants"
+import { DefaultEventPriority } from "react-reconciler/constants.js"
 import { Node } from "./node.js"
 import type { Renderer } from "./renderers/renderer"
 import { TextNode } from "./text-node.js"
