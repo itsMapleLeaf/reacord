@@ -14,15 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.13.4
 
       - name: setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-
-      - name: install pnpm
-        run: npm install -g pnpm
+          cache: pnpm
 
       - name: install deps
         run: pnpm install --frozen-lockfile
