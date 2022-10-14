@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": true,
   "scripts": {
     "dev": "concurrently 'typedoc --watch' 'pnpm tailwind -- --watch' 'remix dev'",
