@@ -1,11 +1,11 @@
 {
-  "name": "reacord",
+  "name": "@answeroverflow/reacord",
   "type": "module",
-  "description": "Create interactive Discord messages using React.",
-  "version": "0.5.2",
+  "description": "Fork of reacord",
+  "version": "0.5.4",
   "types": "./dist/main.d.ts",
   "homepage": "https://reacord.mapleleaf.dev",
-  "repository": "https://github.com/itsMapleLeaf/reacord.git",
+  "repository": "https://github.com/AnswerOverflow/reacord.git",
   "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
   "license": "MIT",
   "keywords": [
