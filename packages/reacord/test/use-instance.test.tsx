@@ -4,7 +4,7 @@ import type { ReacordInstance } from "../library/main"
 import { Button, useInstance } from "../library/main"
 import type { MessageSample } from "./test-adapter"
 import { ReacordTester } from "./test-adapter"
-
+import {assertMessages} from './utils'
 describe("useInstance", () => {
   it("returns the instance of itself", async () => {
     let instanceFromHook: ReacordInstance | undefined
@@ -52,21 +52,24 @@ describe("useInstance", () => {
     const tester = new ReacordTester()
     const instance = tester.send(<TestComponent name="parent" />)
 
-    await tester.assertMessages([messageOutput("parent")])
+    await assertMessages([messageOutput("parent")], tester.sampleMessages())
     expect(instanceFromHook).toBe(instance)
 
-    await tester.findButtonByLabel("create parent").click()
-    await tester.assertMessages([
+    let button = await tester.findButtonByLabel("create parent")
+    await button!.click()
+    await assertMessages([
       messageOutput("parent"),
       messageOutput("child"),
-    ])
+    ], tester.sampleMessages())
 
     // this test ensures that the only the child instance is destroyed,
     // and not the parent instance
-    await tester.findButtonByLabel("destroy child").click()
-    await tester.assertMessages([messageOutput("parent")])
+    button = await tester.findButtonByLabel("destroy child")
+    await button!.click()
+    await assertMessages([messageOutput("parent")], tester.sampleMessages())
 
-    await tester.findButtonByLabel("destroy parent").click()
-    await tester.assertMessages([])
+    button = await tester.findButtonByLabel("destroy parent")
+    await button!.click()
+    await assertMessages([], tester.sampleMessages())
   })
 })

@@ -5,6 +5,6 @@ coverage
 .env
 *.code-workspace
 .pnpm-debug.log
-
+.pnpm-store/
 build
 .cache

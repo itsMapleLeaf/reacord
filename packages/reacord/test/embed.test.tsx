@@ -10,13 +10,13 @@ import {
   EmbedTitle,
 } from "../library/main"
 import { ReacordTester } from "./test-adapter"
-
+import { assertRender } from "./utils"
 const testing = new ReacordTester()
 
 test("kitchen sink", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  await assertRender(testing,
     <>
       <Embed color={0xfe_ee_ef}>
         <EmbedAuthor name="author" iconUrl="https://example.com/author.png" />
@@ -76,7 +76,7 @@ test("kitchen sink", async () => {
 })
 
 test("author variants", async () => {
-  await testing.assertRender(
+  await assertRender(testing,
     <>
       <Embed>
         <EmbedAuthor iconUrl="https://example.com/author.png">
@@ -111,7 +111,7 @@ test("author variants", async () => {
 })
 
 test("field variants", async () => {
-  await testing.assertRender(
+  await assertRender(testing,
     <>
       <Embed>
         <EmbedField name="field name" value="field value" />
@@ -158,7 +158,7 @@ test("field variants", async () => {
 test("footer variants", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  await assertRender(testing,
     <>
       <Embed>
         <EmbedFooter text="footer text" />
@@ -214,7 +214,7 @@ test("footer variants", async () => {
 test("embed props", async () => {
   const now = new Date()
 
-  await testing.assertRender(
+  await assertRender(testing,
     <Embed
       title="title text"
       description="description text"

@@ -8,7 +8,6 @@ import { waitFor } from "@reacord/helpers/wait-for"
 import { randomUUID } from "node:crypto"
 import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
-import { expect } from "vitest"
 import type {
   ChannelInfo,
   GuildInfo,
@@ -24,9 +23,10 @@ import { Container } from "../library/internal/container"
 import type {
   ButtonInteraction,
   CommandInteraction,
+  ComponentInteraction,
   SelectInteraction,
 } from "../library/internal/interaction"
-import type { Message, MessageOptions } from "../library/internal/message"
+import type { Message, MessageButtonOptions, MessageOptions } from "../library/internal/message"
 import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
 
@@ -46,17 +46,17 @@ export class ReacordTester extends Reacord {
     return [...this.messageContainer]
   }
 
-  override send(initialContent?: ReactNode): ReacordInstance {
+  override send(initialContent?: ReactNode, channel?: Channel): ReacordInstance {
     return this.createInstance(
-      new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
+      new ChannelMessageRenderer(channel ?? new TestChannel(this.messageContainer)),
       initialContent,
     )
   }
 
-  override reply(initialContent?: ReactNode): ReacordInstance {
+  override reply(initialContent?: ReactNode, interaction?: CommandInteraction): ReacordInstance {
     return this.createInstance(
       new InteractionReplyRenderer(
-        new TestCommandInteraction(this.messageContainer),
+        interaction ?? new TestCommandInteraction(this.messageContainer),
       ),
       initialContent,
     )
@@ -64,19 +64,6 @@ export class ReacordTester extends Reacord {
 
   override ephemeralReply(initialContent?: ReactNode): ReacordInstance {
     return this.reply(initialContent)
-  }
-
-  assertMessages(expected: MessageSample[]) {
-    return waitFor(() => {
-      expect(this.sampleMessages()).toEqual(expected)
-    })
-  }
-
-  async assertRender(content: ReactNode, expected: MessageSample[]) {
-    const instance = this.reply()
-    instance.render(content)
-    await this.assertMessages(expected)
-    instance.destroy()
   }
 
   logMessages() {
@@ -101,47 +88,34 @@ export class ReacordTester extends Reacord {
     )
   }
 
-  findButtonByLabel(label: string) {
-    return {
-      click: () => {
-        return waitFor(() => {
-          for (const [component, message] of this.eachComponent()) {
-            if (component.type === "button" && component.label === label) {
-              this.handleComponentInteraction(
-                new TestButtonInteraction(component.customId, message, this),
-              )
-              return
-            }
-          }
-          raise(`Couldn't find button with label "${label}"`)
-        })
-      },
+  async findButtonByLabel(label: string) {
+    for (const [component, message] of this.eachComponent()) {
+      const data = message.findButtonByLabel(label, this)
+      if (data) return data;
     }
   }
 
-  findSelectByPlaceholder(placeholder: string) {
-    return {
-      select: (...values: string[]) => {
-        return waitFor(() => {
-          for (const [component, message] of this.eachComponent()) {
-            if (
-              component.type === "select" &&
-              component.placeholder === placeholder
-            ) {
-              this.handleComponentInteraction(
-                new TestSelectInteraction(
-                  component.customId,
-                  message,
-                  values,
-                  this,
-                ),
-              )
-              return
-            }
-          }
-          raise(`Couldn't find select with placeholder "${placeholder}"`)
-        })
-      },
+  async click(message: TestMessage, customId: string) {
+    this.handleComponentInteraction(
+      new TestButtonInteraction(customId, message, this),
+    )
+  }
+
+  async select(message: TestMessage, customId: string, values: string[]) {
+    this.handleComponentInteraction(
+      new TestSelectInteraction(
+        customId,
+        message,
+        values,
+        this,
+      ),
+    )
+  }
+  async findSelectByPlaceholder(placeholder: string) {
+    for (const [component, message] of this.eachComponent()) {
+      const select = message.findSelectByPlaceholder(placeholder, this)
+      if (select)
+        return select;
     }
   }
 
@@ -149,7 +123,7 @@ export class ReacordTester extends Reacord {
     return new TestMessage(options, this.messageContainer)
   }
 
-  private *eachComponent() {
+  private * eachComponent() {
     for (const message of this.messageContainer) {
       for (const component of message.options.actionRows.flat()) {
         yield [component, message] as const
@@ -166,6 +140,41 @@ class TestMessage implements Message {
     container.add(this)
   }
 
+  public findButtonByLabel(label: string, reacord: ReacordTester) {
+    for (const row of this.options.actionRows) {
+      for (const component of row) {
+        if (component.type === "button" && component.label === label) {
+          return {
+            click: (buttonInteraction?: ComponentInteraction) => {
+              return waitFor(() =>
+                reacord.click(this, component.customId)
+              )
+            },
+            ...component
+          }
+        }
+      }
+    }
+  }
+
+  public findSelectByPlaceholder(placeholder: string, reacord: ReacordTester) {
+    for (const row of this.options.actionRows) {
+      for (const component of row) {
+        if (
+          component.type === "select" &&
+          component.placeholder === placeholder
+        ) {
+          return {
+            select: (...values: string[]) => {
+              return waitFor(() => reacord.select
+              )
+            },
+            ...component,
+          }
+        }
+      }
+    }
+  }
   async edit(options: MessageOptions): Promise<void> {
     this.options = options
   }
@@ -180,7 +189,7 @@ class TestCommandInteraction implements CommandInteraction {
   readonly id = "test-command-interaction"
   readonly channelId = "test-channel-id"
 
-  constructor(private messageContainer: Container<TestMessage>) {}
+  constructor(private messageContainer: Container<TestMessage>) { }
 
   async reply(messageOptions: MessageOptions): Promise<Message> {
     await setTimeout()
@@ -201,13 +210,13 @@ class TestInteraction {
     readonly customId: string,
     readonly message: TestMessage,
     private tester: ReacordTester,
-  ) {}
+  ) { }
 
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options
   }
 
-  async deferUpdate(): Promise<void> {}
+  async deferUpdate(): Promise<void> { }
 
   async reply(messageOptions: MessageOptions): Promise<Message> {
     return this.tester.createMessage(messageOptions)
@@ -220,21 +229,20 @@ class TestInteraction {
 
 class TestButtonInteraction
   extends TestInteraction
-  implements ButtonInteraction
-{
+  implements ButtonInteraction {
   readonly type = "button"
   readonly event: ButtonClickEvent
 
   constructor(customId: string, message: TestMessage, tester: ReacordTester) {
     super(customId, message, tester)
     this.event = new TestButtonClickEvent(tester)
+
   }
 }
 
 class TestSelectInteraction
   extends TestInteraction
-  implements SelectInteraction
-{
+  implements SelectInteraction {
   readonly type = "select"
   readonly event: SelectChangeEvent
 
@@ -250,7 +258,7 @@ class TestSelectInteraction
 }
 
 class TestComponentEvent {
-  constructor(private tester: ReacordTester) {}
+  constructor(private tester: ReacordTester) { }
 
   message: MessageInfo = {} as any // todo
   channel: ChannelInfo = {} as any // todo
@@ -268,19 +276,18 @@ class TestComponentEvent {
 
 class TestButtonClickEvent
   extends TestComponentEvent
-  implements ButtonClickEvent {}
+  implements ButtonClickEvent { }
 
 class TestSelectChangeEvent
   extends TestComponentEvent
-  implements SelectChangeEvent
-{
+  implements SelectChangeEvent {
   constructor(readonly values: string[], tester: ReacordTester) {
     super(tester)
   }
 }
 
 class TestChannel implements Channel {
-  constructor(private messageContainer: Container<TestMessage>) {}
+  constructor(private messageContainer: Container<TestMessage>) { }
 
   async send(messageOptions: MessageOptions): Promise<Message> {
     return new TestMessage(messageOptions, this.messageContainer)

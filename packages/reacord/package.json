@@ -63,7 +63,7 @@
     "@reacord/helpers": "workspace:*",
     "@types/lodash-es": "^4.17.6",
     "c8": "^7.12.0",
-    "discord.js": "^14.0.3",
+    "discord.js": "^14.7.1",
     "dotenv": "^16.0.1",
     "lodash-es": "^4.17.21",
     "nodemon": "^2.0.19",

@@ -22,7 +22,7 @@
     "clsx": "^1.2.1",
     "fast-glob": "^3.2.11",
     "gray-matter": "^4.0.3",
-    "reacord": "workspace:*",
+    "@answeroverflow/reacord": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-focus-on": "^3.6.0",

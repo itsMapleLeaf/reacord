@@ -157,69 +157,69 @@ export class ReacordDiscordJs extends Reacord {
     // todo please dear god clean this up
     const channel: ChannelInfo = interaction.channel
       ? {
-          ...pruneNullishValues(
-            pick(interaction.channel, [
-              "topic",
-              "nsfw",
-              "lastMessageId",
-              "ownerId",
-              "parentId",
-              "rateLimitPerUser",
-            ]),
-          ),
-          id: interaction.channelId,
-        }
+        ...pruneNullishValues(
+          pick(interaction.channel, [
+            "topic",
+            "nsfw",
+            "lastMessageId",
+            "ownerId",
+            "parentId",
+            "rateLimitPerUser",
+          ]),
+        ),
+        id: interaction.channelId,
+      }
       : raise("Non-channel interactions are not supported")
 
     const message: MessageInfo =
       interaction.message instanceof Discord.Message
         ? {
-            ...pick(interaction.message, [
-              "id",
-              "channelId",
-              "authorId",
-              "content",
-              "tts",
-              "mentionEveryone",
-            ]),
-            timestamp: new Date(
-              interaction.message.createdTimestamp,
-            ).toISOString(),
-            editedTimestamp: interaction.message.editedTimestamp
-              ? new Date(interaction.message.editedTimestamp).toISOString()
-              : undefined,
-            mentions: interaction.message.mentions.users.map((u) => u.id),
-          }
+          ...pick(interaction.message, [
+            "id",
+            "channelId",
+            "authorId",
+            "content",
+            "tts",
+            "mentionEveryone",
+          ]),
+          timestamp: new Date(
+            interaction.message.createdTimestamp,
+          ).toISOString(),
+          editedTimestamp: interaction.message.editedTimestamp
+            ? new Date(interaction.message.editedTimestamp).toISOString()
+            : undefined,
+          mentions: interaction.message.mentions.users.map((u) => u.id),
+        }
         : raise("Message not found")
 
     const member: GuildMemberInfo | undefined =
       interaction.member instanceof Discord.GuildMember
         ? {
-            ...pruneNullishValues(
-              pick(interaction.member, [
-                "id",
-                "nick",
-                "displayName",
-                "avatarUrl",
-                "displayAvatarUrl",
-                "color",
-                "pending",
-              ]),
-            ),
-            displayName: interaction.member.displayName,
-            roles: [...interaction.member.roles.cache.map((role) => role.id)],
-            joinedAt: interaction.member.joinedAt?.toISOString(),
-            premiumSince: interaction.member.premiumSince?.toISOString(),
-            communicationDisabledUntil:
-              interaction.member.communicationDisabledUntil?.toISOString(),
-          }
+          ...pruneNullishValues(
+            pick(interaction.member, [
+              "id",
+              "nick",
+              "displayName",
+              "avatarUrl",
+              "displayAvatarUrl",
+              "color",
+              "pending",
+            ]),
+          ),
+          displayName: interaction.member.displayName,
+          roles: [...interaction.member.roles.cache.map((role) => role.id)],
+          joinedAt: interaction.member.joinedAt?.toISOString(),
+          premiumSince: interaction.member.premiumSince?.toISOString(),
+          communicationDisabledUntil:
+            interaction.member.communicationDisabledUntil?.toISOString(),
+        }
         : undefined
 
     const guild: GuildInfo | undefined = interaction.guild
       ? {
-          ...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
-          member: member ?? raise("unexpected: member is undefined"),
-        }
+        ...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
+        member: member ?? raise("unexpected: member is undefined"),
+      }
       : undefined
 
     const user: UserInfo = {
@@ -334,9 +334,9 @@ function convertButtonStyleToEnum(style: MessageButtonOptions["style"]) {
 // TODO: this could be a part of the core library,
 // and also handle some edge cases, e.g. empty messages
 function getDiscordMessageOptions(reacordOptions: MessageOptions) {
-  const options = {
+  const options: Discord.BaseMessageOptions = {
     // eslint-disable-next-line unicorn/no-null
-    content: reacordOptions.content || null,
+    content: reacordOptions.content || undefined,
     embeds: reacordOptions.embeds,
     components: reacordOptions.actionRows.map((row) => ({
       type: Discord.ComponentType.ActionRow,
@@ -367,7 +367,7 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
           if (component.type === "select") {
             return {
               ...component,
-              type: Discord.ComponentType.SelectMenu,
+              type: Discord.ComponentType.StringSelect,
               options: component.options.map((option) => ({
                 ...option,
                 default: component.values?.includes(option.value),

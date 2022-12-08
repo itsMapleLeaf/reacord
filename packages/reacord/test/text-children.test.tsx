@@ -12,13 +12,14 @@ import {
   Select,
 } from "../library/main"
 import { ReacordTester } from "./test-adapter"
+import { assertRender } from "./utils"
 
 test("text children in other components", async () => {
   const tester = new ReacordTester()
 
   const SomeText = () => <>some text</>
 
-  await tester.assertRender(
+  await assertRender(tester,
     <>
       <Embed>
         <EmbedTitle>
