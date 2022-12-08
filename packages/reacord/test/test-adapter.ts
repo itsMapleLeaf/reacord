@@ -88,7 +88,7 @@ export class ReacordTester extends Reacord {
     )
   }
 
-  async findButtonByLabel(label: string) {
+  findButtonByLabel(label: string) {
     for (const [component, message] of this.eachComponent()) {
       const data = message.findButtonByLabel(label, this)
       if (data) return data;
@@ -99,6 +99,7 @@ export class ReacordTester extends Reacord {
     this.handleComponentInteraction(
       new TestButtonInteraction(customId, message, this),
     )
+    await setTimeout(500) // Allow time for defer update to run
   }
 
   async select(message: TestMessage, customId: string, values: string[]) {
@@ -110,8 +111,11 @@ export class ReacordTester extends Reacord {
         this,
       ),
     )
+    await setTimeout(500) // Allow time for defer update to run
+
   }
-  async findSelectByPlaceholder(placeholder: string) {
+
+  findSelectByPlaceholder(placeholder: string) {
     for (const [component, message] of this.eachComponent()) {
       const select = message.findSelectByPlaceholder(placeholder, this)
       if (select)
