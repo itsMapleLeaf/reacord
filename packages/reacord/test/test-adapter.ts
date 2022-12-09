@@ -136,7 +136,7 @@ export class ReacordTester extends Reacord {
   }
 }
 
-class TestMessage implements Message {
+export class TestMessage implements Message {
   constructor(
     public options: MessageOptions,
     private container: Container<TestMessage>,
@@ -188,7 +188,7 @@ class TestMessage implements Message {
   }
 }
 
-class TestCommandInteraction implements CommandInteraction {
+export class TestCommandInteraction implements CommandInteraction {
   readonly type = "command"
   readonly id = "test-command-interaction"
   readonly channelId = "test-channel-id"
@@ -206,7 +206,7 @@ class TestCommandInteraction implements CommandInteraction {
   }
 }
 
-class TestInteraction {
+export class TestInteraction {
   readonly id = randomUUID()
   readonly channelId = "test-channel-id"
 
@@ -231,7 +231,7 @@ class TestInteraction {
   }
 }
 
-class TestButtonInteraction
+export class TestButtonInteraction
   extends TestInteraction
   implements ButtonInteraction {
   readonly type = "button"
@@ -244,7 +244,7 @@ class TestButtonInteraction
   }
 }
 
-class TestSelectInteraction
+export class TestSelectInteraction
   extends TestInteraction
   implements SelectInteraction {
   readonly type = "select"
@@ -261,7 +261,7 @@ class TestSelectInteraction
   }
 }
 
-class TestComponentEvent {
+export class TestComponentEvent {
   constructor(private tester: ReacordTester) { }
 
   message: MessageInfo = {} as any // todo
@@ -278,11 +278,11 @@ class TestComponentEvent {
   }
 }
 
-class TestButtonClickEvent
+export class TestButtonClickEvent
   extends TestComponentEvent
   implements ButtonClickEvent { }
 
-class TestSelectChangeEvent
+export class TestSelectChangeEvent
   extends TestComponentEvent
   implements SelectChangeEvent {
   constructor(readonly values: string[], tester: ReacordTester) {
@@ -290,7 +290,7 @@ class TestSelectChangeEvent
   }
 }
 
-class TestChannel implements Channel {
+export class TestChannel implements Channel {
   constructor(private messageContainer: Container<TestMessage>) { }
 
   async send(messageOptions: MessageOptions): Promise<Message> {
