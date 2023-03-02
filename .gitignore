@@ -8,3 +8,4 @@ coverage
 .pnpm-store/
 build
 .cache
+packages/reacord/yarn-error.log
