@@ -7,7 +7,7 @@ import { Renderer } from "./renderer"
 const repliedInteractionIds = new Set<string>()
 
 export class InteractionReplyRenderer extends Renderer {
-  constructor(private interaction: Interaction) {
+  constructor(public interaction: Interaction) {
     super()
   }
 

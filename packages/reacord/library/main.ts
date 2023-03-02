@@ -17,3 +17,4 @@ export { useInstance } from "./core/instance-context"
 export * from "./core/reacord"
 export * from "./core/reacord-discord-js"
 export * from '../test/test-adapter'
+export * from "./internal/renderers/interaction-reply-renderer"

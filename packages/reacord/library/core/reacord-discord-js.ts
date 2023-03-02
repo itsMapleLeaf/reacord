@@ -21,7 +21,7 @@ import type {
   UserInfo,
 } from "./component-event"
 import type { ReacordInstance } from "./instance"
-import type { ReacordConfig } from "./reacord"
+import type { CreateInstanceWrapper, ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
 /**
@@ -29,8 +29,8 @@ import { Reacord } from "./reacord"
  * @category Core
  */
 export class ReacordDiscordJs extends Reacord {
-  constructor(private client: Discord.Client, config: ReacordConfig = {}) {
-    super(config)
+  constructor(private client: Discord.Client, config: ReacordConfig = {}, wrapper: CreateInstanceWrapper) {
+    super(config, wrapper)
 
     client.on("interactionCreate", (interaction) => {
       if (interaction.isButton() || interaction.isSelectMenu()) {

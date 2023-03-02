@@ -12,10 +12,10 @@ type UpdatePayload =
 
 export abstract class Renderer {
   readonly nodes = new Container<Node<unknown>>()
-  private componentInteraction?: ComponentInteraction
-  private message?: Message
-  private active = true
-  private updates = new Subject<UpdatePayload>()
+  public componentInteraction?: ComponentInteraction
+  public message?: Message
+  public active = true
+  public updates = new Subject<UpdatePayload>()
 
   private updateSubscription = this.updates
     .pipe(concatMap((payload) => this.updateMessage(payload)))
