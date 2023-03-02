@@ -51,7 +51,7 @@ export abstract class Renderer {
 
     setTimeout(() => {
       this.updates.next({ action: "deferUpdate", interaction })
-    }, 500)
+    }, 1500)
 
     for (const node of this.nodes) {
       if (node.handleComponentInteraction(interaction)) {
