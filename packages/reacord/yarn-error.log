@@ -1,0 +1,129 @@
+Arguments: 
+  /usr/local/bin/node /opt/yarn-v1.22.19/bin/yarn.js publish
+
+PATH: 
+  /vscode/vscode-server/bin/linux-x64/441438abd1ac652551dbe4d408dfcec8a499b8bf/bin/remote-cli:/usr/local/share/nvm/current/bin:/usr/local/share/npm-global/bin:/usr/local/share/nvm/current/bin:/usr/local/share/npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/node/.local/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.19.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/opt/yarn-v1.22.19/lib/cli.js:137150:13)
+      at Interface.emit (node:events:513:28)
+      at Interface._ttyWrite (node:readline:1085:16)
+      at ReadStream.onkeypress (node:readline:291:10)
+      at ReadStream.emit (node:events:513:28)
+      at emitKeys (node:internal/readline/utils:357:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:61:36)
+      at ReadStream.emit (node:events:513:28)
+      at addChunk (node:internal/streams/readable:315:12)
+
+npm manifest: 
+  {
+    "name": "@answeroverflow/reacord",
+    "type": "module",
+    "description": "Fork of reacord",
+    "version": "0.5.8",
+    "types": "./dist/main.d.ts",
+    "homepage": "https://reacord.mapleleaf.dev",
+    "repository": "https://github.com/AnswerOverflow/reacord.git",
+    "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
+    "license": "MIT",
+    "keywords": [
+      "discord",
+      "discord-js",
+      "react",
+      "react-js",
+      "react-renderer",
+      "interaction",
+      "message",
+      "embed",
+      "reacord"
+    ],
+    "files": [
+      "dist",
+      "README.md",
+      "LICENSE"
+    ],
+    "exports": {
+      ".": {
+        "import": "./dist/main.js",
+        "require": "./dist/main.cjs",
+        "types": "./dist/main.d.ts"
+      },
+      "./package.json": {
+        "import": "./package.json",
+        "require": "./package.json"
+      }
+    },
+    "scripts": {
+      "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
+      "build-watch": "pnpm build -- --watch",
+      "test": "vitest --coverage --no-watch",
+      "test-dev": "vitest",
+      "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx",
+      "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+      "@types/node": "*",
+      "@types/react": "*",
+      "@types/react-reconciler": "^0.28.0",
+      "react-reconciler": "^0.29.0",
+      "rxjs": "^7.5.6"
+    },
+    "peerDependencies": {
+      "discord.js": "^14",
+      "react": ">=17"
+    },
+    "peerDependenciesMeta": {
+      "discord.js": {
+        "optional": true
+      }
+    },
+    "devDependencies": {
+      "@reacord/helpers": "workspace:*",
+      "@types/lodash-es": "^4.17.6",
+      "c8": "^7.12.0",
+      "discord.js": "^14.7.1",
+      "dotenv": "^16.0.1",
+      "lodash-es": "^4.17.21",
+      "nodemon": "^2.0.19",
+      "prettier": "^2.7.1",
+      "pretty-ms": "^8.0.0",
+      "react": "^18.2.0",
+      "tsup": "^6.1.3",
+      "tsx": "^3.8.0",
+      "type-fest": "^2.17.0",
+      "typescript": "^4.7.4",
+      "vitest": "^0.18.1"
+    },
+    "resolutions": {
+      "esbuild": "latest"
+    },
+    "release-it": {
+      "git": {
+        "commitMessage": "release v${version}"
+      },
+      "github": {
+        "release": true,
+        "web": true
+      }
+    },
+    "publishConfig": {
+      "access": "public"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

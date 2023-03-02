@@ -139,14 +139,14 @@ export class ReacordDiscordJs extends Reacord {
           ...getDiscordMessageOptions(options),
           ephemeral: true,
         })
-        return createEphemeralReacordMessage()
+        return createEphemeralReacordMessage(interaction)
       },
       followUp: async (options) => {
         await interaction.followUp({
           ...getDiscordMessageOptions(options),
           ephemeral: true,
         })
-        return createEphemeralReacordMessage()
+        return createEphemeralReacordMessage(interaction)
       },
     })
   }
@@ -307,17 +307,21 @@ function createReacordMessage(message: Discord.Message): Message {
   }
 }
 
-function createEphemeralReacordMessage(): Message {
+function createEphemeralReacordMessage(interaction:
+  | Discord.CommandInteraction
+  | Discord.MessageComponentInteraction): Message {
   return {
-    edit: () => {
-      console.warn("Ephemeral messages can't be edited")
-      return Promise.resolve()
+    async delete() {
+      await interaction.deleteReply()
+      return
     },
-    delete: () => {
-      console.warn("Ephemeral messages can't be deleted")
-      return Promise.resolve()
+    async edit(options) {
+      await interaction.editReply({
+        ...getDiscordMessageOptions(options),
+      })
+      return
     },
-  }
+  };
 }
 
 function convertButtonStyleToEnum(style: MessageButtonOptions["style"]) {
