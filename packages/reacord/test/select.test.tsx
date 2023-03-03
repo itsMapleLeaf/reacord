@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { expect, test, vi } from "vitest"
 import { Button, Option, Select } from "../library/main"
 import { ReacordTester } from "./test-adapter"
+import { assertMessages } from "./utils"
 
 test("single select", async () => {
   const tester = new ReacordTester()
@@ -29,7 +30,7 @@ test("single select", async () => {
   }
 
   async function assertSelect(values: string[], disabled = false) {
-    await tester.assertMessages([
+    await assertMessages([
       {
         content: "",
         embeds: [],
@@ -50,7 +51,7 @@ test("single select", async () => {
           [{ type: "button", style: "secondary", label: "disable" }],
         ],
       },
-    ])
+    ], tester.sampleMessages())
   }
 
   const reply = tester.reply()
@@ -59,16 +60,19 @@ test("single select", async () => {
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  await tester.findSelectByPlaceholder("choose one").select("2")
+  let sel = await tester.findSelectByPlaceholder("choose one")
+  await sel!.select("2")
   await assertSelect(["2"])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: ["2"] }),
   )
 
-  await tester.findButtonByLabel("disable").click()
+  let btn = await tester.findButtonByLabel("disable")
+  await btn!.click()
   await assertSelect(["2"], true)
 
-  await tester.findSelectByPlaceholder("choose one").select("1")
+  sel = await tester.findSelectByPlaceholder("choose one")
+  await sel!.select("1")
   await assertSelect(["2"], true)
   expect(onSelect).toHaveBeenCalledTimes(1)
 })
@@ -95,7 +99,7 @@ test("multiple select", async () => {
   }
 
   async function assertSelect(values: string[]) {
-    await tester.assertMessages([
+    await assertMessages([
       {
         content: "",
         embeds: [],
@@ -116,7 +120,7 @@ test("multiple select", async () => {
           ],
         ],
       },
-    ])
+    ], tester.sampleMessages())
   }
 
   const reply = tester.reply()
@@ -125,19 +129,22 @@ test("multiple select", async () => {
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledTimes(0)
 
-  await tester.findSelectByPlaceholder("select").select("1", "3")
+  let sel = await tester.findSelectByPlaceholder("select")
+  await sel!.select("1", "3")
   await assertSelect(expect.arrayContaining(["1", "3"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["1", "3"]) }),
   )
 
-  await tester.findSelectByPlaceholder("select").select("2")
+  sel = await tester.findSelectByPlaceholder("select")
+  await sel!.select("2")
   await assertSelect(expect.arrayContaining(["2"]) as unknown as string[])
   expect(onSelect).toHaveBeenCalledWith(
     expect.objectContaining({ values: expect.arrayContaining(["2"]) }),
   )
 
-  await tester.findSelectByPlaceholder("select").select()
+  sel = await tester.findSelectByPlaceholder("select")
+  await sel!.select()
   await assertSelect([])
   expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ values: [] }))
 })
@@ -145,8 +152,9 @@ test("multiple select", async () => {
 test("optional onSelect + unknown value", async () => {
   const tester = new ReacordTester()
   tester.reply().render(<Select placeholder="select" />)
-  await tester.findSelectByPlaceholder("select").select("something")
-  await tester.assertMessages([
+  let sel = await tester.findSelectByPlaceholder("select")
+  await sel!.select("something")
+  await assertMessages([
     {
       content: "",
       embeds: [],
@@ -154,7 +162,7 @@ test("optional onSelect + unknown value", async () => {
         [{ type: "select", placeholder: "select", options: [], values: [] }],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 })
 
 test.todo("select minValues and maxValues")

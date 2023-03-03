@@ -7,8 +7,8 @@ import { raise } from "@reacord/helpers/raise"
 import { waitFor } from "@reacord/helpers/wait-for"
 import { randomUUID } from "node:crypto"
 import { setTimeout } from "node:timers/promises"
+import type { Channel as DiscordJSChannel, GuildMember as DiscordJSMember } from 'discord.js'
 import type { ReactNode } from "react"
-import { expect } from "vitest"
 import type {
   ChannelInfo,
   GuildInfo,
@@ -24,9 +24,10 @@ import { Container } from "../library/internal/container"
 import type {
   ButtonInteraction,
   CommandInteraction,
+  ComponentInteraction,
   SelectInteraction,
 } from "../library/internal/interaction"
-import type { Message, MessageOptions } from "../library/internal/message"
+import type { Message, MessageButtonOptions, MessageOptions } from "../library/internal/message"
 import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
 
@@ -46,17 +47,17 @@ export class ReacordTester extends Reacord {
     return [...this.messageContainer]
   }
 
-  override send(initialContent?: ReactNode): ReacordInstance {
+  override send(initialContent?: ReactNode, channel?: Channel): ReacordInstance {
     return this.createInstance(
-      new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
+      new ChannelMessageRenderer(channel ?? new TestChannel(this.messageContainer)),
       initialContent,
     )
   }
 
-  override reply(initialContent?: ReactNode): ReacordInstance {
+  override reply(initialContent?: ReactNode, interaction?: CommandInteraction): ReacordInstance {
     return this.createInstance(
       new InteractionReplyRenderer(
-        new TestCommandInteraction(this.messageContainer),
+        interaction ?? new TestCommandInteraction(this.messageContainer),
       ),
       initialContent,
     )
@@ -64,19 +65,6 @@ export class ReacordTester extends Reacord {
 
   override ephemeralReply(initialContent?: ReactNode): ReacordInstance {
     return this.reply(initialContent)
-  }
-
-  assertMessages(expected: MessageSample[]) {
-    return waitFor(() => {
-      expect(this.sampleMessages()).toEqual(expected)
-    })
-  }
-
-  async assertRender(content: ReactNode, expected: MessageSample[]) {
-    const instance = this.reply()
-    instance.render(content)
-    await this.assertMessages(expected)
-    instance.destroy()
   }
 
   logMessages() {
@@ -102,46 +90,39 @@ export class ReacordTester extends Reacord {
   }
 
   findButtonByLabel(label: string) {
-    return {
-      click: () => {
-        return waitFor(() => {
-          for (const [component, message] of this.eachComponent()) {
-            if (component.type === "button" && component.label === label) {
-              this.handleComponentInteraction(
-                new TestButtonInteraction(component.customId, message, this),
-              )
-              return
-            }
-          }
-          raise(`Couldn't find button with label "${label}"`)
-        })
-      },
+    for (const [component, message] of this.eachComponent()) {
+      const data = message.findButtonByLabel(label, this)
+      if (data) return data;
     }
   }
 
+  async click(message: TestMessage, customId: string, channel: DiscordJSChannel, member: DiscordJSMember) {
+    this.handleComponentInteraction(
+      new TestButtonInteraction(customId, message, this, channel, member),
+    )
+    await setTimeout(500) // Allow time for defer update to run
+  }
+
+  async select(message: TestMessage, customId: string, values: string[], channel: DiscordJSChannel, member: DiscordJSMember) {
+    this.handleComponentInteraction(
+      new TestSelectInteraction(
+        customId,
+        message,
+        values,
+        this,
+        channel,
+        member
+      ),
+    )
+    await setTimeout(500) // Allow time for defer update to run
+
+  }
+
   findSelectByPlaceholder(placeholder: string) {
-    return {
-      select: (...values: string[]) => {
-        return waitFor(() => {
-          for (const [component, message] of this.eachComponent()) {
-            if (
-              component.type === "select" &&
-              component.placeholder === placeholder
-            ) {
-              this.handleComponentInteraction(
-                new TestSelectInteraction(
-                  component.customId,
-                  message,
-                  values,
-                  this,
-                ),
-              )
-              return
-            }
-          }
-          raise(`Couldn't find select with placeholder "${placeholder}"`)
-        })
-      },
+    for (const [component, message] of this.eachComponent()) {
+      const select = message.findSelectByPlaceholder(placeholder, this)
+      if (select)
+        return select;
     }
   }
 
@@ -149,7 +130,7 @@ export class ReacordTester extends Reacord {
     return new TestMessage(options, this.messageContainer)
   }
 
-  private *eachComponent() {
+  private * eachComponent() {
     for (const message of this.messageContainer) {
       for (const component of message.options.actionRows.flat()) {
         yield [component, message] as const
@@ -158,7 +139,7 @@ export class ReacordTester extends Reacord {
   }
 }
 
-class TestMessage implements Message {
+export class TestMessage implements Message {
   constructor(
     public options: MessageOptions,
     private container: Container<TestMessage>,
@@ -166,6 +147,70 @@ class TestMessage implements Message {
     container.add(this)
   }
 
+  public hasButton(label: string, reacord: ReacordTester) {
+    return this.findButtonByLabel(label, reacord) !== undefined;
+  }
+
+  public hasSelectMenu(
+    placeholder: string,
+    reacord: ReacordTester
+  ) {
+    return this.findSelectByPlaceholder(placeholder, reacord) !== undefined;
+  }
+
+  public hasComponents(labels: string[], placeholders: string[]) {
+    const label_lookup = new Set(labels);
+    const placeholder_lookup = new Set(placeholders);
+    let num_components = 0;
+    for (const row of this.options.actionRows) {
+      for (const component of row) {
+        num_components++;
+        if (component.type === 'button' && (!component.label || !label_lookup.has(component.label))) {
+          return false;
+        }
+        if (component.type === 'select' && (!component.placeholder || !placeholder_lookup.has(component.placeholder))) {
+          return false;
+        }
+      }
+    }
+    return num_components == (labels.length + placeholders.length)
+  }
+
+  public findButtonByLabel(label: string, reacord: ReacordTester) {
+    for (const row of this.options.actionRows) {
+      for (const component of row) {
+        if (component.type === "button" && component.label === label) {
+          return {
+            click: (channel: DiscordJSChannel, member: DiscordJSMember) => {
+              return waitFor(() =>
+                reacord.click(this, component.customId, channel, member)
+              )
+            },
+            ...component,
+          }
+        }
+      }
+    }
+  }
+
+  public findSelectByPlaceholder(placeholder: string, reacord: ReacordTester) {
+    for (const row of this.options.actionRows) {
+      for (const component of row) {
+        if (
+          component.type === "select" &&
+          component.placeholder === placeholder
+        ) {
+          return {
+            select: (channel: DiscordJSChannel, member: DiscordJSMember, ...values: string[]) => {
+              return waitFor(() => reacord.select(this, component.customId, values, channel, member)
+              )
+            },
+            ...component,
+          }
+        }
+      }
+    }
+  }
   async edit(options: MessageOptions): Promise<void> {
     this.options = options
   }
@@ -175,12 +220,12 @@ class TestMessage implements Message {
   }
 }
 
-class TestCommandInteraction implements CommandInteraction {
+export class TestCommandInteraction implements CommandInteraction {
   readonly type = "command"
   readonly id = "test-command-interaction"
   readonly channelId = "test-channel-id"
 
-  constructor(private messageContainer: Container<TestMessage>) {}
+  constructor(private messageContainer: Container<TestMessage>) { }
 
   async reply(messageOptions: MessageOptions): Promise<Message> {
     await setTimeout()
@@ -193,7 +238,7 @@ class TestCommandInteraction implements CommandInteraction {
   }
 }
 
-class TestInteraction {
+export class TestInteraction {
   readonly id = randomUUID()
   readonly channelId = "test-channel-id"
 
@@ -201,13 +246,13 @@ class TestInteraction {
     readonly customId: string,
     readonly message: TestMessage,
     private tester: ReacordTester,
-  ) {}
+  ) { }
 
   async update(options: MessageOptions): Promise<void> {
     this.message.options = options
   }
 
-  async deferUpdate(): Promise<void> {}
+  async deferUpdate(): Promise<void> { }
 
   async reply(messageOptions: MessageOptions): Promise<Message> {
     return this.tester.createMessage(messageOptions)
@@ -218,23 +263,22 @@ class TestInteraction {
   }
 }
 
-class TestButtonInteraction
+export class TestButtonInteraction
   extends TestInteraction
-  implements ButtonInteraction
-{
+  implements ButtonInteraction {
   readonly type = "button"
   readonly event: ButtonClickEvent
 
-  constructor(customId: string, message: TestMessage, tester: ReacordTester) {
+  constructor(customId: string, message: TestMessage, tester: ReacordTester, channel: DiscordJSChannel, member: DiscordJSMember) {
     super(customId, message, tester)
-    this.event = new TestButtonClickEvent(tester)
+    this.event = new TestButtonClickEvent(tester, channel, member)
+
   }
 }
 
-class TestSelectInteraction
+export class TestSelectInteraction
   extends TestInteraction
-  implements SelectInteraction
-{
+  implements SelectInteraction {
   readonly type = "select"
   readonly event: SelectChangeEvent
 
@@ -243,19 +287,59 @@ class TestSelectInteraction
     message: TestMessage,
     readonly values: string[],
     tester: ReacordTester,
+    channel: DiscordJSChannel,
+    member: DiscordJSMember
   ) {
     super(customId, message, tester)
-    this.event = new TestSelectChangeEvent(values, tester)
+    this.event = new TestSelectChangeEvent(values, tester, channel, member)
   }
 }
 
-class TestComponentEvent {
-  constructor(private tester: ReacordTester) {}
-
+export class TestComponentEvent {
   message: MessageInfo = {} as any // todo
   channel: ChannelInfo = {} as any // todo
   user: UserInfo = {} as any // todo
   guild: GuildInfo = {} as any // todo
+  constructor(private tester: ReacordTester, channel: DiscordJSChannel, member: DiscordJSMember) {
+    const user = member.user;
+    this.user = {
+      avatarUrl: user.avatarURL() || '',
+      discriminator: user.discriminator,
+      id: user.id,
+      tag: user.tag,
+      username: user.username,
+      accentColor: user.accentColor ?? undefined
+    }
+    this.channel = {
+      id: channel.id,
+      name: channel.isDMBased() ? undefined : channel.name,
+      lastMessageId: channel.isThread() ? channel.lastMessageId ?? undefined : undefined,
+      nsfw: channel.isDMBased() || !channel.isTextBased() || channel.isThread() ? undefined : channel.nsfw,
+      ownerId: channel.isThread() ? channel.ownerId ?? undefined : undefined,
+      parentId: channel.isThread() ? channel.parentId ?? undefined : undefined,
+      rateLimitPerUser: channel.isDMBased() || !channel.isTextBased() ? undefined : channel.rateLimitPerUser ?? undefined,
+      topic: channel.isDMBased() || channel.isThread() || channel.isVoiceBased() || !channel.isTextBased() ? undefined : channel.topic ?? undefined
+    }
+    this.guild = {
+      id: member.guild.id,
+      member: {
+        color: member.displayColor,
+        ...this.user,
+        communicationDisabledUntil: member.communicationDisabledUntilTimestamp?.toString(),
+        roles: member.roles.cache.map((role) => role.id),
+        displayAvatarUrl: member.displayAvatarURL(),
+        displayName: member.displayName,
+        joinedAt: member.joinedTimestamp?.toString(),
+        nick: member.nickname ?? undefined,
+        id: member.id,
+        pending: member.pending,
+        premiumSince: member.premiumSinceTimestamp?.toString(),
+        avatarUrl: member.avatarURL() ?? undefined
+      },
+      name: member.guild.name
+    }
+  }
+
 
   reply(content?: ReactNode): ReacordInstance {
     return this.tester.reply(content)
@@ -266,21 +350,20 @@ class TestComponentEvent {
   }
 }
 
-class TestButtonClickEvent
+export class TestButtonClickEvent
   extends TestComponentEvent
-  implements ButtonClickEvent {}
+  implements ButtonClickEvent { }
 
-class TestSelectChangeEvent
+export class TestSelectChangeEvent
   extends TestComponentEvent
-  implements SelectChangeEvent
-{
-  constructor(readonly values: string[], tester: ReacordTester) {
-    super(tester)
+  implements SelectChangeEvent {
+  constructor(readonly values: string[], tester: ReacordTester, channel: DiscordJSChannel, member: DiscordJSMember) {
+    super(tester, channel, member)
   }
 }
 
-class TestChannel implements Channel {
-  constructor(private messageContainer: Container<TestMessage>) {}
+export class TestChannel implements Channel {
+  constructor(private messageContainer: Container<TestMessage>) { }
 
   async send(messageOptions: MessageOptions): Promise<Message> {
     return new TestMessage(messageOptions, this.messageContainer)

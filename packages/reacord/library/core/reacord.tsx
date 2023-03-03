@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { ComponentType, ReactNode } from "react"
 import React from "react"
 import type { ComponentInteraction } from "../internal/interaction"
 import { reconciler } from "../internal/reconciler.js"
@@ -17,14 +17,20 @@ export type ReacordConfig = {
   maxInstances?: number
 }
 
+export type CreateInstanceWrapper = (props: {
+  renderer: Renderer, initialContent?: ReactNode, children: ReactNode
+}) => React.ReactNode
+
 /**
  * The main Reacord class that other Reacord adapters should extend.
  * Only use this directly if you're making [a custom adapter](/guides/custom-adapters).
  */
 export abstract class Reacord {
   private renderers: Renderer[] = []
-
-  constructor(private readonly config: ReacordConfig = {}) {}
+  private wrapper?: CreateInstanceWrapper
+  constructor(private readonly config: ReacordConfig = {}, createInstanceWrapper?: CreateInstanceWrapper) {
+    this.wrapper = createInstanceWrapper
+  }
 
   abstract send(...args: unknown[]): ReacordInstance
   abstract reply(...args: unknown[]): ReacordInstance
@@ -56,15 +62,18 @@ export abstract class Reacord {
       // eslint-disable-next-line unicorn/no-null
       null,
       "reacord",
-      () => {},
+      () => { },
       // eslint-disable-next-line unicorn/no-null
       null,
     )
 
+
     const instance: ReacordInstance = {
       render: (content: ReactNode) => {
         reconciler.updateContainer(
-          <InstanceProvider value={instance}>{content}</InstanceProvider>,
+          <InstanceProvider value={instance}>
+            {this.wrapper ? this.wrapper({ renderer, initialContent, children: content }) : content}
+          </InstanceProvider>,
           container,
         )
       },

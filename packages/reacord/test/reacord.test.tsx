@@ -2,14 +2,14 @@ import * as React from "react"
 import { test } from "vitest"
 import { Button, Embed, EmbedField, EmbedTitle } from "../library/main"
 import { ReacordTester } from "./test-adapter"
-
+import {assertMessages} from './utils'
 test("rendering behavior", async () => {
   const tester = new ReacordTester()
 
   const reply = tester.reply()
   reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
-  await tester.assertMessages([
+  await assertMessages([
     {
       content: "count: 0",
       embeds: [],
@@ -33,10 +33,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("show embed").click()
-  await tester.assertMessages([
+  let btn = await tester.findButtonByLabel("show embed")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 0",
       embeds: [{ title: "the counter" }],
@@ -60,10 +61,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("clicc").click()
-  await tester.assertMessages([
+  btn = await tester.findButtonByLabel("clicc")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 1",
       embeds: [
@@ -92,10 +94,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("clicc").click()
-  await tester.assertMessages([
+  btn = await tester.findButtonByLabel("clicc")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 2",
       embeds: [
@@ -124,10 +127,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("hide embed").click()
-  await tester.assertMessages([
+  btn = await tester.findButtonByLabel("hide embed")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 2",
       embeds: [],
@@ -151,10 +155,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("clicc").click()
-  await tester.assertMessages([
+  btn = await tester.findButtonByLabel("clicc")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -178,40 +183,11 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
-  await tester.findButtonByLabel("deactivate").click()
-  await tester.assertMessages([
-    {
-      content: "count: 3",
-      embeds: [],
-      actionRows: [
-        [
-          {
-            type: "button",
-            style: "primary",
-            label: "clicc",
-            disabled: true,
-          },
-          {
-            type: "button",
-            style: "secondary",
-            label: "show embed",
-            disabled: true,
-          },
-          {
-            type: "button",
-            style: "danger",
-            label: "deactivate",
-            disabled: true,
-          },
-        ],
-      ],
-    },
-  ])
-
-  await tester.findButtonByLabel("clicc").click()
-  await tester.assertMessages([
+  btn = await tester.findButtonByLabel("deactivate")
+  await btn!.click()
+  await assertMessages([
     {
       content: "count: 3",
       embeds: [],
@@ -238,7 +214,38 @@ test("rendering behavior", async () => {
         ],
       ],
     },
-  ])
+  ], tester.sampleMessages())
+
+  btn = await tester.findButtonByLabel("clicc")
+  await btn!.click()
+  await assertMessages([
+    {
+      content: "count: 3",
+      embeds: [],
+      actionRows: [
+        [
+          {
+            type: "button",
+            style: "primary",
+            label: "clicc",
+            disabled: true,
+          },
+          {
+            type: "button",
+            style: "secondary",
+            label: "show embed",
+            disabled: true,
+          },
+          {
+            type: "button",
+            style: "danger",
+            label: "deactivate",
+            disabled: true,
+          },
+        ],
+      ],
+    },
+  ], tester.sampleMessages())
 })
 
 test("delete", async () => {
@@ -253,7 +260,7 @@ test("delete", async () => {
     </>,
   )
 
-  await tester.assertMessages([
+  await assertMessages([
     {
       content: "some text",
       embeds: [{ description: "some embed" }],
@@ -261,10 +268,10 @@ test("delete", async () => {
         [{ type: "button", style: "secondary", label: "some button" }],
       ],
     },
-  ])
+  ], tester.sampleMessages())
 
   reply.destroy()
-  await tester.assertMessages([])
+  await assertMessages([], tester.sampleMessages())
 })
 
 // test multiple instances that can be updated independently,

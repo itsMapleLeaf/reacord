@@ -2,11 +2,12 @@ import React from "react"
 import { test } from "vitest"
 import { ActionRow, Button, Select } from "../library/main"
 import { ReacordTester } from "./test-adapter"
+import { assertRender } from "./utils"
 
 const testing = new ReacordTester()
 
 test("action row", async () => {
-  await testing.assertRender(
+  await assertRender(testing,
     <>
       <Button label="outside button" onClick={() => {}} />
       <ActionRow>

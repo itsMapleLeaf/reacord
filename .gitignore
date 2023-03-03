@@ -5,6 +5,7 @@ coverage
 .env
 *.code-workspace
 .pnpm-debug.log
-
+.pnpm-store/
 build
 .cache
+packages/reacord/yarn-error.log
