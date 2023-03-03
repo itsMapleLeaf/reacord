@@ -74,4 +74,4 @@ class ButtonNode extends Node<ButtonProps> {
   }
 }
 
-class ButtonLabelNode extends Node<{}> {}
+class ButtonLabelNode extends Node<{}> { }

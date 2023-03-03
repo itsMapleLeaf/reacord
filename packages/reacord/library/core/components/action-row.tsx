@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import React from "react"
 import { ReacordElement } from "../../internal/element.js"
+import type { ComponentInteraction } from "../../internal/interaction.js"
 import type { MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
 
@@ -43,5 +44,13 @@ class ActionRowNode extends Node<{}> {
     for (const child of this.children) {
       child.modifyMessageOptions(options)
     }
+  }
+  override handleComponentInteraction(interaction: ComponentInteraction) {
+    for (const child of this.children) {
+      if (child.handleComponentInteraction(interaction)) {
+        return true
+      }
+    }
+    return false
   }
 }
