@@ -2,7 +2,7 @@
   "name": "@answeroverflow/reacord",
   "type": "module",
   "description": "Fork of reacord",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "types": "./dist/main.d.ts",
   "homepage": "https://reacord.mapleleaf.dev",
   "repository": "https://github.com/AnswerOverflow/reacord.git",
