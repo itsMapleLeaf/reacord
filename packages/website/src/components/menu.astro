@@ -1,9 +1,11 @@
 <details class="md:hidden relative" data-menu>
-  <summary class="list-none p-2 -m-2">
+  <summary
+    class="list-none p-2 -m-2 cursor-pointer hover:text-emerald-500 transition"
+  >
     <slot name="button" />
   </summary>
   <div
-    class="w-48 max-h-[calc(100vh-5rem)] bg-slate-800 shadow rounded-lg overflow-x-hidden overflow-y-auto top-[calc(100%+8px)] right-0 absolute"
+    class="w-48 max-h-[calc(100vh-5rem)] bg-slate-800 shadow rounded-lg overflow-x-hidden overflow-y-auto top-[calc(100%+8px)] right-0 absolute z-10"
   >
     <slot />
   </div>
