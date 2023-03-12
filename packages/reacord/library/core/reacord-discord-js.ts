@@ -207,7 +207,7 @@ export class ReacordDiscordJs extends Reacord {
               ]),
             ),
             displayName: interaction.member.displayName,
-            roles: [...interaction.member.roles.cache.map((role) => role.id)],
+            roles: interaction.member.roles.cache.map((role) => role.id),
             joinedAt: interaction.member.joinedAt?.toISOString(),
             premiumSince: interaction.member.premiumSince?.toISOString(),
             communicationDisabledUntil:

@@ -10,7 +10,7 @@ export function pruneNullishValues<T>(input: T): PruneNullishValues<T> {
   }
 
   const result: any = {}
-  for (const [key, value] of Object.entries(input)) {
+  for (const [key, value] of Object.entries(input as any)) {
     if (value != undefined) {
       result[key] = pruneNullishValues(value)
     }
