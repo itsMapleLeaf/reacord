@@ -5,6 +5,7 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/20/solid"
 import { Bars3Icon } from "@heroicons/react/24/outline"
+import { getCollection } from "astro:content"
 import AppLogo from "./app-logo.astro"
 import ExternalLink from "./external-link.astro"
 import MenuItem from "./menu-item.astro"
@@ -16,6 +17,7 @@ const links = [
     label: "Guides",
     icon: DocumentTextIcon,
     component: "a",
+    prefetch: true,
   },
   {
     href: "/api/",
@@ -30,6 +32,8 @@ const links = [
     component: ExternalLink,
   },
 ]
+
+const guides = await getCollection("guides")
 ---
 
 <nav class="flex justify-between items-center h-16">
@@ -43,6 +47,7 @@ const links = [
         <link.component
           href={link.href}
           class="link inline-flex gap-1 items-center"
+          rel={link.prefetch ? "prefetch" : undefined}
         >
           <link.icon className="inline-icon" />
           {link.label}
@@ -64,6 +69,12 @@ const links = [
       ))
     }
     <hr class="border-black/25" />
-    <!-- TODO: guide links -->
+    {
+      guides.map((guide) => (
+        <a href={`/guides/${guide.slug}`} rel="prefetch">
+          <MenuItem icon={DocumentTextIcon} label={guide.data.title} />
+        </a>
+      ))
+    }
   </Menu>
 </nav>

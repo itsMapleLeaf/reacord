@@ -1,5 +1,4 @@
 node_modules
-
 /.cache
 /build
 /public/build
@@ -9,3 +8,4 @@ cypress/videos
 cypress/screenshots
 *.out.css
 /api
+.astro

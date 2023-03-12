@@ -1,0 +1,58 @@
+---
+import { type GetStaticPaths } from "astro"
+import { getCollection, type CollectionEntry } from "astro:content"
+import AppFooter from "~/components/app-footer.astro"
+import Layout from "~/components/layout.astro"
+import MainNavigation from "~/components/main-navigation.astro"
+
+export type Props = {
+  guide: CollectionEntry<"guides">
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const guides = await getCollection("guides")
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide },
+  }))
+}
+
+const guides = await getCollection("guides")
+const { Content } = await Astro.props.guide.render()
+---
+
+<Layout>
+  <div class="isolate">
+    <header
+      class="bg-slate-700/30 shadow sticky top-0 backdrop-blur-sm transition z-10 flex"
+    >
+      <div class="container">
+        <MainNavigation />
+      </div>
+    </header>
+    <main class="container mt-8 flex items-start gap-4">
+      <nav class="w-48 sticky top-24 hidden md:block">
+        <h2 class="text-2xl">Guides</h2>
+        <ul class="mt-3 flex flex-col gap-2 items-start">
+          {
+            guides.map((guide) => (
+              <li>
+                <a class="link" href={`/guides/${guide.slug}`} rel="prefetch">
+                  {guide.data.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <section
+        class="prose prose-invert prose prose-invert prose-h1:font-light prose-h1:mb-4 prose-h1:text-3xl lg:prose-h1:text-4xl prose-h2:font-light prose-h3:font-light prose-p:my-3 prose-a:font-medium prose-a:text-emerald-400 hover:prose-a:no-underline prose-strong:font-medium prose-strong:text-emerald-400 prose-pre:font-monospace prose-pre:overflow-x-auto prose-code:before:hidden prose-code:after:hidden prose-code:text-slate-400 prose-li:mb-5 max-w-none pb-8 flex-1 min-w-0"
+      >
+        <Content />
+      </section>
+    </main>
+    <div class="py-2">
+      <AppFooter />
+    </div>
+  </div>
+</Layout>

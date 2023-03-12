@@ -86,6 +86,7 @@ importers:
 
   packages/website:
     specifiers:
+      '@astrojs/prefetch': ^0.2.0
       '@astrojs/react': ^2.1.0
       '@astrojs/tailwind': ^3.1.0
       '@fontsource/jetbrains-mono': ^4.5.12
@@ -127,6 +128,7 @@ importers:
       wait-on: ^6.0.1
       zod: ^3.17.10
     dependencies:
+      '@astrojs/prefetch': 0.2.0
       '@astrojs/react': 2.1.0_v7vsrdtui4d36prbwvdnlb7tpq
       '@fontsource/jetbrains-mono': 4.5.12
       '@fontsource/rubik': 4.5.14
@@ -223,6 +225,12 @@ packages:
       vfile: 5.3.4
     transitivePeerDependencies:
       - supports-color
+
+  /@astrojs/prefetch/0.2.0:
+    resolution: {integrity: sha512-q68916tIId0tnRFphNL2OcORgoATnfVItaQAugz7wfIq4ghivNISG1scN86uAyF/md1N1YcKu6XPukT5f2lShQ==}
+    dependencies:
+      throttles: 1.0.1
+    dev: false
 
   /@astrojs/prism/2.1.0:
     resolution: {integrity: sha512-+II6nfIFGZ7iH0FunhRGcj/J1mCxjcHl85cZRuFePKLoIhFHJT3nC3myQnUw386hUaIn2W20McxxtAVf4leeRQ==}
@@ -10659,6 +10667,11 @@ packages:
   /throttleit/1.0.0:
     resolution: {integrity: sha512-rkTVqu6IjfQ/6+uNuuc3sZek4CEYxTJom3IktzgdSxcZqdARuebbA/f4QmAxMQIxqq9ZLEUkSYqvuk1I6VKq4g==}
     dev: true
+
+  /throttles/1.0.1:
+    resolution: {integrity: sha512-fab7Xg+zELr9KOv4fkaBoe/b3L0GMGLd0IBSCn16GoE/Qx6/OfCr1eGNyEcDU2pUA79qQfZ8kPQWlRuok4YwTw==}
+    engines: {node: '>=6'}
+    dev: false
 
   /through/2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
