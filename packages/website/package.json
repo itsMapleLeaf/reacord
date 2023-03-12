@@ -2,15 +2,21 @@
   "name": "website",
   "version": "0.4.3",
   "private": true,
+  "sideEffects": false,
   "scripts": {
-    "dev": "concurrently \"typedoc --watch\" \"pnpm tailwind -- --watch\" \"remix dev\"",
+    "dev": "run-p --race --print-label dev:*",
+    "dev:typedoc": "typedoc --watch",
+    "dev:astro": "astro dev",
     "test": "node ./scripts/test.js",
-    "test-dev": "pnpm dev & wait-on http-get://localhost:3000 && cypress open",
-    "build": "typedoc && pnpm tailwind -- --minify && remix build",
-    "tailwind": "tailwindcss --config tailwind.config.cjs --input app/modules/ui/tailwind.css --output app/modules/ui/tailwind.out.css",
+    "test-dev": "run-p --race --print-label dev:* test-dev:*",
+    "test-dev:cypress": "wait-on http-get://localhost:3000 && cypress open",
+    "build": "run-p --print-label --continue-on-error build:*",
+    "build:typedoc": "typedoc",
+    "build:astro": "astro build",
     "typecheck": "tsc --noEmit && tsc --project cypress/tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@astrojs/react": "^2.1.0",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@reach/rect": "^0.17.0",
@@ -19,6 +25,7 @@
     "@remix-run/vercel": "^1.7.2",
     "@tailwindcss/typography": "^0.5.4",
     "@vercel/node": "^2.5.21",
+    "astro": "^2.1.2",
     "clsx": "^1.2.1",
     "fast-glob": "^3.2.11",
     "gray-matter": "^4.0.3",
@@ -31,6 +38,7 @@
     "zod": "^3.17.10"
   },
   "devDependencies": {
+    "@astrojs/tailwind": "^3.1.0",
     "@remix-run/dev": "^1.6.5",
     "@remix-run/serve": "^1.6.5",
     "@testing-library/cypress": "^8.0.3",
@@ -39,15 +47,14 @@
     "@types/react-dom": "^18.0.6",
     "@types/wait-on": "^5.3.1",
     "autoprefixer": "^10.4.7",
-    "concurrently": "^7.3.0",
     "cypress": "^10.3.1",
     "execa": "^6.1.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "rehype-prism-plus": "^1.4.2",
     "tailwindcss": "^3.1.6",
     "typedoc": "^0.23.8",
     "typescript": "^4.7.4",
     "wait-on": "^6.0.1"
-  },
-  "sideEffects": false
+  }
 }

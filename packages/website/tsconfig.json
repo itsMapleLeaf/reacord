@@ -2,10 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     }
   },
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "**/*.astro"]
 }

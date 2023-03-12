@@ -3,6 +3,14 @@
   "compilerOptions": {
     "noImplicitOverride": true
   },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs",
+    "**/*.astro",
+    ".eslintrc.cjs"
+  ],
   "exclude": [
     "**/node_modules/**",
     "**/coverage/**",
