@@ -17,10 +17,10 @@
     "astro-eslint-parser": "^0.12.0",
     "eslint": "^8.36.0",
     "prettier": "^2.7.1",
+    "prettier-plugin-astro": "^0.8.0",
     "typescript": "^4.8.4"
   },
   "resolutions": {
     "esbuild": "latest"
-  },
-  "prettier": "@itsmapleleaf/configs/prettier"
+  }
 }

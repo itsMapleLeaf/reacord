@@ -3,7 +3,7 @@ module.exports = {
   content: ["./app/**/*.{ts,tsx,md}"],
   theme: {
     fontFamily: {
-      sans: ["Rubik", "sans-serif"],
+      sans: ["RubikVariable", "sans-serif"],
       monospace: ["'JetBrains Mono'", "monospace"],
     },
     boxShadow: {

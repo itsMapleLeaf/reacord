@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@astrojs/react": "^2.1.0",
+    "@fontsource/jetbrains-mono": "^4.5.12",
+    "@fontsource/rubik": "^4.5.14",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@reach/rect": "^0.17.0",

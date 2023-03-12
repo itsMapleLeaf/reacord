@@ -28,6 +28,9 @@ module.exports = {
       parserOptions: {
         parser: "@typescript-eslint/parser",
       },
+      rules: {
+        "react/no-unknown-property": "off",
+      },
     },
   ],
 }

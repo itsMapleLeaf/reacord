@@ -1,0 +1,43 @@
+---
+import "@fontsource/jetbrains-mono/500.css"
+import "@fontsource/rubik/variable.css"
+import packageJson from "reacord/package.json"
+import bannerUrl from "~/assets/banner.png"
+import faviconUrl from "~/assets/favicon.png"
+import "~/styles/prism-theme.css"
+---
+
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-900 text-slate-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description" content={packageJson.description} />
+    <meta name="theme-color" content="#21754b" />
+    <meta property="og:url" content="https://reacord.mapleleaf.dev/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Reacord" />
+    <meta
+      property="og:description"
+      content="Create interactive Discord messages using React"
+    />
+    <meta property="og:image" content={bannerUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:domain" content="reacord.mapleleaf.dev" />
+    <meta name="twitter:url" content="https://reacord.mapleleaf.dev/" />
+    <meta name="twitter:title" content="Reacord" />
+    <meta
+      name="twitter:description"
+      content="Create interactive Discord messages using React"
+    />
+    <meta name="twitter:image" content={bannerUrl} />
+
+    <title>Reacord</title>
+
+    <link rel="icon" href={faviconUrl} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
