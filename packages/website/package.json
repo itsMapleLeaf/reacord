@@ -10,9 +10,7 @@
     "test": "node ./scripts/test.js",
     "test-dev": "run-p --race --print-label dev:* test-dev:*",
     "test-dev:cypress": "wait-on http-get://localhost:3000 && cypress open",
-    "build": "run-p --print-label --continue-on-error build:*",
-    "build:typedoc": "typedoc",
-    "build:astro": "astro build",
+    "build": "typedoc && astro build",
     "typecheck": "tsc --noEmit && tsc --project cypress/tsconfig.json --noEmit"
   },
   "dependencies": {
