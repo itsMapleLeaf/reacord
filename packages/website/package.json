@@ -3,7 +3,7 @@
   "version": "0.4.3",
   "private": true,
   "scripts": {
-    "dev": "concurrently 'typedoc --watch' 'pnpm tailwind -- --watch' 'remix dev'",
+    "dev": "concurrently \"typedoc --watch\" \"pnpm tailwind -- --watch\" \"remix dev\"",
     "test": "node ./scripts/test.js",
     "test-dev": "pnpm dev & wait-on http-get://localhost:3000 && cypress open",
     "build": "typedoc && pnpm tailwind -- --minify && remix build",
