@@ -1,0 +1,14 @@
+---
+export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
+  href: string
+}
+const url = Astro.url
+const linkUrl = new URL(Astro.props.href, url)
+---
+
+<a
+  {...Astro.props}
+  data-active={url.pathname === linkUrl.pathname ? true : undefined}
+>
+  <slot />
+</a>

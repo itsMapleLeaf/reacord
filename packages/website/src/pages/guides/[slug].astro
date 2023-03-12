@@ -4,6 +4,7 @@ import { getCollection, type CollectionEntry } from "astro:content"
 import AppFooter from "~/components/app-footer.astro"
 import Layout from "~/components/layout.astro"
 import MainNavigation from "~/components/main-navigation.astro"
+import NavLink from "~/components/nav-link.astro"
 
 export type Props = {
   guide: CollectionEntry<"guides">
@@ -37,9 +38,13 @@ const { Content } = await Astro.props.guide.render()
           {
             guides.map((guide) => (
               <li>
-                <a class="link" href={`/guides/${guide.slug}`} rel="prefetch">
+                <NavLink
+                  class="link data-[active]:link-active"
+                  href={`/guides/${guide.slug}`}
+                  rel="prefetch"
+                >
                   {guide.data.title}
-                </a>
+                </NavLink>
               </li>
             ))
           }

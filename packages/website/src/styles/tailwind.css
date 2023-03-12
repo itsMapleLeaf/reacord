@@ -24,13 +24,13 @@
     @apply font-medium inline-block relative opacity-60 hover:opacity-100 transition-opacity;
   }
   .link::after {
-    @apply content-[''] absolute block w-full h-px bg-current translate-y-[3px] opacity-0 transition;
+    @apply content-[''] bottom-[-2px] absolute block w-full h-px bg-current translate-y-[3px] opacity-0 transition;
   }
   .link:hover::after {
     @apply -translate-y-px opacity-50;
   }
   .link-active {
-    @apply text-emerald-500;
+    @apply text-emerald-500 opacity-100;
   }
 
   .button {

@@ -53,7 +53,7 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "rehype-prism-plus": "^1.4.2",
-    "tailwindcss": "^3.1.6",
+    "tailwindcss": "^3.2.7",
     "typedoc": "^0.23.8",
     "typescript": "^4.7.4",
     "wait-on": "^6.0.1"
