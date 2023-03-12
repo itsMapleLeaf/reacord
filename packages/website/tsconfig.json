@@ -17,7 +17,6 @@
     "**/.cache/**",
     "**/api/_build/**",
     "**/public/**",
-    "**/cypress/**",
     "app"
   ]
 }
