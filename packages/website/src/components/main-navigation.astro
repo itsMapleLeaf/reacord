@@ -1,10 +1,10 @@
 ---
-import { MenuIcon } from "@heroicons/react/outline"
 import {
-  CodeIcon,
+  ArrowTopRightOnSquareIcon,
+  CodeBracketIcon,
   DocumentTextIcon,
-  ExternalLinkIcon,
-} from "@heroicons/react/solid"
+} from "@heroicons/react/20/solid"
+import { Bars3Icon } from "@heroicons/react/24/outline"
 import AppLogo from "./app-logo.astro"
 import ExternalLink from "./external-link.astro"
 import MenuItem from "./menu-item.astro"
@@ -20,13 +20,13 @@ const links = [
   {
     href: "/api/",
     label: "API Reference",
-    icon: CodeIcon,
+    icon: CodeBracketIcon,
     component: "a",
   },
   {
     href: "https://github.com/itsMapleLeaf/reacord",
     label: "GitHub",
-    icon: ExternalLinkIcon,
+    icon: ArrowTopRightOnSquareIcon,
     component: ExternalLink,
   },
 ]
@@ -53,7 +53,7 @@ const links = [
 
   <Menu>
     <Fragment slot="button">
-      <MenuIcon className="w-6" />
+      <Bars3Icon className="w-6" />
       <span class="sr-only">Menu</span>
     </Fragment>
     {

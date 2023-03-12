@@ -8,5 +8,16 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "**/*.astro"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "**/*.astro"],
+  "exclude": [
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/.cache/**",
+    "**/api/_build/**",
+    "**/public/**",
+    "**/cypress/**",
+    "app"
+  ]
 }

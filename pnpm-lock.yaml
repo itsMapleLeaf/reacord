@@ -91,7 +91,7 @@ importers:
       '@fontsource/jetbrains-mono': ^4.5.12
       '@fontsource/rubik': ^4.5.14
       '@headlessui/react': ^1.6.6
-      '@heroicons/react': ^1.0.6
+      '@heroicons/react': ^2.0.16
       '@reach/rect': ^0.17.0
       '@remix-run/dev': ^1.6.5
       '@remix-run/node': ^1.6.5
@@ -131,7 +131,7 @@ importers:
       '@fontsource/jetbrains-mono': 4.5.12
       '@fontsource/rubik': 4.5.14
       '@headlessui/react': 1.6.6_biqbaboplfbrettd7655fr4n2y
-      '@heroicons/react': 1.0.6_react@18.2.0
+      '@heroicons/react': 2.0.16_react@18.2.0
       '@reach/rect': 0.17.0_biqbaboplfbrettd7655fr4n2y
       '@remix-run/node': 1.6.5_biqbaboplfbrettd7655fr4n2y
       '@remix-run/react': 1.6.5_biqbaboplfbrettd7655fr4n2y
@@ -2117,8 +2117,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@heroicons/react/1.0.6_react@18.2.0:
-    resolution: {integrity: sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==}
+  /@heroicons/react/2.0.16_react@18.2.0:
+    resolution: {integrity: sha512-x89rFxH3SRdYaA+JCXwfe+RkE1SFTo9GcOkZettHer71Y3T7V+ogKmfw5CjTazgS3d0ClJ7p1NA+SP7VQLQcLw==}
     peerDependencies:
       react: '>= 16'
     dependencies:
