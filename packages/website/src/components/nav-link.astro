@@ -2,13 +2,16 @@
 export type Props = astroHTML.JSX.AnchorHTMLAttributes & {
   href: string
 }
-const url = Astro.url
-const linkUrl = new URL(Astro.props.href, url)
+
+const removeTrailingSlash = (str: string) => str.replace(/\/$/, "")
+
+const linkUrl = new URL(Astro.props.href, Astro.url)
+
+const isActive =
+  removeTrailingSlash(Astro.url.pathname) ===
+  removeTrailingSlash(linkUrl.pathname)
 ---
 
-<a
-  {...Astro.props}
-  data-active={url.pathname === linkUrl.pathname ? true : undefined}
->
+<a {...Astro.props} data-active={isActive || undefined}>
   <slot />
 </a>
