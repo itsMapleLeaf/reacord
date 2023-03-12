@@ -9,6 +9,11 @@
   :focus-visible {
     @apply ring-2 ring-emerald-500 ring-inset;
   }
+
+  pre,
+  code {
+    font-variant-ligatures: none;
+  }
 }
 
 @layer components {
