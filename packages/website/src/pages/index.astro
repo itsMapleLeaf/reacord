@@ -1,5 +1,54 @@
 ---
+import dotsBackgroundUrl from "~/assets/dots-background.svg"
+import AppFooter from "~/components/app-footer.astro"
+import AppLogo from "~/components/app-logo.astro"
+import { LandingAnimation } from "~/components/landing-animation"
+import MainNavigation from "~/components/main-navigation.astro"
 import Layout from "~/layout.astro"
 ---
 
-<Layout>content!</Layout>
+<Layout>
+  <div
+    class="fixed inset-0 rotate-6 scale-125 opacity-20"
+    style={{ backgroundImage: `url(${dotsBackgroundUrl})` }}
+  >
+  </div>
+  <div class="flex flex-col relative min-w-0 min-h-screen pb-4 gap-4">
+    <header class="container">
+      <MainNavigation />
+    </header>
+    <div class="flex flex-col gap-4 my-auto px-4">
+      <AppLogo class="w-full max-w-lg mx-auto" />
+
+      <div class="max-w-md w-full mx-auto">
+        <LandingAnimation client:only />
+      </div>
+
+      <p class="text-center text-lg font-light -mb-1">
+        Create interactive Discord messages with React.
+      </p>
+
+      <div class="flex gap-4 self-center">
+        <a href="/guides/getting-started" class="button button-solid">
+          Get Started
+        </a>
+
+        <!-- <UncontrolledModal
+          button={(button) => (
+            <button {...button} class={buttonClass({ variant: "semiblack" })}>
+              Show Code
+            </button>
+          )}
+        >
+          <div class="text-sm sm:text-base">
+            <LandingCode />
+          </div>
+        </UncontrolledModal> -->
+      </div>
+    </div>
+
+    <div class="text-center">
+      <AppFooter />
+    </div>
+  </div>
+</Layout>

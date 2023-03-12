@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :focus {
+    @apply outline-none;
+  }
+  :focus-visible {
+    @apply ring-2 ring-emerald-500 ring-inset;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto w-full max-w-screen-lg px-4;
+  }
+
+  .inline-icon {
+    @apply inline w-5 align-sub;
+  }
+
+  .link {
+    @apply font-medium inline-block relative opacity-60 hover:opacity-100 transition-opacity;
+  }
+  .link::after {
+    @apply content-[''] absolute block w-full h-px bg-current translate-y-[3px] opacity-0 transition;
+  }
+  .link:hover::after {
+    @apply -translate-y-px opacity-50;
+  }
+  .link-active {
+    @apply text-emerald-500;
+  }
+
+  .button {
+    @apply inline-block mt-4 px-4 py-2.5 text-xl transition rounded-lg bg-black/25 hover:bg-black/40 hover:-translate-y-0.5 hover:shadow active:translate-y-0 active:transition-none;
+  }
+  .button-solid {
+    @apply bg-emerald-700 hover:bg-emerald-800;
+  }
+}

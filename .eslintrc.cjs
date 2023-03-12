@@ -30,6 +30,8 @@ module.exports = {
       },
       rules: {
         "react/no-unknown-property": "off",
+        "react/jsx-key": "off",
+        "react/jsx-no-undef": "off",
       },
     },
   ],

@@ -1,0 +1,13 @@
+---
+export type Props = {
+  icon: (props: { class?: string; className?: string }) => any
+  label: string
+}
+---
+
+<div
+  class="px-3 py-2 transition text-left font-medium block w-full opacity-50 inline-flex gap-1 items-center"
+>
+  <Astro.props.icon class="inline-icon" className="inline-icon" />
+  {Astro.props.label}
+</div>
