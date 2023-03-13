@@ -8,9 +8,6 @@
     "dev": "run-p --race --print-label dev:*",
     "dev:typedoc": "typedoc --watch",
     "dev:astro": "astro dev",
-    "test": "node ./scripts/test.js",
-    "test-dev": "run-p --race --print-label dev:* test-dev:*",
-    "test-dev:cypress": "wait-on http-get://localhost:3000 && cypress open",
     "start": "astro preview",
     "build": "typedoc && astro build",
     "typecheck": "tsc --noEmit && tsc --project cypress/tsconfig.json --noEmit"
