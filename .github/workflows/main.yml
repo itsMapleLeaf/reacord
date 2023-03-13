@@ -31,7 +31,7 @@ jobs:
           - name: lint
             run: pnpm run lint
           - name: typecheck
-            run: pnpm --recursive run typecheck
+            run: pnpm run typecheck
     name: ${{ matrix.command.name }}
     runs-on: ubuntu-latest
     steps:

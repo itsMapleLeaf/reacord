@@ -1,4 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
+  "extends": "@itsmapleleaf/configs/tsconfig.base",
+  "exclude": ["node_modules", "dist"]
 }

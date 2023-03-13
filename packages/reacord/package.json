@@ -40,8 +40,7 @@
     "build-watch": "pnpm build -- --watch",
     "test": "vitest --coverage --no-watch",
     "test-dev": "vitest",
-    "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx",
-    "typecheck": "tsc --noEmit"
+    "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx"
   },
   "dependencies": {
     "@types/node": "*",

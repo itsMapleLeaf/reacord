@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/reacord" },
+    { "path": "packages/website" },
+    { "path": "packages/helpers" }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "@itsmapleleaf/configs/tsconfig.base",
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
@@ -8,15 +8,5 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "**/*.astro"],
-  "exclude": [
-    "**/node_modules/**",
-    "**/coverage/**",
-    "**/build/**",
-    "**/dist/**",
-    "**/.cache/**",
-    "**/api/_build/**",
-    "**/public/**",
-    "app"
-  ]
+  "exclude": ["node_modules", "dist", "public/api"]
 }
