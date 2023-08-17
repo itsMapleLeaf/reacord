@@ -10,7 +10,6 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "esnext",
-		"composite": true
+		"target": "esnext"
 	}
 }
