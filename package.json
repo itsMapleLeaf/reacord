@@ -5,7 +5,7 @@
 		"lint": "run-p --print-label --continue-on-error --silent lint:*",
 		"lint:prettier": "prettier --cache --check .",
 		"lint:eslint": "eslint . --report-unused-disable-directives",
-		"lint:tsc": "pnpm -r --parallel --no-bail exec tsc -b",
+		"lint:tsc": "pnpm --filter website exec astro sync && pnpm -r --parallel --no-bail exec tsc -b",
 		"lint:tsc-root": "tsc -b",
 		"format": "run-s --continue-on-error format:*",
 		"format:eslint": "eslint . --report-unused-disable-directives --fix",
