@@ -22,7 +22,8 @@
 		"clsx": "^2.0.0",
 		"reacord": "workspace:*",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"tailwind-merge": "^1.14.0"
 	},
 	"devDependencies": {
 		"@astrojs/tailwind": "^4.0.0",

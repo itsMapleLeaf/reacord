@@ -45,3 +45,15 @@
 		@apply bg-emerald-700 hover:bg-emerald-800;
 	}
 }
+
+@layer utilities {
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	.animate-fade-in {
+		animation: fade-in 0.5s;
+	}
+}

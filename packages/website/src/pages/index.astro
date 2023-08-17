@@ -8,32 +8,32 @@ import MainNavigation from "~/components/main-navigation.astro"
 ---
 
 <Layout>
-  <div
-    class="fixed inset-0 rotate-6 scale-125 opacity-20"
-    style={{ backgroundImage: `url(${dotsBackgroundUrl})` }}
-  >
-  </div>
-  <div class="flex flex-col relative min-w-0 min-h-screen pb-4 gap-4">
-    <header class="container">
-      <MainNavigation />
-    </header>
-    <div class="flex flex-col gap-4 my-auto px-4">
-      <AppLogo class="w-full max-w-lg mx-auto" />
+	<div
+		class="fixed inset-0 rotate-6 scale-125 opacity-20"
+		style={{ backgroundImage: `url(${dotsBackgroundUrl})` }}
+	>
+	</div>
+	<div class="relative flex min-h-screen min-w-0 flex-col gap-4 pb-4">
+		<header class="container">
+			<MainNavigation />
+		</header>
+		<div class="my-auto flex flex-col gap-4 px-4">
+			<AppLogo class="mx-auto w-full max-w-lg" />
 
-      <div class="max-w-md w-full mx-auto isolate">
-        <LandingAnimation client:only />
-      </div>
+			<div class="isolate mx-auto h-44 w-full max-w-md">
+				<LandingAnimation client:only />
+			</div>
 
-      <p class="text-center text-lg font-light -mb-1">
-        Create interactive Discord messages with React.
-      </p>
+			<p class="-mb-1 text-center text-lg font-light">
+				Create interactive Discord messages with React.
+			</p>
 
-      <div class="flex gap-4 self-center">
-        <a href="/guides/getting-started" class="button button-solid">
-          Get Started
-        </a>
+			<div class="flex gap-4 self-center">
+				<a href="/guides/getting-started" class="button button-solid">
+					Get Started
+				</a>
 
-        <!-- <UncontrolledModal
+				<!-- <UncontrolledModal
           button={(button) => (
             <button {...button} class={buttonClass({ variant: "semiblack" })}>
               Show Code
@@ -44,11 +44,11 @@ import MainNavigation from "~/components/main-navigation.astro"
             <LandingCode />
           </div>
         </UncontrolledModal> -->
-      </div>
-    </div>
+			</div>
+		</div>
 
-    <div class="text-center">
-      <AppFooter />
-    </div>
-  </div>
+		<div class="container text-center">
+			<AppFooter />
+		</div>
+	</div>
 </Layout>

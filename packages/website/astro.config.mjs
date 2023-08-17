@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import prefetch from "@astrojs/prefetch"
 import react from "@astrojs/react"
 import tailwind from "@astrojs/tailwind"
@@ -12,4 +14,7 @@ export default defineConfig({
 		react(),
 		prefetch(),
 	],
+	markdown: {
+		shikiConfig: {},
+	},
 })

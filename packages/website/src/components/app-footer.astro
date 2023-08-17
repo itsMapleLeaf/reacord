@@ -1,14 +1,19 @@
 ---
 import { HeartIcon } from "@heroicons/react/20/solid"
+import { twMerge } from "tailwind-merge"
 import ExternalLink from "./external-link.astro"
+
+export interface Props {
+	class?: string
+}
 ---
 
-<footer class="container text-xs opacity-75">
-  <address class="not-italic">
-    &copy; {new Date().getFullYear()} itsMapleLeaf
-  </address>
-  <p>
-    Coded with <HeartIcon className="inline w-4 align-sub" /> using{" "}
-    <ExternalLink class="link" href="https://astro.build">Astro</ExternalLink>
-  </p>
+<footer class={twMerge("text-xs opacity-75", Astro.props.class)}>
+	<address class="not-italic">
+		&copy; {new Date().getFullYear()} itsMapleLeaf
+	</address>
+	<p>
+		Coded with <HeartIcon className="inline w-4 align-sub" /> using{" "}
+		<ExternalLink class="link" href="https://astro.build">Astro</ExternalLink>
+	</p>
 </footer>

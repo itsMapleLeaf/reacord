@@ -7,15 +7,15 @@ import MainNavigation from "~/components/main-navigation.astro"
 import NavLink from "~/components/nav-link.astro"
 
 export interface Props {
-  guide: CollectionEntry<"guides">
+	guide: CollectionEntry<"guides">
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const guides = await getCollection("guides")
-  return guides.map((guide) => ({
-    params: { slug: guide.slug },
-    props: { guide },
-  }))
+	const guides = await getCollection("guides")
+	return guides.map((guide) => ({
+		params: { slug: guide.slug },
+		props: { guide },
+	}))
 }
 
 const guides = await getCollection("guides")
@@ -23,41 +23,73 @@ const { Content } = await Astro.props.guide.render()
 ---
 
 <Layout>
-  <div class="isolate">
-    <header
-      class="bg-slate-700/30 shadow sticky top-0 backdrop-blur-sm transition z-10 flex"
-    >
-      <div class="container">
-        <MainNavigation />
-      </div>
-    </header>
-    <main class="container mt-8 flex items-start gap-4">
-      <nav class="w-48 sticky top-24 hidden md:block">
-        <h2 class="text-2xl">Guides</h2>
-        <ul class="mt-3 flex flex-col gap-2 items-start">
-          {
-            guides.map((guide) => (
-              <li>
-                <NavLink
-                  class="link data-[active]:link-active"
-                  href={`/guides/${guide.slug}`}
-                  rel="prefetch"
-                >
-                  {guide.data.title}
-                </NavLink>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-      <section
-        class="prose prose-invert prose prose-invert prose-h1:font-light prose-h1:mb-4 prose-h1:text-3xl lg:prose-h1:text-4xl prose-h2:font-light prose-h3:font-light prose-p:my-3 prose-a:font-medium prose-a:text-emerald-400 hover:prose-a:no-underline prose-strong:font-medium prose-strong:text-emerald-400 prose-pre:font-monospace prose-pre:overflow-x-auto prose-code:before:hidden prose-code:after:hidden prose-code:text-slate-400 prose-li:mb-5 max-w-none pb-8 flex-1 min-w-0"
-      >
-        <Content />
-      </section>
-    </main>
-    <div class="py-2">
-      <AppFooter />
-    </div>
-  </div>
+	<div class="isolate">
+		<header
+			class="sticky top-0 z-10 flex bg-slate-700/30 shadow backdrop-blur-sm transition"
+		>
+			<div class="container">
+				<MainNavigation />
+			</div>
+		</header>
+		<main class="container mt-8 flex items-start gap-4">
+			<nav
+				class="sticky top-24 hidden h-[calc(100vh-theme(spacing.28))] w-48 flex-col gap-3 md:flex"
+			>
+				<h2 class="text-2xl">Guides</h2>
+				<ul class="flex flex-col items-start gap-2">
+					{
+						guides.map((guide) => (
+							<li>
+								<NavLink
+									class="link data-[active]:link-active"
+									href={`/guides/${guide.slug}`}
+									rel="prefetch"
+								>
+									{guide.data.title}
+								</NavLink>
+							</li>
+						))
+					}
+				</ul>
+				<AppFooter class="mt-auto" />
+			</nav>
+			<article class="-mt-8 min-w-0 max-w-none flex-1 pb-8">
+				<Content />
+			</article>
+		</main>
+		<AppFooter class="mx-auto mb-4 text-center md:hidden" />
+	</div>
 </Layout>
+
+<style>
+	article :global(:where(h1, h2, h3, h4, h5, h6)) {
+		@apply mb-3 mt-8 font-light;
+	}
+	article :global(h1) {
+		@apply text-3xl lg:text-4xl;
+	}
+	article :global(h2) {
+		@apply text-2xl;
+	}
+	article :global(h3) {
+		@apply text-xl;
+	}
+	article :global(p) {
+		@apply my-3;
+	}
+	article :global(a) {
+		@apply font-medium text-emerald-400 hover:no-underline;
+	}
+	article :global(strong) {
+		@apply font-medium text-emerald-400;
+	}
+	article :global(code) {
+		@apply rounded border border-slate-800 bg-slate-950 px-1 py-0.5 leading-none text-slate-300;
+	}
+	article :global(pre) {
+		@apply my-4 overflow-x-auto rounded-md border border-slate-800 !bg-slate-950 px-4 py-3 font-monospace;
+	}
+	article :global(pre code) {
+		@apply border-none bg-transparent p-0;
+	}
+</style>

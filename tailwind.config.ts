@@ -1,8 +1,6 @@
 import typography from "@tailwindcss/typography"
-import { type Config } from "tailwindcss"
 
 export default {
-	content: ["./packages/*/src/**/*.{ts,tsx,md,astro}"],
 	theme: {
 		fontFamily: {
 			sans: ["RubikVariable", "sans-serif"],
@@ -16,5 +14,5 @@ export default {
 	corePlugins: {
 		container: false,
 	},
-	plugins: [typography],
-} satisfies Config
+	plugins: [],
+}

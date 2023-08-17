@@ -125,7 +125,7 @@ export function LandingAnimation() {
 
 	return (
 		<div
-			className="pointer-events-none relative grid select-none gap-2"
+			className="animate-fade-in pointer-events-none relative grid select-none gap-2"
 			role="presentation"
 		>
 			<div
