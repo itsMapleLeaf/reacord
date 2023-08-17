@@ -10,7 +10,10 @@ export interface Props {
 
 <footer class={twMerge("text-xs opacity-75", Astro.props.class)}>
 	<address class="not-italic">
-		&copy; {new Date().getFullYear()} itsMapleLeaf
+		&copy; {new Date().getFullYear()}
+		<ExternalLink class="link" href="https://github.com/itsMapleLeaf">
+			itsMapleLeaf
+		</ExternalLink>
 	</address>
 	<p>
 		Coded with <HeartIcon className="inline w-4 align-sub" /> using{" "}
