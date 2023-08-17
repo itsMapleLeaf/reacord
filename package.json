@@ -4,9 +4,10 @@
 	"scripts": {
 		"lint": "run-p --print-label --continue-on-error --silent lint:*",
 		"lint:prettier": "prettier --cache --check .",
-		"lint:eslint": "eslint . --report-unused-disable-directives",
-		"lint:tsc": "pnpm --filter website exec astro sync && pnpm -r --parallel --no-bail exec tsc -b",
+		"lint:eslint": "pnpm astro-sync && eslint . --report-unused-disable-directives",
+		"lint:tsc": "pnpm astro-sync && pnpm -r --parallel --no-bail exec tsc -b",
 		"lint:tsc-root": "tsc -b",
+		"astro-sync": "pnpm --filter website exec astro sync",
 		"format": "run-s --continue-on-error format:*",
 		"format:eslint": "eslint . --report-unused-disable-directives --fix",
 		"format:prettier": "prettier --cache --write .",
