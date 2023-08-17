@@ -1,13 +1,13 @@
 ---
-export type Props = {
-  icon: (props: { class?: string; className?: string }) => any
-  label: string
+export interface Props {
+	icon: (props: { class?: string; className?: string }) => unknown
+	label: string
 }
 ---
 
 <div
-  class="px-3 py-2 transition text-left font-medium block w-full opacity-50 inline-flex gap-1 items-center hover:opacity-100 hover:text-emerald-500"
+	class="flex w-full items-center gap-1 px-3 py-2 text-left font-medium opacity-50 transition hover:text-emerald-500 hover:opacity-100"
 >
-  <Astro.props.icon class="inline-icon" className="inline-icon" />
-  <span class="flex-1">{Astro.props.label}</span>
+	<Astro.props.icon class="inline-icon" className="inline-icon" />
+	<span class="flex-1">{Astro.props.label}</span>
 </div>

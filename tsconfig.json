@@ -1,8 +1,4 @@
 {
-  "files": [],
-  "references": [
-    { "path": "packages/reacord" },
-    { "path": "packages/website" },
-    { "path": "packages/helpers" }
-  ]
+	"extends": "./tsconfig.base.json",
+	"exclude": ["node_modules", "packages"]
 }

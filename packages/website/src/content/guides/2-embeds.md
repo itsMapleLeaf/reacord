@@ -12,14 +12,14 @@ Reacord comes with an `<Embed />` component for sending rich embeds.
 import { Embed } from "reacord"
 
 function FancyMessage({ title, description }) {
-  return (
-    <Embed
-      title={title}
-      description={description}
-      color={0x00ff00}
-      timestamp={Date.now()}
-    />
-  )
+	return (
+		<Embed
+			title={title}
+			description={description}
+			color={0x00ff00}
+			timestamp={Date.now()}
+		/>
+	)
 }
 ```
 
@@ -33,30 +33,30 @@ Reacord also comes with multiple embed components, for defining embeds on a piec
 import { Embed, EmbedTitle } from "reacord"
 
 function FancyDetails({ title, description }) {
-  return (
-    <>
-      <EmbedTitle>{title}</EmbedTitle>
-      {/* embed descriptions are just text */}
-      {description}
-    </>
-  )
+	return (
+		<>
+			<EmbedTitle>{title}</EmbedTitle>
+			{/* embed descriptions are just text */}
+			{description}
+		</>
+	)
 }
 
 function FancyMessage({ children }) {
-  return (
-    <Embed color={0x00ff00} timestamp={Date.now()}>
-      {children}
-    </Embed>
-  )
+	return (
+		<Embed color={0x00ff00} timestamp={Date.now()}>
+			{children}
+		</Embed>
+	)
 }
 ```
 
 ```jsx
 reacord.send(
-  channelId,
-  <FancyMessage>
-    <FancyDetails title="Hello" description="World" />
-  </FancyMessage>,
+	channelId,
+	<FancyMessage>
+		<FancyDetails title="Hello" description="World" />
+	</FancyMessage>,
 )
 ```
 

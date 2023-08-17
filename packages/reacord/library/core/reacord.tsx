@@ -1,91 +1,85 @@
 import type { ReactNode } from "react"
-import React from "react"
-import type { ComponentInteraction } from "../internal/interaction"
+import type { ComponentInteraction } from "../internal/interaction.js"
 import { reconciler } from "../internal/reconciler.js"
-import type { Renderer } from "../internal/renderers/renderer"
-import type { ReacordInstance } from "./instance"
-import { InstanceProvider } from "./instance-context"
+import type { Renderer } from "../internal/renderers/renderer.js"
+import { InstanceProvider } from "./instance-context.js"
+import type { ReacordInstance } from "./instance.js"
 
-/**
- * @category Core
- */
-export type ReacordConfig = {
-  /**
-   * The max number of active instances.
-   * When this limit is exceeded, the oldest instances will be disabled.
-   */
-  maxInstances?: number
+/** @category Core */
+export interface ReacordConfig {
+	/**
+	 * The max number of active instances. When this limit is exceeded, the oldest
+	 * instances will be disabled.
+	 */
+	maxInstances?: number
 }
 
 /**
- * The main Reacord class that other Reacord adapters should extend.
- * Only use this directly if you're making [a custom adapter](/guides/custom-adapters).
+ * The main Reacord class that other Reacord adapters should extend. Only use
+ * this directly if you're making [a custom adapter](/guides/custom-adapters).
  */
 export abstract class Reacord {
-  private renderers: Renderer[] = []
+	private renderers: Renderer[] = []
 
-  constructor(private readonly config: ReacordConfig = {}) {}
+	constructor(private readonly config: ReacordConfig = {}) {}
 
-  abstract send(...args: unknown[]): ReacordInstance
-  abstract reply(...args: unknown[]): ReacordInstance
-  abstract ephemeralReply(...args: unknown[]): ReacordInstance
+	abstract send(...args: unknown[]): ReacordInstance
+	abstract reply(...args: unknown[]): ReacordInstance
+	abstract ephemeralReply(...args: unknown[]): ReacordInstance
 
-  protected handleComponentInteraction(interaction: ComponentInteraction) {
-    for (const renderer of this.renderers) {
-      if (renderer.handleComponentInteraction(interaction)) return
-    }
-  }
+	protected handleComponentInteraction(interaction: ComponentInteraction) {
+		for (const renderer of this.renderers) {
+			if (renderer.handleComponentInteraction(interaction)) return
+		}
+	}
 
-  private get maxInstances() {
-    return this.config.maxInstances ?? 50
-  }
+	private get maxInstances() {
+		return this.config.maxInstances ?? 50
+	}
 
-  protected createInstance(renderer: Renderer, initialContent?: ReactNode) {
-    if (this.renderers.length > this.maxInstances) {
-      this.deactivate(this.renderers[0]!)
-    }
+	protected createInstance(renderer: Renderer, initialContent?: ReactNode) {
+		if (this.renderers.length > this.maxInstances) {
+			this.deactivate(this.renderers[0]!)
+		}
 
-    this.renderers.push(renderer)
+		this.renderers.push(renderer)
 
-    const container = reconciler.createContainer(
-      renderer,
-      0,
-      // eslint-disable-next-line unicorn/no-null
-      null,
-      false,
-      // eslint-disable-next-line unicorn/no-null
-      null,
-      "reacord",
-      () => {},
-      // eslint-disable-next-line unicorn/no-null
-      null,
-    )
+		const container = reconciler.createContainer(
+			renderer,
+			0,
+			null,
+			false,
+			null,
+			"reacord",
+			() => {},
+			null,
+		)
 
-    const instance: ReacordInstance = {
-      render: (content: ReactNode) => {
-        reconciler.updateContainer(
-          <InstanceProvider value={instance}>{content}</InstanceProvider>,
-          container,
-        )
-      },
-      deactivate: () => {
-        this.deactivate(renderer)
-      },
-      destroy: () => {
-        this.renderers = this.renderers.filter((it) => it !== renderer)
-        renderer.destroy()
-      },
-    }
+		const instance: ReacordInstance = {
+			render: (content: ReactNode) => {
+				reconciler.updateContainer(
+					<InstanceProvider value={instance}>{content}</InstanceProvider>,
+					container,
+				)
+			},
+			deactivate: () => {
+				this.deactivate(renderer)
+			},
+			destroy: () => {
+				this.renderers = this.renderers.filter((it) => it !== renderer)
+				renderer.destroy()
+			},
+		}
 
-    if (initialContent !== undefined) {
-      instance.render(initialContent)
-    }
+		if (initialContent !== undefined) {
+			instance.render(initialContent)
+		}
 
-    return instance
-  }
+		return instance
+	}
 
-  private deactivate(renderer: Renderer) {
-    this.renderers = this.renderers.filter((it) => it !== renderer)
-    renderer.deactivate()
-  }
+	private deactivate(renderer: Renderer) {
+		this.renderers = this.renderers.filter((it) => it !== renderer)
+		renderer.deactivate()
+	}
 }

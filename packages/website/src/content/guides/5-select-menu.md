@@ -10,40 +10,40 @@ To create a select menu, use the `Select` component, and pass a list of `Option`
 
 ```jsx
 export function FruitSelect({ onConfirm }) {
-  const [value, setValue] = useState()
+	const [value, setValue] = useState()
 
-  return (
-    <>
-      <Select
-        placeholder="choose a fruit"
-        value={value}
-        onChangeValue={setValue}
-      >
-        <Option value="🍎" />
-        <Option value="🍌" />
-        <Option value="🍒" />
-      </Select>
-      <Button
-        label="confirm"
-        disabled={value == undefined}
-        onClick={() => {
-          if (value) onConfirm(value)
-        }}
-      />
-    </>
-  )
+	return (
+		<>
+			<Select
+				placeholder="choose a fruit"
+				value={value}
+				onChangeValue={setValue}
+			>
+				<Option value="🍎" />
+				<Option value="🍌" />
+				<Option value="🍒" />
+			</Select>
+			<Button
+				label="confirm"
+				disabled={value == undefined}
+				onClick={() => {
+					if (value) onConfirm(value)
+				}}
+			/>
+		</>
+	)
 }
 ```
 
 ```jsx
 const instance = reacord.send(
-  channelId,
-  <FruitSelect
-    onConfirm={(value) => {
-      instance.render(`you chose ${value}`)
-      instance.deactivate()
-    }}
-  />,
+	channelId,
+	<FruitSelect
+		onConfirm={(value) => {
+			instance.render(`you chose ${value}`)
+			instance.deactivate()
+		}}
+	/>,
 )
 ```
 
@@ -51,19 +51,19 @@ For a multi-select, use the `multiple` prop, then you can use `values` and `onCh
 
 ```tsx
 export function FruitSelect({ onConfirm }) {
-  const [values, setValues] = useState([])
+	const [values, setValues] = useState([])
 
-  return (
-    <Select
-      placeholder="choose a fruit"
-      values={values}
-      onChangeMultiple={setValues}
-    >
-      <Option value="🍎" />
-      <Option value="🍌" />
-      <Option value="🍒" />
-    </Select>
-  )
+	return (
+		<Select
+			placeholder="choose a fruit"
+			values={values}
+			onChangeMultiple={setValues}
+		>
+			<Option value="🍎" />
+			<Option value="🍌" />
+			<Option value="🍒" />
+		</Select>
+	)
 }
 ```
 

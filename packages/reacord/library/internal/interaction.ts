@@ -8,28 +8,28 @@ export type ComponentInteraction = ButtonInteraction | SelectInteraction
 export type CommandInteraction = BaseInteraction<"command">
 
 export type ButtonInteraction = BaseComponentInteraction<
-  "button",
-  ButtonClickEvent
+	"button",
+	ButtonClickEvent
 >
 
 export type SelectInteraction = BaseComponentInteraction<
-  "select",
-  SelectChangeEvent
+	"select",
+	SelectChangeEvent
 >
 
-export type BaseInteraction<Type extends string> = {
-  type: Type
-  id: string
-  reply(messageOptions: MessageOptions): Promise<Message>
-  followUp(messageOptions: MessageOptions): Promise<Message>
+export interface BaseInteraction<Type extends string> {
+	type: Type
+	id: string
+	reply(messageOptions: MessageOptions): Promise<Message>
+	followUp(messageOptions: MessageOptions): Promise<Message>
 }
 
 export type BaseComponentInteraction<
-  Type extends string,
-  Event extends ComponentEvent,
+	Type extends string,
+	Event extends ComponentEvent,
 > = BaseInteraction<Type> & {
-  event: Event
-  customId: string
-  update(options: MessageOptions): Promise<void>
-  deferUpdate(): Promise<void>
+	event: Event
+	customId: string
+	update(options: MessageOptions): Promise<void>
+	deferUpdate(): Promise<void>
 }

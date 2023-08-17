@@ -1,0 +1,35 @@
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  TEST_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
+  TEST_CHANNEL_ID: ${{ secrets.TEST_CHANNEL_ID }}
+  TEST_GUILD_ID: ${{ secrets.TEST_GUILD_ID }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        script: ["prettier", "eslint", "tsc", "tsc-root"]
+    name: lint (${{ matrix.script }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint:${{ matrix.script }}

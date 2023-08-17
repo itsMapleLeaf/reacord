@@ -1,93 +1,90 @@
 {
-  "name": "reacord",
-  "type": "module",
-  "description": "Create interactive Discord messages using React.",
-  "version": "0.5.2",
-  "types": "./dist/main.d.ts",
-  "homepage": "https://reacord.mapleleaf.dev",
-  "repository": "https://github.com/itsMapleLeaf/reacord.git",
-  "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
-  "license": "MIT",
-  "keywords": [
-    "discord",
-    "discord-js",
-    "react",
-    "react-js",
-    "react-renderer",
-    "interaction",
-    "message",
-    "embed",
-    "reacord"
-  ],
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/main.js",
-      "require": "./dist/main.cjs",
-      "types": "./dist/main.d.ts"
-    },
-    "./package.json": {
-      "import": "./package.json",
-      "require": "./package.json"
-    }
-  },
-  "scripts": {
-    "build": "cp ../../README.md . && cp ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --dts --sourcemap",
-    "build-watch": "pnpm build -- --watch",
-    "test": "vitest --coverage --no-watch",
-    "test-dev": "vitest",
-    "test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx"
-  },
-  "dependencies": {
-    "@types/node": "*",
-    "@types/react": "*",
-    "@types/react-reconciler": "^0.28.0",
-    "react-reconciler": "^0.29.0",
-    "rxjs": "^7.5.6"
-  },
-  "peerDependencies": {
-    "discord.js": "^14",
-    "react": ">=17"
-  },
-  "peerDependenciesMeta": {
-    "discord.js": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "@reacord/helpers": "workspace:*",
-    "@types/lodash-es": "^4.17.6",
-    "c8": "^7.12.0",
-    "discord.js": "^14.0.3",
-    "dotenv": "^16.0.1",
-    "lodash-es": "^4.17.21",
-    "nodemon": "^2.0.19",
-    "prettier": "^2.7.1",
-    "pretty-ms": "^8.0.0",
-    "react": "^18.2.0",
-    "tsup": "^6.1.3",
-    "tsx": "^3.8.0",
-    "type-fest": "^2.17.0",
-    "typescript": "^4.7.4",
-    "vitest": "^0.18.1"
-  },
-  "resolutions": {
-    "esbuild": "latest"
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "release v${version}"
-    },
-    "github": {
-      "release": true,
-      "web": true
-    }
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "reacord",
+	"type": "module",
+	"description": "Create interactive Discord messages using React.",
+	"version": "0.5.2",
+	"types": "./dist/main.d.ts",
+	"homepage": "https://reacord.mapleleaf.dev",
+	"repository": "https://github.com/itsMapleLeaf/reacord.git",
+	"changelog": "https://github.com/itsMapleLeaf/reacord/releases",
+	"license": "MIT",
+	"keywords": [
+		"discord",
+		"discord-js",
+		"react",
+		"react-js",
+		"react-renderer",
+		"interaction",
+		"message",
+		"embed",
+		"reacord"
+	],
+	"files": [
+		"library",
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/main.js",
+			"require": "./dist/main.cjs",
+			"types": "./library/main.ts"
+		},
+		"./package.json": {
+			"import": "./package.json",
+			"require": "./package.json"
+		}
+	},
+	"scripts": {
+		"build": "cpy ../../README.md ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --sourcemap",
+		"build-watch": "pnpm build -- --watch",
+		"test": "vitest --coverage --no-watch",
+		"test-dev": "vitest",
+		"test-manual": "nodemon --exec tsx --ext ts,tsx ./scripts/discordjs-manual-test.tsx"
+	},
+	"dependencies": {
+		"@types/node": "^20.5.0",
+		"@types/react": "^18.2.20",
+		"@types/react-reconciler": "^0.28.2",
+		"react-reconciler": "^0.29.0",
+		"rxjs": "^7.8.1"
+	},
+	"peerDependencies": {
+		"discord.js": "^14",
+		"react": ">=17"
+	},
+	"peerDependenciesMeta": {
+		"discord.js": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@reacord/helpers": "workspace:*",
+		"@types/lodash-es": "^4.17.8",
+		"c8": "^8.0.1",
+		"cpy-cli": "^5.0.0",
+		"discord.js": "^14.12.1",
+		"dotenv": "^16.3.1",
+		"lodash-es": "^4.17.21",
+		"nodemon": "^3.0.1",
+		"prettier": "^3.0.2",
+		"pretty-ms": "^8.0.0",
+		"react": "^18.2.0",
+		"tsup": "^7.2.0",
+		"tsx": "^3.12.7",
+		"type-fest": "^4.2.0"
+	},
+	"release-it": {
+		"git": {
+			"commitMessage": "release v${version}"
+		},
+		"github": {
+			"release": true,
+			"web": true
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

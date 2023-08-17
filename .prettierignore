@@ -1,7 +1,2 @@
-node_modules
-dist
-coverage
 pnpm-lock.yaml
-build
-.cache
-packages/website/public/api
+/packages/website/public/api

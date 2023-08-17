@@ -3,45 +3,45 @@
 @tailwind utilities;
 
 @layer base {
-  :focus {
-    @apply outline-none;
-  }
-  :focus-visible {
-    @apply ring-2 ring-emerald-500 ring-inset;
-  }
+	:focus {
+		@apply outline-none;
+	}
+	:focus-visible {
+		@apply ring-2 ring-inset ring-emerald-500;
+	}
 
-  pre,
-  code {
-    font-variant-ligatures: none;
-  }
+	pre,
+	code {
+		font-variant-ligatures: none;
+	}
 }
 
 @layer components {
-  .container {
-    @apply mx-auto w-full max-w-screen-lg px-4;
-  }
+	.container {
+		@apply mx-auto w-full max-w-screen-lg px-4;
+	}
 
-  .inline-icon {
-    @apply inline w-5 align-sub;
-  }
+	.inline-icon {
+		@apply inline w-5 align-sub;
+	}
 
-  .link {
-    @apply font-medium inline-block relative opacity-60 hover:opacity-100 transition-opacity;
-  }
-  .link::after {
-    @apply content-[''] bottom-[-2px] absolute block w-full h-px bg-current translate-y-[3px] opacity-0 transition;
-  }
-  .link:hover::after {
-    @apply -translate-y-px opacity-50;
-  }
-  .link-active {
-    @apply text-emerald-500 opacity-100;
-  }
+	.link {
+		@apply relative inline-block font-medium opacity-60 transition-opacity hover:opacity-100;
+	}
+	.link::after {
+		@apply absolute bottom-[-2px] block h-px w-full translate-y-[3px] bg-current opacity-0 transition content-[''];
+	}
+	.link:hover::after {
+		@apply -translate-y-px opacity-50;
+	}
+	.link-active {
+		@apply text-emerald-500 opacity-100;
+	}
 
-  .button {
-    @apply inline-block mt-4 px-4 py-2.5 text-xl transition rounded-lg bg-black/25 hover:bg-black/40 hover:-translate-y-0.5 hover:shadow active:translate-y-0 active:transition-none;
-  }
-  .button-solid {
-    @apply bg-emerald-700 hover:bg-emerald-800;
-  }
+	.button {
+		@apply mt-4 inline-block rounded-lg bg-black/25 px-4 py-2.5 text-xl transition hover:-translate-y-0.5 hover:bg-black/40 hover:shadow active:translate-y-0 active:transition-none;
+	}
+	.button-solid {
+		@apply bg-emerald-700 hover:bg-emerald-800;
+	}
 }

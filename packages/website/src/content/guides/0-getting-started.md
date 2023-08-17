@@ -38,7 +38,7 @@ const client = new Client()
 const reacord = new ReacordDiscordJs(client)
 
 client.on("ready", () => {
-  console.log("Ready!")
+	console.log("Ready!")
 })
 
 await client.login(process.env.BOT_TOKEN)

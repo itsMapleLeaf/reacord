@@ -1,20 +1,21 @@
-/* eslint-disable class-methods-use-this */
 import { Container } from "./container.js"
 import type { ComponentInteraction } from "./interaction"
 import type { MessageOptions } from "./message"
 
 export abstract class Node<Props> {
-  readonly children = new Container<Node<unknown>>()
+	readonly children = new Container<Node<unknown>>()
 
-  constructor(public props: Props) {}
+	constructor(public props: Props) {}
 
-  modifyMessageOptions(options: MessageOptions) {}
+	modifyMessageOptions(_options: MessageOptions) {
+		// noop
+	}
 
-  handleComponentInteraction(interaction: ComponentInteraction): boolean {
-    return false
-  }
+	handleComponentInteraction(_interaction: ComponentInteraction): boolean {
+		return false
+	}
 
-  get text(): string {
-    return [...this.children].map((child) => child.text).join("")
-  }
+	get text(): string {
+		return [...this.children].map((child) => child.text).join("")
+	}
 }

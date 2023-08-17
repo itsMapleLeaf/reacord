@@ -12,7 +12,7 @@ You can send messages via Reacord to a channel like so.
 const channelId = "abc123deadbeef"
 
 client.on("ready", () => {
-  reacord.send(channelId, "Hello, world!")
+	reacord.send(channelId, "Hello, world!")
 })
 ```
 
@@ -22,21 +22,21 @@ Components rendered through this instance can include state and effects, and the
 
 ```jsx
 function Uptime() {
-  const [startTime] = useState(Date.now())
-  const [currentTime, setCurrentTime] = useState(Date.now())
+	const [startTime] = useState(Date.now())
+	const [currentTime, setCurrentTime] = useState(Date.now())
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(Date.now())
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentTime(Date.now())
+		}, 3000)
+		return () => clearInterval(interval)
+	}, [])
 
-  return <>this message has been shown for {currentTime - startTime}ms</>
+	return <>this message has been shown for {currentTime - startTime}ms</>
 }
 
 client.on("ready", () => {
-  reacord.send(channelId, <Uptime />)
+	reacord.send(channelId, <Uptime />)
 })
 ```
 
@@ -46,9 +46,9 @@ The instance can be rendered to multiple times, which will update the message ea
 const Hello = ({ subject }) => <>Hello, {subject}!</>
 
 client.on("ready", () => {
-  const instance = reacord.send(channel)
-  instance.render(<Hello subject="World" />)
-  instance.render(<Hello subject="Moon" />)
+	const instance = reacord.send(channel)
+	instance.render(<Hello subject="World" />)
+	instance.render(<Hello subject="Moon" />)
 })
 ```
 
@@ -63,9 +63,9 @@ By default, Reacord has a max limit on the number of active instances, and deact
 
 ```js
 const reacord = new ReacordDiscordJs(client, {
-  // after sending four messages,
-  // the first one will be deactivated
-  maxInstances: 3,
+	// after sending four messages,
+	// the first one will be deactivated
+	maxInstances: 3,
 })
 ```
 
@@ -79,24 +79,24 @@ To reply to a command interaction, use the `.reply()` function. This function re
 
 ```jsx
 import { Client } from "discord.js"
-import * as React from "react"
 import { Button, ReacordDiscordJs } from "reacord"
+import * as React from "react"
 
 const client = new Client({ intents: [] })
 const reacord = new ReacordDiscordJs(client)
 
 client.on("ready", () => {
-  client.application?.commands.create({
-    name: "ping",
-    description: "pong!",
-  })
+	client.application?.commands.create({
+		name: "ping",
+		description: "pong!",
+	})
 })
 
 client.on("interactionCreate", (interaction) => {
-  if (interaction.isCommand() && interaction.commandName === "ping") {
-    // Use the reply() function instead of send
-    reacord.reply(interaction, <>pong!</>)
-  }
+	if (interaction.isCommand() && interaction.commandName === "ping") {
+		// Use the reply() function instead of send
+		reacord.reply(interaction, <>pong!</>)
+	}
 })
 
 client.login(process.env.DISCORD_TOKEN)
@@ -110,40 +110,40 @@ However, the process of creating commands can get really repetitive and error-pr
 
 ```jsx
 function handleCommands(client, commands) {
-  client.on("ready", () => {
-    for (const { name, description } of commands) {
-      client.application?.commands.create({ name, description })
-    }
-  })
+	client.on("ready", () => {
+		for (const { name, description } of commands) {
+			client.application?.commands.create({ name, description })
+		}
+	})
 
-  client.on("interactionCreate", (interaction) => {
-    if (interaction.isCommand()) {
-      for (const command of commands) {
-        if (interaction.commandName === command.name) {
-          command.run(interaction)
-        }
-      }
-    }
-  })
+	client.on("interactionCreate", (interaction) => {
+		if (interaction.isCommand()) {
+			for (const command of commands) {
+				if (interaction.commandName === command.name) {
+					command.run(interaction)
+				}
+			}
+		}
+	})
 }
 ```
 
 ```jsx
 handleCommands(client, [
-  {
-    name: "ping",
-    description: "pong!",
-    run: (interaction) => {
-      reacord.reply(interaction, <>pong!</>)
-    },
-  },
-  {
-    name: "hi",
-    description: "say hi",
-    run: (interaction) => {
-      reacord.reply(interaction, <>hi</>)
-    },
-  },
+	{
+		name: "ping",
+		description: "pong!",
+		run: (interaction) => {
+			reacord.reply(interaction, <>pong!</>)
+		},
+	},
+	{
+		name: "hi",
+		description: "say hi",
+		run: (interaction) => {
+			reacord.reply(interaction, <>hi</>)
+		},
+	},
 ])
 ```
 
@@ -153,13 +153,13 @@ Ephemeral replies are replies that only appear for one user. To create them, use
 
 ```tsx
 handleCommands(client, [
-  {
-    name: "pong",
-    description: "pong, but in secret",
-    run: (interaction) => {
-      reacord.ephemeralReply(interaction, <>(pong)</>)
-    },
-  },
+	{
+		name: "pong",
+		description: "pong, but in secret",
+		run: (interaction) => {
+			reacord.ephemeralReply(interaction, <>(pong)</>)
+		},
+	},
 ])
 ```
 

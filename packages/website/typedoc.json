@@ -1,22 +1,22 @@
 {
-  "entryPoints": ["../reacord/library/main.ts"],
-  "out": ["public/api"],
-  "tsconfig": "../reacord/tsconfig.json",
-  "excludeInternal": true,
-  "excludePrivate": true,
-  "excludeProtected": true,
-  "categorizeByGroup": false,
-  "preserveWatchOutput": true,
-  "githubPages": false,
-  "readme": "none",
-  "categoryOrder": [
-    "Core",
-    "Embed",
-    "Button",
-    "Link",
-    "Select",
-    "Action Row",
-    "Component Event",
-    "*"
-  ]
+	"entryPoints": ["../reacord/library/main.ts"],
+	"out": ["public/api"],
+	"tsconfig": "../reacord/tsconfig.json",
+	"excludeInternal": true,
+	"excludePrivate": true,
+	"excludeProtected": true,
+	"categorizeByGroup": false,
+	"preserveWatchOutput": true,
+	"githubPages": false,
+	"readme": "none",
+	"categoryOrder": [
+		"Core",
+		"Embed",
+		"Button",
+		"Link",
+		"Select",
+		"Action Row",
+		"Component Event",
+		"*"
+	]
 }

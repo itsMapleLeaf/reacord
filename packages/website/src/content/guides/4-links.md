@@ -12,12 +12,12 @@ In Discord, links are a type of button, and they work similarly. Clicking on it 
 import { Link } from "reacord"
 
 function AwesomeLinks() {
-  return (
-    <>
-      <Link label="look at this" url="https://google.com" />
-      <Link label="wow" url="https://youtube.com/watch?v=dQw4w9WgXcQ" />
-    </>
-  )
+	return (
+		<>
+			<Link label="look at this" url="https://google.com" />
+			<Link label="wow" url="https://youtube.com/watch?v=dQw4w9WgXcQ" />
+		</>
+	)
 }
 ```
 

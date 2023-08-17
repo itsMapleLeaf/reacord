@@ -5,8 +5,7 @@ coverage
 .env
 *.code-workspace
 .pnpm-debug.log
-
 build
 .cache
-
 .vercel
+*.tsbuildinfo

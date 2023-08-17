@@ -12,14 +12,14 @@ You can use `useInstance` to get the current [instance](/guides/sending-messages
 import { Button, useInstance } from "reacord"
 
 function SelfDestruct() {
-  const instance = useInstance()
-  return (
-    <Button
-      style="danger"
-      label="delete this"
-      onClick={() => instance.destroy()}
-    />
-  )
+	const instance = useInstance()
+	return (
+		<Button
+			style="danger"
+			label="delete this"
+			onClick={() => instance.destroy()}
+		/>
+	)
 }
 
 reacord.send(channelId, <SelfDestruct />)

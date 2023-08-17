@@ -12,14 +12,14 @@ Use the `<Button />` component to create a message with a button, and use the `o
 import { Button } from "reacord"
 
 function Counter() {
-  const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0)
 
-  return (
-    <>
-      You've clicked the button {count} times.
-      <Button label="+1" onClick={() => setCount(count + 1)} />
-    </>
-  )
+	return (
+		<>
+			You've clicked the button {count} times.
+			<Button label="+1" onClick={() => setCount(count + 1)} />
+		</>
+	)
 }
 ```
 
@@ -29,17 +29,17 @@ The `onClick` callback receives an `event` object. It includes some information,
 import { Button } from "reacord"
 
 function TheButton() {
-  function handleClick(event) {
-    const name = event.guild.member.displayName || event.user.username
+	function handleClick(event) {
+		const name = event.guild.member.displayName || event.user.username
 
-    const publicReply = event.reply(`${name} clicked the button. wow`)
-    setTimeout(() => publicReply.destroy(), 3000)
+		const publicReply = event.reply(`${name} clicked the button. wow`)
+		setTimeout(() => publicReply.destroy(), 3000)
 
-    const privateReply = event.ephemeralReply("good job, you clicked it")
-    privateReply.deactivate() // we don't need to listen to updates on this
-  }
+		const privateReply = event.ephemeralReply("good job, you clicked it")
+		privateReply.deactivate() // we don't need to listen to updates on this
+	}
 
-  return <Button label="click me i dare you" onClick={handleClick} />
+	return <Button label="click me i dare you" onClick={handleClick} />
 }
 ```
 

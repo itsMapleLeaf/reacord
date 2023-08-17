@@ -1,6 +1,6 @@
-import { raise } from "@reacord/helpers/raise"
+import type { ReacordInstance } from "./instance.js"
+import { raise } from "@reacord/helpers/raise.js"
 import * as React from "react"
-import type { ReacordInstance } from "./instance"
 
 const Context = React.createContext<ReacordInstance | undefined>(undefined)
 
@@ -13,8 +13,8 @@ export const InstanceProvider = Context.Provider
  * @see https://reacord.mapleleaf.dev/guides/use-instance
  */
 export function useInstance(): ReacordInstance {
-  return (
-    React.useContext(Context) ??
-    raise("Could not find instance, was this component rendered via Reacord?")
-  )
+	return (
+		React.useContext(Context) ??
+		raise("Could not find instance, was this component rendered via Reacord?")
+	)
 }

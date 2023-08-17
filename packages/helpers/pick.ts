@@ -1,15 +1,11 @@
-import type { LoosePick, UnknownRecord } from "./types"
+import type { LoosePick } from "./types"
 
-export function pick<T, K extends keyof T | PropertyKey>(
-  object: T,
-  keys: K[],
-): LoosePick<T, K> {
-  const result: any = {}
-  for (const key of keys) {
-    const value = (object as UnknownRecord)[key]
-    if (value !== undefined) {
-      result[key] = value
-    }
-  }
-  return result
+export function pick<T extends object, K extends keyof T | PropertyKey>(
+	object: T,
+	keys: K[],
+) {
+	const keySet = new Set<PropertyKey>(keys)
+	return Object.fromEntries(
+		Object.entries(object).filter(([key]) => keySet.has(key)),
+	) as LoosePick<T, K>
 }
