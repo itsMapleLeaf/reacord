@@ -394,7 +394,7 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
 		})),
 	}
 
-	if (!options.content && !options.embeds?.length) {
+	if (!options.content && !options.embeds.length) {
 		options.content = "_ _"
 	}
 

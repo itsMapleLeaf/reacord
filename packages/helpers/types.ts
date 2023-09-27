@@ -2,7 +2,7 @@ import { raise } from "./raise.ts"
 
 export type MaybePromise<T> = T | PromiseLike<T>
 
-export type ValueOf<Type> = Type extends readonly (infer Value)[]
+export type ValueOf<Type> = Type extends ReadonlyArray<infer Value>
 	? Value
 	: Type[keyof Type]
 
