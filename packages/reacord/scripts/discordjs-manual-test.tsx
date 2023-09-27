@@ -34,7 +34,7 @@ for (const [, channel] of category.children.cache) {
 let prefix = 0
 const createTest = async (
 	name: string,
-	block: (channel: TextChannel) => void | Promise<unknown>,
+	block: (channel: TextChannel) => unknown,
 ) => {
 	prefix += 1
 	const channel = await category.children.create({

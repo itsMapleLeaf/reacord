@@ -374,6 +374,8 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
 						}
 					}
 
+					// future proofing
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					if (component.type === "select") {
 						return {
 							...component,

@@ -35,6 +35,7 @@ export function LandingAnimation() {
 		let running = true
 
 		void (async () => {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			while (running) {
 				setState(defaultState)
 				await delay(700)
@@ -102,6 +103,7 @@ export function LandingAnimation() {
 		let running = true
 
 		void (async () => {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			while (running) {
 				// check if the cursor is in the input
 				const cursorRect = cursorRef.current!.getBoundingClientRect()

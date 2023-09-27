@@ -38,6 +38,10 @@
       "node_modules",
       "dist",
       "packages/website/public/api"
-    ]
+    ],
+    "rules": {
+      "@typescript-eslint/no-non-null-assertion": "warn",
+      "@typescript-eslint/require-await": "off"
+    }
   }
 }

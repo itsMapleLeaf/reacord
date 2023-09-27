@@ -18,5 +18,6 @@ export async function waitFor<Result>(
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
 	throw lastError ?? new Error("Timeout")
 }
