@@ -1,42 +1,53 @@
 {
-	"name": "reacord-monorepo",
-	"private": true,
-	"scripts": {
-		"lint": "run-p --print-label --continue-on-error --silent lint:*",
-		"lint:prettier": "prettier --cache --check .",
-		"lint:eslint": "pnpm astro-sync && eslint . --report-unused-disable-directives",
-		"lint:tsc": "pnpm astro-sync && pnpm -r --parallel --no-bail exec tsc -b",
-		"lint:tsc-root": "tsc -b",
-		"astro-sync": "pnpm --filter website exec astro sync",
-		"format": "run-s --continue-on-error format:*",
-		"format:eslint": "eslint . --report-unused-disable-directives --fix",
-		"format:prettier": "prettier --cache --write .",
-		"test": "vitest",
-		"build": "pnpm -r run build",
-		"build:website": "pnpm --filter website... run build",
-		"start": "pnpm -C packages/website run start",
-		"start:website": "pnpm -C packages/website run start",
-		"release": "pnpm -r run build && changeset publish"
-	},
-	"devDependencies": {
-		"@changesets/cli": "^2.26.2",
-		"@itsmapleleaf/configs": "^3.0.1",
-		"@types/eslint": "^8.44.2",
-		"@typescript-eslint/eslint-plugin": "^6.4.0",
-		"@typescript-eslint/parser": "^6.4.0",
-		"eslint": "^8.47.0",
-		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-astro": "^0.28.0",
-		"eslint-plugin-react": "^7.33.2",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"npm-run-all": "^4.1.5",
-		"prettier": "^3.0.2",
-		"prettier-plugin-astro": "^0.11.1",
-		"prettier-plugin-jsdoc": "^1.0.1",
-		"prettier-plugin-tailwindcss": "^0.5.3",
-		"react": "^18.2.0",
-		"tailwindcss": "^3.3.3",
-		"typescript": "^5.1.6",
-		"vitest": "^0.34.1"
-	}
+  "name": "reacord-monorepo",
+  "private": true,
+  "scripts": {
+    "lint": "run-s --continue-on-error lint:*",
+    "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
+    "lint:prettier": "prettier . --write --cache",
+    "lint:types": "tsc -b & pnpm -r --parallel run typecheck",
+    "astro-sync": "pnpm --filter website exec astro sync",
+    "format": "run-s --continue-on-error format:*",
+    "format:eslint": "eslint . --report-unused-disable-directives --fix",
+    "format:prettier": "prettier --cache --write .",
+    "test": "vitest",
+    "build": "pnpm -r run build",
+    "build:website": "pnpm --filter website... run build",
+    "start": "pnpm -C packages/website run start",
+    "start:website": "pnpm -C packages/website run start",
+    "release": "pnpm -r run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
+    "@types/eslint": "^8.44.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-astro": "^0.28.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.2",
+    "prettier-plugin-astro": "^0.11.1",
+    "prettier-plugin-jsdoc": "^1.0.1",
+    "prettier-plugin-tailwindcss": "^0.5.3",
+    "react": "^18.2.0",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.1"
+  },
+  "prettier": "@itsmapleleaf/configs/prettier",
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@itsmapleleaf/configs/eslint.config.cjs",
+      "./node_modules/@itsmapleleaf/configs/eslint.config.react.cjs"
+    ],
+    "ignorePatterns": [
+      "node_modules",
+      "dist",
+      "packages/website/public/api"
+    ]
+  }
 }

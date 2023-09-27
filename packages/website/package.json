@@ -1,39 +1,40 @@
 {
-	"type": "module",
-	"name": "website",
-	"version": "0.4.3",
-	"private": true,
-	"sideEffects": false,
-	"scripts": {
-		"dev": "run-p --race --print-label dev:*",
-		"dev:typedoc": "typedoc --watch",
-		"dev:astro": "astro dev",
-		"start": "astro preview",
-		"build": "typedoc && astro build"
-	},
-	"dependencies": {
-		"@astrojs/prefetch": "^0.3.0",
-		"@astrojs/react": "^2.2.2",
-		"@fontsource/jetbrains-mono": "^4.5.12",
-		"@fontsource/rubik": "^4.5.14",
-		"@heroicons/react": "^2.0.18",
-		"@tailwindcss/typography": "^0.5.9",
-		"astro": "^2.10.9",
-		"clsx": "^2.0.0",
-		"reacord": "workspace:*",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"tailwind-merge": "^1.14.0"
-	},
-	"devDependencies": {
-		"@astrojs/tailwind": "^4.0.0",
-		"@total-typescript/ts-reset": "^0.4.2",
-		"@types/node": "^20.5.0",
-		"@types/react": "^18.2.20",
-		"@types/react-dom": "^18.2.7",
-		"npm-run-all": "^4.1.5",
-		"tailwindcss": "^3.3.3",
-		"typedoc": "^0.24.8",
-		"wait-on": "^7.0.1"
-	}
+  "type": "module",
+  "name": "website",
+  "version": "0.4.3",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "dev": "run-p --race --print-label dev:*",
+    "dev:typedoc": "typedoc --watch",
+    "dev:astro": "astro dev",
+    "start": "astro preview",
+    "build": "typedoc && astro build",
+    "typecheck": "astro check && tsc -b"
+  },
+  "dependencies": {
+    "@astrojs/prefetch": "^0.3.0",
+    "@astrojs/react": "^2.2.2",
+    "@fontsource/jetbrains-mono": "^4.5.12",
+    "@fontsource/rubik": "^4.5.14",
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/typography": "^0.5.9",
+    "astro": "^2.10.9",
+    "clsx": "^2.0.0",
+    "reacord": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^1.14.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^4.0.0",
+    "@total-typescript/ts-reset": "^0.4.2",
+    "@types/node": "^20.5.0",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "npm-run-all": "^4.1.5",
+    "tailwindcss": "^3.3.3",
+    "typedoc": "^0.24.8",
+    "wait-on": "^7.0.1"
+  }
 }
