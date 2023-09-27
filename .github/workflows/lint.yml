@@ -16,20 +16,21 @@ concurrency:
 
 jobs:
   lint:
-    strategy:
-      fail-fast: false
-      matrix:
-        script: ["prettier", "eslint", "tsc", "tsc-root"]
-    name: lint (${{ matrix.script }})
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
       - uses: pnpm/action-setup@v2
         with:
           version: 8
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint:${{ matrix.script }}
+      - run: pnpm run lint
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: true
