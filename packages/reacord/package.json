@@ -45,9 +45,9 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@types/node": "^20.5.0",
-    "@types/react": "^18.2.20",
-    "@types/react-reconciler": "^0.28.2",
+    "@types/node": "^20.7.0",
+    "@types/react": "^18.2.23",
+    "@types/react-reconciler": "^0.28.5",
     "react-reconciler": "^0.29.0",
     "rxjs": "^7.8.1"
   },
@@ -62,19 +62,19 @@
   },
   "devDependencies": {
     "@reacord/helpers": "workspace:*",
-    "@types/lodash-es": "^4.17.8",
+    "@types/lodash-es": "^4.17.9",
     "c8": "^8.0.1",
     "cpy-cli": "^5.0.0",
-    "discord.js": "^14.12.1",
+    "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "lodash-es": "^4.17.21",
     "nodemon": "^3.0.1",
-    "prettier": "^3.0.2",
+    "prettier": "^3.0.3",
     "pretty-ms": "^8.0.0",
     "react": "^18.2.0",
     "tsup": "^7.2.0",
-    "tsx": "^3.12.7",
-    "type-fest": "^4.2.0"
+    "tsx": "^3.13.0",
+    "type-fest": "^4.3.2"
   },
   "release-it": {
     "git": {

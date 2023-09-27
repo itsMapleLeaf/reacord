@@ -6,9 +6,9 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@types/lodash-es": "^4.17.8",
+    "@types/lodash-es": "^4.17.9",
     "lodash-es": "^4.17.21",
-    "type-fest": "^4.2.0",
-    "vitest": "^0.34.1"
+    "type-fest": "^4.3.2",
+    "vitest": "^0.34.5"
   }
 }
