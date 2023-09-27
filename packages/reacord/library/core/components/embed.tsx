@@ -1,6 +1,6 @@
 import { snakeCaseDeep } from "@reacord/helpers/convert-object-property-case"
 import { omit } from "@reacord/helpers/omit"
-import React from "react"
+import type React from "react"
 import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
@@ -17,7 +17,7 @@ export interface EmbedProps {
 	description?: string
 	url?: string
 	color?: number
-	fields?: { name: string; value: string; inline?: boolean }[]
+	fields?: Array<{ name: string; value: string; inline?: boolean }>
 	author?: { name: string; url?: string; iconUrl?: string }
 	thumbnail?: { url: string }
 	image?: { url: string }

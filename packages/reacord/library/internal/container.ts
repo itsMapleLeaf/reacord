@@ -26,7 +26,7 @@ export class Container<T> {
 	}
 
 	findType<U extends T>(
-		type: new (...args: NonNullable<unknown>[]) => U,
+		type: new (...args: Array<NonNullable<unknown>>) => U,
 	): U | undefined {
 		for (const item of this.items) {
 			if (item instanceof type) return item

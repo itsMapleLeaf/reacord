@@ -1,5 +1,5 @@
 import { setTimeout } from "node:timers/promises"
-import { MaybePromise } from "./types.ts"
+import type { MaybePromise } from "./types.ts"
 
 const maxTime = 1000
 
