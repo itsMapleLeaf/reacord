@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   tests:
-    name: tests - ${{ matrix.script }}
+    name: ${{ matrix.script }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
