@@ -374,6 +374,8 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
 						}
 					}
 
+					// future proofing
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					if (component.type === "select") {
 						return {
 							...component,
@@ -394,7 +396,7 @@ function getDiscordMessageOptions(reacordOptions: MessageOptions) {
 		})),
 	}
 
-	if (!options.content && !options.embeds?.length) {
+	if (!options.content && !options.embeds.length) {
 		options.content = "_ _"
 	}
 

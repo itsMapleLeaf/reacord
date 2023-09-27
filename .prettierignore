@@ -1,2 +1,3 @@
 pnpm-lock.yaml
 /packages/website/public/api
+.astro

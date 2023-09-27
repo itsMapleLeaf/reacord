@@ -1,5 +1,5 @@
 import { setTimeout } from "node:timers/promises"
-import { MaybePromise } from "./types.ts"
+import type { MaybePromise } from "./types.ts"
 
 const maxTime = 1000
 
@@ -18,5 +18,6 @@ export async function waitFor<Result>(
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
 	throw lastError ?? new Error("Timeout")
 }
