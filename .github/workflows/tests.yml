@@ -1,4 +1,4 @@
-name: unit test
+name: tests
 
 on:
   push:
@@ -15,16 +15,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  tests:
+    name: tests - ${{ matrix.script }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        script:
+          - lint
+          - build
+          - test
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
       - uses: pnpm/action-setup@v2
         with:
           version: 8
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+      - run: pnpm run ${{ matrix.script }}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: always()
