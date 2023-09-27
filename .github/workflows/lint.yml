@@ -16,7 +16,15 @@ concurrency:
 
 jobs:
   lint:
+    name: ${{ matrix.script }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        script:
+          - lint
+          - build
+          - test
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -31,6 +39,6 @@ jobs:
           node-version: 18
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint
+      - run: pnpm run ${{ matrix.script }}
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: true
+        if: always()
