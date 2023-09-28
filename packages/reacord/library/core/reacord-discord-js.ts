@@ -37,7 +37,7 @@ export class ReacordDiscordJs extends Reacord {
 		super(config)
 
 		client.on("interactionCreate", (interaction) => {
-			if (interaction.isButton() || interaction.isSelectMenu()) {
+			if (interaction.isButton() || interaction.isStringSelectMenu()) {
 				this.handleComponentInteraction(
 					this.createReacordComponentInteraction(interaction),
 				)
@@ -296,7 +296,7 @@ export class ReacordDiscordJs extends Reacord {
 			}
 		}
 
-		if (interaction.isSelectMenu()) {
+		if (interaction.isStringSelectMenu()) {
 			return {
 				...baseProps,
 				type: "select",
