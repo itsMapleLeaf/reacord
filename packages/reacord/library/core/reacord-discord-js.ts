@@ -245,7 +245,11 @@ export class ReacordDiscordJs extends Reacord {
 			id: interaction.id,
 			customId: interaction.customId,
 			update: async (options: MessageOptions) => {
-				await interaction.update(getDiscordMessageOptions(options))
+				if (interaction.deferred || interaction.replied) {
+					await interaction.message.edit(getDiscordMessageOptions(options))
+				} else {
+					await interaction.update(getDiscordMessageOptions(options))
+				}
 			},
 			deferUpdate: async () => {
 				if (interaction.replied || interaction.deferred) return
