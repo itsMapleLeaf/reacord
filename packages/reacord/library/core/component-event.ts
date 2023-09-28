@@ -97,6 +97,6 @@ export interface UserInfo {
 	username: string
 	discriminator: string
 	tag: string
-	avatarUrl: string
+	avatarUrl: string | null
 	accentColor?: number
 }

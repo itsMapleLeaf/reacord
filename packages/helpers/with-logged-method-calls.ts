@@ -17,7 +17,7 @@ export function withLoggedMethodCalls<T extends object>(value: T) {
 						)
 						.join(", ")})`,
 				)
-				return value.apply(target, values)
+				return value.apply(target, values) as unknown
 			}
 		},
 	}) as T

@@ -41,7 +41,7 @@ const config: HostConfig<
 			raise(`Missing createNode function`)
 		}
 
-		const node = props.createNode(props.props)
+		const node: unknown = props.createNode(props.props)
 		if (!(node instanceof Node)) {
 			raise(`createNode function did not return a Node`)
 		}

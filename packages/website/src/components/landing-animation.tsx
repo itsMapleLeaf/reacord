@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import blobComfyUrl from "~/assets/blob-comfy.png"
 import cursorIbeamUrl from "~/assets/cursor-ibeam.png"
 import cursorUrl from "~/assets/cursor.png"
+import { raise } from "@reacord/helpers/raise.ts"
 
 const defaultState = {
 	chatInputText: "",
@@ -70,7 +71,7 @@ export function LandingAnimation() {
 						count: state.count + 1,
 						chatInputCursorVisible: false,
 					}))
-					animateClick(addRef.current!)
+					animateClick(addRef.current ?? raise("addRef is null"))
 					await delay(700)
 				}
 
@@ -82,7 +83,7 @@ export function LandingAnimation() {
 				}))
 				await delay(1000)
 
-				animateClick(deleteRef.current!)
+				animateClick(deleteRef.current ?? raise("deleteRef is null"))
 				setState((state) => ({ ...state, messageVisible: false }))
 				await delay(1000)
 
@@ -105,16 +106,19 @@ export function LandingAnimation() {
 		void (async () => {
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			while (running) {
+				const cursor = cursorRef.current ?? raise("cursorRef is null")
+				const chatInput = chatInputRef.current ?? raise("chatInputRef is null")
+
 				// check if the cursor is in the input
-				const cursorRect = cursorRef.current!.getBoundingClientRect()
-				const chatInputRect = chatInputRef.current!.getBoundingClientRect()
+				const cursorRect = cursor.getBoundingClientRect()
+				const chatInputRect = chatInput.getBoundingClientRect()
 
 				const isOverInput =
 					cursorRef.current &&
 					chatInputRef.current &&
 					cursorRect.top + cursorRect.height / 2 > chatInputRect.top
 
-				cursorRef.current!.src = isOverInput ? cursorIbeamUrl : cursorUrl
+				cursor.src = isOverInput ? cursorIbeamUrl : cursorUrl
 
 				await animationFrame()
 			}

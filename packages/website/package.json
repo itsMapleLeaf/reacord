@@ -18,6 +18,7 @@
     "@fontsource/jetbrains-mono": "^4.5.12",
     "@fontsource/rubik": "^4.5.14",
     "@heroicons/react": "^2.0.18",
+    "@reacord/helpers": "workspace:^",
     "@tailwindcss/typography": "^0.5.10",
     "astro": "^2.10.9",
     "clsx": "^2.0.0",

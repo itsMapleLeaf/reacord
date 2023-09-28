@@ -8,7 +8,9 @@ export function pruneNullishValues<T>(input: T): PruneNullishValues<T> {
 	if (Array.isArray(input)) {
 		return input
 			.filter(Boolean)
-			.map((item) => pruneNullishValues(item)) as PruneNullishValues<T>
+			.map(
+				(item) => pruneNullishValues(item) as unknown,
+			) as PruneNullishValues<T>
 	}
 
 	const result: Record<string, unknown> = {}

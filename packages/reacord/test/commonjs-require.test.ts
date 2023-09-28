@@ -8,5 +8,5 @@ beforeAll(() => {
 
 test("can require commonjs", () => {
 	const require = createRequire(import.meta.url)
-	expect(() => require("../dist/main.cjs")).not.toThrow()
+	expect(() => require("../dist/main.cjs") as unknown).not.toThrow()
 })

@@ -37,7 +37,7 @@ export class ReacordDiscordJs extends Reacord {
 		super(config)
 
 		client.on("interactionCreate", (interaction) => {
-			if (interaction.isButton() || interaction.isSelectMenu()) {
+			if (interaction.isButton() || interaction.isStringSelectMenu()) {
 				this.handleComponentInteraction(
 					this.createReacordComponentInteraction(interaction),
 				)
@@ -237,7 +237,7 @@ export class ReacordDiscordJs extends Reacord {
 			...pruneNullishValues(
 				pick(interaction.user, ["id", "username", "discriminator", "tag"]),
 			),
-			avatarUrl: interaction.user.avatarURL()!,
+			avatarUrl: interaction.user.avatarURL(),
 			accentColor: interaction.user.accentColor ?? undefined,
 		}
 
@@ -245,7 +245,11 @@ export class ReacordDiscordJs extends Reacord {
 			id: interaction.id,
 			customId: interaction.customId,
 			update: async (options: MessageOptions) => {
-				await interaction.update(getDiscordMessageOptions(options))
+				if (interaction.deferred || interaction.replied) {
+					await interaction.message.edit(getDiscordMessageOptions(options))
+				} else {
+					await interaction.update(getDiscordMessageOptions(options))
+				}
 			},
 			deferUpdate: async () => {
 				if (interaction.replied || interaction.deferred) return
@@ -292,7 +296,7 @@ export class ReacordDiscordJs extends Reacord {
 			}
 		}
 
-		if (interaction.isSelectMenu()) {
+		if (interaction.isStringSelectMenu()) {
 			return {
 				...baseProps,
 				type: "select",

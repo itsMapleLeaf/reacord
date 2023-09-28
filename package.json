@@ -9,7 +9,7 @@
     "astro-sync": "pnpm --filter website exec astro sync",
     "format": "run-s --continue-on-error format:*",
     "format:eslint": "eslint . --report-unused-disable-directives --fix",
-    "format:prettier": "prettier --cache --write .",
+    "format:prettier": "prettier --cache --write . \"**/*.astro\"",
     "test": "vitest",
     "build": "pnpm -r run build",
     "build:website": "pnpm --filter website... run build",

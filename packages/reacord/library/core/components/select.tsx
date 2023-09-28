@@ -11,6 +11,7 @@ import type {
 import { Node } from "../../internal/node.js"
 import type { ComponentEvent } from "../component-event"
 import { OptionNode } from "./option-node"
+import { omit } from "@reacord/helpers/omit.js"
 
 /** @category Select */
 export interface SelectProps {
@@ -102,12 +103,13 @@ class SelectNode extends Node<SelectProps> {
 			values,
 			minValues = 0,
 			maxValues = 25,
-			children,
-			onChange,
-			onChangeValue,
-			onChangeMultiple,
 			...props
-		} = this.props
+		} = omit(this.props, [
+			"children",
+			"onChange",
+			"onChangeValue",
+			"onChangeMultiple",
+		])
 
 		const item: ActionRowItem = {
 			...props,
