@@ -1,5 +1,12 @@
 # website
 
+## 0.4.5
+
+### Patch Changes
+
+- Updated dependencies [41c87e3]
+  - reacord@0.5.4
+
 ## 0.4.4
 
 ### Patch Changes
