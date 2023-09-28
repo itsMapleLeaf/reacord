@@ -47,14 +47,12 @@ export abstract class Renderer {
 	}
 
 	handleComponentInteraction(interaction: ComponentInteraction) {
-		this.componentInteraction = interaction
-
-		setTimeout(() => {
-			this.updates.next({ action: "deferUpdate", interaction })
-		}, 500)
-
 		for (const node of this.nodes) {
 			if (node.handleComponentInteraction(interaction)) {
+				this.componentInteraction = interaction
+				setTimeout(() => {
+					this.updates.next({ action: "deferUpdate", interaction })
+				}, 500)
 				return true
 			}
 		}
