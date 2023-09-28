@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import { ReacordElement } from "../../internal/element.js"
 import type { MessageOptions } from "../../internal/message"
 import { Node } from "../../internal/node.js"
+import type { ComponentInteraction } from "../../internal/interaction.js"
 
 /**
  * Props for an action row
@@ -43,5 +44,13 @@ class ActionRowNode extends Node<ActionRowProps> {
 		for (const child of this.children) {
 			child.modifyMessageOptions(options)
 		}
+	}
+	handleComponentInteraction(interaction: ComponentInteraction) {
+		for (const child of this.children) {
+			if (child.handleComponentInteraction(interaction)) {
+				return true
+			}
+		}
+		return false
 	}
 }
