@@ -1,5 +1,14 @@
 # reacord
 
+## 0.5.3
+
+### Patch Changes
+
+- 104b175: ensure message is edited from arbitrary component updates
+- 156cf90: fix interaction handling
+- 0bab505: fix DJS deprecation warning on isStringSelectMenu
+- d76f316: ensure action rows handle child interactions
+
 ## 0.5.2
 
 ### Patch Changes
