@@ -237,7 +237,7 @@ export class ReacordDiscordJs extends Reacord {
 			...pruneNullishValues(
 				pick(interaction.user, ["id", "username", "discriminator", "tag"]),
 			),
-			avatarUrl: interaction.user.avatarURL()!,
+			avatarUrl: interaction.user.avatarURL(),
 			accentColor: interaction.user.accentColor ?? undefined,
 		}
 

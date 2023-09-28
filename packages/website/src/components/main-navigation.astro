@@ -1,8 +1,8 @@
 ---
 import {
-  ArrowTopRightOnSquareIcon,
-  CodeBracketIcon,
-  DocumentTextIcon,
+	ArrowTopRightOnSquareIcon,
+	CodeBracketIcon,
+	DocumentTextIcon,
 } from "@heroicons/react/20/solid"
 import { Bars3Icon } from "@heroicons/react/24/outline"
 import { getCollection } from "astro:content"
@@ -12,69 +12,70 @@ import MenuItem from "./menu-item.astro"
 import Menu from "./menu.astro"
 
 const links = [
-  {
-    href: "/guides/getting-started",
-    label: "Guides",
-    icon: DocumentTextIcon,
-    component: "a",
-    prefetch: true,
-  },
-  {
-    href: "/api/",
-    label: "API Reference",
-    icon: CodeBracketIcon,
-    component: "a",
-  },
-  {
-    href: "https://github.com/itsMapleLeaf/reacord",
-    label: "GitHub",
-    icon: ArrowTopRightOnSquareIcon,
-    component: ExternalLink,
-  },
+	{
+		href: "/guides/getting-started",
+		label: "Guides",
+		icon: DocumentTextIcon,
+		component: "a",
+		prefetch: true,
+	},
+	{
+		href: "/api/",
+		label: "API Reference",
+		icon: CodeBracketIcon,
+		component: "a",
+	},
+	{
+		href: "https://github.com/itsMapleLeaf/reacord",
+		label: "GitHub",
+		icon: ArrowTopRightOnSquareIcon,
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		component: ExternalLink,
+	},
 ]
 
 const guides = await getCollection("guides")
 ---
 
-<nav class="flex justify-between items-center h-16">
-  <a href="/">
-    <AppLogo class="w-32" />
-    <span class="sr-only">Home</span>
-  </a>
-  <div class="hidden md:flex gap-4">
-    {
-      links.map((link) => (
-        <link.component
-          href={link.href}
-          class="link inline-flex gap-1 items-center"
-          rel={link.prefetch ? "prefetch" : undefined}
-        >
-          <link.icon className="inline-icon" />
-          {link.label}
-        </link.component>
-      ))
-    }
-  </div>
+<nav class="flex h-16 items-center justify-between">
+	<a href="/">
+		<AppLogo class="w-32" />
+		<span class="sr-only">Home</span>
+	</a>
+	<div class="hidden gap-4 md:flex">
+		{
+			links.map((link) => (
+				<link.component
+					href={link.href}
+					class="link inline-flex items-center gap-1"
+					rel={link.prefetch ? "prefetch" : undefined}
+				>
+					<link.icon className="inline-icon" />
+					{link.label}
+				</link.component>
+			))
+		}
+	</div>
 
-  <Menu>
-    <Fragment slot="button">
-      <Bars3Icon className="w-6" />
-      <span class="sr-only">Menu</span>
-    </Fragment>
-    {
-      links.map((link) => (
-        <link.component href={link.href}>
-          <MenuItem icon={link.icon} label={link.label} />
-        </link.component>
-      ))
-    }
-    <hr class="border-black/25" />
-    {
-      guides.map((guide) => (
-        <a href={`/guides/${guide.slug}`} rel="prefetch">
-          <MenuItem icon={DocumentTextIcon} label={guide.data.title} />
-        </a>
-      ))
-    }
-  </Menu>
+	<Menu>
+		<Fragment slot="button">
+			<Bars3Icon className="w-6" />
+			<span class="sr-only">Menu</span>
+		</Fragment>
+		{
+			links.map((link) => (
+				<link.component href={link.href}>
+					<MenuItem icon={link.icon} label={link.label} />
+				</link.component>
+			))
+		}
+		<hr class="border-black/25" />
+		{
+			guides.map((guide) => (
+				<a href={`/guides/${guide.slug}`} rel="prefetch">
+					<MenuItem icon={DocumentTextIcon} label={guide.data.title} />
+				</a>
+			))
+		}
+	</Menu>
 </nav>

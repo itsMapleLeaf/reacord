@@ -38,13 +38,13 @@ export abstract class Reacord {
 	}
 
 	protected createInstance(renderer: Renderer, initialContent?: ReactNode) {
-		if (this.renderers.length > this.maxInstances) {
-			this.deactivate(this.renderers[0]!)
+		if (this.renderers.length > this.maxInstances && this.renderers[0]) {
+			this.deactivate(this.renderers[0])
 		}
 
 		this.renderers.push(renderer)
 
-		const container = reconciler.createContainer(
+		const container: unknown = reconciler.createContainer(
 			renderer,
 			0,
 			null,

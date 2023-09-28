@@ -128,13 +128,17 @@ test("multiple select", async () => {
 	await tester.findSelectByPlaceholder("select").select("1", "3")
 	await assertSelect(expect.arrayContaining(["1", "3"]) as unknown as string[])
 	expect(onSelect).toHaveBeenCalledWith(
-		expect.objectContaining({ values: expect.arrayContaining(["1", "3"]) }),
+		expect.objectContaining({
+			values: expect.arrayContaining(["1", "3"]) as unknown,
+		}),
 	)
 
 	await tester.findSelectByPlaceholder("select").select("2")
 	await assertSelect(expect.arrayContaining(["2"]) as unknown as string[])
 	expect(onSelect).toHaveBeenCalledWith(
-		expect.objectContaining({ values: expect.arrayContaining(["2"]) }),
+		expect.objectContaining({
+			values: expect.arrayContaining(["2"]) as unknown,
+		}),
 	)
 
 	await tester.findSelectByPlaceholder("select").select()

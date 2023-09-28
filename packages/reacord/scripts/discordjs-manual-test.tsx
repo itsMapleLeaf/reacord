@@ -1,3 +1,4 @@
+import { raise } from "@reacord/helpers/raise.js"
 import {
 	Button,
 	Link,
@@ -18,9 +19,13 @@ const reacord = new ReacordDiscordJs(client)
 
 await client.login(process.env.TEST_BOT_TOKEN)
 
-const guild = await client.guilds.fetch(process.env.TEST_GUILD_ID!)
+const guild = await client.guilds.fetch(
+	process.env.TEST_GUILD_ID ?? raise("TEST_GUILD_ID not defined"),
+)
 
-const category = await guild.channels.fetch(process.env.TEST_CATEGORY_ID!)
+const category = await guild.channels.fetch(
+	process.env.TEST_CATEGORY_ID ?? raise("TEST_CATEGORY_ID not defined"),
+)
 if (category?.type !== ChannelType.GuildCategory) {
 	throw new Error(
 		`channel ${process.env.TEST_CATEGORY_ID} is not a guild category. received ${category?.type}`,
