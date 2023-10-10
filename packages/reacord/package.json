@@ -2,7 +2,7 @@
   "name": "reacord",
   "type": "module",
   "description": "Create interactive Discord messages using React.",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "homepage": "https://reacord.mapleleaf.dev",
   "repository": "https://github.com/itsMapleLeaf/reacord.git",
   "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
