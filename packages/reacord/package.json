@@ -44,8 +44,8 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@types/node": "^20.7.0",
-    "@types/react": "^18.2.23",
+    "@types/node": "^20.8.4",
+    "@types/react": "^18.2.27",
     "@types/react-reconciler": "^0.28.5",
     "react-reconciler": "^0.29.0",
     "rxjs": "^7.8.1"
@@ -73,7 +73,7 @@
     "react": "^18.2.0",
     "tsup": "^7.2.0",
     "tsx": "^3.13.0",
-    "type-fest": "^4.3.2"
+    "type-fest": "^4.4.0"
   },
   "release-it": {
     "git": {

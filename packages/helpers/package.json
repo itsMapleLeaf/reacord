@@ -9,7 +9,7 @@
   "dependencies": {
     "@types/lodash-es": "^4.17.9",
     "lodash-es": "^4.17.21",
-    "type-fest": "^4.3.2",
-    "vitest": "^0.34.5"
+    "type-fest": "^4.4.0",
+    "vitest": "^0.34.6"
   }
 }
