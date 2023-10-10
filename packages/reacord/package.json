@@ -19,17 +19,16 @@
     "reacord"
   ],
   "files": [
-    "library",
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "types": "./library/main.ts",
+  "types": "./dist/main.d.ts",
   "exports": {
     ".": {
       "import": "./dist/main.js",
       "require": "./dist/main.cjs",
-      "types": "./library/main.ts"
+      "types": "./dist/main.d.ts"
     },
     "./package.json": {
       "import": "./package.json",
@@ -37,7 +36,7 @@
     }
   },
   "scripts": {
-    "build": "cpy ../../README.md ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --sourcemap",
+    "build": "cpy ../../README.md ../../LICENSE . && tsup library/main.ts --target node16 --format cjs,esm --sourcemap --dts --dts-resolve",
     "build-watch": "pnpm build -- --watch",
     "test": "vitest --coverage --no-watch",
     "test-dev": "vitest",
