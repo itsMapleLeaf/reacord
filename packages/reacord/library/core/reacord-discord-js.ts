@@ -78,6 +78,7 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends an ephemeral message as a reply to a command interaction.
 	 *
+   * @deprecated Use reacord.reply(content, { ephemeral: true })
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	override ephemeralReply(
