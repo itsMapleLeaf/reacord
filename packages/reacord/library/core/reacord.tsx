@@ -25,9 +25,6 @@ export abstract class Reacord {
 
 	abstract send(...args: unknown[]): ReacordInstance
 	abstract reply(...args: unknown[]): ReacordInstance
-	/** 
-   * @deprecated Use reacord.reply(content, { ephemeral: true })
-   */
 	abstract ephemeralReply(...args: unknown[]): ReacordInstance
 
 	protected handleComponentInteraction(interaction: ComponentInteraction) {

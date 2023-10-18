@@ -24,6 +24,14 @@ import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
+interface SendOptions {
+	reply?: boolean
+}
+
+interface ReplyOptions {
+	ephemeral?: boolean
+}
+
 /**
  * The Reacord adapter for Discord.js.
  *
@@ -78,7 +86,7 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends an ephemeral message as a reply to a command interaction.
 	 *
-   * @deprecated Use reacord.reply(content, { ephemeral: true })
+	 * @deprecated Use reacord.reply(interaction, content, { ephemeral: true })
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	override ephemeralReply(
@@ -91,18 +99,33 @@ export class ReacordDiscordJs extends Reacord {
 		)
 	}
 
-	private createChannelRenderer(channelId: string) {
+	private createChannelRenderer(
+		event: string | Discord.Message,
+		opts?: SendOptions,
+	) {
 		return new ChannelMessageRenderer({
 			send: async (options) => {
+				// Backwards compatible channelId api
+				// `event` is treated as MessageEvent depending on its type
 				const channel =
-					this.client.channels.cache.get(channelId) ??
-					(await this.client.channels.fetch(channelId)) ??
-					raise(`Channel ${channelId} not found`)
+					typeof event === "string"
+						? this.client.channels.cache.get(event) ??
+						  (await this.client.channels.fetch(event)) ??
+						  raise(`Channel ${event} not found`)
+						: event.channel
 
 				if (!channel.isTextBased()) {
-					raise(`Channel ${channelId} is not a text channel`)
+					raise(`Channel ${event} is not a text channel`)
 				}
 
+				if (opts?.reply) {
+					if (typeof event === "string") {
+						raise("Cannot send reply with channel ID provided")
+					}
+
+					const message = await event.reply(getDiscordMessageOptions(options))
+					return createReacordMessage(message)
+				}
 				const message = await channel.send(getDiscordMessageOptions(options))
 				return createReacordMessage(message)
 			},
@@ -113,6 +136,7 @@ export class ReacordDiscordJs extends Reacord {
 		interaction:
 			| Discord.CommandInteraction
 			| Discord.MessageComponentInteraction,
+		opts?: ReplyOptions,
 	) {
 		return new InteractionReplyRenderer({
 			type: "command",
@@ -121,6 +145,7 @@ export class ReacordDiscordJs extends Reacord {
 				const message = await interaction.reply({
 					...getDiscordMessageOptions(options),
 					fetchReply: true,
+					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
@@ -128,6 +153,7 @@ export class ReacordDiscordJs extends Reacord {
 				const message = await interaction.followUp({
 					...getDiscordMessageOptions(options),
 					fetchReply: true,
+					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
