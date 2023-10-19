@@ -121,7 +121,7 @@ export class ReacordDiscordJs extends Reacord {
 						: event.channel
 
 				if (!channel.isTextBased()) {
-					raise(`Channel ${event} is not a text channel`)
+					raise(`Channel ${channel.id} is not a text channel`)
 				}
 
 				if (opts?.reply) {
