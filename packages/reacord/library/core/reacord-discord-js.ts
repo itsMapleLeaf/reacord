@@ -24,6 +24,14 @@ import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
+interface SendOptions {
+	reply?: boolean
+}
+
+interface ReplyOptions {
+	ephemeral?: boolean
+}
+
 /**
  * The Reacord adapter for Discord.js.
  *
@@ -46,16 +54,17 @@ export class ReacordDiscordJs extends Reacord {
 	}
 
 	/**
-	 * Sends a message to a channel.
+	 * Sends a message to a channel. Alternatively replies to message event.
 	 *
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	override send(
 		channelId: string,
 		initialContent?: React.ReactNode,
+		options?: SendOptions,
 	): ReacordInstance {
 		return this.createInstance(
-			this.createChannelRenderer(channelId),
+			this.createChannelRenderer(channelId, options),
 			initialContent,
 		)
 	}
@@ -68,9 +77,10 @@ export class ReacordDiscordJs extends Reacord {
 	override reply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
+		options?: ReplyOptions,
 	): ReacordInstance {
 		return this.createInstance(
-			this.createInteractionReplyRenderer(interaction),
+			this.createInteractionReplyRenderer(interaction, options),
 			initialContent,
 		)
 	}
@@ -78,30 +88,50 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends an ephemeral message as a reply to a command interaction.
 	 *
+	 * @deprecated Use reacord.reply(interaction, content, { ephemeral: true })
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	override ephemeralReply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
+		options?: Omit<ReplyOptions, "ephemeral">,
 	): ReacordInstance {
 		return this.createInstance(
-			this.createEphemeralInteractionReplyRenderer(interaction),
+			this.createInteractionReplyRenderer(interaction, {
+				...options,
+				ephemeral: true,
+			}),
 			initialContent,
 		)
 	}
 
-	private createChannelRenderer(channelId: string) {
+	private createChannelRenderer(
+		event: string | Discord.Message,
+		opts?: SendOptions,
+	) {
 		return new ChannelMessageRenderer({
 			send: async (options) => {
+				// Backwards compatible channelId api
+				// `event` is treated as MessageEvent depending on its type
 				const channel =
-					this.client.channels.cache.get(channelId) ??
-					(await this.client.channels.fetch(channelId)) ??
-					raise(`Channel ${channelId} not found`)
+					typeof event === "string"
+						? this.client.channels.cache.get(event) ??
+						  (await this.client.channels.fetch(event)) ??
+						  raise(`Channel ${event} not found`)
+						: event.channel
 
 				if (!channel.isTextBased()) {
-					raise(`Channel ${channelId} is not a text channel`)
+					raise(`Channel ${channel.id} is not a text channel`)
 				}
 
+				if (opts?.reply) {
+					if (typeof event === "string") {
+						raise("Cannot send reply with channel ID provided")
+					}
+
+					const message = await event.reply(getDiscordMessageOptions(options))
+					return createReacordMessage(message)
+				}
 				const message = await channel.send(getDiscordMessageOptions(options))
 				return createReacordMessage(message)
 			},
@@ -112,6 +142,7 @@ export class ReacordDiscordJs extends Reacord {
 		interaction:
 			| Discord.CommandInteraction
 			| Discord.MessageComponentInteraction,
+		opts?: ReplyOptions,
 	) {
 		return new InteractionReplyRenderer({
 			type: "command",
@@ -120,6 +151,7 @@ export class ReacordDiscordJs extends Reacord {
 				const message = await interaction.reply({
 					...getDiscordMessageOptions(options),
 					fetchReply: true,
+					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
@@ -127,33 +159,9 @@ export class ReacordDiscordJs extends Reacord {
 				const message = await interaction.followUp({
 					...getDiscordMessageOptions(options),
 					fetchReply: true,
+					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
-			},
-		})
-	}
-
-	private createEphemeralInteractionReplyRenderer(
-		interaction:
-			| Discord.CommandInteraction
-			| Discord.MessageComponentInteraction,
-	) {
-		return new InteractionReplyRenderer({
-			type: "command",
-			id: interaction.id,
-			reply: async (options) => {
-				await interaction.reply({
-					...getDiscordMessageOptions(options),
-					ephemeral: true,
-				})
-				return createEphemeralReacordMessage()
-			},
-			followUp: async (options) => {
-				await interaction.followUp({
-					...getDiscordMessageOptions(options),
-					ephemeral: true,
-				})
-				return createEphemeralReacordMessage()
 			},
 		})
 	}
@@ -283,7 +291,9 @@ export class ReacordDiscordJs extends Reacord {
 
 				ephemeralReply: (content: ReactNode) =>
 					this.createInstance(
-						this.createEphemeralInteractionReplyRenderer(interaction),
+						this.createInteractionReplyRenderer(interaction, {
+							ephemeral: true,
+						}),
 						content,
 					),
 			},
@@ -318,19 +328,6 @@ function createReacordMessage(message: Discord.Message): Message {
 		},
 		delete: async () => {
 			await message.delete()
-		},
-	}
-}
-
-function createEphemeralReacordMessage(): Message {
-	return {
-		edit: () => {
-			console.warn("Ephemeral messages can't be edited")
-			return Promise.resolve()
-		},
-		delete: () => {
-			console.warn("Ephemeral messages can't be deleted")
-			return Promise.resolve()
 		},
 	}
 }
