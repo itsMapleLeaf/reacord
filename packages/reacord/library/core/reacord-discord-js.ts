@@ -24,12 +24,46 @@ import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
 
-interface SendOptions {
+/**
+ * Options for the channel message.
+ *
+ * @see https://reacord.mapleleaf.dev/guides/sending-messages
+ */
+export interface LegacyCreateChannelMessageOptions
+	extends CreateChannelMessageOptions {
+	/**
+	 * Send message as a reply. Requires the use of message event instead of
+	 * channel id provided as argument.
+	 *
+	 * @deprecated Use reacord.createMessageReply()
+	 */
 	reply?: boolean
 }
 
-interface ReplyOptions {
+/**
+ * Options for the channel message.
+ *
+ * @see https://reacord.mapleleaf.dev/guides/sending-messages
+ */
+export interface CreateChannelMessageOptions {}
+
+/**
+ * Options for the message reply method.
+ *
+ * @see https://reacord.mapleleaf.dev/guides/sending-messages
+ */
+export interface CreateMessageReplyOptions {}
+
+/**
+ * Custom options for the interaction reply method.
+ *
+ * @see https://reacord.mapleleaf.dev/guides/sending-messages
+ */
+export interface CreateInteractionReplyOptions {
+	/** Whether to send interaction reply as _ephemeral_. */
 	ephemeral?: boolean
+	/** Whether to use text-to-speech. */
+	tts?: boolean
 }
 
 /**
@@ -54,17 +88,80 @@ export class ReacordDiscordJs extends Reacord {
 	}
 
 	/**
-	 * Sends a message to a channel. Alternatively replies to message event.
+	 * Sends a message to a channel.
 	 *
+	 * @param {Discord.Channel} target - Discord channel object.
+	 * @param {CreateChannelMessageOptions} [options={}] - Options for the channel
+	 *   message. Default is `{}`
+	 * @param {React.ReactNode} [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
-	override send(
-		channelId: string,
-		initialContent?: React.ReactNode,
-		options?: SendOptions,
+	public createChannelMessage(
+		target: Discord.Channel,
+		options: CreateChannelMessageOptions = {},
+		content?: React.ReactNode,
 	): ReacordInstance {
 		return this.createInstance(
-			this.createChannelRenderer(channelId, options),
+			this.createChannelMessageRenderer(target, options),
+			content,
+		)
+	}
+
+	/**
+	 * Replies to a message by sending a message.
+	 *
+	 * @param {Discord.Message} message - Discord message event object.
+	 * @param {CreateMessageReplyOptions} [options={}] - Options for the message
+	 *   reply method. Default is `{}`
+	 * @param {React.ReactNode} [content] - Initial React node content to render.
+	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 */
+	public createMessageReply(
+		message: Discord.Message,
+		options: CreateMessageReplyOptions = {},
+		content?: React.ReactNode,
+	): ReacordInstance {
+		return this.createInstance(
+			this.createMessageReplyRenderer(message, options),
+			content,
+		)
+	}
+
+	/**
+	 * Replies to a command interaction by sending a message.
+	 *
+	 * @param {Discord.CommandInteraction} interaction - Discord command
+	 *   interaction object.
+	 * @param {CreateInteractionReplyOptions} [options={}] - Custom options for
+	 *   the interaction reply method. Default is `{}`
+	 * @param {React.ReactNode} [content] - Initial React node content to render.
+	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 */
+	public createInteractionReply(
+		interaction: Discord.CommandInteraction,
+		options: CreateInteractionReplyOptions = {},
+		content?: React.ReactNode,
+	): ReacordInstance {
+		return this.createInstance(
+			this.createInteractionReplyRenderer(interaction, options),
+			content,
+		)
+	}
+
+	/**
+	 * Sends a message to a channel. Alternatively replies to message event.
+	 *
+	 * @deprecated Use reacord.createChannelMessage() or
+	 *   reacord.createMessageReply() instead.
+	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 */
+	public send(
+		event: string | Discord.Message,
+		initialContent?: React.ReactNode,
+		options: LegacyCreateChannelMessageOptions = {},
+	): ReacordInstance {
+		return this.createInstance(
+			this.createMessageReplyRenderer(event, options),
 			initialContent,
 		)
 	}
@@ -72,12 +169,13 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends a message as a reply to a command interaction.
 	 *
+	 * @deprecated Use reacord.createInteractionReply() instead.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
-	override reply(
+	public reply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
-		options?: ReplyOptions,
+		options: CreateInteractionReplyOptions = {},
 	): ReacordInstance {
 		return this.createInstance(
 			this.createInteractionReplyRenderer(interaction, options),
@@ -88,13 +186,14 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends an ephemeral message as a reply to a command interaction.
 	 *
-	 * @deprecated Use reacord.reply(interaction, content, { ephemeral: true })
+	 * @deprecated Use reacord.createInteractionReply(interaction, content, {
+	 *   ephemeral: true })
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
-	override ephemeralReply(
+	public ephemeralReply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
-		options?: Omit<ReplyOptions, "ephemeral">,
+		options?: Omit<CreateInteractionReplyOptions, "ephemeral">,
 	): ReacordInstance {
 		return this.createInstance(
 			this.createInteractionReplyRenderer(interaction, {
@@ -105,9 +204,25 @@ export class ReacordDiscordJs extends Reacord {
 		)
 	}
 
-	private createChannelRenderer(
+	private createChannelMessageRenderer(
+		channel: Discord.Channel,
+		_opts?: CreateMessageReplyOptions,
+	) {
+		return new ChannelMessageRenderer({
+			send: async (options) => {
+				if (!channel.isTextBased()) {
+					raise(`Channel ${channel.id} is not a text channel`)
+				}
+
+				const message = await channel.send(getDiscordMessageOptions(options))
+				return createReacordMessage(message)
+			},
+		})
+	}
+
+	private createMessageReplyRenderer(
 		event: string | Discord.Message,
-		opts?: SendOptions,
+		opts: CreateChannelMessageOptions | LegacyCreateChannelMessageOptions,
 	) {
 		return new ChannelMessageRenderer({
 			send: async (options) => {
@@ -124,7 +239,7 @@ export class ReacordDiscordJs extends Reacord {
 					raise(`Channel ${channel.id} is not a text channel`)
 				}
 
-				if (opts?.reply) {
+				if ("reply" in opts && opts.reply) {
 					if (typeof event === "string") {
 						raise("Cannot send reply with channel ID provided")
 					}
@@ -142,7 +257,7 @@ export class ReacordDiscordJs extends Reacord {
 		interaction:
 			| Discord.CommandInteraction
 			| Discord.MessageComponentInteraction,
-		opts?: ReplyOptions,
+		opts: CreateInteractionReplyOptions,
 	) {
 		return new InteractionReplyRenderer({
 			type: "command",
@@ -150,16 +265,16 @@ export class ReacordDiscordJs extends Reacord {
 			reply: async (options) => {
 				const message = await interaction.reply({
 					...getDiscordMessageOptions(options),
+					...opts,
 					fetchReply: true,
-					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
 			followUp: async (options) => {
 				const message = await interaction.followUp({
 					...getDiscordMessageOptions(options),
+					...opts,
 					fetchReply: true,
-					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
@@ -285,7 +400,7 @@ export class ReacordDiscordJs extends Reacord {
 
 				reply: (content?: ReactNode) =>
 					this.createInstance(
-						this.createInteractionReplyRenderer(interaction),
+						this.createInteractionReplyRenderer(interaction, {}),
 						content,
 					),
 

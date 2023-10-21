@@ -42,14 +42,14 @@ export class ReacordTester extends Reacord {
 		return [...this.messageContainer]
 	}
 
-	override send(initialContent?: ReactNode): ReacordInstance {
+	public send(initialContent?: ReactNode): ReacordInstance {
 		return this.createInstance(
 			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
 			initialContent,
 		)
 	}
 
-	override reply(initialContent?: ReactNode): ReacordInstance {
+	public reply(initialContent?: ReactNode): ReacordInstance {
 		return this.createInstance(
 			new InteractionReplyRenderer(
 				new TestCommandInteraction(this.messageContainer),
@@ -58,7 +58,7 @@ export class ReacordTester extends Reacord {
 		)
 	}
 
-	override ephemeralReply(initialContent?: ReactNode): ReacordInstance {
+	public ephemeralReply(initialContent?: ReactNode): ReacordInstance {
 		return this.reply(initialContent)
 	}
 

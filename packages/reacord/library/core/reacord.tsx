@@ -23,9 +23,10 @@ export abstract class Reacord {
 
 	constructor(private readonly config: ReacordConfig = {}) {}
 
-	abstract send(...args: unknown[]): ReacordInstance
-	abstract reply(...args: unknown[]): ReacordInstance
-	abstract ephemeralReply(...args: unknown[]): ReacordInstance
+	// There's no more need in abstract methods
+	// abstract send(...args: unknown[]): ReacordInstance
+	// abstract reply(...args: unknown[]): ReacordInstance
+	// abstract ephemeralReply(...args: unknown[]): ReacordInstance
 
 	protected handleComponentInteraction(interaction: ComponentInteraction) {
 		for (const renderer of this.renderers) {
