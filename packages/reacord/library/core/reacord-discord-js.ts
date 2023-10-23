@@ -90,10 +90,9 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends a message to a channel.
 	 *
-	 * @param {Discord.Channel} target - Discord channel object.
-	 * @param {CreateChannelMessageOptions} [options={}] - Options for the channel
-	 *   message. Default is `{}`
-	 * @param {React.ReactNode} [content] - Initial React node content to render.
+	 * @param target - Discord channel object.
+	 * @param [options] - Options for the channel message
+	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createChannelMessage(
@@ -110,10 +109,9 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Replies to a message by sending a message.
 	 *
-	 * @param {Discord.Message} message - Discord message event object.
-	 * @param {CreateMessageReplyOptions} [options={}] - Options for the message
-	 *   reply method. Default is `{}`
-	 * @param {React.ReactNode} [content] - Initial React node content to render.
+	 * @param message - Discord message event object.
+	 * @param [options] - Options for the message reply method.
+	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createMessageReply(
@@ -130,11 +128,9 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Replies to a command interaction by sending a message.
 	 *
-	 * @param {Discord.CommandInteraction} interaction - Discord command
-	 *   interaction object.
-	 * @param {CreateInteractionReplyOptions} [options={}] - Custom options for
-	 *   the interaction reply method. Default is `{}`
-	 * @param {React.ReactNode} [content] - Initial React node content to render.
+	 * @param interaction - Discord command interaction object.
+	 * @param [options] - Custom options for the interaction reply method.
+	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createInteractionReply(
