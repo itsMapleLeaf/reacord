@@ -11,6 +11,7 @@ import type {
 	ChannelInfo,
 	GuildInfo,
 	MessageInfo,
+	ReplyInfo,
 	UserInfo,
 } from "../library/core/component-event"
 import type { ButtonClickEvent } from "../library/core/components/button"
@@ -42,24 +43,30 @@ export class ReacordTester extends Reacord {
 		return [...this.messageContainer]
 	}
 
-	public send(initialContent?: ReactNode): ReacordInstance {
+	public createChannelMessage(initialContent?: ReactNode): ReacordInstance {
 		return this.createInstance(
 			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
 			initialContent,
 		)
 	}
 
-	public reply(initialContent?: ReactNode): ReacordInstance {
+	public createMessageReply(initialContent?: ReactNode): ReacordInstance {
+		return this.createInstance(
+			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
+			initialContent,
+		)
+	}
+
+	public createInteractionReply(
+		initialContent?: ReactNode,
+		_options?: ReplyInfo,
+	): ReacordInstance {
 		return this.createInstance(
 			new InteractionReplyRenderer(
 				new TestCommandInteraction(this.messageContainer),
 			),
 			initialContent,
 		)
-	}
-
-	public ephemeralReply(initialContent?: ReactNode): ReacordInstance {
-		return this.reply(initialContent)
 	}
 
 	assertMessages(expected: MessageSample[]) {
@@ -69,7 +76,7 @@ export class ReacordTester extends Reacord {
 	}
 
 	async assertRender(content: ReactNode, expected: MessageSample[]) {
-		const instance = this.reply()
+		const instance = this.createInteractionReply()
 		instance.render(content)
 		await this.assertMessages(expected)
 		instance.destroy()
@@ -254,11 +261,11 @@ class TestComponentEvent {
 	guild: GuildInfo = {} as GuildInfo // todo
 
 	reply(content?: ReactNode): ReacordInstance {
-		return this.tester.reply(content)
+		return this.tester.createInteractionReply(content)
 	}
 
 	ephemeralReply(content?: ReactNode): ReacordInstance {
-		return this.tester.ephemeralReply(content)
+		return this.tester.createInteractionReply(content, { ephemeral: true })
 	}
 }
 

@@ -53,7 +53,7 @@ test("single select", async () => {
 		])
 	}
 
-	const reply = tester.reply()
+	const reply = tester.createInteractionReply()
 
 	reply.render(<TestSelect />)
 	await assertSelect([])
@@ -119,7 +119,7 @@ test("multiple select", async () => {
 		])
 	}
 
-	const reply = tester.reply()
+	const reply = tester.createInteractionReply()
 
 	reply.render(<TestSelect />)
 	await assertSelect([])
@@ -148,7 +148,7 @@ test("multiple select", async () => {
 
 test("optional onSelect + unknown value", async () => {
 	const tester = new ReacordTester()
-	tester.reply().render(<Select placeholder="select" />)
+	tester.createInteractionReply().render(<Select placeholder="select" />)
 	await tester.findSelectByPlaceholder("select").select("something")
 	await tester.assertMessages([
 		{
