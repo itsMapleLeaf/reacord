@@ -49,7 +49,9 @@ describe("useInstance", () => {
 		}
 
 		const tester = new ReacordTester()
-		const instance = tester.createChannelMessage(<TestComponent name="parent" />)
+		const instance = tester.createChannelMessage(
+			<TestComponent name="parent" />,
+		)
 
 		await tester.assertMessages([messageOutput("parent")])
 		expect(instanceFromHook).toBe(instance)
