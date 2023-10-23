@@ -18,6 +18,7 @@ import type {
 	GuildInfo,
 	GuildMemberInfo,
 	MessageInfo,
+	ReplyInfo,
 	UserInfo,
 } from "./component-event"
 import type { ReacordInstance } from "./instance"
@@ -59,12 +60,7 @@ export interface CreateMessageReplyOptions {}
  *
  * @see https://reacord.mapleleaf.dev/guides/sending-messages
  */
-export interface CreateInteractionReplyOptions {
-	/** Whether to send interaction reply as _ephemeral_. */
-	ephemeral?: boolean
-	/** Whether to use text-to-speech. */
-	tts?: boolean
-}
+export type CreateInteractionReplyOptions = ReplyInfo;
 
 /**
  * The Reacord adapter for Discord.js.
@@ -394,12 +390,13 @@ export class ReacordDiscordJs extends Reacord {
 				user,
 				guild,
 
-				reply: (content?: ReactNode) =>
+				reply: (content?: ReactNode, options?: ReplyInfo) =>
 					this.createInstance(
-						this.createInteractionReplyRenderer(interaction, {}),
+						this.createInteractionReplyRenderer(interaction, options ?? {}),
 						content,
 					),
 
+				/** @deprecated Use event.reply(content, { ephemeral: true }) */
 				ephemeralReply: (content: ReactNode) =>
 					this.createInstance(
 						this.createInteractionReplyRenderer(interaction, {

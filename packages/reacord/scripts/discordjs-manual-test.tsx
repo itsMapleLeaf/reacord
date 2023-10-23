@@ -127,7 +127,7 @@ await createTest("ephemeral button", (channel) => {
 			/>
 			<Button
 				label="clic"
-				onClick={(event) => event.ephemeralReply("you clic")}
+				onClick={(event) => event.reply("you clic", { ephemeral: true })}
 			/>
 		</>,
 	)

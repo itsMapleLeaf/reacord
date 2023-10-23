@@ -33,13 +33,21 @@ export interface ComponentEvent {
 	guild?: GuildInfo
 
 	/** Create a new reply to this event. */
-	reply(content?: ReactNode): ReacordInstance
+	reply(content?: ReactNode, options?: ReplyInfo): ReacordInstance
 
 	/**
 	 * Create an ephemeral reply to this event, shown only to the user who
 	 * triggered it.
+	 * 
+	 * @deprecated Use event.reply(content, { ephemeral: true })
 	 */
 	ephemeralReply(content?: ReactNode): ReacordInstance
+}
+
+/** @category Component Event */
+export interface ReplyInfo {
+	ephemeral?: boolean
+	tts?: boolean
 }
 
 /** @category Component Event */
