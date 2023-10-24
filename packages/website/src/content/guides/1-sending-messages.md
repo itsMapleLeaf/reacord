@@ -11,7 +11,8 @@ You can send messages via Reacord to a channel like so.
 ```jsx
 client.on("ready", () => {
 	const channel = await client.channels.fetch("abc123deadbeef")
-	reacord.createChannelMessage(channel, {}, "Hello, world!")
+	const instance = reacord.createChannelMessage(channel)
+	instance.render("Hello, world!")
 })
 ```
 
@@ -35,7 +36,7 @@ function Uptime() {
 }
 
 client.on("ready", () => {
-	reacord.createChannelMessage(channel, {}, <Uptime />)
+	reacord.createChannelMessage(channel).render(<Uptime />)
 })
 ```
 
@@ -59,11 +60,9 @@ Instead of sending messages to a channel, you may want to reply to a specific me
 const Hello = ({ username }) => <>Hello, {username}!</>
 
 client.on("messageCreate", (message) => {
-	reacord.createMessageReply(
-		message,
-		{},
-		<Hello username={message.author.displayName} />,
-	)
+	reacord
+		.createMessageReply(message)
+		.render(<Hello username={message.author.displayName} />)
 })
 ```
 
@@ -110,7 +109,7 @@ client.on("ready", () => {
 client.on("interactionCreate", (interaction) => {
 	if (interaction.isCommand() && interaction.commandName === "ping") {
 		// Use the createInteractionReply() function instead of createChannelMessage
-		reacord.createInteractionReply(interaction, {}, <>pong!</>)
+		reacord.createInteractionReply(interaction).render(<>pong!</>)
 	}
 })
 
@@ -149,14 +148,14 @@ handleCommands(client, [
 		name: "ping",
 		description: "pong!",
 		run: (interaction) => {
-			reacord.createInteractionReply(interaction, {}, <>pong!</>)
+			reacord.createInteractionReply(interaction).render(<>pong!</>)
 		},
 	},
 	{
 		name: "hi",
 		description: "say hi",
 		run: (interaction) => {
-			reacord.createInteractionReply(interaction, {}, <>hi</>)
+			reacord.createInteractionReply(interaction).render(<>hi</>)
 		},
 	},
 ])
@@ -176,11 +175,9 @@ handleCommands(client, [
 		name: "pong",
 		description: "pong, but in secret",
 		run: (interaction) => {
-			reacord.createInteractionReply(
-				interaction,
-				{ ephemeral: true },
-				<>(pong)</>,
-			)
+			reacord
+				.createInteractionReply(interaction, { ephemeral: true })
+				.render(<>(pong)</>)
 		},
 	},
 ])
@@ -196,7 +193,9 @@ handleCommands(client, [
 		name: "pong",
 		description: "pong, but converted into audio",
 		run: (interaction) => {
-			reacord.createInteractionReply(interaction, { tts: true }, <>pong!</>)
+			reacord
+				.createInteractionReply(interaction, { tts: true })
+				.render(<>pong!</>)
 		},
 	},
 ])

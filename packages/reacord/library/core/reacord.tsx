@@ -57,6 +57,7 @@ export abstract class Reacord {
 					<InstanceProvider value={instance}>{content}</InstanceProvider>,
 					container,
 				)
+				return instance
 			},
 			deactivate: () => {
 				this.deactivate(renderer)

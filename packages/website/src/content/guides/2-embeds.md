@@ -56,9 +56,7 @@ function FancyMessage({ children }) {
 ```
 
 ```jsx
-reacord.createChannelMessage(
-	channel,
-	{},
+reacord.createChannelMessage(channel).render(
 	<FancyMessage>
 		<FancyDetails title="Hello" description="World" />
 	</FancyMessage>,

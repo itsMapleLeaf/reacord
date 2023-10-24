@@ -88,17 +88,14 @@ export class ReacordDiscordJs extends Reacord {
 	 *
 	 * @param target - Discord channel object.
 	 * @param [options] - Options for the channel message
-	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createChannelMessage(
 		target: Discord.Channel,
 		options: CreateChannelMessageOptions = {},
-		content?: React.ReactNode,
 	): ReacordInstance {
 		return this.createInstance(
 			this.createChannelMessageRenderer(target, options),
-			content,
 		)
 	}
 
@@ -107,17 +104,14 @@ export class ReacordDiscordJs extends Reacord {
 	 *
 	 * @param message - Discord message event object.
 	 * @param [options] - Options for the message reply method.
-	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createMessageReply(
 		message: Discord.Message,
 		options: CreateMessageReplyOptions = {},
-		content?: React.ReactNode,
 	): ReacordInstance {
 		return this.createInstance(
 			this.createMessageReplyRenderer(message, options),
-			content,
 		)
 	}
 
@@ -126,17 +120,14 @@ export class ReacordDiscordJs extends Reacord {
 	 *
 	 * @param interaction - Discord command interaction object.
 	 * @param [options] - Custom options for the interaction reply method.
-	 * @param [content] - Initial React node content to render.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
 	public createInteractionReply(
 		interaction: Discord.CommandInteraction,
 		options: CreateInteractionReplyOptions = {},
-		content?: React.ReactNode,
 	): ReacordInstance {
 		return this.createInstance(
 			this.createInteractionReplyRenderer(interaction, options),
-			content,
 		)
 	}
 

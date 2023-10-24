@@ -43,29 +43,23 @@ export class ReacordTester extends Reacord {
 		return [...this.messageContainer]
 	}
 
-	public createChannelMessage(initialContent?: ReactNode): ReacordInstance {
+	public createChannelMessage(): ReacordInstance {
 		return this.createInstance(
 			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
-			initialContent,
 		)
 	}
 
-	public createMessageReply(initialContent?: ReactNode): ReacordInstance {
+	public createMessageReply(): ReacordInstance {
 		return this.createInstance(
 			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
-			initialContent,
 		)
 	}
 
-	public createInteractionReply(
-		initialContent?: ReactNode,
-		_options?: ReplyInfo,
-	): ReacordInstance {
+	public createInteractionReply(_options?: ReplyInfo): ReacordInstance {
 		return this.createInstance(
 			new InteractionReplyRenderer(
 				new TestCommandInteraction(this.messageContainer),
 			),
-			initialContent,
 		)
 	}
 
@@ -261,11 +255,13 @@ class TestComponentEvent {
 	guild: GuildInfo = {} as GuildInfo // todo
 
 	reply(content?: ReactNode): ReacordInstance {
-		return this.tester.createInteractionReply(content)
+		return this.tester.createInteractionReply().render(content)
 	}
 
 	ephemeralReply(content?: ReactNode): ReacordInstance {
-		return this.tester.createInteractionReply(content, { ephemeral: true })
+		return this.tester
+			.createInteractionReply({ ephemeral: true })
+			.render(content)
 	}
 }
 

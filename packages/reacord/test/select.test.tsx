@@ -53,9 +53,7 @@ test("single select", async () => {
 		])
 	}
 
-	const reply = tester.createInteractionReply()
-
-	reply.render(<TestSelect />)
+	tester.createInteractionReply().render(<TestSelect />)
 	await assertSelect([])
 	expect(onSelect).toHaveBeenCalledTimes(0)
 
@@ -119,9 +117,7 @@ test("multiple select", async () => {
 		])
 	}
 
-	const reply = tester.createInteractionReply()
-
-	reply.render(<TestSelect />)
+	tester.createInteractionReply().render(<TestSelect />)
 	await assertSelect([])
 	expect(onSelect).toHaveBeenCalledTimes(0)
 
