@@ -11,8 +11,7 @@ You can send messages via Reacord to a channel like so.
 ```jsx
 client.on("ready", () => {
 	const channel = await client.channels.fetch("abc123deadbeef")
-	const instance = reacord.createChannelMessage(channel)
-	instance.render("Hello, world!")
+	reacord.createChannelMessage(channel).render("Hello, world!")
 })
 ```
 
@@ -36,7 +35,9 @@ function Uptime() {
 }
 
 client.on("ready", () => {
-	reacord.createChannelMessage(channel).render(<Uptime />)
+	const instance = reacord.createChannelMessage(channel)
+
+	instance.render(<Uptime />)
 })
 ```
 
@@ -47,6 +48,7 @@ const Hello = ({ subject }) => <>Hello, {subject}!</>
 
 client.on("ready", () => {
 	const instance = reacord.createChannelMessage(channel)
+
 	instance.render(<Hello subject="World" />)
 	instance.render(<Hello subject="Moon" />)
 })

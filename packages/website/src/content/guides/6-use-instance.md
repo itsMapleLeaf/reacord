@@ -22,5 +22,5 @@ function SelfDestruct() {
 	)
 }
 
-reacord.send(channelId, <SelfDestruct />)
+reacord.createChannelMessage(channel).render(<SelfDestruct />)
 ```
