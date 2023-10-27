@@ -36,8 +36,7 @@ export function FruitSelect({ onConfirm }) {
 ```
 
 ```jsx
-const instance = reacord.send(
-	channelId,
+const instance = reacord.createChannelMessage(channel).render(
 	<FruitSelect
 		onConfirm={(value) => {
 			instance.render(`you chose ${value}`)
