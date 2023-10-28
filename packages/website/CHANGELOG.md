@@ -1,5 +1,13 @@
 # website
 
+## 0.4.7
+
+### Patch Changes
+
+- Updated dependencies [11153df]
+- Updated dependencies [fb0a997]
+  - reacord@0.6.0
+
 ## 0.4.6
 
 ### Patch Changes
