@@ -8,11 +8,11 @@ import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
 import type {
-	ChannelInfo,
-	GuildInfo,
-	MessageInfo,
-	ReplyInfo,
-	UserInfo,
+	ComponentEventChannel,
+	ComponentEventGuild,
+	ComponentEventMessage,
+	ComponentEventReplyOptions,
+	ComponentEventUser,
 } from "../library/core/component-event"
 import type { ButtonClickEvent } from "../library/core/components/button"
 import type { SelectChangeEvent } from "../library/core/components/select"
@@ -55,7 +55,9 @@ export class ReacordTester extends Reacord {
 		)
 	}
 
-	public createInteractionReply(_options?: ReplyInfo): ReacordInstance {
+	public createInteractionReply(
+		_options?: ComponentEventReplyOptions,
+	): ReacordInstance {
 		return this.createInstance(
 			new InteractionReplyRenderer(
 				new TestCommandInteraction(this.messageContainer),
@@ -249,10 +251,10 @@ class TestSelectInteraction
 class TestComponentEvent {
 	constructor(private tester: ReacordTester) {}
 
-	message: MessageInfo = {} as MessageInfo // todo
-	channel: ChannelInfo = {} as ChannelInfo // todo
-	user: UserInfo = {} as UserInfo // todo
-	guild: GuildInfo = {} as GuildInfo // todo
+	message: ComponentEventMessage = {} as ComponentEventMessage // todo
+	channel: ComponentEventChannel = {} as ComponentEventChannel // todo
+	user: ComponentEventUser = {} as ComponentEventUser // todo
+	guild: ComponentEventGuild = {} as ComponentEventGuild // todo
 
 	reply(content?: ReactNode): ReacordInstance {
 		return this.tester.createInteractionReply().render(content)

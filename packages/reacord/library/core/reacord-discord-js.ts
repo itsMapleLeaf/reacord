@@ -14,12 +14,12 @@ import type {
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
 import type {
-	ChannelInfo,
-	GuildInfo,
-	GuildMemberInfo,
-	MessageInfo,
-	ReplyInfo,
-	UserInfo,
+	ComponentEventChannel,
+	ComponentEventGuild,
+	ComponentEventGuildMember,
+	ComponentEventMessage,
+	ComponentEventReplyOptions,
+	ComponentEventUser,
 } from "./component-event"
 import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
@@ -194,7 +194,7 @@ export class ReacordDiscordJs extends Reacord {
 		interaction: Discord.MessageComponentInteraction,
 	): ComponentInteraction {
 		// todo please dear god clean this up
-		const channel: ChannelInfo = interaction.channel
+		const channel: ComponentEventChannel = interaction.channel
 			? {
 					...pruneNullishValues(
 						pick(interaction.channel, [
@@ -210,7 +210,7 @@ export class ReacordDiscordJs extends Reacord {
 			  }
 			: raise("Non-channel interactions are not supported")
 
-		const message: MessageInfo =
+		const message: ComponentEventMessage =
 			interaction.message instanceof Discord.Message
 				? {
 						...pick(interaction.message, [
@@ -233,7 +233,7 @@ export class ReacordDiscordJs extends Reacord {
 				  }
 				: raise("Message not found")
 
-		const member: GuildMemberInfo | undefined =
+		const member: ComponentEventGuildMember | undefined =
 			interaction.member instanceof Discord.GuildMember
 				? {
 						...pruneNullishValues(
@@ -258,14 +258,14 @@ export class ReacordDiscordJs extends Reacord {
 				  }
 				: undefined
 
-		const guild: GuildInfo | undefined = interaction.guild
+		const guild: ComponentEventGuild | undefined = interaction.guild
 			? {
 					...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
 					member: member ?? raise("unexpected: member is undefined"),
 			  }
 			: undefined
 
-		const user: UserInfo = {
+		const user: ComponentEventUser = {
 			...pruneNullishValues(
 				pick(interaction.user, ["id", "username", "discriminator", "tag"]),
 			),
@@ -307,7 +307,7 @@ export class ReacordDiscordJs extends Reacord {
 				user,
 				guild,
 
-				reply: (content?: ReactNode, options?: ReplyInfo) =>
+				reply: (content?: ReactNode, options?: ComponentEventReplyOptions) =>
 					this.createInstance(
 						this.createInteractionReplyRenderer(interaction, options ?? {}),
 						content,

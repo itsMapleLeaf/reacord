@@ -9,31 +9,34 @@ export interface ComponentEvent {
 	 *
 	 * @see https://discord.com/developers/docs/resources/channel#message-object
 	 */
-	message: MessageInfo
+	message: ComponentEventMessage
 
 	/**
 	 * The channel that this event occurred in.
 	 *
 	 * @see https://discord.com/developers/docs/resources/channel#channel-object
 	 */
-	channel: ChannelInfo
+	channel: ComponentEventChannel
 
 	/**
 	 * The user that triggered this event.
 	 *
 	 * @see https://discord.com/developers/docs/resources/user#user-object
 	 */
-	user: UserInfo
+	user: ComponentEventUser
 
 	/**
 	 * The guild that this event occurred in.
 	 *
 	 * @see https://discord.com/developers/docs/resources/guild#guild-object
 	 */
-	guild?: GuildInfo
+	guild?: ComponentEventGuild
 
 	/** Create a new reply to this event. */
-	reply(content?: ReactNode, options?: ReplyInfo): ReacordInstance
+	reply(
+		content?: ReactNode,
+		options?: ComponentEventReplyOptions,
+	): ReacordInstance
 
 	/**
 	 * Create an ephemeral reply to this event, shown only to the user who
@@ -45,13 +48,13 @@ export interface ComponentEvent {
 }
 
 /** @category Component Event */
-export interface ReplyInfo {
+export interface ComponentEventReplyOptions {
 	ephemeral?: boolean
 	tts?: boolean
 }
 
 /** @category Component Event */
-export interface ChannelInfo {
+export interface ComponentEventChannel {
 	id: string
 	name?: string
 	topic?: string
@@ -63,11 +66,11 @@ export interface ChannelInfo {
 }
 
 /** @category Component Event */
-export interface MessageInfo {
+export interface ComponentEventMessage {
 	id: string
 	channelId: string
 	authorId: string
-	member?: GuildMemberInfo
+	member?: ComponentEventGuildMember
 	content: string
 	timestamp: string
 	editedTimestamp?: string
@@ -78,14 +81,14 @@ export interface MessageInfo {
 }
 
 /** @category Component Event */
-export interface GuildInfo {
+export interface ComponentEventGuild {
 	id: string
 	name: string
-	member: GuildMemberInfo
+	member: ComponentEventGuildMember
 }
 
 /** @category Component Event */
-export interface GuildMemberInfo {
+export interface ComponentEventGuildMember {
 	id: string
 	nick?: string
 	displayName: string
@@ -100,7 +103,7 @@ export interface GuildMemberInfo {
 }
 
 /** @category Component Event */
-export interface UserInfo {
+export interface ComponentEventUser {
 	id: string
 	username: string
 	discriminator: string
