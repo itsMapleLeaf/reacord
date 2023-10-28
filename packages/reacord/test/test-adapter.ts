@@ -22,12 +22,14 @@ import type { Channel } from "../library/internal/channel"
 import { Container } from "../library/internal/container"
 import type {
 	ButtonInteraction,
-	CommandInteraction,
 	SelectInteraction,
 } from "../library/internal/interaction"
 import type { Message, MessageOptions } from "../library/internal/message"
 import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
-import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
+import {
+	InteractionReplyRenderer,
+	type InteractionReplyRendererImplementation,
+} from "../library/internal/renderers/interaction-reply-renderer"
 
 export type MessageSample = ReturnType<ReacordTester["sampleMessages"]>[0]
 
@@ -174,9 +176,8 @@ class TestMessage implements Message {
 	}
 }
 
-class TestCommandInteraction implements CommandInteraction {
-	readonly type = "command"
-	readonly id = "test-command-interaction"
+class TestCommandInteraction implements InteractionReplyRendererImplementation {
+	readonly interactionId = "test-command-interaction"
 	readonly channelId = "test-channel-id"
 
 	constructor(private messageContainer: Container<TestMessage>) {}
