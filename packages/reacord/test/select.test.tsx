@@ -53,9 +53,7 @@ test("single select", async () => {
 		])
 	}
 
-	const reply = tester.reply()
-
-	reply.render(<TestSelect />)
+	tester.createInteractionReply().render(<TestSelect />)
 	await assertSelect([])
 	expect(onSelect).toHaveBeenCalledTimes(0)
 
@@ -119,9 +117,7 @@ test("multiple select", async () => {
 		])
 	}
 
-	const reply = tester.reply()
-
-	reply.render(<TestSelect />)
+	tester.createInteractionReply().render(<TestSelect />)
 	await assertSelect([])
 	expect(onSelect).toHaveBeenCalledTimes(0)
 
@@ -148,7 +144,7 @@ test("multiple select", async () => {
 
 test("optional onSelect + unknown value", async () => {
 	const tester = new ReacordTester()
-	tester.reply().render(<Select placeholder="select" />)
+	tester.createInteractionReply().render(<Select placeholder="select" />)
 	await tester.findSelectByPlaceholder("select").select("something")
 	await tester.assertMessages([
 		{

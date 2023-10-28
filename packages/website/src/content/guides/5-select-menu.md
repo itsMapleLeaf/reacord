@@ -36,8 +36,7 @@ export function FruitSelect({ onConfirm }) {
 ```
 
 ```jsx
-const instance = reacord.send(
-	channelId,
+const instance = reacord.createChannelMessage(channel).render(
 	<FruitSelect
 		onConfirm={(value) => {
 			instance.render(`you chose ${value}`)
@@ -49,7 +48,7 @@ const instance = reacord.send(
 
 For a multi-select, use the `multiple` prop, then you can use `values` and `onChangeMultiple` to handle multiple values.
 
-```tsx
+```jsx
 export function FruitSelect({ onConfirm }) {
 	const [values, setValues] = useState([])
 

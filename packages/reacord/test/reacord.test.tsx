@@ -6,8 +6,9 @@ import { test } from "vitest"
 test("rendering behavior", async () => {
 	const tester = new ReacordTester()
 
-	const reply = tester.reply()
-	reply.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
+	const reply = tester
+		.createInteractionReply()
+		.render(<KitchenSinkCounter onDeactivate={() => reply.deactivate()} />)
 
 	await tester.assertMessages([
 		{
@@ -244,8 +245,7 @@ test("rendering behavior", async () => {
 test("delete", async () => {
 	const tester = new ReacordTester()
 
-	const reply = tester.reply()
-	reply.render(
+	const reply = tester.createInteractionReply().render(
 		<>
 			some text
 			<Embed>some embed</Embed>
