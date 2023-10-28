@@ -6,7 +6,7 @@ slug: getting-started
 
 # Getting Started
 
-These guides assume some familiarity with JavaScript, [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
+These guides assume some familiarity with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/javascript), [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
 
 ## Setup from template
 
@@ -47,6 +47,13 @@ await client.login(process.env.BOT_TOKEN)
 To use JSX in your code, run it with [tsx](https://npm.im/tsx):
 
 ```bash
-npm install tsx
-tsx main.tsx
+npm install -D tsx
+npx tsx main.tsx
+```
+
+For production, I recommend compiling it with [tsup](https://npm.im/tsup):
+
+```bash
+npm install -D tsup
+npx tsup src/main.tsx --target node20
 ```

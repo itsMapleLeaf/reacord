@@ -36,7 +36,6 @@ function Uptime() {
 
 client.on("ready", () => {
 	const instance = reacord.createChannelMessage(channel)
-
 	instance.render(<Uptime />)
 })
 ```
@@ -48,25 +47,24 @@ const Hello = ({ subject }) => <>Hello, {subject}!</>
 
 client.on("ready", () => {
 	const instance = reacord.createChannelMessage(channel)
-
 	instance.render(<Hello subject="World" />)
 	instance.render(<Hello subject="Moon" />)
 })
 ```
 
-## Replying to Messages
-
-Instead of sending messages to a channel, you may want to reply to a specific message instead. To do this, create an instance using `.createMessageReply()` instead:
+You can specify various options for the message:
 
 ```jsx
-const Hello = ({ username }) => <>Hello, {username}!</>
-
-client.on("messageCreate", (message) => {
-	reacord
-		.createMessageReply(message)
-		.render(<Hello username={message.author.displayName} />)
+const instance = reacord.createChannelMessage(channel, {
+	tts: true,
+	reply: {
+		messageReference: someMessage.id,
+	},
+	flags: [MessageFlags.SuppressNotifications],
 })
 ```
+
+See the [Discord.js docs](https://discord.js.org/#/docs/discord.js/main/typedef/MessageCreateOptions) for all of the available options.
 
 ## Cleaning Up Instances
 
@@ -91,7 +89,7 @@ const reacord = new ReacordDiscordJs(client, {
 This section also applies to other kinds of application commands, such as context menu commands.
 </aside>
 
-To reply to a command interaction, use the `.createInteractionReply()` function. This function returns an instance that works the same way as the one from `.createChannelMessage()` and `.createMessageReply()`. Here's an example:
+To reply to a command interaction, use the `.createInteractionReply()` function. This function returns an instance that works the same way as the one from `.createChannelMessage()`. Here's an example:
 
 ```jsx
 import { Client } from "discord.js"
@@ -163,11 +161,7 @@ handleCommands(client, [
 ])
 ```
 
-## Interaction Options
-
-Just like `.createChannelMessage()` and `.createMessageReply()`, interaction replies provide a way to specify certain `interaction.reply()` options.
-
-### Ephemeral Command Replies
+## Ephemeral Command Replies
 
 Ephemeral replies are replies that only appear for one user. To create them, use the `.createInteractionReply()` function and provide `ephemeral` option.
 
@@ -185,7 +179,7 @@ handleCommands(client, [
 ])
 ```
 
-### Text-to-Speech Command Replies
+## Text-to-Speech Command Replies
 
 Additionally interaction replies may have `tts` option to turn on text-to-speech ability for the reply. To create such reply, use `.createInteractionReply()` function and provide `tts` option.
 
