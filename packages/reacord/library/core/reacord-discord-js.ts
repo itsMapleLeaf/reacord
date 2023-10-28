@@ -14,23 +14,16 @@ import type {
 import { ChannelMessageRenderer } from "../internal/renderers/channel-message-renderer"
 import { InteractionReplyRenderer } from "../internal/renderers/interaction-reply-renderer"
 import type {
-	ChannelInfo,
-	GuildInfo,
-	GuildMemberInfo,
-	MessageInfo,
-	UserInfo,
+	ComponentEventChannel,
+	ComponentEventGuild,
+	ComponentEventGuildMember,
+	ComponentEventMessage,
+	ComponentEventReplyOptions,
+	ComponentEventUser,
 } from "./component-event"
 import type { ReacordInstance } from "./instance"
 import type { ReacordConfig } from "./reacord"
 import { Reacord } from "./reacord"
-
-interface SendOptions {
-	reply?: boolean
-}
-
-interface ReplyOptions {
-	ephemeral?: boolean
-}
 
 /**
  * The Reacord adapter for Discord.js.
@@ -54,17 +47,51 @@ export class ReacordDiscordJs extends Reacord {
 	}
 
 	/**
-	 * Sends a message to a channel. Alternatively replies to message event.
+	 * Sends a message to a channel.
 	 *
+	 * @param target Discord channel object.
+	 * @param [options] Options for the channel message
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 * @see {@link Discord.MessageCreateOptions}
 	 */
-	override send(
-		channelId: string,
-		initialContent?: React.ReactNode,
-		options?: SendOptions,
+	public createChannelMessage(
+		target: Discord.ChannelResolvable,
+		options: Discord.MessageCreateOptions = {},
 	): ReacordInstance {
 		return this.createInstance(
-			this.createChannelRenderer(channelId, options),
+			this.createChannelMessageRenderer(target, options),
+		)
+	}
+
+	/**
+	 * Replies to a command interaction by sending a message.
+	 *
+	 * @param interaction Discord command interaction object.
+	 * @param [options] Custom options for the interaction reply method.
+	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 * @see {@link Discord.InteractionReplyOptions}
+	 */
+	public createInteractionReply(
+		interaction: Discord.CommandInteraction,
+		options: Discord.InteractionReplyOptions = {},
+	): ReacordInstance {
+		return this.createInstance(
+			this.createInteractionReplyRenderer(interaction, options),
+		)
+	}
+
+	/**
+	 * Sends a message to a channel.
+	 *
+	 * @deprecated Use reacord.createChannelMessage() instead.
+	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
+	 */
+	public send(
+		channel: Discord.ChannelResolvable,
+		initialContent?: React.ReactNode,
+	): ReacordInstance {
+		return this.createInstance(
+			this.createChannelMessageRenderer(channel, {}),
 			initialContent,
 		)
 	}
@@ -72,15 +99,15 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends a message as a reply to a command interaction.
 	 *
+	 * @deprecated Use reacord.createInteractionReply() instead.
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
-	override reply(
+	public reply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
-		options?: ReplyOptions,
 	): ReacordInstance {
 		return this.createInstance(
-			this.createInteractionReplyRenderer(interaction, options),
+			this.createInteractionReplyRenderer(interaction, {}),
 			initialContent,
 		)
 	}
@@ -88,51 +115,49 @@ export class ReacordDiscordJs extends Reacord {
 	/**
 	 * Sends an ephemeral message as a reply to a command interaction.
 	 *
-	 * @deprecated Use reacord.reply(interaction, content, { ephemeral: true })
+	 * @deprecated Use reacord.createInteractionReply(interaction, { ephemeral:
+	 *   true })
 	 * @see https://reacord.mapleleaf.dev/guides/sending-messages
 	 */
-	override ephemeralReply(
+	public ephemeralReply(
 		interaction: Discord.CommandInteraction,
 		initialContent?: React.ReactNode,
-		options?: Omit<ReplyOptions, "ephemeral">,
 	): ReacordInstance {
 		return this.createInstance(
 			this.createInteractionReplyRenderer(interaction, {
-				...options,
 				ephemeral: true,
 			}),
 			initialContent,
 		)
 	}
 
-	private createChannelRenderer(
-		event: string | Discord.Message,
-		opts?: SendOptions,
+	private createChannelMessageRenderer(
+		channelResolvable: Discord.ChannelResolvable,
+		messageCreateOptions?: Discord.MessageCreateOptions,
 	) {
 		return new ChannelMessageRenderer({
-			send: async (options) => {
-				// Backwards compatible channelId api
-				// `event` is treated as MessageEvent depending on its type
-				const channel =
-					typeof event === "string"
-						? this.client.channels.cache.get(event) ??
-						  (await this.client.channels.fetch(event)) ??
-						  raise(`Channel ${event} not found`)
-						: event.channel
+			send: async (messageOptions) => {
+				let channel = this.client.channels.resolve(channelResolvable)
+				if (!channel && typeof channelResolvable === "string") {
+					channel = await this.client.channels.fetch(channelResolvable)
+				}
+
+				if (!channel) {
+					const id =
+						typeof channelResolvable === "string"
+							? channelResolvable
+							: channelResolvable.id
+					raise(`Channel ${id} not found`)
+				}
 
 				if (!channel.isTextBased()) {
-					raise(`Channel ${channel.id} is not a text channel`)
+					raise(`Channel ${channel.id} must be a text channel`)
 				}
 
-				if (opts?.reply) {
-					if (typeof event === "string") {
-						raise("Cannot send reply with channel ID provided")
-					}
-
-					const message = await event.reply(getDiscordMessageOptions(options))
-					return createReacordMessage(message)
-				}
-				const message = await channel.send(getDiscordMessageOptions(options))
+				const message = await channel.send({
+					...getDiscordMessageOptions(messageOptions),
+					...messageCreateOptions,
+				})
 				return createReacordMessage(message)
 			},
 		})
@@ -142,24 +167,23 @@ export class ReacordDiscordJs extends Reacord {
 		interaction:
 			| Discord.CommandInteraction
 			| Discord.MessageComponentInteraction,
-		opts?: ReplyOptions,
+		interactionReplyOptions: Discord.InteractionReplyOptions,
 	) {
 		return new InteractionReplyRenderer({
-			type: "command",
-			id: interaction.id,
-			reply: async (options) => {
+			interactionId: interaction.id,
+			reply: async (messageOptions) => {
 				const message = await interaction.reply({
-					...getDiscordMessageOptions(options),
+					...getDiscordMessageOptions(messageOptions),
+					...interactionReplyOptions,
 					fetchReply: true,
-					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
-			followUp: async (options) => {
+			followUp: async (messageOptions) => {
 				const message = await interaction.followUp({
-					...getDiscordMessageOptions(options),
+					...getDiscordMessageOptions(messageOptions),
+					...interactionReplyOptions,
 					fetchReply: true,
-					ephemeral: opts?.ephemeral,
 				})
 				return createReacordMessage(message)
 			},
@@ -170,7 +194,7 @@ export class ReacordDiscordJs extends Reacord {
 		interaction: Discord.MessageComponentInteraction,
 	): ComponentInteraction {
 		// todo please dear god clean this up
-		const channel: ChannelInfo = interaction.channel
+		const channel: ComponentEventChannel = interaction.channel
 			? {
 					...pruneNullishValues(
 						pick(interaction.channel, [
@@ -186,7 +210,7 @@ export class ReacordDiscordJs extends Reacord {
 			  }
 			: raise("Non-channel interactions are not supported")
 
-		const message: MessageInfo =
+		const message: ComponentEventMessage =
 			interaction.message instanceof Discord.Message
 				? {
 						...pick(interaction.message, [
@@ -209,7 +233,7 @@ export class ReacordDiscordJs extends Reacord {
 				  }
 				: raise("Message not found")
 
-		const member: GuildMemberInfo | undefined =
+		const member: ComponentEventGuildMember | undefined =
 			interaction.member instanceof Discord.GuildMember
 				? {
 						...pruneNullishValues(
@@ -234,14 +258,14 @@ export class ReacordDiscordJs extends Reacord {
 				  }
 				: undefined
 
-		const guild: GuildInfo | undefined = interaction.guild
+		const guild: ComponentEventGuild | undefined = interaction.guild
 			? {
 					...pruneNullishValues(pick(interaction.guild, ["id", "name"])),
 					member: member ?? raise("unexpected: member is undefined"),
 			  }
 			: undefined
 
-		const user: UserInfo = {
+		const user: ComponentEventUser = {
 			...pruneNullishValues(
 				pick(interaction.user, ["id", "username", "discriminator", "tag"]),
 			),
@@ -283,12 +307,13 @@ export class ReacordDiscordJs extends Reacord {
 				user,
 				guild,
 
-				reply: (content?: ReactNode) =>
+				reply: (content?: ReactNode, options?: ComponentEventReplyOptions) =>
 					this.createInstance(
-						this.createInteractionReplyRenderer(interaction),
+						this.createInteractionReplyRenderer(interaction, options ?? {}),
 						content,
 					),
 
+				/** @deprecated Use event.reply(content, { ephemeral: true }) */
 				ephemeralReply: (content: ReactNode) =>
 					this.createInstance(
 						this.createInteractionReplyRenderer(interaction, {

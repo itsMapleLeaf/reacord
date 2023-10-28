@@ -7,7 +7,7 @@ import type { ReactNode } from "react"
  */
 export interface ReacordInstance {
 	/** Render some JSX to this instance (edits the message) */
-	render: (content: ReactNode) => void
+	render: (content: ReactNode) => ReacordInstance
 
 	/** Remove this message */
 	destroy: () => void

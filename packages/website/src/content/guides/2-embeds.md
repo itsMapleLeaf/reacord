@@ -24,7 +24,9 @@ function FancyMessage({ title, description }) {
 ```
 
 ```jsx
-reacord.send(channelId, <FancyMessage title="Hello" description="World" />)
+reacord
+	.createChannelMessage(channel)
+	.render(<FancyMessage title="Hello" description="World" />)
 ```
 
 Reacord also comes with multiple embed components, for defining embeds on a piece-by-piece basis. This enables composition:
@@ -52,8 +54,7 @@ function FancyMessage({ children }) {
 ```
 
 ```jsx
-reacord.send(
-	channelId,
+reacord.createChannelMessage(channel).render(
 	<FancyMessage>
 		<FancyDetails title="Hello" description="World" />
 	</FancyMessage>,

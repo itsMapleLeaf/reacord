@@ -50,7 +50,7 @@ const createTest = async (
 }
 
 await createTest("basic", (channel) => {
-	reacord.send(channel.id, "Hello, world!")
+	reacord.createChannelMessage(channel).render("Hello, world!")
 })
 
 await createTest("counter", (channel) => {
@@ -73,7 +73,7 @@ await createTest("counter", (channel) => {
 			</>
 		)
 	}
-	reacord.send(channel.id, <Counter />)
+	reacord.createChannelMessage(channel).render(<Counter />)
 })
 
 await createTest("select", (channel) => {
@@ -102,8 +102,7 @@ await createTest("select", (channel) => {
 		)
 	}
 
-	const instance = reacord.send(
-		channel.id,
+	const instance = reacord.createChannelMessage(channel).render(
 		<FruitSelect
 			onConfirm={(value) => {
 				instance.render(`you chose ${value}`)
@@ -114,8 +113,7 @@ await createTest("select", (channel) => {
 })
 
 await createTest("ephemeral button", (channel) => {
-	reacord.send(
-		channel.id,
+	reacord.createChannelMessage(channel).render(
 		<>
 			<Button
 				label="public clic"
@@ -125,7 +123,7 @@ await createTest("ephemeral button", (channel) => {
 			/>
 			<Button
 				label="clic"
-				onClick={(event) => event.ephemeralReply("you clic")}
+				onClick={(event) => event.reply("you clic", { ephemeral: true })}
 			/>
 		</>,
 	)
@@ -136,9 +134,11 @@ await createTest("delete this", (channel) => {
 		const instance = useInstance()
 		return <Button label="delete this" onClick={() => instance.destroy()} />
 	}
-	reacord.send(channel.id, <DeleteThis />)
+	reacord.createChannelMessage(channel).render(<DeleteThis />)
 })
 
 await createTest("link", (channel) => {
-	reacord.send(channel.id, <Link label="hi" url="https://mapleleaf.dev" />)
+	reacord
+		.createChannelMessage(channel)
+		.render(<Link label="hi" url="https://mapleleaf.dev" />)
 })

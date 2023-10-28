@@ -35,7 +35,9 @@ function TheButton() {
 		const publicReply = event.reply(`${name} clicked the button. wow`)
 		setTimeout(() => publicReply.destroy(), 3000)
 
-		const privateReply = event.ephemeralReply("good job, you clicked it")
+		const privateReply = event.reply("good job, you clicked it", {
+			ephemeral: true,
+		})
 		privateReply.deactivate() // we don't need to listen to updates on this
 	}
 

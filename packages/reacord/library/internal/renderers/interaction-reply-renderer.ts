@@ -1,4 +1,3 @@
-import type { Interaction } from "../interaction"
 import type { Message, MessageOptions } from "../message"
 import { Renderer } from "./renderer"
 
@@ -6,17 +5,23 @@ import { Renderer } from "./renderer"
 // so we know whether to call reply() or followUp()
 const repliedInteractionIds = new Set<string>()
 
+export type InteractionReplyRendererImplementation = {
+	interactionId: string
+	reply: (options: MessageOptions) => Promise<Message>
+	followUp: (options: MessageOptions) => Promise<Message>
+}
+
 export class InteractionReplyRenderer extends Renderer {
-	constructor(private interaction: Interaction) {
+	constructor(private implementation: InteractionReplyRendererImplementation) {
 		super()
 	}
 
 	protected createMessage(options: MessageOptions): Promise<Message> {
-		if (repliedInteractionIds.has(this.interaction.id)) {
-			return this.interaction.followUp(options)
+		if (repliedInteractionIds.has(this.implementation.interactionId)) {
+			return this.implementation.followUp(options)
 		}
 
-		repliedInteractionIds.add(this.interaction.id)
-		return this.interaction.reply(options)
+		repliedInteractionIds.add(this.implementation.interactionId)
+		return this.implementation.reply(options)
 	}
 }

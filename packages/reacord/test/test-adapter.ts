@@ -8,10 +8,11 @@ import { setTimeout } from "node:timers/promises"
 import type { ReactNode } from "react"
 import { expect } from "vitest"
 import type {
-	ChannelInfo,
-	GuildInfo,
-	MessageInfo,
-	UserInfo,
+	ComponentEventChannel,
+	ComponentEventGuild,
+	ComponentEventMessage,
+	ComponentEventReplyOptions,
+	ComponentEventUser,
 } from "../library/core/component-event"
 import type { ButtonClickEvent } from "../library/core/components/button"
 import type { SelectChangeEvent } from "../library/core/components/select"
@@ -21,12 +22,14 @@ import type { Channel } from "../library/internal/channel"
 import { Container } from "../library/internal/container"
 import type {
 	ButtonInteraction,
-	CommandInteraction,
 	SelectInteraction,
 } from "../library/internal/interaction"
 import type { Message, MessageOptions } from "../library/internal/message"
 import { ChannelMessageRenderer } from "../library/internal/renderers/channel-message-renderer"
-import { InteractionReplyRenderer } from "../library/internal/renderers/interaction-reply-renderer"
+import {
+	InteractionReplyRenderer,
+	type InteractionReplyRendererImplementation,
+} from "../library/internal/renderers/interaction-reply-renderer"
 
 export type MessageSample = ReturnType<ReacordTester["sampleMessages"]>[0]
 
@@ -42,24 +45,26 @@ export class ReacordTester extends Reacord {
 		return [...this.messageContainer]
 	}
 
-	override send(initialContent?: ReactNode): ReacordInstance {
+	public createChannelMessage(): ReacordInstance {
 		return this.createInstance(
 			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
-			initialContent,
 		)
 	}
 
-	override reply(initialContent?: ReactNode): ReacordInstance {
+	public createMessageReply(): ReacordInstance {
+		return this.createInstance(
+			new ChannelMessageRenderer(new TestChannel(this.messageContainer)),
+		)
+	}
+
+	public createInteractionReply(
+		_options?: ComponentEventReplyOptions,
+	): ReacordInstance {
 		return this.createInstance(
 			new InteractionReplyRenderer(
 				new TestCommandInteraction(this.messageContainer),
 			),
-			initialContent,
 		)
-	}
-
-	override ephemeralReply(initialContent?: ReactNode): ReacordInstance {
-		return this.reply(initialContent)
 	}
 
 	assertMessages(expected: MessageSample[]) {
@@ -69,7 +74,7 @@ export class ReacordTester extends Reacord {
 	}
 
 	async assertRender(content: ReactNode, expected: MessageSample[]) {
-		const instance = this.reply()
+		const instance = this.createInteractionReply()
 		instance.render(content)
 		await this.assertMessages(expected)
 		instance.destroy()
@@ -171,9 +176,8 @@ class TestMessage implements Message {
 	}
 }
 
-class TestCommandInteraction implements CommandInteraction {
-	readonly type = "command"
-	readonly id = "test-command-interaction"
+class TestCommandInteraction implements InteractionReplyRendererImplementation {
+	readonly interactionId = "test-command-interaction"
 	readonly channelId = "test-channel-id"
 
 	constructor(private messageContainer: Container<TestMessage>) {}
@@ -248,17 +252,19 @@ class TestSelectInteraction
 class TestComponentEvent {
 	constructor(private tester: ReacordTester) {}
 
-	message: MessageInfo = {} as MessageInfo // todo
-	channel: ChannelInfo = {} as ChannelInfo // todo
-	user: UserInfo = {} as UserInfo // todo
-	guild: GuildInfo = {} as GuildInfo // todo
+	message: ComponentEventMessage = {} as ComponentEventMessage // todo
+	channel: ComponentEventChannel = {} as ComponentEventChannel // todo
+	user: ComponentEventUser = {} as ComponentEventUser // todo
+	guild: ComponentEventGuild = {} as ComponentEventGuild // todo
 
 	reply(content?: ReactNode): ReacordInstance {
-		return this.tester.reply(content)
+		return this.tester.createInteractionReply().render(content)
 	}
 
 	ephemeralReply(content?: ReactNode): ReacordInstance {
-		return this.tester.ephemeralReply(content)
+		return this.tester
+			.createInteractionReply({ ephemeral: true })
+			.render(content)
 	}
 }
 

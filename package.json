@@ -4,12 +4,9 @@
   "scripts": {
     "lint": "run-s --continue-on-error lint:*",
     "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
-    "lint:prettier": "prettier . --write --cache --list-different",
+    "lint:prettier": "prettier . \"**/*.astro\" --write --cache --list-different",
     "lint:types": "tsc -b & pnpm -r --parallel run typecheck",
     "astro-sync": "pnpm --filter website exec astro sync",
-    "format": "run-s --continue-on-error format:*",
-    "format:eslint": "eslint . --report-unused-disable-directives --fix",
-    "format:prettier": "prettier --cache --write . \"**/*.astro\"",
     "test": "vitest",
     "build": "pnpm -r run build",
     "build:website": "pnpm --filter website... run build",

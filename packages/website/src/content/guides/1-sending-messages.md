@@ -9,14 +9,13 @@ slug: sending-messages
 You can send messages via Reacord to a channel like so.
 
 ```jsx
-const channelId = "abc123deadbeef"
-
 client.on("ready", () => {
-	reacord.send(channelId, "Hello, world!")
+	const channel = await client.channels.fetch("abc123deadbeef")
+	reacord.createChannelMessage(channel).render("Hello, world!")
 })
 ```
 
-The `.send()` function creates a **Reacord instance**. You can pass strings, numbers, or anything that can be rendered by React, such as JSX!
+The `.createChannelMessage()` function creates a **Reacord instance**. You can pass strings, numbers, or anything that can be rendered by React, such as JSX!
 
 Components rendered through this instance can include state and effects, and the message on Discord will update automatically.
 
@@ -36,7 +35,8 @@ function Uptime() {
 }
 
 client.on("ready", () => {
-	reacord.send(channelId, <Uptime />)
+	const instance = reacord.createChannelMessage(channel)
+	instance.render(<Uptime />)
 })
 ```
 
@@ -46,11 +46,25 @@ The instance can be rendered to multiple times, which will update the message ea
 const Hello = ({ subject }) => <>Hello, {subject}!</>
 
 client.on("ready", () => {
-	const instance = reacord.send(channel)
+	const instance = reacord.createChannelMessage(channel)
 	instance.render(<Hello subject="World" />)
 	instance.render(<Hello subject="Moon" />)
 })
 ```
+
+You can specify various options for the message:
+
+```jsx
+const instance = reacord.createChannelMessage(channel, {
+	tts: true,
+	reply: {
+		messageReference: someMessage.id,
+	},
+	flags: [MessageFlags.SuppressNotifications],
+})
+```
+
+See the [Discord.js docs](https://discord.js.org/#/docs/discord.js/main/typedef/MessageCreateOptions) for all of the available options.
 
 ## Cleaning Up Instances
 
@@ -75,7 +89,7 @@ const reacord = new ReacordDiscordJs(client, {
 This section also applies to other kinds of application commands, such as context menu commands.
 </aside>
 
-To reply to a command interaction, use the `.reply()` function. This function returns an instance that works the same way as the one from `.send()`. Here's an example:
+To reply to a command interaction, use the `.createInteractionReply()` function. This function returns an instance that works the same way as the one from `.createChannelMessage()`. Here's an example:
 
 ```jsx
 import { Client } from "discord.js"
@@ -94,8 +108,8 @@ client.on("ready", () => {
 
 client.on("interactionCreate", (interaction) => {
 	if (interaction.isCommand() && interaction.commandName === "ping") {
-		// Use the reply() function instead of send
-		reacord.reply(interaction, <>pong!</>)
+		// Use the createInteractionReply() function instead of createChannelMessage
+		reacord.createInteractionReply(interaction).render(<>pong!</>)
 	}
 })
 
@@ -134,14 +148,14 @@ handleCommands(client, [
 		name: "ping",
 		description: "pong!",
 		run: (interaction) => {
-			reacord.reply(interaction, <>pong!</>)
+			reacord.createInteractionReply(interaction).render(<>pong!</>)
 		},
 	},
 	{
 		name: "hi",
 		description: "say hi",
 		run: (interaction) => {
-			reacord.reply(interaction, <>hi</>)
+			reacord.createInteractionReply(interaction).render(<>hi</>)
 		},
 	},
 ])
@@ -149,18 +163,36 @@ handleCommands(client, [
 
 ## Ephemeral Command Replies
 
-Ephemeral replies are replies that only appear for one user. To create them, use the `.ephemeralReply()` function.
+Ephemeral replies are replies that only appear for one user. To create them, use the `.createInteractionReply()` function and provide `ephemeral` option.
 
-```tsx
+```jsx
 handleCommands(client, [
 	{
 		name: "pong",
 		description: "pong, but in secret",
 		run: (interaction) => {
-			reacord.ephemeralReply(interaction, <>(pong)</>)
+			reacord
+				.createInteractionReply(interaction, { ephemeral: true })
+				.render(<>(pong)</>)
 		},
 	},
 ])
 ```
 
-The `ephemeralReply` function also returns an instance, but ephemeral replies cannot be updated via `instance.render()`. You can `.deactivate()` them, but `.destroy()` will not delete the message; only the user can hide it from view.
+## Text-to-Speech Command Replies
+
+Additionally interaction replies may have `tts` option to turn on text-to-speech ability for the reply. To create such reply, use `.createInteractionReply()` function and provide `tts` option.
+
+```jsx
+handleCommands(client, [
+	{
+		name: "pong",
+		description: "pong, but converted into audio",
+		run: (interaction) => {
+			reacord
+				.createInteractionReply(interaction, { tts: true })
+				.render(<>pong!</>)
+		},
+	},
+])
+```
