@@ -8,10 +8,11 @@ slug: buttons
 
 Use the `<Button />` component to create a message with a button, and use the `onClick` callback to respond to button clicks.
 
-```jsx
+```tsx
 import { Button } from "reacord"
+import { useState } from "react"
 
-function Counter() {
+export function Counter() {
 	const [count, setCount] = useState(0)
 
 	return (
@@ -25,12 +26,12 @@ function Counter() {
 
 The `onClick` callback receives an `event` object. It includes some information, such as the user who clicked the button, and functions for creating new replies in response. These functions return message instances.
 
-```jsx
-import { Button } from "reacord"
+```tsx
+import { Button, type ComponentEvent } from "reacord"
 
-function TheButton() {
-	function handleClick(event) {
-		const name = event.guild.member.displayName || event.user.username
+export function SuspiciousButton() {
+	function handleClick(event: ComponentEvent) {
+		const name = event.guild.member.displayName ?? event.user.username
 
 		const publicReply = event.reply(`${name} clicked the button. wow`)
 		setTimeout(() => publicReply.destroy(), 3000)

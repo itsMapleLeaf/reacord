@@ -6,7 +6,7 @@ slug: getting-started
 
 # Getting Started
 
-These guides assume some familiarity with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/javascript), [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
+These guides assume some familiarity with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/javascript), [TypeScript](https://www.typescriptlang.org/), [React](https://reactjs.org), [Discord.js](https://discord.js.org) and the [Discord API](https://discord.dev). Keep these pages as reference if you need it.
 
 ## Setup from template
 
@@ -29,31 +29,16 @@ pnpm add reacord react discord.js
 
 Create a Discord.js client and a Reacord instance:
 
-```js
-// main.jsx
-import { Client } from "discord.js"
+```ts
+import { Client, Events } from "discord.js"
 import { ReacordDiscordJs } from "reacord"
 
 const client = new Client()
 const reacord = new ReacordDiscordJs(client)
 
-client.on("ready", () => {
+client.once(Events.ClientReady, () => {
 	console.log("Ready!")
 })
 
 await client.login(process.env.BOT_TOKEN)
-```
-
-To use JSX in your code, run it with [tsx](https://npm.im/tsx):
-
-```bash
-npm install -D tsx
-npx tsx main.tsx
-```
-
-For production, I recommend compiling it with [tsup](https://npm.im/tsup):
-
-```bash
-npm install -D tsup
-npx tsup src/main.tsx --target node20
 ```
