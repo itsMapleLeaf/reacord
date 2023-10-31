@@ -22,23 +22,51 @@ pnpm add reacord react discord.js
 
 ## Example
 
-<!-- prettier-ignore -->
 ```tsx
-import * as React from "react"
-import { Embed, Button } from "reacord"
+import { useState } from "react"
+import { Embed, EmbedField, Button } from "reacord"
+
+interface EmbedCounterProps {
+	count: number
+	visible: boolean
+}
+
+function EmbedCounter({ count, visible }: EmbedCounterProps) {
+	if (!visible) return <></>
+
+	return (
+		<Embed title="the counter">
+			<EmbedField name="is it even?">{count % 2 ? "no" : "yes"}</EmbedField>
+		</Embed>
+	)
+}
 
 function Counter() {
-  const [count, setCount] = React.useState(0)
-  return (
-    <>
-      <Embed title="Counter">
-        This button has been clicked {count} times.
-      </Embed>
-      <Button onClick={() => setCount(count + 1)}>
-        +1
-      </Button>
-    </>
-  )
+	const [showEmbed, setShowEmbed] = useState<boolean>(false)
+	const [count, setCount] = useState<number>(0)
+	const instance = useInstance()
+
+	return (
+		<>
+			this button was clicked {count} times
+			<EmbedCounter count={count} visible={showEmbed} />
+			<Button
+				style="primary"
+				label="clicc"
+				onClick={() => setCount(count + 1)}
+			/>
+			<Button
+				style="secondary"
+				label={showEmbed ? "hide embed" : "show embed"}
+				onClick={() => setShowEmbed(!showEmbed)}
+			/>
+			<Button
+				style="danger"
+				label="deactivate"
+				onClick={() => instance.destroy()}
+			/>
+		</>
+	)
 }
 ```
 

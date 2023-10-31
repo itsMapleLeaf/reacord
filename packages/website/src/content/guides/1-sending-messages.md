@@ -141,14 +141,12 @@ interface Command {
 }
 
 function handleCommands(client: Client, commands: Command[]) {
-	// Registering commands when client is ready
 	client.once(Events.ClientReady, () => {
 		for (const { name, description } of commands) {
 			client.application?.commands.create({ name, description })
 		}
 	})
 
-	// Subscribing to interactionCreate event
 	client.on(Events.InteractionCreate, (interaction) => {
 		if (interaction.isCommand()) {
 			for (const command of commands) {
