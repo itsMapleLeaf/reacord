@@ -8,10 +8,15 @@ slug: embeds
 
 Reacord comes with an `<Embed />` component for sending rich embeds.
 
-```jsx
+```tsx
 import { Embed } from "reacord"
 
-function FancyMessage({ title, description }) {
+interface FancyMessageProps {
+	title: string
+	description: string
+}
+
+function FancyMessage({ title, description }: FancyMessageProps) {
 	return (
 		<Embed
 			title={title}
@@ -23,7 +28,7 @@ function FancyMessage({ title, description }) {
 }
 ```
 
-```jsx
+```tsx
 reacord
 	.createChannelMessage(channel)
 	.render(<FancyMessage title="Hello" description="World" />)
@@ -31,10 +36,15 @@ reacord
 
 Reacord also comes with multiple embed components, for defining embeds on a piece-by-piece basis. This enables composition:
 
-```jsx
+```tsx
 import { Embed, EmbedTitle } from "reacord"
 
-function FancyDetails({ title, description }) {
+interface FancyDetailsProps {
+	title: string
+	description: string
+}
+
+function FancyDetails({ title, description }: FancyDetailsProps) {
 	return (
 		<>
 			<EmbedTitle>{title}</EmbedTitle>
@@ -44,7 +54,11 @@ function FancyDetails({ title, description }) {
 	)
 }
 
-function FancyMessage({ children }) {
+interface FancyMessageProps {
+	children: React.ReactNode
+}
+
+function FancyMessage({ children }: FancyMessageProps) {
 	return (
 		<Embed color={0x00ff00} timestamp={Date.now()}>
 			{children}
@@ -53,7 +67,7 @@ function FancyMessage({ children }) {
 }
 ```
 
-```jsx
+```tsx
 reacord.createChannelMessage(channel).render(
 	<FancyMessage>
 		<FancyDetails title="Hello" description="World" />

@@ -8,8 +8,8 @@ slug: sending-messages
 
 You can send messages via Reacord to a channel like so.
 
-```jsx
-client.on("ready", () => {
+```tsx
+client.once(Events.ClientReady, () => {
 	const channel = await client.channels.fetch("abc123deadbeef")
 	reacord.createChannelMessage(channel).render("Hello, world!")
 })
@@ -19,7 +19,9 @@ The `.createChannelMessage()` function creates a **Reacord instance**. You can p
 
 Components rendered through this instance can include state and effects, and the message on Discord will update automatically.
 
-```jsx
+```tsx
+import { useEffect, useState } from "react"
+
 function Uptime() {
 	const [startTime] = useState(Date.now())
 	const [currentTime, setCurrentTime] = useState(Date.now())
@@ -34,7 +36,7 @@ function Uptime() {
 	return <>this message has been shown for {currentTime - startTime}ms</>
 }
 
-client.on("ready", () => {
+client.once(Events.ClientReady, () => {
 	const instance = reacord.createChannelMessage(channel)
 	instance.render(<Uptime />)
 })
@@ -42,10 +44,14 @@ client.on("ready", () => {
 
 The instance can be rendered to multiple times, which will update the message each time.
 
-```jsx
-const Hello = ({ subject }) => <>Hello, {subject}!</>
+```tsx
+interface HelloProps {
+	subject: string
+}
 
-client.on("ready", () => {
+const Hello = ({ subject }: HelloProps) => <>Hello, {subject}!</>
+
+client.once(Events.ClientReady, () => {
 	const instance = reacord.createChannelMessage(channel)
 	instance.render(<Hello subject="World" />)
 	instance.render(<Hello subject="Moon" />)
@@ -54,7 +60,7 @@ client.on("ready", () => {
 
 You can specify various options for the message:
 
-```jsx
+```tsx
 const instance = reacord.createChannelMessage(channel, {
 	tts: true,
 	reply: {
@@ -75,7 +81,7 @@ If you no longer want to use the instance, you can clean it up in a few ways:
 
 By default, Reacord has a max limit on the number of active instances, and deactivates older instances to conserve memory. This can be configured through the Reacord options:
 
-```js
+```ts
 const reacord = new ReacordDiscordJs(client, {
 	// after sending four messages,
 	// the first one will be deactivated
@@ -91,29 +97,29 @@ This section also applies to other kinds of application commands, such as contex
 
 To reply to a command interaction, use the `.createInteractionReply()` function. This function returns an instance that works the same way as the one from `.createChannelMessage()`. Here's an example:
 
-```jsx
-import { Client } from "discord.js"
+```tsx
+import { Client, Events } from "discord.js"
 import { Button, ReacordDiscordJs } from "reacord"
 import * as React from "react"
 
 const client = new Client({ intents: [] })
 const reacord = new ReacordDiscordJs(client)
 
-client.on("ready", () => {
+client.once(Events.ClientReady, () => {
 	client.application?.commands.create({
 		name: "ping",
 		description: "pong!",
 	})
 })
 
-client.on("interactionCreate", (interaction) => {
+client.on(Events.InteractionCreate, (interaction) => {
 	if (interaction.isCommand() && interaction.commandName === "ping") {
 		// Use the createInteractionReply() function instead of createChannelMessage
 		reacord.createInteractionReply(interaction).render(<>pong!</>)
 	}
 })
 
-client.login(process.env.DISCORD_TOKEN)
+await client.login(process.env.DISCORD_TOKEN)
 ```
 
 <aside>
@@ -122,15 +128,26 @@ This example uses <a href="https://discord.com/developers/docs/interactions/appl
 
 However, the process of creating commands can get really repetitive and error-prone. A command framework could help with this, or you could make a small helper:
 
-```jsx
-function handleCommands(client, commands) {
-	client.on("ready", () => {
+```tsx
+import type { Client, CommandInteraction } from "discord.js"
+
+interface Command {
+	// Command name
+	name: string
+	// A mandatory description for the command
+	description: string
+	// Specific handler for the command
+	run: (interaction: CommandInteraction) => Promise<void> | void
+}
+
+function handleCommands(client: Client, commands: Command[]) {
+	client.once(Events.ClientReady, () => {
 		for (const { name, description } of commands) {
 			client.application?.commands.create({ name, description })
 		}
 	})
 
-	client.on("interactionCreate", (interaction) => {
+	client.on(Events.InteractionCreate, (interaction) => {
 		if (interaction.isCommand()) {
 			for (const command of commands) {
 				if (interaction.commandName === command.name) {
@@ -142,7 +159,7 @@ function handleCommands(client, commands) {
 }
 ```
 
-```jsx
+```tsx
 handleCommands(client, [
 	{
 		name: "ping",
@@ -165,7 +182,7 @@ handleCommands(client, [
 
 Ephemeral replies are replies that only appear for one user. To create them, use the `.createInteractionReply()` function and provide `ephemeral` option.
 
-```jsx
+```tsx
 handleCommands(client, [
 	{
 		name: "pong",
@@ -183,7 +200,7 @@ handleCommands(client, [
 
 Additionally interaction replies may have `tts` option to turn on text-to-speech ability for the reply. To create such reply, use `.createInteractionReply()` function and provide `tts` option.
 
-```jsx
+```tsx
 handleCommands(client, [
 	{
 		name: "pong",

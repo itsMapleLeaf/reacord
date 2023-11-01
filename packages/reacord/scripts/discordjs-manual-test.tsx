@@ -1,6 +1,8 @@
 import { raise } from "@reacord/helpers/raise.js"
 import {
 	Button,
+	Embed,
+	EmbedField,
 	Link,
 	Option,
 	ReacordDiscordJs,
@@ -11,7 +13,6 @@ import type { TextChannel } from "discord.js"
 import { ChannelType, Client, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
-import * as React from "react"
 import { useState } from "react"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
@@ -53,9 +54,57 @@ await createTest("basic", (channel) => {
 	reacord.createChannelMessage(channel).render("Hello, world!")
 })
 
+await createTest("readme counter", (channel) => {
+	interface EmbedCounterProps {
+		count: number
+		visible: boolean
+	}
+
+	function EmbedCounter({ count, visible }: EmbedCounterProps) {
+		if (!visible) return <></>
+
+		return (
+			<Embed title="the counter">
+				<EmbedField name="is it even?">{count % 2 ? "no" : "yes"}</EmbedField>
+			</Embed>
+		)
+	}
+
+	function Counter() {
+		const [showEmbed, setShowEmbed] = useState(false)
+		const [count, setCount] = useState(0)
+		const instance = useInstance()
+
+		return (
+			<>
+				this button was clicked {count} times
+				<EmbedCounter count={count} visible={showEmbed} />
+				<Button
+					style="primary"
+					label="clicc"
+					onClick={() => setCount(count + 1)}
+				/>
+				<Button
+					style="secondary"
+					label={showEmbed ? "hide embed" : "show embed"}
+					onClick={() => setShowEmbed(!showEmbed)}
+				/>
+				<Button
+					style="danger"
+					label="deactivate"
+					onClick={() => instance.destroy()}
+				/>
+			</>
+		)
+	}
+
+	reacord.createChannelMessage(channel).render(<Counter />)
+})
+
 await createTest("counter", (channel) => {
-	const Counter = () => {
-		const [count, setCount] = React.useState(0)
+	function Counter() {
+		const [count, setCount] = useState(0)
+
 		return (
 			<>
 				count: {count}

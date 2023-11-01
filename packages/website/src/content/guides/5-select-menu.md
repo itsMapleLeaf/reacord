@@ -8,9 +8,16 @@ slug: select-menus
 
 To create a select menu, use the `Select` component, and pass a list of `Option` components as children. Use the `value` prop to set a currently selected value. You can respond to changes in the value via `onChangeValue`.
 
-```jsx
-export function FruitSelect({ onConfirm }) {
-	const [value, setValue] = useState()
+```tsx
+import { Button, Option, Select } from "reacord"
+import { useState } from "react"
+
+interface FruitSelectProps {
+	onConfirm: (choice: string) => void
+}
+
+export function FruitSelect({ onConfirm }: FruitSelectProps) {
+	const [value, setValue] = useState<string>()
 
 	return (
 		<>
@@ -35,7 +42,7 @@ export function FruitSelect({ onConfirm }) {
 }
 ```
 
-```jsx
+```tsx
 const instance = reacord.createChannelMessage(channel).render(
 	<FruitSelect
 		onConfirm={(value) => {
@@ -48,9 +55,13 @@ const instance = reacord.createChannelMessage(channel).render(
 
 For a multi-select, use the `multiple` prop, then you can use `values` and `onChangeMultiple` to handle multiple values.
 
-```jsx
-export function FruitSelect({ onConfirm }) {
-	const [values, setValues] = useState([])
+```tsx
+interface FruitSelectProps {
+	onConfirm: (choices: string[]) => void
+}
+
+export function FruitSelect({ onConfirm }: FruitSelectProps) {
+	const [values, setValues] = useState<string[]>([])
 
 	return (
 		<Select
