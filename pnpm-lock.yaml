@@ -36,6 +36,64 @@ importers:
         specifier: ^0.34.6
         version: 0.34.6
 
+  packages/discord.js:
+    dependencies:
+      '@types/node':
+        specifier: ^20.8.4
+        version: 20.8.4
+      '@types/react':
+        specifier: ^18.2.27
+        version: 18.2.27
+      '@types/react-reconciler':
+        specifier: ^0.28.5
+        version: 0.28.5
+      reacord:
+        specifier: workspace:*
+        version: link:../reacord
+      react-reconciler:
+        specifier: ^0.29.0
+        version: 0.29.0(react@18.2.0)
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+    devDependencies:
+      '@reacord/helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@types/lodash-es':
+        specifier: ^4.17.9
+        version: 4.17.9
+      c8:
+        specifier: ^8.0.1
+        version: 8.0.1
+      cpy-cli:
+        specifier: ^5.0.0
+        version: 5.0.0
+      discord.js:
+        specifier: ^14.13.0
+        version: 14.13.0
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      nodemon:
+        specifier: ^3.0.1
+        version: 3.0.1
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(postcss@8.4.31)(typescript@5.2.2)
+      type-fest:
+        specifier: ^4.4.0
+        version: 4.4.0
+
   packages/helpers:
     dependencies:
       '@types/lodash-es':

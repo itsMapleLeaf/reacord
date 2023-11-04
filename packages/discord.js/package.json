@@ -1,0 +1,84 @@
+{
+  "name": "@reacord/discord.js",
+  "type": "module",
+  "description": "Utility bridge between discord.js and react.",
+  "version": "0.0.1",
+  "homepage": "https://reacord.mapleleaf.dev",
+  "repository": "https://github.com/itsMapleLeaf/reacord.git",
+  "changelog": "https://github.com/itsMapleLeaf/reacord/releases",
+  "license": "MIT",
+  "keywords": [
+    "discord",
+    "discord-js",
+    "react",
+    "react-js",
+    "react-renderer",
+    "interaction",
+    "message",
+    "embed",
+    "reacord",
+    "bridge"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "types": "./dist/main.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs",
+      "types": "./dist/main.d.ts"
+    },
+    "./package.json": {
+      "import": "./package.json",
+      "require": "./package.json"
+    }
+  },
+  "scripts": {
+    "build": "cpy ../../LICENSE . && tsup library/main.ts --target node18 --format cjs,esm --sourcemap --dts --dts-resolve",
+    "build-watch": "pnpm build -- --watch",
+    "test": "vitest --coverage --no-watch",
+    "test-dev": "vitest",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@types/node": "^20.8.4",
+    "@types/react": "^18.2.27",
+    "@types/react-reconciler": "^0.28.5",
+    "react-reconciler": "^0.29.0",
+    "rxjs": "^7.8.1"
+  },
+  "peerDependencies": {
+    "discord.js": "^14",
+    "reacord": "workspace:*",
+    "react": ">=17"
+  },
+  "devDependencies": {
+    "@reacord/helpers": "workspace:*",
+    "@types/lodash-es": "^4.17.9",
+    "c8": "^8.0.1",
+    "cpy-cli": "^5.0.0",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "lodash-es": "^4.17.21",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "react": "^18.2.0",
+    "tsup": "^7.2.0",
+    "type-fest": "^4.4.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "release v${version}"
+    },
+    "github": {
+      "release": true,
+      "web": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
