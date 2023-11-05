@@ -23,7 +23,7 @@ export function useReactions({ message }: Options) {
 
 	// Reactions collection
 	const [reactions, setReactions] = useState<Reactions>(
-		collector?.collected ?? new Collection(),
+		() => new Collection(),
 	)
 
 	const update = useCallback(() => {
