@@ -9,11 +9,11 @@ import {
 	Select,
 	useInstance,
 } from "../library/main.js"
-import type { TextChannel } from "discord.js"
-import { ChannelType, Client, IntentsBitField } from "discord.js"
+import type { CommandInteraction, TextChannel } from "discord.js"
+import { ChannelType, Client, Events, IntentsBitField } from "discord.js"
 import "dotenv/config"
 import { kebabCase } from "lodash-es"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const client = new Client({ intents: IntentsBitField.Flags.Guilds })
 const reacord = new ReacordDiscordJs(client)
@@ -49,6 +49,29 @@ const createTest = async (
 	})
 	await block(channel)
 }
+
+const executables: Record<
+	string,
+	(interaction: CommandInteraction) => unknown
+> = {}
+const createInteractionTest = async (
+	name: string,
+	block: (interaction: CommandInteraction) => unknown,
+) => {
+	const slashName = kebabCase(name)
+
+	await client.application?.commands.create({
+		name: slashName,
+		description: "Test command",
+	})
+	executables[slashName] = block
+}
+
+client.on(Events.InteractionCreate, (interaction) => {
+	if (interaction.isCommand()) {
+		executables[interaction.commandName]?.(interaction)
+	}
+})
 
 await createTest("basic", (channel) => {
 	reacord.createChannelMessage(channel).render("Hello, world!")
@@ -123,6 +146,36 @@ await createTest("counter", (channel) => {
 		)
 	}
 	reacord.createChannelMessage(channel).render(<Counter />)
+})
+
+await createInteractionTest("bounce counter", (interaction) => {
+	function Counter() {
+		const [count, setCount] = useState(0)
+
+		useEffect(() => {
+			// This will reply once the count is updated to track useEffect usage.
+			// Not creating instances.
+			void interaction.followUp(`Updated the count to ${count}`)
+		}, [count])
+
+		return (
+			<>
+				count: {count}
+				<Button
+					style="primary"
+					emoji="➕"
+					onClick={() => setCount(count + 1)}
+				/>
+				<Button
+					style="primary"
+					emoji="➖"
+					onClick={() => setCount(count - 1)}
+				/>
+				<Button label="reset" onClick={() => setCount(0)} />
+			</>
+		)
+	}
+	reacord.createInteractionReply(interaction).render(<Counter />)
 })
 
 await createTest("select", (channel) => {
