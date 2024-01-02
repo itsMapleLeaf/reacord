@@ -23,7 +23,7 @@ export function useReactions(options: UseReactionsOptions) {
 
 	// Reactions collection
 	const [reactions, setReactions] = useState<Reactions>(
-		collector?.collected ?? new Collection(),
+		() => new Collection(),
 	)
 
 	useEffect(() => {
