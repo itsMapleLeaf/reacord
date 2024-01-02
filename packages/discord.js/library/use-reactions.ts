@@ -4,20 +4,20 @@ import {
 	type MessageReaction,
 	type ReactionCollector,
 } from "discord.js"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useMessage } from "./use-message"
 
-interface Options {
+export interface UseReactionsOptions {
 	message?: Message
 }
 
 type Reactions = Collection<string, MessageReaction>
 
-export function useReactions({ message }: Options) {
+export function useReactions(options: UseReactionsOptions) {
 	// Hooks should not be called conditionally
 	const messageInstance = useMessage()
 	// Ref will persist the value across renders
-	const messageRef = useRef(message ?? messageInstance)
+	const message = options.message ?? messageInstance
 	const [collector, setCollector] = useState<ReactionCollector | null>(null)
 	const [alive, setAlive] = useState<boolean>(true)
 
@@ -26,14 +26,14 @@ export function useReactions({ message }: Options) {
 		collector?.collected ?? new Collection(),
 	)
 
-	const update = useCallback(() => {
-		if (collector) setReactions(() => collector.collected)
-	}, [collector])
-
 	useEffect(() => {
-		const collector = messageRef.current.createReactionCollector({
+		const collector = message.createReactionCollector({
 			dispose: true,
 		})
+
+		const update = () => {
+			setReactions(() => collector.collected)
+		}
 
 		setCollector(collector)
 		collector.on("collect", update)
@@ -44,7 +44,7 @@ export function useReactions({ message }: Options) {
 		})
 
 		return () => collector.stop()
-	}, [message, update])
+	}, [message])
 
 	return { reactions, alive, collector }
 }

@@ -52,7 +52,7 @@
   },
   "peerDependencies": {
     "discord.js": "^14",
-    "reacord": "workspace:*",
+    "reacord": ">=0.6.0",
     "react": ">=17"
   },
   "devDependencies": {
